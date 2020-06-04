@@ -23,6 +23,7 @@
             ],
             "styles": [
               "node_modules/chartist/dist/chartist.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.css",
               "src/assets/styles/style.scss"
             ],
