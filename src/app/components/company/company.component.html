@@ -1,6 +1,70 @@
 <p>company works!</p>
-<!-- <ngx-datatable #myTable class="material" [rows]="rows" [columns]="[{name:'Name'},{name:'Gender'},{name:'Company'}]"
-    [columnMode]="'force'" [headerHeight]="50" [loadingIndicator]="isLoading" [scrollbarV]="true" [footerHeight]="50"
-    [rowHeight]="50" [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber"
-    (page)='setPage($event)'>
-</ngx-datatable> -->
+<mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+            {{ row.email }}
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="username">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+            User Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+            {{ row.username }}
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="created_date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Created Date
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+            {{ row.created_date }}
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="modified_date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Modified Date
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+            {{ row.modified_date }}
+        </mat-cell>
+    </ng-container>
+    <!-- <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Action
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+            <button mat-fab (click)="openDialog(dialog)" color="warn">
+                edit
+            </button>
+        </mat-cell>
+    </ng-container> -->
+    <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>
+          Action
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          <button mat-icon-button>
+            <mat-icon class="mat-18 mat-color-primary">
+              edit
+            </mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+</mat-table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+<!-- <div class="" #dialog>
+    <h1 mat-dialog-title>Hi thong</h1>
+    <div mat-dialog-content>
+        <p>What's your favorite animal?</p>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+    </div>
+</div> -->

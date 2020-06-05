@@ -3,13 +3,18 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CompanyComponent } from './company.component';
 import { CompanyRoutes } from './company.routing';
-import { NgxDatatableModule} from '@swimlane/ngx-datatable'
+import { MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule } from '@angular/material';
 
 @NgModule({
     imports: [
         RouterModule,
         CommonModule,
-        NgxDatatableModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDialogModule,
         RouterModule.forChild(CompanyRoutes)
     ],
     declarations: [CompanyComponent]
