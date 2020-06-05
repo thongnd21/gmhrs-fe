@@ -15,6 +15,11 @@ export const AppRoutes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'company',
+        loadChildren:
+          () => import('./components/company/company.module').then(m => m.CompanyModule)
+      },
+      {
         path: '',
         loadChildren:
           () => import('./material-component/material.module').then(m => m.MaterialComponentsModule)
@@ -24,6 +29,6 @@ export const AppRoutes: Routes = [
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
       }
     ],
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   }
 ];
