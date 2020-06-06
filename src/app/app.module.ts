@@ -14,9 +14,10 @@ import { AppHeaderComponent } from './layouts/full/header/header.component';
 import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './demo-material-module';
-
+import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
+import { AuthGuard } from './shared/guard/auth.guard';
 
 @NgModule({
   declarations: [
@@ -34,9 +35,11 @@ import { SpinnerComponent } from './shared/spinner.component';
     FlexLayoutModule,
     HttpClientModule,
     SharedModule,
+    ToastrModule.forRoot(),
     RouterModule.forRoot(AppRoutes)
   ],
   providers: [
+    AuthGuard,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

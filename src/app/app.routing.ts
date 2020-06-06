@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { FullComponent } from './layouts/full/full.component';
+import { AuthGuard } from './shared/guard/auth.guard';
 
 export const AppRoutes: Routes = [
   { path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
@@ -22,6 +23,7 @@ export const AppRoutes: Routes = [
         path: 'dashboard',
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
       }
-    ]
+    ],
+    canActivate: [AuthGuard]
   }
 ];

@@ -2,9 +2,9 @@
     <mat-card-content>
         <mat-card-title>GMHRMS</mat-card-title>
         <mat-form-field>
-            <input matInput placeholder="User name" #message> </mat-form-field>
+            <input matInput [(ngModel)]="username" placeholder="User name" #message> </mat-form-field>
         <mat-form-field>
-            <input matInput placeholder="Password" #action> </mat-form-field>
-        <button mat-raised-button color="warn">Login</button>
+            <input matInput type="password" [(ngModel)]="password" placeholder="Password" #action> </mat-form-field>
+        <button mat-raised-button color="warn" (click)="onLogin()">Login</button>
     </mat-card-content>
 </mat-card>
