@@ -39,7 +39,6 @@
 .mat-select-panel {
     z-index: 99999 !important;
  }
-
- .cdk-global-overlay-wrapper, .cdk-overlay-container {
-    z-index: 99999 !important;
- }
+.form-error-msg{
+    color: red;
+}

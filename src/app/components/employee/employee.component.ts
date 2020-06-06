@@ -50,6 +50,10 @@ export class EmployeeComponent implements OnInit {
       name: 'phone'
     },
     {
+      prop: 'depName',
+      name: 'depName'
+    },
+    {
       prop: 'created_date',
       name: 'CreateAt'
     },
@@ -71,7 +75,7 @@ export class EmployeeComponent implements OnInit {
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop)
     this.getAllAccount();
-    this.getDepartment();
+    // this.getDepartment();
   }
 
   getAllAccount() {
@@ -87,19 +91,26 @@ export class EmployeeComponent implements OnInit {
             item['personal_email'] = element.personal_email;
             item['phone'] = element.phone;
             item['name'] = element.first_name +" "+ element.last_name;
-            item['roleId'] = element.role.name;
             item['status'] = element.status_id;
+            item['is_sync'] = element.is_sync;
+            item['departmentName'] = element.department.name;
             item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
             item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
             listAccount.push(item);
           });
+          console.log(listAccount);
           this.dataSource = new MatTableDataSource(listAccount);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         }
       },
       (error)=>{
-        this.toast.error("Server is not available!");
+        if(error.status == 0){
+          this.toast.error("Connection timeout!");
+        }if(error.status == 400){
+          this.toast.error("Server is not available!");
+        }
+          this.toast.error("Server is not available!");
       }
     );
   }
@@ -128,7 +139,7 @@ export class EmployeeComponent implements OnInit {
           Validators.minLength(5),
           Validators.maxLength(50)
         ]),
-        departmentId: new FormControl("")
+        // departmentId: new FormControl("")
       });
       this.empForm.setValue({
         firstname : '',
@@ -137,7 +148,7 @@ export class EmployeeComponent implements OnInit {
         personal_email : '',
         phone:'',
         address:'',
-        departmentId : this.departmentList[0].id
+        // departmentId : this.departmentList[0].id
       });
     this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
@@ -206,26 +217,26 @@ export class EmployeeComponent implements OnInit {
     );
   }
 
-  getDepartment(){
-    this.departmentList = [];
-    this.depServices.getAllDepartment().subscribe(
-      (res) => {
-        const department: any = res;
-        department.forEach(element => {
-          let item = {};
-          item['id'] = element.id;
-          item['name'] = element.name;
-          item['description'] = element.description;
-          item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
-          item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
-          this.departmentList.push(item);
-        });
-      },
-      (error) => {
-        this.toast.error('Server is not avaiable!');
-      }
-    );
-  }
+  // getDepartment(){
+  //   this.departmentList = [];
+  //   this.depServices.getAllDepartment().subscribe(
+  //     (res) => {
+  //       const department: any = res;
+  //       department.forEach(element => {
+  //         let item = {};
+  //         item['id'] = element.id;
+  //         item['name'] = element.name;
+  //         item['description'] = element.description;
+  //         item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
+  //         item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
+  //         this.departmentList.push(item);
+  //       });
+  //     },
+  //     (error) => {
+  //       this.toast.error('Server is not avaiable!');
+  //     }
+  //   );
+  // }
 
   getTeam() {
     this.listTeam = [];
