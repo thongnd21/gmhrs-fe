@@ -18,7 +18,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { AuthGuard } from './shared/guard/auth.guard';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -36,6 +36,7 @@ import { AuthGuard } from './shared/guard/auth.guard';
     FlexLayoutModule,
     HttpClientModule,
     SharedModule,
+    NgbModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot(AppRoutes)
   ],

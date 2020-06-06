@@ -27,10 +27,13 @@
             <mat-icon>{{ menuitem.icon }}</mat-icon> 
             <span>{{ menuitem.name }}</span> 
             <span fxFlex></span> 
-            <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span> 
         </a>
-
-        
     </mat-list-item>
-
+    <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/employee']">
+            <mat-icon>account_circle</mat-icon> 
+            <span>Employee</span> 
+            <span fxFlex></span> 
+        </a>
+    </mat-list-item>
 </mat-nav-list>
