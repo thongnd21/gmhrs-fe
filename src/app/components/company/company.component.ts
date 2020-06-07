@@ -3,6 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { CompanyServices } from '../../api-services/company.services';
 import * as moment from 'moment';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -13,6 +15,8 @@ export class CompanyComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [];
   isLoading = true;
+  dataSource: any;
+  accountCompanyForm: FormGroup;
   column = [
     {
       prop: 'email',
@@ -35,11 +39,10 @@ export class CompanyComponent implements OnInit {
       name: 'action'
     },
   ];
-  dataSource;
+  
   constructor(
+    private modalService: NgbModal,
     private companyServices: CompanyServices,
-    public dialog: MatDialog,
-    // private dialogRef : MatDialogRef<dialog>
   ) {
 
   }
@@ -73,15 +76,51 @@ export class CompanyComponent implements OnInit {
     )
   }
 
-  openDialog(dialog): void {
-    const dialogRef = this.dialog.open(dialog, {
-      width: '250px',
+  open(modal) {
+    this.accountCompanyForm = new FormGroup({
+      email: new FormControl("", [Validators.required, Validators.email]),
+      username: new FormControl("", [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(30)
+      ]),
+      password: new FormControl("", [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(30)
+      ]),
+      // personal_email: new FormControl("", [Validators.required, Validators.email]),
+      // phone: new FormControl("", [
+      //   Validators.required,
+      //   Validators.pattern(new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g))
+      // ]),
+      // address: new FormControl("", [
+      //   Validators.required,
+      //   Validators.minLength(5),
+      //   Validators.maxLength(50)
+      // ]),
+      // departmentId: new FormControl("")
     });
-  }
+    this.accountCompanyForm.setValue({
+      email : '',
+      username : '',
+      password : '',
+      // personal_email : '',
+      // phone:'',
+      // address:'',
+      // departmentId : this.departmentList[0].id
+    });
+  this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+}
 
-  onNoClick(): void {
-    this.dialog.closeAll;
-  }
+closeModal() {
+  this.modalService.dismissAll();
+}
+
+applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this.dataSource.filter = filterValue.trim().toLowerCase();
+}
 
   ngAfterViewInit() {
 
