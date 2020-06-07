@@ -1,21 +1,16 @@
 <div class="ml-05 mr-05 mt-05 pb-1">
   <div class="mat-elevation-z8">
-    <div class="container ">
-      <div class="row mt-1">
+    <div class="container">
+      <div class="row">
         <div class="col-md-4">
           <mat-form-field>
             <mat-label>Search</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
           </mat-form-field>
         </div>
-        <!-- <div class="col-md-4">
-          <button class="col  " style="margin-bottom:10px" mat-button color="link" (click)="openModalGroup(group)">
-            <i class="fa fa-fw fa-plus"></i>
-            Add to group
-          </button>
-        </div> -->
-        <div class="col-md-4">
-          <button class="col" style="margin-top:10px" mat-raised-button color="primary" (click)="open(create)">
+       
+        <div class="col-md-4 offset-md-4">
+          <button style="margin-top:10px" mat-raised-button color="primary" (click)="open(create)">
             <i class="fa fa-fw fa-plus"></i>
             Create Account Company
           </button>
@@ -61,7 +56,15 @@
         Action
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-        <button mat-icon-button>
+
+        <!-- view detail account company icon button -->
+        <button mat-icon-button (click)="openDetail(detail,row.id)">
+          <mat-icon>
+            remove_red_eye
+          </mat-icon>
+        </button>
+        <!-- update account company icon button -->
+        <button mat-icon-button (click)="updateAccountCompany(row.id)">
           <mat-icon class="mat-18 mat-color-primary">
             edit
           </mat-icon>
@@ -74,7 +77,7 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
 
-<!-- Modal create --> -->
+<!-- Modal create  account company-->
 <ng-template #create let-modal>
   <div class="modal-body">
     <div class="card-body">
@@ -106,8 +109,8 @@
 
                 <div class="pb-1">
                   <mat-form-field class="full-width">
-                    <input matInput type="password" name="password" formControlName="password"
-                      placeholder="Password *" value="">
+                    <input matInput type="password" name="password" formControlName="password" placeholder="Password *"
+                      value="">
                   </mat-form-field>
                   <!-- <small
                     *ngIf="accountCompanyForm.controls['primary_email'].hasError('required') && accountCompanyForm.controls['primary_email'].touched"
@@ -117,14 +120,66 @@
                 </div>
               </div>
             </div>
-            <button mat-flat-button class="col-md-2 btn-success" color="primary" ngbAutofocus
-              [disabled]="accountCompanyForm.invalid">Submit</button>
+            <button mat-flat-button class="col-md-2 btn-success" (click)="createAccountCompany()" color="primary"
+              ngbAutofocus [disabled]="accountCompanyForm.invalid">Submit</button>
             <button mat-flat-button class="col-md-2 ml-2" color="accent" (click)="closeModal()">
               Close
             </button>
           </form>
         </mat-card-content>
       </mat-card>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #detail let-modal>
+  <div class="modal-header">
+    <h4>Detail</h4>
+  </div>
+  <div class="modal-body">
+    <div class="card-body">
+      <table class="table table-borderless" style="border: 0;">
+        <tr>
+          <td>
+            Username
+          </td>
+          <td>
+            : {{account.username}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Email
+          </td>
+          <td>
+            : {{account.email}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Create Date
+          </td>
+          <td>
+            : {{account.created_date}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Modified Date
+          </td>
+          <td>
+            : {{account.modified_date}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Role
+          </td>
+          <td>
+            : {{account.role}}
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </ng-template>

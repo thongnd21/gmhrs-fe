@@ -5,6 +5,9 @@ import { CompanyServices } from '../../api-services/company.services';
 import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { AccountCompanyModel } from '../../model/accounts';
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -39,10 +42,13 @@ export class CompanyComponent implements OnInit {
       name: 'action'
     },
   ];
-  
+  account = new AccountCompanyModel();
+
   constructor(
     private modalService: NgbModal,
     private companyServices: CompanyServices,
+    private toast: ToastrService,
+    private router: Router,
   ) {
 
   }
@@ -51,6 +57,12 @@ export class CompanyComponent implements OnInit {
     this.displayedColumns = this.column.map((c) => c.prop);
     this.getAllCompany();
   }
+
+  // updateAccountCompany(id){
+  //   this.router.navigate(['/update/', id]);
+  // }
+
+
 
   getAllCompany() {
     this.companyServices.getAllCompany().subscribe(
@@ -74,6 +86,27 @@ export class CompanyComponent implements OnInit {
         this.dataSource.sort = this.sort;
       }
     )
+  }
+
+  getAccountCompanyById(id) {console.log(id);
+    this.companyServices.getAccountCompanyById(id).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.account.id = data.id;
+        this.account.email = data.email;
+        this.account.username = data.username;
+        this.account.created_date = moment.utc(data.created_date).local().format('LLLL');
+        this.account.modified_date = moment.utc(data.modified_date).local().format('LLLL');
+        this.account.role = data.role.name;
+        console.log(this.account);
+      }
+
+    )
+  }
+
+  openDetail(detail,id) {
+    this.getAccountCompanyById(id);
+    this.modalService.open(detail, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
   open(modal) {
@@ -102,25 +135,45 @@ export class CompanyComponent implements OnInit {
       // departmentId: new FormControl("")
     });
     this.accountCompanyForm.setValue({
-      email : '',
-      username : '',
-      password : '',
+      email: '',
+      username: '',
+      password: '',
       // personal_email : '',
       // phone:'',
       // address:'',
       // departmentId : this.departmentList[0].id
     });
-  this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-}
+    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+  }
 
-closeModal() {
-  this.modalService.dismissAll();
-}
+  closeModal() {
+    this.modalService.dismissAll();
+  }
 
-applyFilter(event: Event) {
-  const filterValue = (event.target as HTMLInputElement).value;
-  this.dataSource.filter = filterValue.trim().toLowerCase();
-}
+  createAccountCompany() {
+    const newAccountCompany = {
+      email: this.accountCompanyForm.controls['email'].value,
+      username: this.accountCompanyForm.controls['username'].value,
+      password: this.accountCompanyForm.controls['password'].value,
+
+    }
+    this.companyServices.createAccountCompany(newAccountCompany).subscribe(
+      (res) => {
+        this.toast.success("Create Account success!");
+        this.getAllCompany();
+        this.closeModal();
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+        this.closeModal();
+      }
+    );
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   ngAfterViewInit() {
 
