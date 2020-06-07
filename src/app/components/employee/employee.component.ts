@@ -75,7 +75,7 @@ export class EmployeeComponent implements OnInit {
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop)
     this.getAllAccount();
-    // this.getDepartment();
+    // this.getDepartment(); 
   }
 
   getAllAccount() {
