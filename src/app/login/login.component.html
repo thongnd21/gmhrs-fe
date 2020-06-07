@@ -1,10 +1,38 @@
-<mat-card>
-    <mat-card-content>
-        <mat-card-title>GMHRMS</mat-card-title>
-        <mat-form-field>
-            <input matInput [(ngModel)]="username" placeholder="User name" #message> </mat-form-field>
-        <mat-form-field>
-            <input matInput type="password" [(ngModel)]="password" placeholder="Password" #action> </mat-form-field>
-        <button mat-raised-button color="warn" (click)="onLogin()">Login</button>
-    </mat-card-content>
-</mat-card>
+<div class="login-page">
+    <div *ngIf="login == true" class="row justify-content-md-center">
+        <div class="login col-md-5">
+            <mat-card>
+                <mat-card-content>
+                    <mat-card-title>GMHRMS</mat-card-title>
+                    <mat-form-field>
+                        <input matInput [(ngModel)]="username" placeholder="User name" #message />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput type="password" [(ngModel)]="password" placeholder="Password" #action />
+                    </mat-form-field>
+                    <button mat-raised-button color="warn" (click)="onLogin()">
+                        Login
+                    </button>
+                </mat-card-content> 
+            </mat-card>
+        </div>
+    </div>
+    <div *ngIf="login == false" class="row justify-content-md-center">
+        <div class="login col-md-5">
+            <mat-card>
+                <mat-card-content>
+                    <mat-card-title>Re</mat-card-title>
+                    <mat-form-field>
+                        <input matInput [(ngModel)]="username" placeholder="User name" #message />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput type="password" [(ngModel)]="password" placeholder="Password" #action />
+                    </mat-form-field>
+                    <button mat-raised-button color="warn" (click)="onLogin()">
+                        Login
+                    </button>
+                </mat-card-content> 
+            </mat-card>
+        </div>
+    </div>
+</div>
