@@ -4,7 +4,7 @@
       <div class="row mt-1">
         <div class="col-md-4">
           <mat-form-field>
-            <mat-label>Filter</mat-label>
+            <mat-label>Search</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
           </mat-form-field>
         </div>
@@ -71,6 +71,15 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
         {{ row.phone }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="depName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Department
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+        {{ row.departmentName }}
       </mat-cell>
     </ng-container>
 
@@ -166,7 +175,7 @@
                     <input matInput name="address" formControlName="address" placeholder="Address">
                   </mat-form-field>
                 </div>
-                <div class="pb-1">
+                <!-- <div class="pb-1">
                   <mat-form-field>
                     <mat-label>Department</mat-label>
                     <mat-select formControlName=departmentId name="department">
@@ -175,7 +184,7 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                </div>
+                </div> -->
               </div>
             </div>
             <button mat-flat-button class="col-md-2 btn-success" (click)="createEmployee()" color="primary" ngbAutofocus
