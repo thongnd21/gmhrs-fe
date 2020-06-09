@@ -1,0 +1,26 @@
+.mat-table{
+    width: 100%;
+}
+.mat-table__wrapper .mat-table {
+    min-width: auto !important;
+    width: 100% !important;
+}
+.mat-header-row {
+    width: 100%;
+}
+.mat-row {
+    width: 100%;
+}
+.mat-column-count{
+    flex: 0 0 20% !important;
+    width: 20% !important;
+}
+.mat-column-name{
+    flex: 0 0 30% !important;
+    width: 30% !important;
+}
+.mat-column-description{
+    flex: 0 0 50% !important;
+    width: 50% !important;
+}
+
