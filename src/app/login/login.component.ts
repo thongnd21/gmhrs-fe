@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
     username: string;
     password: string;
     public loading = false;
+    login = true;
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.login = true;
     }
 
     onLogin() {
