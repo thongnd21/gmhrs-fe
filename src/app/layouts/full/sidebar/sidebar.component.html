@@ -41,4 +41,18 @@
             <span fxFlex></span>
         </a>
     </mat-list-item>
+    <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/teams']">
+            <mat-icon>group</mat-icon>
+            <span>Team</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+    <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/departments']">
+            <mat-icon>business</mat-icon>
+            <span>Department</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
 </mat-nav-list>
