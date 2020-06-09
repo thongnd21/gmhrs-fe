@@ -42,27 +42,19 @@ export class CompanyComponent implements OnInit {
       name: 'action'
     },
   ];
-  account = new AccountCompanyModel();
+  account;
 
   constructor(
     private modalService: NgbModal,
     private companyServices: CompanyServices,
     private toast: ToastrService,
     private router: Router,
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.displayedColumns = this.column.map((c) => c.prop);
     this.getAllCompany();
   }
-
-  // updateAccountCompany(id){
-  //   this.router.navigate(['/update/', id]);
-  // }
-
-
 
   getAllCompany() {
     this.companyServices.getAllCompany().subscribe(
@@ -75,7 +67,7 @@ export class CompanyComponent implements OnInit {
           item['username'] = company.username;
           item['created_date'] = moment.utc(company.created_date).local().format('LLLL');
           item['modified_date'] = moment.utc(company.modified_date).local().format('LLLL');
-          item['role_id'] = company.role_id;
+          item['role'] = company.role.name;
           item['status_id'] = company.status_id;
           list.push(item);
           console.log(item);
@@ -89,6 +81,7 @@ export class CompanyComponent implements OnInit {
   }
 
   getAccountCompanyById(id) {console.log(id);
+    this.account = new AccountCompanyModel;
     this.companyServices.getAccountCompanyById(id).subscribe(
       (data: any) => {
         console.log(data);
@@ -102,6 +95,37 @@ export class CompanyComponent implements OnInit {
       }
 
     )
+  }
+
+  opentUpdate(update,data){
+    console.log(data);
+    this.account = new AccountCompanyModel();
+    this.account.id = data.id;
+    this.account.email = data.email;
+    this.account.username = data.username;
+    this.account.created_date = data.created_date;
+    this.account.modified_date = data.modified_date;
+    this.account.role = data.role;
+    console.log(this.account);
+    this.accountCompanyForm = new FormGroup({
+      email: new FormControl(this.account.email, [Validators.required, Validators.email]),
+      username: new FormControl(this.account.username, [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(30)
+      ]),
+      role: new FormControl(this.account.role, [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(15)
+      ]),
+    });
+    // this.accountCompanyForm.setValue({
+    //   email: this.account.email,
+    //   username: this.account.username,
+    //   role: this.account.role,
+    // });
+    this.modalService.open(update, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
   openDetail(detail,id) {
@@ -151,13 +175,14 @@ export class CompanyComponent implements OnInit {
   }
 
   createAccountCompany() {
-    const newAccountCompany = {
-      email: this.accountCompanyForm.controls['email'].value,
-      username: this.accountCompanyForm.controls['username'].value,
-      password: this.accountCompanyForm.controls['password'].value,
+    this.account = new AccountCompanyModel();
+    // const newAccountCompany = {
+      this.account.email=  this.accountCompanyForm.controls['email'].value,
+      this.account.username= this.accountCompanyForm.controls['username'].value,
+      this.account.password= this.accountCompanyForm.controls['password'].value,
 
-    }
-    this.companyServices.createAccountCompany(newAccountCompany).subscribe(
+    // }
+    this.companyServices.createAccountCompany(this.account).subscribe(
       (res) => {
         this.toast.success("Create Account success!");
         this.getAllCompany();
