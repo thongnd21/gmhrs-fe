@@ -9,7 +9,9 @@ $topnav-background-color: linear-gradient( #3e5ae8, rgba(255, 11, 11, 0.83));
     right: 0;
     bottom: 0;
     overflow: auto;
-    background: $topnav-background-color;
+    background-image: url(./../../assets/images/background/login.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
     text-align: center;
     color: black;
     padding: 3em;
@@ -96,4 +98,7 @@ $topnav-background-color: linear-gradient( #3e5ae8, rgba(255, 11, 11, 0.83));
     .button{
         padding-bottom: 20px;
     }
+}
+.form-error-msg{
+    color: red;
 }
