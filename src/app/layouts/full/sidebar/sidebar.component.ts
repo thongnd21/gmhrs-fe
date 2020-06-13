@@ -29,7 +29,7 @@ export class AppSidebarComponent implements OnDestroy {
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
-
+  role = Number.parseInt(localStorage.getItem('roleId'));
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }

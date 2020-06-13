@@ -55,8 +55,9 @@ export class LoginComponent implements OnInit {
                 console.log(res);
                 const userInfo: any = res;
                 localStorage.setItem('isLoggedin', 'true');
-                localStorage.setItem('username', this.username);
+                localStorage.setItem('username', userInfo.profile.username);
                 localStorage.setItem('token', userInfo.token);
+                localStorage.setItem('roleId', userInfo.profile.role.id);
                 this.router.navigate(['/dashboard']);
             },
             (err) => {
