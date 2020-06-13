@@ -111,6 +111,7 @@ export class CompanyComponent implements OnInit {
       email: new FormControl(this.account.email, [Validators.required, Validators.email]),
       username: new FormControl(this.account.username, [
         Validators.required,
+        Validators.pattern(new RegExp(/(^[a-zA-Z0-9]*$)/g)),
         Validators.minLength(2),
         Validators.maxLength(30)
       ]),

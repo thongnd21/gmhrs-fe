@@ -19,6 +19,8 @@ import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { AuthGuard } from './shared/guard/auth.guard';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
+import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
   ],
   providers: [
     AuthGuard,
+    SystemAdminGuard,
+    CompanyManagerGuard,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
