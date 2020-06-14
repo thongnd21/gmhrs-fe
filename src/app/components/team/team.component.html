@@ -1,0 +1,56 @@
+<div class="ml-05 mr-05 mt-05 pb-1">
+  <div class="mat-elevation-z8">
+    <div class="container ">
+      <div class="row mt-1">
+        <div class="col-md-5 align-self-start">
+          <mat-form-field >
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="count">
+        <mat-header-cell *matHeaderCellDef >
+          No.
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row ;let i = index;" data-label="No.">
+          {{i+1}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Group Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Group name">
+          {{ row.name }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.email }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Description
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.description }}
+        </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+</div>

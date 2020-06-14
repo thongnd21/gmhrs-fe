@@ -56,9 +56,6 @@ export class EmployeeComponent implements OnInit {
     {
       prop: 'created_date',
       name: 'CreateAt'
-    },
-    {
-      prop: 'action'
     }
   ];
   listTeam =[];
@@ -75,7 +72,6 @@ export class EmployeeComponent implements OnInit {
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop)
     this.getAllAccount();
-    // this.getDepartment(); 
   }
 
   getAllAccount() {
@@ -115,49 +111,6 @@ export class EmployeeComponent implements OnInit {
     );
   }
 
-
-  open(modal) {
-      this.empForm = new FormGroup({
-        firstname: new FormControl("", [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(30)
-        ]),
-        lastname: new FormControl("", [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(30)
-        ]),
-        primary_email: new FormControl("", [Validators.required, Validators.email]),
-        personal_email: new FormControl("", [Validators.required, Validators.email]),
-        phone: new FormControl("", [
-          Validators.required,
-          Validators.pattern(new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g))
-        ]),
-        address: new FormControl("", [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(50)
-        ]),
-        // departmentId: new FormControl("")
-      });
-      this.empForm.setValue({
-        firstname : '',
-        lastname : '',
-        primary_email : '',
-        personal_email : '',
-        phone:'',
-        address:'',
-        // departmentId : this.departmentList[0].id
-      });
-    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-  }
-
-  openModalGroup(group){
-    console.log(this.selection);
-    this.getTeam();
-    this.modalService.open(group, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-  }
  
   closeModal() {
     this.modalService.dismissAll();
@@ -188,103 +141,4 @@ export class EmployeeComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
-
-  viewDetail(item) {
-    console.log(item)
-    this.router.navigate(['/employee/', item]);
-  }
-
-  createEmployee(){
-    const employee = {
-      primary_email: this.empForm.controls['primary_email'].value,
-      personal_email: this.empForm.controls['personal_email'].value,
-      phone: this.empForm.controls['phone'].value,
-      first_name: this.empForm.controls['firstname'].value,
-      last_name: this.empForm.controls['lastname'].value,
-      address: this.empForm.controls['address'].value,
-      department_id: this.empForm.controls['departmentId'].value,
-    }
-    this.accountServices.createAccount(employee).subscribe(
-      (res)=>{
-        this.toast.success("Create Employee success!");
-        this.getAllAccount();
-        this.closeModal();
-      },
-      (error)=>{
-        this.toast.error("Server is not available!");
-        this.closeModal();
-      }
-    );
-  }
-
-  // getDepartment(){
-  //   this.departmentList = [];
-  //   this.depServices.getAllDepartment().subscribe(
-  //     (res) => {
-  //       const department: any = res;
-  //       department.forEach(element => {
-  //         let item = {};
-  //         item['id'] = element.id;
-  //         item['name'] = element.name;
-  //         item['description'] = element.description;
-  //         item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
-  //         item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
-  //         this.departmentList.push(item);
-  //       });
-  //     },
-  //     (error) => {
-  //       this.toast.error('Server is not avaiable!');
-  //     }
-  //   );
-  // }
-
-  getTeam() {
-    this.listTeam = [];
-    this.teamService.getAllTeam().subscribe(
-      (res)=>{
-        const data:any = res;
-        data.forEach(element => {
-          let item ={};
-          item['id'] = element.id;
-          item['name'] = element.name;
-          item['email'] = element.email;
-          item['description'] = element.description;
-          item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
-          item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
-          this.listTeam.push(item);
-        });
-        this.teamId = this.listTeam[0].id;
-      },
-      (error)=>{
-        this.toast.error("Server is not avaiable!");
-      }
-    );
-  }
-
-  addEmpToGroup(){
-    let listEmployee=[];
-    this.selection.selected.forEach(element => {
-      let item ={};
-      item['employeeId'] = element.id;
-      listEmployee.push(item);
-    });
-    const employeeTeam = {
-      teamId: this.teamId,
-      listEmployee: listEmployee
-    }
-    console.log(employeeTeam);
-    this.accountServices.addAccountToTeam(employeeTeam).subscribe(
-      (res)=>{
-        this.toast.success("Create Employee success!");
-        this.getAllAccount();
-        this.closeModal();
-        this.selection.clear();
-      },
-      (error)=>{
-        this.toast.error("Server is not available!");
-        this.closeModal();
-      }
-    );
-  }
-
 }

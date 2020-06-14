@@ -5,4 +5,10 @@ import { Component } from '@angular/core';
   templateUrl: './header.component.html',
   styleUrls: []
 })
-export class AppHeaderComponent {}
+export class AppHeaderComponent {
+  username;
+
+  ngOnInit() {
+    this.username = localStorage.getItem('username');
+  }
+}
