@@ -6,7 +6,8 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 
 export const AppRoutes: Routes = [
-  { path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
+  { path: '', loadChildren: () => import('./login/login.module')
+  .then(m => m.LoginModule) },
   {
     path: '',
     component: FullComponent,
@@ -20,6 +21,12 @@ export const AppRoutes: Routes = [
         path: 'company',
         loadChildren:
           () => import('./components/company/company.module').then(m => m.CompanyModule),canActivate: [SystemAdminGuard]
+      },
+      {
+        path: 'company-config-connection',
+        loadChildren:
+          () => import('./components/company-config-connection/company-config-connection.module')
+          .then(m => m.CompanyConfigConnectionModule),canActivate: [SystemAdminGuard]
       },
       {
         path: 'employee',
