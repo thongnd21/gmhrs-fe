@@ -5,8 +5,8 @@
 <!-- <a href="https://wrappixel.com/templates/materialpro-angular-dashboard/" class=" m-r-20 hidden-sm-up" mat-raised-button color="warn">Upgrade To Pro</a> -->
 <a [matMenuTriggerFor]="profile" class="m-r-5">{{username}}</a>
 <mat-menu #profile="matMenu" class="mymegamenu">
-    <button mat-menu-item>
-        <mat-icon>settings</mat-icon> Settings </button>
+    <button mat-menu-item [routerLink]="['/company-config-connection']">
+        <mat-icon>settings</mat-icon> Settings Connection</button>
     <button mat-menu-item>
         <mat-icon>account_box</mat-icon> Profile </button>
     <button mat-menu-item>

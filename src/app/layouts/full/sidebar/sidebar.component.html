@@ -8,11 +8,11 @@
     <!-- ============================================================== -->
     <!-- Profile - style you can find in header.scss -->
     <!-- ============================================================== -->
-    <div class="profile-text"><a [matMenuTriggerFor]="sdprofile" class=""> Markarn Doe <i
-                class="ti-angle-down font-12 m-l-5"></i></a></div>
-    <mat-menu #sdprofile="matMenu" class="mymegamenu">
+    <div class="profile-text"> Markarn Doe <i
+                class="ti-angle-down font-12 m-l-5"></i></div>
+    <!-- <mat-menu #sdprofile="matMenu" class="mymegamenu" >
         <button mat-menu-item>
-            <mat-icon>settings</mat-icon> Settings
+            <mat-icon>settings</mat-icon> Setting Connection
         </button>
         <button mat-menu-item>
             <mat-icon>account_box</mat-icon> Profile
@@ -23,12 +23,12 @@
         <button mat-menu-item>
             <mat-icon>exit_to_app</mat-icon> Sign Out
         </button>
-    </mat-menu>
+    </mat-menu> -->
 
 </div>
 <mat-nav-list appAccordion>
     <mat-list-item appAccordionLink routerLinkActive="selected">
-        <a class="" appAccordionToggle [routerLink]="['/employee']" *ngIf="role === 2" >
+        <a class="" appAccordionToggle [routerLink]="['/employee']" *ngIf="role === 2">
             <mat-icon>account_circle</mat-icon>
             <span>Employee</span>
             <span fxFlex></span>

@@ -146,19 +146,19 @@
               <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                 <div class="pb-1">
                   <mat-form-field class="full-width">
-                    <input matInput name="email" formControlName="email"  value="">
+                    <input matInput name="email" formControlName="email" placeholder="Email" value="">
                   </mat-form-field>
                 </div>
                 <!-- username field -->
                 <div class="pb-1">
                   <mat-form-field class="full-width">
-                    <input matInput name="username" formControlName="username"  value="">
+                    <input matInput name="username" formControlName="username" placeholder="User Name" value="">
                   </mat-form-field>
                 </div>
                 <!-- role field -->
                 <div class="pb-1">
                   <mat-form-field class="full-width">
-                    <input matInput name="role" formControlName="role" value="">
+                    <input matInput name="role" formControlName="role" placeholder="Role" value="">
                   </mat-form-field>
                 </div>
               </div>
@@ -182,7 +182,7 @@
   </div>
   <div class="modal-body">
     <div class="card-body">
-      <table class="table table-borderless" style="border: 0;">
+      <table class="table">
         <tr>
           <td>
             Username
@@ -224,6 +224,9 @@
           </td>
         </tr>
       </table>
+      <button mat-flat-button class="col-md-2 ml-2" color="accent" (click)="closeModal()">
+        Close
+      </button>
     </div>
   </div>
 </ng-template>

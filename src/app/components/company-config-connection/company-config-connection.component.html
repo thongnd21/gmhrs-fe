@@ -1,0 +1,106 @@
+<div>
+    <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Database Connection">
+            <div class="card-body">
+                <mat-card class="p-0">
+                    <mat-card-content>
+                        <form [formGroup]="accessDBForm" (ngSubmit)="onSubmitConection(accessDBForm.value)">
+                            <div fxLayout="row wrap">
+
+                                <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+                                    <div class="pb-1">
+                                        <mat-form-field class="full-width">
+                                            <input matInput name="connectionName" formControlName="connectionName"
+                                                placeholder="Connection Name" value="">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="pb-1">
+                                        <mat-form-field class="full-width">
+                                            <input matInput name="hostname" formControlName="hostname"
+                                                placeholder="Hostname" value="">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="pb-1">
+                                        <mat-form-field class="full-width">
+                                            <input matInput name="port" formControlName="port" placeholder="Port"
+                                                value="">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="pb-1">
+                                        <mat-form-field class="full-width">
+                                            <input matInput name="username" formControlName="username"
+                                                placeholder="Username" value="">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="pb-1">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="password" name="password" formControlName="password"
+                                                placeholder="Password" value="">
+                                        </mat-form-field>
+                                    </div>
+                                    <div>
+                                        <mat-form-field>
+                                            <mat-label>Database Type</mat-label>
+                                            <select matNativeControl required>
+                                                <option value="mysql">My SQL</option>
+                                                <option value="mssql"></option>
+                                            </select>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <button class="submit-btn" type="submit" color="primary">Save</button>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+        </mat-tab>
+        <mat-tab label="API Endpoint">
+            <div class="card-body">
+                <mat-card class="p-0">
+                    <mat-card-content>
+                        <form [formGroup]="accessDBForm" (ngSubmit)="onSubmitConection(accessDBForm.value)">
+                            <div fxLayout="row wrap">
+                                <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+                                    <div class="pb-1">
+                                        <mat-form-field class="full-width">
+                                            <input matInput name="connectionName" formControlName="connectionName"
+                                                placeholder="URL" value="">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" color="primary">Save</button>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-tab>
+        <mat-tab label="Config G-suite Authentication">
+            <div class="mainContainer">
+                <div class="content">
+                    <div class="header">
+                        <h2>G-suite credential file</h2>
+                    </div>
+                    <div class="row margin25">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text upload" id="btnUpload">Upload</span>
+                            </div>
+                            <div class="custom-file">
+                                <form action="/api/upload" method="post" enctype="multipart/form-data">
+                                    <input type="file" class="custom-file-input" id="inputGroupFile01"
+                                        aria-describedby="inputGroupFileAddon01">
+                                </form>
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

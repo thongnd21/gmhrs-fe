@@ -147,26 +147,12 @@ export class CompanyComponent implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(30)
       ]),
-      // personal_email: new FormControl("", [Validators.required, Validators.email]),
-      // phone: new FormControl("", [
-      //   Validators.required,
-      //   Validators.pattern(new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g))
-      // ]),
-      // address: new FormControl("", [
-      //   Validators.required,
-      //   Validators.minLength(5),
-      //   Validators.maxLength(50)
-      // ]),
-      // departmentId: new FormControl("")
+      
     });
     this.accountCompanyForm.setValue({
       email: '',
       username: '',
       password: '',
-      // personal_email : '',
-      // phone:'',
-      // address:'',
-      // departmentId : this.departmentList[0].id
     });
     this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
