@@ -8,8 +8,7 @@
     <!-- ============================================================== -->
     <!-- Profile - style you can find in header.scss -->
     <!-- ============================================================== -->
-    <div class="profile-text"> Markarn Doe <i
-                class="ti-angle-down font-12 m-l-5"></i></div>
+    <div class="profile-text"> Markarn Doe <i class="ti-angle-down font-12 m-l-5"></i></div>
     <!-- <mat-menu #sdprofile="matMenu" class="mymegamenu" >
         <button mat-menu-item>
             <mat-icon>settings</mat-icon> Setting Connection
@@ -52,6 +51,13 @@
         <a class="" appAccordionToggle [routerLink]="['/departments']" *ngIf="role === 2">
             <mat-icon>business</mat-icon>
             <span>Department</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+    <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/twofaauth']">
+            <mat-icon>business</mat-icon>
+            <span>2FA Authentication</span>
             <span fxFlex></span>
         </a>
     </mat-list-item>

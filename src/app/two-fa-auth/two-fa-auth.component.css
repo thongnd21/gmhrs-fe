@@ -1,0 +1,16 @@
+.mat-column-email{
+    flex: 0 0 35% !important;
+    width: 35% !important;
+}
+.mat-column-action{
+    flex: 0 0 15% !important;
+    width: 15% !important;
+}
+th.mat-header-cell,
+td.mat-cell {
+  text-align: center !important;
+}
+
+tr {
+    margin-bottom: 10px;
+}

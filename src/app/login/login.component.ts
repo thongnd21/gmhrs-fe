@@ -26,13 +26,13 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.login = true;
-        const accPassword = new FormControl("",[Validators.required]);
+        const accPassword = new FormControl("", [Validators.required]);
         const confirmPassword = new FormControl(
             "",
             CustomValidators.equalTo(accPassword)
         );
 
-        this.registerForm =  new FormGroup({
+        this.registerForm = new FormGroup({
             username: new FormControl("", [
                 Validators.required,
                 Validators.minLength(4),
@@ -56,9 +56,15 @@ export class LoginComponent implements OnInit {
                 const userInfo: any = res;
                 localStorage.setItem('isLoggedin', 'true');
                 localStorage.setItem('username', userInfo.profile.username);
+                localStorage.setItem('two_fa_status', userInfo.profile.two_fa_status);
                 localStorage.setItem('token', userInfo.token);
                 localStorage.setItem('roleId', userInfo.profile.role.id);
-                this.router.navigate(['/dashboard']);
+                if (userInfo.profile.two_fa_status === 1) {
+                    this.router.navigate(['/dashboard']);
+                } else {
+                    this.router.navigate(['/dashboard']);
+                }
+
             },
             (err) => {
                 if (err.status == 0) {
@@ -82,16 +88,16 @@ export class LoginComponent implements OnInit {
             email: this.registerForm.controls['email'].value,
             username: this.registerForm.controls['username'].value,
             password: this.registerForm.controls['password'].value
-          };
-          this.companyServices.createAccountCompany(account).subscribe(
+        };
+        this.companyServices.createAccountCompany(account).subscribe(
             (res) => {
-              this.registerForm.reset();
-              this.toast.success("Create Account success!");
+                this.registerForm.reset();
+                this.toast.success("Create Account success!");
             },
             (error) => {
-              this.toast.error("Server is not available!");
+                this.toast.error("Server is not available!");
             }
-          );
+        );
     }
 
 }
