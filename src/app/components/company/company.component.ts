@@ -169,9 +169,11 @@ export class CompanyComponent implements OnInit {
 
   updateAccountCompany(data) {
     this.account = new AccountCompanyModel()
-    this.account.id = data.id
+    this.account.id = data.id;
     this.account.address = data.address;
     this.account.phone = data.phone;
+    // this.account.api_endpoint = data.api_endpoint,
+    // this.account.connection_database = data.connection_database
 
     console.log(this.account);;
     this.companyServices.updateAccountCompany(this.account).subscribe(
@@ -194,17 +196,19 @@ export class CompanyComponent implements OnInit {
       this.account.username = this.accountCompanyForm.controls['username'].value,
       this.account.password = this.accountCompanyForm.controls['password'].value,
 
-      this.companyServices.createAccountCompany(this.account).subscribe(
-        (res) => {
-          this.toast.success("Create Account success!");
-          this.getAllCompany();
-          this.closeModal();
-        },
-        (error) => {
-          this.toast.error("Server is not available!");
-          this.closeModal();
-        }
-      );
+
+      console.log(this.account);
+    this.companyServices.createAccountCompany(this.account).subscribe(
+      (res) => {
+        this.toast.success("Create Account success!");
+        this.getAllCompany();
+        this.closeModal();
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+        this.closeModal();
+      }
+    );
   }
 
   applyFilter(event: Event) {

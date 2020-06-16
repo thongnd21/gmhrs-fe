@@ -7,4 +7,6 @@ export class AccountCompanyModel {
     role: string
     address: string
     phone: string
+    api_endpoint: string
+    connection_database: string
 }
