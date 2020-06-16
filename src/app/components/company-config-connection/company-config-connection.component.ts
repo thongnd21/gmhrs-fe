@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyServices } from '../../api-services/company.services';
+import { AccountCompanyModel } from '../../model/accounts';
 
 @Component({
   selector: 'app-company-config-connection',
@@ -12,6 +13,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
   isOptional = false;
   APIEndpointForm: FormGroup;
+  account;
+  fileContent;
+  file;
   days=[
     {
       id: 0,
@@ -81,10 +85,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
 
-
+// api endpoint
   onSubmitURLConection(value) {
-    console.log(JSON.stringify(value));
-    this.companyServices.updateAccountCompany(JSON.stringify(value)).subscribe(
+    this.account = new AccountCompanyModel();
+    this.account.id = localStorage.getItem('id');
+    this.account.api_endpoint  =  value.url;
+    console.log(this.account);
+    this.companyServices.updateAccountCompany(this.account).subscribe(
       (res) => {
         this.toast.success("Update Account success!");
       },
@@ -98,8 +105,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
   // conection string 
   onSubmitConection(value) {
     // let connectionString = value.hostname
-    console.log(JSON.stringify(value));
-    this.companyServices.updateAccountCompany(JSON.stringify(value)).subscribe(
+    this.account = new AccountCompanyModel();
+    this.account.id = localStorage.getItem('id');
+    this.account.connection_database  =  JSON.stringify(value);
+    console.log(this.account);
+    this.companyServices.updateAccountCompany(this.account).subscribe(
       (res) => {
         this.toast.success("Update Account success!");
       },
@@ -135,6 +145,18 @@ export class CompanyConfigConnectionComponent implements OnInit {
       control.removeAt(i);
   }
 
+  submit(){
+    let date = JSON.stringify(this.fileContent);
+    console.log(date);
+  }
 
-
+  public onChange(fileList: FileList): void {
+    let file = fileList[0];
+    let fileReader: FileReader = new FileReader();
+    let self = this;
+    fileReader.onloadend = function() {
+      self.fileContent = fileReader.result;
+    }
+    fileReader.readAsText(file);
+  }
 }

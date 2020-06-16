@@ -14,6 +14,7 @@ export class CompanyServices {
 
   updateAccountCompany(updateAccount) {
     return this.httpClient.put('https://gmhrs-api.herokuapp.com/api/accounts', updateAccount);
+    // return this.httpClient.put('https://localhost:3000/api/accounts', updateAccount);
   }
 
   createAccountCompany(newAccount) {

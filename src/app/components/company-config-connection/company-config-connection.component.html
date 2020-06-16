@@ -67,8 +67,7 @@
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="url" formControlName="url"
-                                                placeholder="URL" value="">
+                                            <input matInput name="url" formControlName="url" placeholder="URL" value="">
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -80,27 +79,18 @@
             </div>
         </mat-tab>
         <mat-tab label="Config G-suite Authentication">
-            <div class="mainContainer">
-                <div class="content">
-                    <div class="header">
-                        <h2>G-suite credential file</h2>
-                    </div>
-                    <div class="row margin25">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text upload" id="btnUpload">Upload</span>
-                            </div>
-                            <div class="custom-file">
-                                <form action="/api/upload" method="post" enctype="multipart/form-data">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile01"
-                                        aria-describedby="inputGroupFileAddon01">
-                                </form>
-                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                            </div>
-                        </div>
-                    </div>
+            <mat-card class="p-0">
+                <div class="row">
+                    <form (ngSubmit)="submit()" class="col-md-4">
+                            <input  [(ngModel)]="file" (change)="onChange($event.target.files)" name="file" type="file"
+                                class="custom-file-input" id="inputGroupFile01">
+                            <button class="btn" type="submit">Save</button>
+                    </form>
+                    <label class="col-md-3" class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    
                 </div>
-            </div>
+                    {{fileContent}}
+                </mat-card>
         </mat-tab>
         <mat-tab label="Shedule Synchronize">
             <div class="card-body">
@@ -108,49 +98,52 @@
                     <mat-card-content>
                         <mat-vertical-stepper linear #stepper>
                             <mat-step [stepControl]="getDaysOfWeek">
-                              <form [formGroup]="getDaysOfWeek">
-                                <ng-template matStepLabel>Choose days in week</ng-template>
-                                <mat-form-field>
-                                    <mat-select formControlName="multiday" placeholder="Choose days" multiple>
-                                        <mat-option *ngFor="let date of days" [value]="date.id" >{{date.name}}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <div>
-                                  <button mat-button matStepperNext>Next</button>
-                                </div>
-                              </form>
+                                <form [formGroup]="getDaysOfWeek">
+                                    <ng-template matStepLabel>Choose days in week</ng-template>
+                                    <mat-form-field>
+                                        <mat-select formControlName="multiday" placeholder="Choose days" multiple>
+                                            <mat-option *ngFor="let date of days" [value]="date.id">{{date.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <div>
+                                        <button mat-button matStepperNext>Next</button>
+                                    </div>
+                                </form>
                             </mat-step>
                             <mat-step [stepControl]="getTime">
-                              <form [formGroup]="getTime">
-                                <ng-template matStepLabel>Choose time</ng-template>
-                                <button mat-button (click)="onAddTime()">Add Time</button>
-                                <div *ngFor="let timeForm of getTime.controls['time'].controls; let i=index">
-                                    <div [formGroup]="timeForm" class="row">
-                                        <div class="col-md-9">
-                                            <mat-form-field>
-                                                <input matInput formControlName="timeControl" type="time" placeholder="Hours" required>
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-3" *ngIf="getTime.controls['time'].controls.length > 1">
-                                            <button mat-flat-button color="warn" (click)="removeUnit(i)">Remove</button>
+                                <form [formGroup]="getTime">
+                                    <ng-template matStepLabel>Choose time</ng-template>
+                                    <button mat-button (click)="onAddTime()">Add Time</button>
+                                    <div *ngFor="let timeForm of getTime.controls['time'].controls; let i=index">
+                                        <div [formGroup]="timeForm" class="row">
+                                            <div class="col-md-9">
+                                                <mat-form-field>
+                                                    <input matInput formControlName="timeControl" type="time"
+                                                        placeholder="Hours" required>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3" *ngIf="getTime.controls['time'].controls.length > 1">
+                                                <button mat-flat-button color="warn"
+                                                    (click)="removeUnit(i)">Remove</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div>
-                                  <button mat-button matStepperPrevious>Back</button>
-                                  <button mat-flat-button color="primary" matStepperNext>Submit</button>
-                                </div>
-                              </form>
+                                    <div>
+                                        <button mat-button matStepperPrevious>Back</button>
+                                        <button mat-flat-button color="primary" matStepperNext>Submit</button>
+                                    </div>
+                                </form>
                             </mat-step>
                             <mat-step>
-                              <ng-template matStepLabel>Done</ng-template>
-                              <p>You are now done.</p>
-                              <div>
-                                <button mat-button matStepperPrevious>Back</button>
-                                <button mat-button (click)="stepper.reset()">Reset</button>
-                              </div>
+                                <ng-template matStepLabel>Done</ng-template>
+                                <p>You are now done.</p>
+                                <div>
+                                    <button mat-button matStepperPrevious>Back</button>
+                                    <button mat-button (click)="stepper.reset()">Reset</button>
+                                </div>
                             </mat-step>
-                          </mat-vertical-stepper>
+                        </mat-vertical-stepper>
                     </mat-card-content>
                 </mat-card>
             </div>
