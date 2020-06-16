@@ -22,6 +22,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +30,7 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
+    
   ],
   imports: [
     BrowserModule,
