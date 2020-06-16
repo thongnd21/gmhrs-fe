@@ -26,7 +26,7 @@ export const AppRoutes: Routes = [
         path: 'company-config-connection',
         loadChildren:
           () => import('./components/company-config-connection/company-config-connection.module')
-          .then(m => m.CompanyConfigConnectionModule),canActivate: [SystemAdminGuard]
+          .then(m => m.CompanyConfigConnectionModule),canActivate: [CompanyManagerGuard]
       },
       {
         path: 'employee',
