@@ -16,6 +16,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   account;
   fileContent;
   file;
+  controls;
   days=[
     {
       id: 0,
@@ -64,6 +65,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       multiday: ['']
     });
     this.mainForm();
+    this.controls = this.getTime.controls.time;
   }
 
   createAForm() {
