@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { CompanyServices } from '../../api-services/company.services';
 
 @Component({
   selector: 'app-company-config-connection',
@@ -10,8 +11,11 @@ import { ToastrService } from 'ngx-toastr';
 export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
 
+  APIEndpointForm: FormGroup;
+
   constructor(
     private toast: ToastrService,
+    private companyServices: CompanyServices,
     private fb: FormBuilder,
   ) {
 
@@ -19,6 +23,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   ngOnInit() {
     this.createAForm();
+    this.createFormApiEndpoint();
   }
 
   createAForm() {
@@ -29,13 +34,43 @@ export class CompanyConfigConnectionComponent implements OnInit {
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
     });
-   
+
+
   }
 
-  // conection string , them filed check box kieu database
-  onSubmitConection(value){
+  createFormApiEndpoint() {
+    this.APIEndpointForm = this.fb.group({
+      url: new FormControl('', [Validators.required]),
+    });
+  }
+
+
+
+  onSubmitURLConection(value) {
+    console.log(JSON.stringify(value));
+    this.companyServices.updateAccountCompany(JSON.stringify(value)).subscribe(
+      (res) => {
+        this.toast.success("Update Account success!");
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+      }
+    )
+  }
+
+
+  // conection string 
+  onSubmitConection(value) {
     // let connectionString = value.hostname
     console.log(JSON.stringify(value));
+    this.companyServices.updateAccountCompany(JSON.stringify(value)).subscribe(
+      (res) => {
+        this.toast.success("Update Account success!");
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+      }
+    )
   }
 
 

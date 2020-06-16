@@ -49,7 +49,7 @@ export class CompanyComponent implements OnInit {
     private companyServices: CompanyServices,
     private toast: ToastrService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.displayedColumns = this.column.map((c) => c.prop);
@@ -69,6 +69,8 @@ export class CompanyComponent implements OnInit {
           item['modified_date'] = moment.utc(company.modified_date).local().format('LLLL');
           item['role'] = company.role.name;
           item['status_id'] = company.status_id;
+          item['address'] = company.address;
+          item['phone'] = company.phone;
           list.push(item);
           console.log(item);
         });
@@ -80,7 +82,8 @@ export class CompanyComponent implements OnInit {
     )
   }
 
-  getAccountCompanyById(id) {console.log(id);
+  getAccountCompanyById(id) {
+    console.log(id);
     this.account = new AccountCompanyModel;
     this.companyServices.getAccountCompanyById(id).subscribe(
       (data: any) => {
@@ -90,14 +93,16 @@ export class CompanyComponent implements OnInit {
         this.account.username = data.username;
         this.account.created_date = moment.utc(data.created_date).local().format('LLLL');
         this.account.modified_date = moment.utc(data.modified_date).local().format('LLLL');
-        this.account.role = data.role.name;
+        // this.account.role = data.role.name;
+        this.account.address = data.address;
+        this.account.phone = data.phone;
         console.log(this.account);
       }
 
     )
   }
 
-  opentUpdate(update,data){
+  opentUpdate(update, data) {
     console.log(data);
     this.account = new AccountCompanyModel();
     this.account.id = data.id;
@@ -106,8 +111,11 @@ export class CompanyComponent implements OnInit {
     this.account.created_date = data.created_date;
     this.account.modified_date = data.modified_date;
     this.account.role = data.role;
+    this.account.address = data.address;
+    this.account.phone = data.phone;
     console.log(this.account);
     this.accountCompanyForm = new FormGroup({
+      id: new FormControl(this.account.id),
       email: new FormControl(this.account.email, [Validators.required, Validators.email]),
       username: new FormControl(this.account.username, [
         Validators.required,
@@ -115,21 +123,18 @@ export class CompanyComponent implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(30)
       ]),
-      role: new FormControl(this.account.role, [
+      address: new FormControl(this.account.address, [
         Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(15)
+      ]),
+      phone: new FormControl(this.account.phone, [
+        Validators.required,
       ]),
     });
-    // this.accountCompanyForm.setValue({
-    //   email: this.account.email,
-    //   username: this.account.username,
-    //   role: this.account.role,
-    // });
+
     this.modalService.open(update, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
-  openDetail(detail,id) {
+  openDetail(detail, id) {
     this.getAccountCompanyById(id);
     this.modalService.open(detail, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
@@ -147,7 +152,7 @@ export class CompanyComponent implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(30)
       ]),
-      
+
     });
     this.accountCompanyForm.setValue({
       email: '',
@@ -161,17 +166,17 @@ export class CompanyComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  createAccountCompany() {
-    this.account = new AccountCompanyModel();
-    // const newAccountCompany = {
-      this.account.email=  this.accountCompanyForm.controls['email'].value,
-      this.account.username= this.accountCompanyForm.controls['username'].value,
-      this.account.password= this.accountCompanyForm.controls['password'].value,
 
-    // }
-    this.companyServices.createAccountCompany(this.account).subscribe(
+  updateAccountCompany(data) {
+    this.account = new AccountCompanyModel()
+    this.account.id = data.id
+    this.account.address = data.address;
+    this.account.phone = data.phone;
+
+    console.log(this.account);;
+    this.companyServices.updateAccountCompany(this.account).subscribe(
       (res) => {
-        this.toast.success("Create Account success!");
+        this.toast.success("Update Account success!");
         this.getAllCompany();
         this.closeModal();
       },
@@ -179,7 +184,27 @@ export class CompanyComponent implements OnInit {
         this.toast.error("Server is not available!");
         this.closeModal();
       }
-    );
+    )
+
+  }
+
+  createAccountCompany() {
+    this.account = new AccountCompanyModel();
+    this.account.email = this.accountCompanyForm.controls['email'].value,
+      this.account.username = this.accountCompanyForm.controls['username'].value,
+      this.account.password = this.accountCompanyForm.controls['password'].value,
+
+      this.companyServices.createAccountCompany(this.account).subscribe(
+        (res) => {
+          this.toast.success("Create Account success!");
+          this.getAllCompany();
+          this.closeModal();
+        },
+        (error) => {
+          this.toast.error("Server is not available!");
+          this.closeModal();
+        }
+      );
   }
 
   applyFilter(event: Event) {
