@@ -6,8 +6,15 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 
 export const AppRoutes: Routes = [
-  { path: '', loadChildren: () => import('./login/login.module')
-  .then(m => m.LoginModule) },
+  {
+    path: '', loadChildren: () => import('./login/login.module')
+      .then(m => m.LoginModule)
+  },
+  {
+    path: 'checkotp',
+    loadChildren:
+      () => import('./check-otp/check-otp.module').then(m => m.CheckOtpModule)
+  },
   {
     path: '',
     component: FullComponent,
@@ -18,30 +25,36 @@ export const AppRoutes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'twofaauth',
+        loadChildren:
+          () => import('./two-fa-auth/two-fa-auth.module').then(m => m.TwoFaAuthModule)
+      },
+
+      {
         path: 'company',
         loadChildren:
-          () => import('./components/company/company.module').then(m => m.CompanyModule),canActivate: [SystemAdminGuard]
+          () => import('./components/company/company.module').then(m => m.CompanyModule), canActivate: [SystemAdminGuard]
       },
       {
         path: 'company-config-connection',
         loadChildren:
           () => import('./components/company-config-connection/company-config-connection.module')
-          .then(m => m.CompanyConfigConnectionModule),canActivate: [CompanyManagerGuard]
+            .then(m => m.CompanyConfigConnectionModule), canActivate: [CompanyManagerGuard]
       },
       {
         path: 'employee',
         loadChildren:
-          () => import('./components/employee/employee.module').then(m => m.EmployeeModule),canActivate: [CompanyManagerGuard]
+          () => import('./components/employee/employee.module').then(m => m.EmployeeModule), canActivate: [CompanyManagerGuard]
       },
       {
         path: 'teams',
         loadChildren:
-          () => import('./components/team/team.module').then(m => m.TeamModule),canActivate: [CompanyManagerGuard]
+          () => import('./components/team/team.module').then(m => m.TeamModule), canActivate: [CompanyManagerGuard]
       },
       {
         path: 'departments',
         loadChildren:
-          () => import('./components/department/department.module').then(m => m.DepartmentModule),canActivate: [CompanyManagerGuard]
+          () => import('./components/department/department.module').then(m => m.DepartmentModule), canActivate: [CompanyManagerGuard]
       },
       {
         path: '',

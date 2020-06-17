@@ -7,8 +7,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class AuthenService {
   constructor(private httpClient: HttpClient) { }
 
-  login(account) { 
-    return this.httpClient.post('https://gmhrs-api.herokuapp.com/api/auth/login',account);
+  login(account) {
+    return this.httpClient.post('https://gmhrs-api.herokuapp.com/api/auth/login', account);
   }
 
 }

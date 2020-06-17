@@ -4,4 +4,6 @@ export class AppSettings {
     public static EMP = 'employees/'
     public static TEAM = 'teams/'
     public static DEPARTMENT = 'departments/'
+    public static TWOFAAUTHGETQRCODE = 'twofa/getQRCode/'
+    public static CHECKOTP = 'twofa/checkotp/'
 }

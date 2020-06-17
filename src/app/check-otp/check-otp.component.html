@@ -1,0 +1,27 @@
+<div class="row justify-content-md-center" style="background-color: white; padding-top: 10%;">
+    <div class="col-md-5">
+        <mat-card>
+            <mat-card-content>
+                <p>
+                    <span class="row justify-content-md-center">
+                        <mat-card-title>Two Factor Authentication</mat-card-title>
+                    </span>
+                </p>
+                <p>
+                    <span class="row justify-content-md-center">
+                        <ng-otp-input #ngOtpInput (onInputChange)="onOtpChange($event)"
+                            [config]="{length:6, allowNumbersOnly: true}">
+                        </ng-otp-input>
+                    </span>
+                </p>
+                <p>
+                    <span class="row justify-content-md-center">
+                        <button mat-raised-button color="accent" (click)="onSubmitOtp()">
+                            Submit
+                        </button>
+                    </span>
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
