@@ -59,8 +59,10 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('two_fa_status', userInfo.profile.two_fa_status);
                 localStorage.setItem('token', userInfo.token);
                 localStorage.setItem('roleId', userInfo.profile.role.id);
+                console.log(userInfo.profile.two_fa_status);
+
                 if (userInfo.profile.two_fa_status === 1) {
-                    this.router.navigate(['/dashboard']);
+                    this.router.navigate(['/checkotp']);
                 } else {
                     this.router.navigate(['/dashboard']);
                 }

@@ -15,9 +15,9 @@ export class TwoFaAuthService {
         return this.httpClient.get(this.URL + AppSettings.TWOFAAUTHGETQRCODE + username);
     }
 
-    // createTeam(team) {    
-    //     return this.httpClient.post(this.URL + AppSettings.TEAM,team);
-    // }
+    checkOtp(otp, username) {
+        return this.httpClient.get(this.URL + AppSettings.CHECKOTP + otp + '/' + username);
+    }
 
     // updateTeam(team) {    
     //     return this.httpClient.put(this.URL + AppSettings.TEAM,team);

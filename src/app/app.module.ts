@@ -18,7 +18,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { AuthGuard } from './shared/guard/auth.guard';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 
@@ -29,8 +29,7 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
     FullComponent,
     AppHeaderComponent,
     SpinnerComponent,
-    AppSidebarComponent,
-    
+    AppSidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -55,4 +54,4 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

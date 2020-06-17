@@ -11,6 +11,11 @@ export const AppRoutes: Routes = [
       .then(m => m.LoginModule)
   },
   {
+    path: 'checkotp',
+    loadChildren:
+      () => import('./check-otp/check-otp.module').then(m => m.CheckOtpModule)
+  },
+  {
     path: '',
     component: FullComponent,
     children: [
@@ -24,6 +29,7 @@ export const AppRoutes: Routes = [
         loadChildren:
           () => import('./two-fa-auth/two-fa-auth.module').then(m => m.TwoFaAuthModule)
       },
+
       {
         path: 'company',
         loadChildren:
