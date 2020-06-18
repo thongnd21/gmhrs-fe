@@ -5,4 +5,8 @@ export class AccountCompanyModel {
     created_date: string
     modified_date: string
     role: string
+    address: string
+    phone: string
+    api_endpoint: string
+    connection_database: string
 }

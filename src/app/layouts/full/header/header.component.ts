@@ -11,4 +11,8 @@ export class AppHeaderComponent {
   ngOnInit() {
     this.username = localStorage.getItem('username');
   }
+
+  signOut(){
+    localStorage.clear();
+  }
 }

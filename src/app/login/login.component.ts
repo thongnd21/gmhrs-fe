@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
                 console.log(res);
                 const userInfo: any = res;
                 localStorage.setItem('isLoggedin', 'true');
+                localStorage.setItem('id', userInfo.profile.id);
                 localStorage.setItem('username', userInfo.profile.username);
                 localStorage.setItem('two_fa_status', userInfo.profile.two_fa_status);
                 localStorage.setItem('token', userInfo.token);
@@ -101,5 +102,4 @@ export class LoginComponent implements OnInit {
             }
         );
     }
-
 }
