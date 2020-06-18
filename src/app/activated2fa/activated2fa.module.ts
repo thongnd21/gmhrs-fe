@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TwoFaAuthComponent } from './two-fa-auth.component';
-import { TwoFaAuthRoutes } from './two-fa-auth-routing';
+import { Activated2faComponent } from './activated2fa.component';
+import { Activated2faRoutes } from './activated2fa-routing';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,8 +26,8 @@ import { NgOtpInputModule } from 'ng-otp-input';
         MatInputModule,
         ReactiveFormsModule,
         NgOtpInputModule,
-        RouterModule.forChild(TwoFaAuthRoutes)
+        RouterModule.forChild(Activated2faRoutes)
     ],
-    declarations: [TwoFaAuthComponent]
+    declarations: [Activated2faComponent]
 })
-export class TwoFaAuthModule { }
+export class Activated2faModule { }

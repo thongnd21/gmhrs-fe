@@ -6,4 +6,7 @@ export class AppSettings {
     public static DEPARTMENT = 'departments/'
     public static TWOFAAUTHGETQRCODE = 'twofa/getQRCode/'
     public static CHECKOTP = 'twofa/checkotp/'
+    public static ACTIVATED2FA = 'twofa/activated2fa/'
+    public static DEACTIVATED2FA = 'twofa/deactivated2fa/'
+    public static CHECK2FASTATUS = 'twofa/check2fastatus/'
 }

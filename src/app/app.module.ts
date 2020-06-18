@@ -23,13 +23,14 @@ import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     FullComponent,
     AppHeaderComponent,
     SpinnerComponent,
-    AppSidebarComponent
+    AppSidebarComponent,
   ],
   imports: [
     BrowserModule,

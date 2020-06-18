@@ -29,7 +29,11 @@ export const AppRoutes: Routes = [
         loadChildren:
           () => import('./two-fa-auth/two-fa-auth.module').then(m => m.TwoFaAuthModule)
       },
-
+      {
+        path: 'activated2fa',
+        loadChildren:
+          () => import('./activated2fa/activated2fa.module').then(m => m.Activated2faModule)
+      },
       {
         path: 'company',
         loadChildren:

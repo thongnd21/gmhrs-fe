@@ -19,6 +19,16 @@ export class TwoFaAuthService {
         return this.httpClient.get(this.URL + AppSettings.CHECKOTP + otp + '/' + username);
     }
 
+    activated2FA(otp, username) {
+        return this.httpClient.get(this.URL + AppSettings.ACTIVATED2FA + otp + '/' + username);
+    }
+
+    deactivated2FA(username) {
+        return this.httpClient.get(this.URL + AppSettings.DEACTIVATED2FA + username)
+    }
+    check2faStatus(username) {
+        return this.httpClient.get(this.URL + AppSettings.CHECK2FASTATUS + username);
+    }
     // updateTeam(team) {    
     //     return this.httpClient.put(this.URL + AppSettings.TEAM,team);
     // }

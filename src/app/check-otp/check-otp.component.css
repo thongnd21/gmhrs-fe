@@ -14,3 +14,10 @@ td.mat-cell {
 tr {
     margin-bottom: 10px;
 }
+.main-div{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+  }

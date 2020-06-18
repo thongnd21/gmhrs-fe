@@ -12,7 +12,7 @@ import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
   styleUrls: ['./two-fa-auth.component.css']
 })
 export class TwoFaAuthComponent implements OnInit {
-
+  otp: any;
   QrCodeLink: any;
 
   constructor(
@@ -24,16 +24,46 @@ export class TwoFaAuthComponent implements OnInit {
   ) {
 
   }
-
-  ngOnInit(): void {
-    let two_fa_status = localStorage.getItem('two_fa_status');
+  onOtpChange($event) {
+    this.otp = $event;
+  }
+  onSubmitOtp() {
     let username = localStorage.getItem('username');
-    this.twoFaAuthService.getQrCode(username).subscribe(
+    this.twoFaAuthService.activated2FA(this.otp, username).subscribe(
       (res) => {
-        this.QrCodeLink = res;
+        if (res) {
+          this.toast.success('Validation successful!');
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.toast.error('Invalid OTP!');
+        }
       }
     );
-    // this.QrCodeLink = 'https://authy.com/wp-content/uploads/login-with-2fa-flow.png';
+  }
+  ngOnInit(): void {
+    let username = localStorage.getItem('username');
+
+    this.twoFaAuthService.check2faStatus(username).subscribe(
+      (res) => {
+        localStorage.setItem('two_fa_status', res.toString());
+        let two_fa_status = localStorage.getItem('two_fa_status');
+        console.log(two_fa_status);
+
+        if (two_fa_status.toString() === '0') {
+          let username = localStorage.getItem('username');
+          this.twoFaAuthService.getQrCode(username).subscribe(
+            (res) => {
+              this.QrCodeLink = res;
+            }
+          );
+        } else {
+          this.router.navigate(['/activated2fa']);
+        }
+      }
+    )
+
+
+
   }
 
 }
