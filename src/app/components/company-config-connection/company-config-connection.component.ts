@@ -5,7 +5,10 @@ import { CompanyServices } from '../../api-services/company.services';
 import { AccountCompanyModel } from '../../model/accounts';
 import { CompanyConnection } from '../../model/company_connection';
 import { CompanyConnectionService } from '../../api-services/company-connection-api.service';
+import { FileUpload } from '../../api-services/file-upload-api.service';
 import { from } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-company-config-connection',
@@ -15,12 +18,14 @@ import { from } from 'rxjs';
 export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
   isOptional = false;
+  gsuiteCredentialForm: FormGroup;
   APIEndpointForm: FormGroup;
   account;
   fileContent;
   file;
   companyConnection;
   controls;
+  uploadedFiles: Array<File>;
   days = [
     {
       id: 0,
@@ -58,7 +63,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
     private toast: ToastrService,
     private companyServices: CompanyServices,
     private companyConnectionService: CompanyConnectionService,
+    private fileUploadServices: FileUpload,
     private fb: FormBuilder,
+    private http: HttpClient,
   ) {
 
   }
@@ -66,6 +73,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   ngOnInit() {
     this.createAForm();
     this.createFormApiEndpoint();
+    this.createGsuiteCredentialForm();
     this.getDaysOfWeek = this.fb.group({
       multiday: ['']
     });
@@ -82,8 +90,43 @@ export class CompanyConfigConnectionComponent implements OnInit {
       password: new FormControl('', [Validators.required]),
       dialect: new FormControl(''),
     });
+  }
+
+  createGsuiteCredentialForm() {
+    this.gsuiteCredentialForm = this.fb.group({
+      company_email: new FormControl('', [Validators.required, Validators.email]),
+      file: new FormControl('')
+    })
+  }
 
 
+  fileChange(element) {
+    this.uploadedFiles = element.target.files;
+  }
+
+  upload(value) {
+    let formData = new FormData();
+    console.log(this.uploadedFiles);
+    console.log(value.file);
+    let company_email = value.company_email;
+    let id_company = localStorage.getItem('id');
+    for (var i = 0; i < this.uploadedFiles.length; i++) {
+      formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
+    }
+    formData.set("company_email", company_email);
+    formData.set("id", id_company);
+    console.log(formData);
+
+    this.account = new AccountCompanyModel();
+    this.account.id = localStorage.getItem('id');
+    this.http.post('https://gmhrs-api.herokuapp.com/api/file/upload', formData)
+      .subscribe(
+        (res) => {
+          this.toast.success("Upload file success!");
+        },
+        (error) => {
+          this.toast.error("Server is not available!");
+        })
   }
 
   createFormApiEndpoint() {
@@ -191,6 +234,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
   submit() {
     let date = JSON.stringify(this.fileContent);
     console.log(date);
+    this.fileUploadServices.uploadFile(date).subscribe(
+      (res) => {
+        this.toast.success("Save connection success!");
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+      }
+    )
   }
 
   public onChange(fileList: FileList): void {
