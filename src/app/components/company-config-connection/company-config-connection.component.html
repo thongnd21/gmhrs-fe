@@ -82,8 +82,9 @@
             </div>
         </mat-tab>
         <mat-tab label="Config G-suite Authentication">
-            <mat-card class="p-0">
-                <div class="row">
+            <div class="card-body">
+                <mat-card class="p-0">
+                    <!-- <div class="row">
                     <form (ngSubmit)="submit()" class="col-md-4">
                         <input [(ngModel)]="file" (change)="onChange($event.target.files)" name="file" type="file"
                             class="custom-file-input" id="inputGroupFile01">
@@ -92,8 +93,22 @@
                     <label class="col-md-3" class="custom-file-label" for="inputGroupFile01">Choose file</label>
 
                 </div>
-                {{fileContent}}
-            </mat-card>
+                {{fileContent}} -->
+                    <mat-card-content>
+                        <form class="col-md-4" [formGroup]="gsuiteCredentialForm"
+                            (ngSubmit)="upload(gsuiteCredentialForm.value)">
+                            <mat-form-field class="full-width">
+                                <input matInput name="company_email" formControlName="company_email"
+                                    placeholder="Company Email" value=""></mat-form-field>
+
+                            <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
+                                type="file" name="file">
+                            <button mat-raised-button type="submit" color="primary">Upload
+                            </button>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+            </div>
         </mat-tab>
         <mat-tab label="Shedule Synchronize">
             <div class="card-body">
@@ -118,7 +133,7 @@
                                 <form [formGroup]="getTime">
                                     <ng-template matStepLabel>Choose time</ng-template>
                                     <button mat-button (click)="onAddTime()">Add Time</button>
-                                    <div *ngFor="let timeForm of getTime.controls['time'].controls; let i=index">
+                                    <div *ngFor="let timeForm of getTime.controls['time']; let i=index">
                                         <div [formGroup]="timeForm" class="row">
                                             <div class="col-md-9">
                                                 <mat-form-field>
