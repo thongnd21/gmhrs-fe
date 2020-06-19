@@ -1,4 +1,4 @@
-<mat-card class="center-screen-div">
+<mat-card *ngIf="showOrNot" class="center-screen-div">
     <mat-card-header class="center-screen-div">
         <!-- <div mat-card-avatar class="example-header-image"></div> -->
         <mat-card-title>Use any 2FA app to scan this QR code!</mat-card-title>
@@ -29,7 +29,7 @@
                     <p>
                         <span class="row justify-content-md-center">
                             <ng-otp-input #ngOtpInput (onInputChange)="onOtpChange($event)"
-                                [config]="{length:6, allowNumbersOnly: true}">
+                                [config]="{length:6, allowNumbersOnly: true}" autocomplete="off">
                             </ng-otp-input>
                         </span>
                     </p>

@@ -14,6 +14,7 @@ import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
 export class TwoFaAuthComponent implements OnInit {
   otp: any;
   QrCodeLink: any;
+  showOrNot = false;
 
   constructor(
     private router: Router,
@@ -54,6 +55,7 @@ export class TwoFaAuthComponent implements OnInit {
           this.twoFaAuthService.getQrCode(username).subscribe(
             (res) => {
               this.QrCodeLink = res;
+              this.showOrNot = true;
             }
           );
         } else {
