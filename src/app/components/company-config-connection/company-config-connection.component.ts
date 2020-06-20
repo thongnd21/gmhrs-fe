@@ -17,6 +17,7 @@ import { data } from 'jquery';
 })
 export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
+  connection = true;
   isOptional = false;
   gsuiteCredentialForm: FormGroup;
   APIEndpointForm: FormGroup;
@@ -56,9 +57,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
       name: 'Saturday'
     },
   ];
-  getDaysOfWeek: FormGroup;
-  getTime: FormGroup;
-  timeForm: FormGroup;
   constructor(
     private toast: ToastrService,
     private companyServices: CompanyServices,
@@ -74,12 +72,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.createAForm();
     this.createFormApiEndpoint();
     this.createGsuiteCredentialForm();
-    this.getDaysOfWeek = this.fb.group({
-      multiday: ['']
-    });
-    this.mainForm();
-    this.controls = this.getTime.controls.time;
   }
+
+
 
   createAForm() {
     this.accessDBForm = this.fb.group({
@@ -203,32 +198,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.toast.error("Server is not available!");
       }
     )
-  }
-
-  //dynamic
-  mainForm() {
-    this.getTime = this.fb.group({
-      time: this.fb.array([
-        this.addTimeForm()
-      ])
-    });
-
-  }
-
-  onAddTime() {
-    (<FormArray>this.getTime.controls['time']).push(this.addTimeForm());
-
-  }
-
-  addTimeForm(): FormGroup {
-    this.timeForm = this.fb.group({
-      timeControl: ['', Validators.required],
-    });
-    return this.timeForm;
-  }
-  removeUnit(i: number) {
-    const control = <FormArray>this.getTime.controls['time'];
-    control.removeAt(i);
   }
 
   submit() {
