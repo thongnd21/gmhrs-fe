@@ -10,7 +10,8 @@ import {  MatButtonModule,
       MatTabsModule,
       MatStepperModule,
       MatSelectModule,
-      MatOptionModule} from '@angular/material';
+      MatOptionModule,
+      MatRadioModule} from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -21,12 +22,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         MatButtonToggleModule,
         MatDialogModule,
         MatStepperModule,
+        MatRadioModule,
         MatSelectModule,
         MatOptionModule,
         MatIconModule,
         FormsModule,
         MatCardModule,
         MatInputModule,
+        MatStepperModule,
         ReactiveFormsModule,
         ReactiveFormsModule,
         FormsModule,
