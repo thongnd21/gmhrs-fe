@@ -27,6 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         FormsModule,
         MatCardModule,
         MatInputModule,
+        MatStepperModule,
         ReactiveFormsModule,
         ReactiveFormsModule,
         FormsModule,

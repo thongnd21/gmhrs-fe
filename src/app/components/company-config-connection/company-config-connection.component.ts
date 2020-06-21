@@ -21,10 +21,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
   file;
   companyConnection;
   controls;
+  typeSync;
+  dayInMonth : Array<Number>= []; 
   days = [
     {
       id: 0,
-      name: 'Monday'
+      name: 'Sunday '
     },
     {
       id: 1,
@@ -51,9 +53,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       name: 'Saturday'
     },
   ];
-  getDaysOfWeek: FormGroup;
-  getTime: FormGroup;
-  timeForm: FormGroup;
+  getTime : FormGroup
   constructor(
     private toast: ToastrService,
     private companyServices: CompanyServices,
@@ -66,12 +66,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
   ngOnInit() {
     this.createAForm();
     this.createFormApiEndpoint();
-    this.getDaysOfWeek = this.fb.group({
-      multiday: ['']
-    });
-    this.mainForm();
-    this.controls = this.getTime.controls.time;
+    for(let i = 1; i < 32; i++){
+      this.dayInMonth.push(i);
+    }
   }
+
 
   createAForm() {
     this.accessDBForm = this.fb.group({
@@ -162,31 +161,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     )
   }
 
-  //dynamic
-  mainForm() {
-    this.getTime = this.fb.group({
-      time: this.fb.array([
-        this.addTimeForm()
-      ])
-    });
 
-  }
-
-  onAddTime() {
-    (<FormArray>this.getTime.controls['time']).push(this.addTimeForm());
-
-  }
-
-  addTimeForm(): FormGroup {
-    this.timeForm = this.fb.group({
-      timeControl: ['', Validators.required],
-    });
-    return this.timeForm;
-  }
-  removeUnit(i: number) {
-    const control = <FormArray>this.getTime.controls['time'];
-    control.removeAt(i);
-  }
 
   submit() {
     let date = JSON.stringify(this.fileContent);
