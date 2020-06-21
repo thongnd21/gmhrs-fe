@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray, FormControlName } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyServices } from '../../api-services/company.services';
 import { AccountCompanyModel } from '../../model/accounts';
@@ -18,6 +18,7 @@ import { data } from 'jquery';
 export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
   connection = true;
+  timeMonthDate = true;
   isOptional = false;
   gsuiteCredentialForm: FormGroup;
   APIEndpointForm: FormGroup;
@@ -28,6 +29,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
   controls;
   typeSync;
   dayInMonth : Array<Number>= []; 
+  monthDayChoose;
+  timeChoose;
   uploadedFiles: Array<File>;
   days = [
     {
@@ -59,6 +62,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
       name: 'Saturday'
     },
   ];
+  dayMonth : FormGroup;
+  dayWeek : FormGroup;
+  daily : FormGroup;
   constructor(
     private toast: ToastrService,
     private companyServices: CompanyServices,
@@ -77,6 +83,18 @@ export class CompanyConfigConnectionComponent implements OnInit {
       this.dayInMonth.push(i);
     }
     this.createGsuiteCredentialForm();
+    this.dayMonth = new FormGroup({
+      time : new FormControl(''),
+      everyTime : new FormControl('')
+    });
+    this.dayWeek = new FormGroup({
+      time : new FormControl(''),
+      everyTime : new FormControl('')
+    });
+    this.daily = new FormGroup({
+      time : new FormControl(''),
+      everyTime : new FormControl('')
+    });
   }
 
   createAForm() {
@@ -194,18 +212,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
       this.companyConnection.dialect
     console.log(connectionString);
     this.companyServices.updateAccountCompany(connectionString).subscribe(
-      (res) => {
-        this.toast.success("Save connection success!");
-      },
-      (error) => {
-        this.toast.error("Server is not available!");
-      }
-    )
-  }
-
-  submit() {
-    let date = JSON.stringify(this.fileContent);
-    this.fileUploadServices.uploadFile(date).subscribe(
       (res) => {
         this.toast.success("Save connection success!");
       },
