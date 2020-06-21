@@ -1,149 +1,150 @@
 <div>
     <mat-tab-group mat-align-tabs="start">
-        <mat-tab label="Database Connection">
-            <div class="card-body">
+        <mat-tab label="Setting Connection">
+            <mat-radio-group [(ngModel)]="connection" aria-label="Select an option">
+                <mat-radio-button [value]=true>Database Connection</mat-radio-button>
+                <mat-radio-button [value]=false>API Endpoint</mat-radio-button>
+            </mat-radio-group>
+            <div class="card-body" *ngIf="connection == true">
                 <mat-card class="p-0">
                     <mat-card-content>
-                        <form [formGroup]="accessDBForm" (ngSubmit)="onSubmitConection(accessDBForm.value)">
+                        <form [formGroup]="accessDBForm">
                             <div fxLayout="row wrap">
-
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="connectionName" formControlName="connectionName"
-                                                placeholder="Connection Name" value="">
+                                            <input matInput name="dbName" formControlName="dbName"
+                                                placeholder="Connection Name" value="" />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="hostname" formControlName="hostname"
-                                                placeholder="Hostname" value="">
+                                            <input matInput name="host" formControlName="host" placeholder="Hostname"
+                                                value="" />
                                         </mat-form-field>
                                     </div>
 
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="port" formControlName="port" placeholder="Port"
-                                                value="">
+                                                value="" />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="username" formControlName="username"
-                                                placeholder="Username" value="">
+                                                placeholder="Username" value="" />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput type="password" name="password" formControlName="password"
-                                                placeholder="Password" value="">
+                                                placeholder="Password" value="" />
                                         </mat-form-field>
                                     </div>
                                     <div>
                                         <mat-form-field>
                                             <mat-label>Database Type</mat-label>
-                                            <select matNativeControl required>
+                                            <select matNativeControl required formControlName="dialect">
                                                 <option value="mysql">My SQL</option>
-                                                <option value="mssql"></option>
+                                                <option value="mssql">MSSQL</option>
                                             </select>
                                         </mat-form-field>
                                     </div>
-
                                 </div>
                             </div>
-                            <button mat-raised-button type="submit" color="primary">Save</button>
+                            <button mat-raised-button (click)="onSubmitConection(accessDBForm.value)" color="primary">
+                                Save
+                            </button>
+                            <button style="margin: 40px;" mat-raised-button
+                                (click)="onTestConection(accessDBForm.value)" color="primary">
+                                Test Connection
+                            </button>
                         </form>
                     </mat-card-content>
                 </mat-card>
             </div>
-
-        </mat-tab>
-        <mat-tab label="API Endpoint">
-            <div class="card-body">
+            <div class="card-body" *ngIf="connection == false">
                 <mat-card class="p-0">
                     <mat-card-content>
-                        <form [formGroup]="APIEndpointForm" (ngSubmit)="onSubmitURLConection(APIEndpointForm.value)">
+                        <form [formGroup]="APIEndpointForm"
+                            (ngSubmit)="onSubmitURLConection(APIEndpointForm.value)">
                             <div fxLayout="row wrap">
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="url" formControlName="url" placeholder="URL" value="">
+                                            <input matInput name="url" formControlName="url" placeholder="URL"
+                                                value="" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                             </div>
-                            <button mat-raised-button type="submit" color="primary">Save</button>
+                            <button mat-raised-button type="submit" color="primary">
+                                Save
+                            </button>
                         </form>
                     </mat-card-content>
                 </mat-card>
             </div>
         </mat-tab>
         <mat-tab label="Config G-suite Authentication">
-            <mat-card class="p-0">
-                <div class="row">
-                    <form (ngSubmit)="submit()" class="col-md-4">
-                            <input  [(ngModel)]="file" (change)="onChange($event.target.files)" name="file" type="file"
-                                class="custom-file-input" id="inputGroupFile01">
-                            <button class="btn" type="submit">Save</button>
-                    </form>
-                    <label class="col-md-3" class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                    
-                </div>
-                    {{fileContent}}
+            <div class="card-body">
+                <mat-card class="p-0">
+                    <mat-card-content>
+                        <form class="col-md-4" [formGroup]="gsuiteCredentialForm"
+                            (ngSubmit)="upload(gsuiteCredentialForm.value)">
+                            <mat-form-field class="full-width">
+                                <input matInput name="company_email" formControlName="company_email"
+                                    placeholder="Company Email" value="">
+                            </mat-form-field>
+                            <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
+                                type="file" name="file">
+                            <button mat-raised-button type="submit" color="primary">Upload
+                            </button>
+                        </form>
+                    </mat-card-content>
                 </mat-card>
+            </div>
         </mat-tab>
         <mat-tab label="Shedule Synchronize">
             <div class="card-body">
                 <mat-card class="p-0">
                     <mat-card-content>
-                        <mat-vertical-stepper linear #stepper>
-                            <mat-step [stepControl]="getDaysOfWeek">
-                                <form [formGroup]="getDaysOfWeek">
-                                    <ng-template matStepLabel>Choose days in week</ng-template>
-                                    <mat-form-field>
-                                        <mat-select formControlName="multiday" placeholder="Choose days" multiple>
-                                            <mat-option *ngFor="let date of days" [value]="date.id">{{date.name}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <div>
-                                        <button mat-button matStepperNext>Next</button>
-                                    </div>
-                                </form>
-                            </mat-step>
-                            <mat-step [stepControl]="getTime">
-                                <form [formGroup]="getTime">
-                                    <ng-template matStepLabel>Choose time</ng-template>
-                                    <button mat-button (click)="onAddTime()">Add Time</button>
-                                    <div *ngFor="let timeForm of controls.controls; let i=index">
-                                        <div [formGroup]="timeForm" class="row">
-                                            <div class="col-md-9">
-                                                <mat-form-field>
-                                                    <input matInput formControlName="timeControl" type="time"
-                                                        placeholder="Hours" required>
-                                                </mat-form-field>
-                                            </div>
-                                            <div class="col-md-3" *ngIf="controls.controls.length > 1">
-                                                <button mat-flat-button color="warn"
-                                                    (click)="removeUnit(i)">Remove</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <button mat-button matStepperPrevious>Back</button>
-                                        <button mat-flat-button color="primary" matStepperNext>Submit</button>
-                                    </div>
-                                </form>
-                            </mat-step>
-                            <mat-step>
-                                <ng-template matStepLabel>Done</ng-template>
-                                <p>You are now done.</p>
-                                <div>
-                                    <button mat-button matStepperPrevious>Back</button>
-                                    <button mat-button (click)="stepper.reset()">Reset</button>
-                                </div>
-                            </mat-step>
-                        </mat-vertical-stepper>
+                        <mat-form-field class="col-md-6">
+                            <mat-select [(ngModel)]="typeSync" placeholder="Choose schedule for synchronize">
+                                <mat-option [value]="1">Monthly</mat-option>
+                                <mat-option [value]="2">Weekly</mat-option>
+                                <mat-option [value]="3">Daily</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <!-- Choose day in month -->
+                        <mat-card *ngIf="typeSync == 1">
+                            <mat-card-header>
+                                Monthly synchronize
+                            </mat-card-header>
+                            <mat-card-content>
+                                <mat-form-field>
+                                    <mat-select placeholder="Choose days" multiple>
+                                        <mat-option *ngFor="let date of dayInMonth" [value]="date">{{ date }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </mat-card-content>
+                        </mat-card>
+                        <!-- Choose day in week -->
+                        <mat-card *ngIf="typeSync == 2">
+                            <mat-card-header>
+                                Weekly synchronize
+                            </mat-card-header>
+                            <mat-card-content>
+                                <mat-form-field>
+                                    <mat-select placeholder="Choose days" multiple>
+                                        <mat-option *ngFor="let date of days" [value]="date.id">{{ date.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </mat-card-content>
+                        </mat-card>
                     </mat-card-content>
                 </mat-card>
             </div>

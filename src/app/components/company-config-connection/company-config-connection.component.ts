@@ -3,6 +3,12 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@ang
 import { ToastrService } from 'ngx-toastr';
 import { CompanyServices } from '../../api-services/company.services';
 import { AccountCompanyModel } from '../../model/accounts';
+import { CompanyConnection } from '../../model/company_connection';
+import { CompanyConnectionService } from '../../api-services/company-connection-api.service';
+import { FileUpload } from '../../api-services/file-upload-api.service';
+import { from } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-company-config-connection',
@@ -11,49 +17,55 @@ import { AccountCompanyModel } from '../../model/accounts';
 })
 export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
+  connection = true;
   isOptional = false;
+  gsuiteCredentialForm: FormGroup;
   APIEndpointForm: FormGroup;
   account;
   fileContent;
   file;
+  companyConnection;
   controls;
-  days=[
+  typeSync;
+  dayInMonth : Array<Number>= []; 
+  uploadedFiles: Array<File>;
+  days = [
     {
       id: 0,
-      name:'Monday'
+      name: 'Sunday '
     },
     {
       id: 1,
-      name:'Monday'
+      name: 'Monday'
     },
     {
       id: 2,
-      name:'Tuesday'
+      name: 'Tuesday'
     },
     {
       id: 3,
-      name:'Wednesday'
+      name: 'Wednesday'
     },
     {
       id: 4,
-      name:'Thursday'
+      name: 'Thursday'
     },
     {
       id: 5,
-      name:'Friday'
+      name: 'Friday'
     },
     {
       id: 6,
-      name:'Saturday'
+      name: 'Saturday'
     },
   ];
-  getDaysOfWeek: FormGroup;
-  getTime: FormGroup;
-  timeForm : FormGroup;
   constructor(
     private toast: ToastrService,
     private companyServices: CompanyServices,
+    private companyConnectionService: CompanyConnectionService,
+    private fileUploadServices: FileUpload,
     private fb: FormBuilder,
+    private http: HttpClient,
   ) {
 
   }
@@ -61,23 +73,58 @@ export class CompanyConfigConnectionComponent implements OnInit {
   ngOnInit() {
     this.createAForm();
     this.createFormApiEndpoint();
-    this.getDaysOfWeek = this.fb.group({
-      multiday: ['']
-    });
-    this.mainForm();
-    this.controls = this.getTime.controls.time;
+    for(let i = 1; i < 32; i++){
+      this.dayInMonth.push(i);
+    }
+    this.createGsuiteCredentialForm();
   }
 
   createAForm() {
     this.accessDBForm = this.fb.group({
-      connectionName: new FormControl('', [Validators.required, Validators.email]),
-      hostname: new FormControl('', [Validators.required]),
+      dbName: new FormControl('', [Validators.required, Validators.email]),
+      host: new FormControl('', [Validators.required]),
       port: new FormControl('', [Validators.required]),
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
+      dialect: new FormControl(''),
     });
+  }
+
+  createGsuiteCredentialForm() {
+    this.gsuiteCredentialForm = this.fb.group({
+      company_email: new FormControl('', [Validators.required, Validators.email]),
+      file: new FormControl('')
+    })
+  }
 
 
+  fileChange(element) {
+    this.uploadedFiles = element.target.files;
+  }
+
+  upload(value) {
+    let formData = new FormData();
+    console.log(this.uploadedFiles);
+    console.log(value.file);
+    let company_email = value.company_email;
+    let id_company = localStorage.getItem('id');
+    for (var i = 0; i < this.uploadedFiles.length; i++) {
+      formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
+    }
+    formData.set("company_email", company_email);
+    formData.set("id", id_company);
+    console.log(formData);
+
+    this.account = new AccountCompanyModel();
+    this.account.id = localStorage.getItem('id');
+    this.http.post('https://gmhrs-api.herokuapp.com/api/file/upload', formData)
+      .subscribe(
+        (res) => {
+          this.toast.success("Upload file success!");
+        },
+        (error) => {
+          this.toast.error("Server is not available!");
+        })
   }
 
   createFormApiEndpoint() {
@@ -87,11 +134,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
 
-// api endpoint
+  // api endpoint
   onSubmitURLConection(value) {
     this.account = new AccountCompanyModel();
     this.account.id = localStorage.getItem('id');
-    this.account.api_endpoint  =  value.url;
+    this.account.api_endpoint = value.url;
     console.log(this.account);
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res) => {
@@ -104,16 +151,51 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
 
-  // conection string 
+  // test connection string
+  onTestConection(value) {
+    this.companyConnection = new CompanyConnection();
+    this.companyConnection.dbName = value.dbName;
+    this.companyConnection.host = value.host;
+    this.companyConnection.port = value.port;
+    this.companyConnection.username = value.username;
+    this.companyConnection.password = value.password;
+    this.companyConnection.dialect = value.dialect;
+    console.log(this.companyConnection);
+    this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
+      (res) => {
+        const status: any = res;
+        if (status.status == 0) {
+          this.toast.error("Connection fail!!");
+        } else if (status.status == 200) {
+          this.toast.success("Database connection success!");
+        }
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+      }
+    )
+  }
+
+  // save connection string
   onSubmitConection(value) {
-    // let connectionString = value.hostname
-    this.account = new AccountCompanyModel();
-    this.account.id = localStorage.getItem('id');
-    this.account.connection_database  =  JSON.stringify(value);
-    console.log(this.account);
-    this.companyServices.updateAccountCompany(this.account).subscribe(
+    this.companyConnection = new CompanyConnection();
+    this.companyConnection.dbName = value.dbName;
+    this.companyConnection.host = value.host;
+    this.companyConnection.port = value.port;
+    this.companyConnection.username = value.username;
+    this.companyConnection.password = value.password;
+    this.companyConnection.dialect = value.dialect;
+    const connectionString =
+      this.companyConnection.dbName + " " +
+      this.companyConnection.host + " " +
+      this.companyConnection.port + " " +
+      this.companyConnection.username + " " +
+      this.companyConnection.password + " " +
+      this.companyConnection.dialect
+    console.log(connectionString);
+    this.companyServices.updateAccountCompany(connectionString).subscribe(
       (res) => {
-        this.toast.success("Update Account success!");
+        this.toast.success("Save connection success!");
       },
       (error) => {
         this.toast.error("Server is not available!");
@@ -121,42 +203,23 @@ export class CompanyConfigConnectionComponent implements OnInit {
     )
   }
 
-  //dynamic
-  mainForm() {
-    this.getTime = this.fb.group({
-        time: this.fb.array([
-            this.addTimeForm()
-        ])
-    });
-
-  }
-
-  onAddTime() {
-      (<FormArray>this.getTime.controls['time']).push(this.addTimeForm());
-
-  }
-
-  addTimeForm(): FormGroup {
-      this.timeForm = this.fb.group({
-          timeControl: ['', Validators.required],
-      });
-      return this.timeForm;
-  }
-  removeUnit(i: number) {
-      const control = <FormArray>this.getTime.controls['time'];
-      control.removeAt(i);
-  }
-
-  submit(){
+  submit() {
     let date = JSON.stringify(this.fileContent);
-    console.log(date);
+    this.fileUploadServices.uploadFile(date).subscribe(
+      (res) => {
+        this.toast.success("Save connection success!");
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+      }
+    )
   }
 
   public onChange(fileList: FileList): void {
     let file = fileList[0];
     let fileReader: FileReader = new FileReader();
     let self = this;
-    fileReader.onloadend = function() {
+    fileReader.onloadend = function () {
       self.fileContent = fileReader.result;
     }
     fileReader.readAsText(file);
