@@ -28,6 +28,13 @@ export class TwoFaAuthComponent implements OnInit {
   onOtpChange($event) {
     this.otp = $event;
   }
+
+  keyDownFunction(event) {
+    if (event.keyCode === 13) {
+      this.onSubmitOtp();
+    }
+  }
+
   onSubmitOtp() {
     let username = localStorage.getItem('username');
     this.twoFaAuthService.activated2FA(this.otp, username).subscribe(

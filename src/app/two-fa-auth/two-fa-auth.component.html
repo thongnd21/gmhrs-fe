@@ -1,8 +1,8 @@
 <mat-card *ngIf="showOrNot" class="center-screen-div">
     <mat-card-header class="center-screen-div">
         <!-- <div mat-card-avatar class="example-header-image"></div> -->
-        <mat-card-title>Use any 2FA app to scan this QR code!</mat-card-title>
-        <mat-card-subtitle class="red-text">For sercurity, please do not share this QR for any one!</mat-card-subtitle>
+        <mat-card-title>Use any 2FA application to scan this QR code!</mat-card-title>
+        <mat-card-subtitle class="red-text">For sercurity, please do not share this QR for anyone!</mat-card-subtitle>
     </mat-card-header>
     <img class="qr-code-img" mat-card-image src={{this.QrCodeLink}}>
     <!-- <mat-card-content>
@@ -22,21 +22,22 @@
                 <mat-card-content>
                     <p>
                         <span class="row justify-content-md-center">
-                            <mat-card-title>Enter your OTP got from your mobile to activated 2FA on your account
+                            <mat-card-title>Enter your OTP got from your mobile to activate 2FA on your account
                             </mat-card-title>
                         </span>
                     </p>
                     <p>
                         <span class="row justify-content-md-center">
-                            <ng-otp-input #ngOtpInput (onInputChange)="onOtpChange($event)"
-                                [config]="{length:6, allowNumbersOnly: true}" autocomplete="off">
+                            <ng-otp-input (keydown)="keyDownFunction($event)" #ngOtpInput
+                                (onInputChange)="onOtpChange($event)" [config]="{length:6, allowNumbersOnly: true}"
+                                autocomplete="off">
                             </ng-otp-input>
                         </span>
                     </p>
                     <p>
                         <span class="row justify-content-md-center">
                             <button mat-raised-button color="accent" (click)="onSubmitOtp()">
-                                Activated
+                                Activate
                             </button>
                         </span>
                     </p>

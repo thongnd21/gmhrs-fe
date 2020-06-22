@@ -9,8 +9,8 @@
                 </p>
                 <p>
                     <span class="row justify-content-md-center">
-                        <ng-otp-input #ngOtpInput (onInputChange)="onOtpChange($event)"
-                            [config]="{length:6, allowNumbersOnly: true}">
+                        <ng-otp-input (keydown)="keyDownFunction($event)" #ngOtpInput
+                            (onInputChange)="onOtpChange($event)" [config]="{length:6, allowNumbersOnly: true}">
                         </ng-otp-input>
                     </span>
                 </p>

@@ -10,6 +10,11 @@ export class TwoFaAuthService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
+    checkBypassOtp(username) {
+        console.log(this.URL + AppSettings.CHECKBYPASSOTP);
+        return this.httpClient.get(this.URL + AppSettings.CHECKBYPASSOTP + username);
+    }
+
     getQrCode(username) {
         console.log(this.URL + AppSettings.TWOFAAUTHGETQRCODE);
         return this.httpClient.get(this.URL + AppSettings.TWOFAAUTHGETQRCODE + username);

@@ -9,6 +9,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { NgOtpInputModule } from 'ng-otp-input';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/interval';
 
 
 @Component({
@@ -18,6 +20,7 @@ import { NgOtpInputModule } from 'ng-otp-input';
 })
 export class CheckOtpComponent implements OnInit {
   otp: any;
+  sub: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -25,6 +28,12 @@ export class CheckOtpComponent implements OnInit {
     private authenticationService: AuthenService,
     private twoFaAuthService: TwoFaAuthService
   ) { }
+
+  keyDownFunction(event) {
+    if (event.keyCode === 13) {
+      this.onSubmitOtp();
+    }
+  }
 
   onOtpChange($event) {
     this.otp = $event;
@@ -43,6 +52,21 @@ export class CheckOtpComponent implements OnInit {
     );
   }
   ngOnInit(): void {
+    let username = localStorage.getItem('username');
+    this.sub = Observable.interval(2000).subscribe((val) => {
+      this.twoFaAuthService.checkBypassOtp(username).subscribe(
+        res => {
+          console.log(res);
+          if (res) {
+            this.sub.unsubscribe();
+            this.toast.success('You have bypassed by mobile application!')
+            this.router.navigate(['/dashboard']);
+          }
+        }
+      );
+    })
+
+
   }
 
 }
