@@ -107,118 +107,118 @@
             </div>
         </mat-tab>
         <mat-tab label="Shedule Synchronize">
-            <div class="card-body">
-                <mat-card class="p-0">
-                    <mat-card-content>
-                        <mat-form-field class="col-md-6">
-                            <mat-select [(ngModel)]="typeSync" placeholder="Choose schedule for synchronize">
-                                <mat-option [value]="1">Monthly</mat-option>
-                                <mat-option [value]="2">Weekly</mat-option>
-                                <mat-option [value]="3">Daily</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <!-- Choose day in month -->
-                        <mat-card *ngIf="typeSync == 1">
-                            <mat-card-header>
-                                Monthly synchronize
-                            </mat-card-header>
-                            <mat-card-content>
-                                <mat-form-field>
-                                    <mat-select [(ngModel)]="monthDayChoose" placeholder="Choose days" multiple>
-                                        <mat-option *ngFor="let date of dayInMonth" [value]="date">{{ date }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <label>Time Type:</label>
-                                <mat-radio-group [(ngModel)]="timeChoose" aria-label="Select an option">
-                                    <mat-radio-button style="margin-right: 10px; margin-left: 10px;" [value]="true">
-                                        One Time</mat-radio-button>
-                                    <mat-radio-button [value]="false">Every hour</mat-radio-button>
-                                </mat-radio-group>
-                                <form [formGroup]="dayMonth">
-                                    <div *ngIf="timeChoose == true">
-                                        <mat-form-field>
-                                            <input matInput type="time" formControlName="time" />
-                                        </mat-form-field>
+            <div style="margin-top: 20px ;" class="card">
+                <div class="card-header">
+                    <div class="container">
+                        <div class="row">
+                            <h4 class="col-md-5">Schedule for synchronizing</h4>
+                            <div class="col-md-2 offset-md-5">
+                                <mat-slide-toggle [checked]="checkSync"
+                                    (change)="openDialogScheduleConfirm(dialog,$event)">
+                                    <div style="font-weight: bold; color: green;" *ngIf="checkSync == true">
+                                        On
                                     </div>
-                                    <div *ngIf="timeChoose == false">
-                                        <mat-form-field *ngIf="timeMonthDate == false">
-                                            <input matInput type="time" formControlName="everyTime" />
-                                        </mat-form-field>
+                                    <div style="font-weight: bold; color: red;" *ngIf="checkSync == false">
+                                        Off
                                     </div>
-                                    <button mat-raised-button type="submit" color="primary">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="col align-self-center">
+                            <p style="color: red;">{{timeSchedule}}</p>
+                        </div>
+                    </div>
+                    <mat-card class="p-0">
+                        <mat-card-content>
+                            <mat-form-field class="col-md-6">
+                                <mat-select [(ngModel)]="typeSync" placeholder="Choose schedule for synchronize">
+                                    <mat-option [value]="1">Monthly</mat-option>
+                                    <mat-option [value]="2">Weekly</mat-option>
+                                    <mat-option [value]="3">Daily</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!-- Choose day in month -->
+                            <mat-card *ngIf="typeSync == 1">
+                                <mat-card-header>
+                                    Monthly synchronize
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <mat-form-field>
+                                        <mat-select [(ngModel)]="monthDayChoose" placeholder="Choose days" multiple>
+                                            <mat-option *ngFor="let date of dayInMonth" [value]="date">{{ date }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <label>Time:</label>
+                                    <mat-form-field>
+                                        <input matInput  [(ngModel)]="monthTime" type="time" />
+                                    </mat-form-field>
+                                    <button mat-raised-button (click)="saveScheduleTime()" type="submit"
+                                        color="primary">
                                         Submit
                                     </button>
-                                </form>
-                            </mat-card-content>
-                        </mat-card>
-                        <!-- Choose day in week -->
-                        <mat-card *ngIf="typeSync == 2">
-                            <mat-card-header>
-                                Weekly synchronize
-                            </mat-card-header>
-                            <mat-card-content>
-                                <mat-form-field>
-                                    <mat-select placeholder="Choose days" multiple>
-                                        <mat-option *ngFor="let date of days" [value]="date.id">{{ date.name }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <label>Time Type:</label>
-                                <mat-radio-group [(ngModel)]="timeChoose" aria-label="Select an option">
-                                    <mat-radio-button style="margin-right: 10px; margin-left: 10px;" [value]="true">
-                                        One Time</mat-radio-button>
-                                    <mat-radio-button [value]="false">Every hour</mat-radio-button>
-                                </mat-radio-group>
-                                <form [formGroup]="dayWeek">
-                                    <div *ngIf="timeChoose == true">
-                                        <mat-form-field>
-                                            <input matInput type="time" formControlName="time" />
-                                        </mat-form-field>
-                                    </div>
-                                    <div *ngIf="timeChoose == false">
-                                        <mat-form-field>
-                                            <input matInput type="time" formControlName="everyTime" />
-                                        </mat-form-field>
-                                    </div>
-                                    <button mat-raised-button type="submit" color="primary">
-                                        Submit
-                                    </button>
-                                </form>
-                            </mat-card-content>
-                        </mat-card>
-                        <!-- Choose time daily -->
-                        <mat-card *ngIf="typeSync == 3">
-                            <mat-card-header>
-                                Daily synchronize
-                            </mat-card-header>
-                            <mat-card-content>
-                                <label>Time Type:</label>
-                                <mat-radio-group [(ngModel)]="timeChoose" aria-label="Select an option">
-                                    <mat-radio-button style="margin-right: 10px; margin-left: 10px;" [value]="true">
-                                        One Time</mat-radio-button>
-                                    <mat-radio-button [value]="false">Every hour</mat-radio-button>
-                                </mat-radio-group>
-                                <form [formGroup]="daily">
-                                    <div *ngIf="timeChoose == true">
-                                        <mat-form-field>
-                                            <input matInput type="time" formControlName="time" />
-                                        </mat-form-field>
-                                    </div>
-                                    <div *ngIf="timeChoose == false">
-                                        <mat-form-field >
-                                            <input matInput type="time" formControlName="everyTime" />
-                                        </mat-form-field>
-                                    </div>
-                                    <button mat-raised-button type="submit" color="primary">
-                                        Submit
-                                    </button>
-                                </form>
-                            </mat-card-content>
-                        </mat-card>
-                    </mat-card-content>
-                </mat-card>
+                                </mat-card-content>
+                            </mat-card>
+                            <!-- Choose day in week -->
+                            <mat-card *ngIf="typeSync == 2">
+                                <mat-card-header>
+                                    Weekly synchronize
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <mat-form-field>
+                                        <mat-select [(ngModel)]="weekDayChoose" placeholder="Choose days" multiple>
+                                            <mat-option *ngFor="let date of days" [value]="date.id">{{ date.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <label>Time </label>
+                                    <mat-form-field>
+                                        <input matInput  [(ngModel)]="weekTime" type="time" />
+                                    </mat-form-field>
+                                        <button mat-raised-button (click)="saveScheduleTime()" type="submit"
+                                            color="primary">
+                                            Submit
+                                        </button>
+                                </mat-card-content>
+                            </mat-card>
+                            <!-- Choose time daily -->
+                            <mat-card *ngIf="typeSync == 3">
+                                <mat-card-header>
+                                    Daily synchronize
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <label>Time:</label>
+                                    <mat-form-field>
+                                        <input matInput  [(ngModel)]="dailyTime" type="time" />
+                                    </mat-form-field>
+                                        <button mat-raised-button type="submit" color="primary">
+                                            Submit
+                                        </button>
+                                </mat-card-content>
+                            </mat-card>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
             </div>
         </mat-tab>
     </mat-tab-group>
 </div>
+<ng-template id="dialog" #dialog>
+    <mat-dialog-content>
+        <div *ngIf="checkSync == false">
+            Are you sure want to start schedule
+        </div>
+        <div *ngIf="checkSync == true">
+            Are you sure want to off schedule
+        </div>
+        <!-- {{timeSchedule}} -->
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" (click)="changeCheckSync()" tabindex="1">Change</button>
+        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+</ng-template>
