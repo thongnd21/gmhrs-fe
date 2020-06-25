@@ -4,7 +4,13 @@
     align-items: center;
     text-align: center;
   }
-
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
   .qr-code-img{
     width: 300px;
     height: 300px;

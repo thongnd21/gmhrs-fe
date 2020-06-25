@@ -21,8 +21,8 @@ import { AuthGuard } from './shared/guard/auth.guard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
-
-
+import { CheckOTPGuard } from './shared/guard/checkotp.guard';
+import { LoginPageGuard } from './shared/guard/loginpage.guard';
 
 @NgModule({
   declarations: [
@@ -48,6 +48,8 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
     AuthGuard,
     SystemAdminGuard,
     CompanyManagerGuard,
+    CheckOTPGuard,
+    LoginPageGuard,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

@@ -4,16 +4,17 @@ import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './shared/guard/auth.guard';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
+import { CheckOTPGuard } from './shared/guard/checkotp.guard';
+import { LoginPageGuard } from './shared/guard/loginpage.guard';
 
 export const AppRoutes: Routes = [
   {
-    path: '', loadChildren: () => import('./login/login.module')
-      .then(m => m.LoginModule)
+    path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginPageGuard]
   },
   {
     path: 'checkotp',
     loadChildren:
-      () => import('./check-otp/check-otp.module').then(m => m.CheckOtpModule)
+      () => import('./check-otp/check-otp.module').then(m => m.CheckOtpModule), canActivate: [CheckOTPGuard]
   },
   {
     path: '',
