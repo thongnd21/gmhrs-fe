@@ -12,6 +12,10 @@ export class AppHeaderComponent {
     this.username = localStorage.getItem('username');
   }
 
+  synchornizeNow(){
+    
+  }
+
   signOut(){
     localStorage.clear();
   }
