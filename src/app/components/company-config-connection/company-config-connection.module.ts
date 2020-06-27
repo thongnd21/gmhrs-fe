@@ -11,7 +11,9 @@ import {  MatButtonModule,
       MatStepperModule,
       MatSelectModule,
       MatOptionModule,
-      MatRadioModule} from '@angular/material';
+      MatRadioModule,
+      MatSlideToggleModule,
+      MatProgressSpinnerModule} from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -27,14 +29,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         MatOptionModule,
         MatIconModule,
         FormsModule,
+        MatSlideToggleModule,
         MatCardModule,
         MatInputModule,
         MatStepperModule,
         ReactiveFormsModule,
-        ReactiveFormsModule,
+        MatProgressSpinnerModule,
         FormsModule,
         MatMenuModule,
         MatTabsModule,
+        MatDialogModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

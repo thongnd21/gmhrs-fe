@@ -9,4 +9,6 @@ export class AccountCompanyModel {
     phone: string
     api_endpoint: string
     connection_database: string
+    is_schedule : boolean
+    schedule_time: string
 }
