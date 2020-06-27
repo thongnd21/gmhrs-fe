@@ -17,13 +17,13 @@ export class CompanyConnectionService {
 
   changeSchedule(account) {
     const path = 'changeScheStatus/';
-    console.log('http://localhost:3000/api/' + AppSettings.SCHEDULE + path);
-    return this.httpClient.post('http://localhost:3000/api/' + AppSettings.SCHEDULE + path, account)
+    console.log(this.URL + AppSettings.SCHEDULE + path);
+    return this.httpClient.post(this.URL + AppSettings.SCHEDULE + path, account)
   }
 
   saveSchedule(account) {
     const path = 'save/';
-    return this.httpClient.post('http://localhost:3000/api/' + AppSettings.SCHEDULE + path, account)
+    return this.httpClient.post(this.URL + AppSettings.SCHEDULE + path, account)
   }
 
   synchonize(){
@@ -33,6 +33,6 @@ export class CompanyConnectionService {
   getSchedule(accountId) {
     const path = 'getSchedule/';
     let  id = new HttpParams().set('id',accountId);
-    return this.httpClient.get('http://localhost:3000/api/' + AppSettings.SCHEDULE + path, {params : id})
+    return this.httpClient.get(this.URL + AppSettings.SCHEDULE + path, {params : id})
   }
 }

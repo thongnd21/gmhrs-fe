@@ -2,11 +2,39 @@
 <!-- ============================================================== -->
 <!-- Profile - style you can find in header.scss -->
 <!-- ============================================================== -->
-<!-- <a href="https://wrappixel.com/templates/materialpro-angular-dashboard/" class=" m-r-20 hidden-sm-up" mat-raised-button color="warn">Upgrade To Pro</a> -->
-<button  class="btn btn-success mr-4">
-    Synchronize
+<!-- <div class="button-container  mr-4">
+    <div class="spinner-container" *ngIf="loading">
+        <mat-spinner diameter="24"></mat-spinner>
+    </div>
+    <button (click)="synchornizeNow()" mat-raised-button  [disabled]="loading">
+        Synchronize
+    </button>
+</div>
+<a style="font-size: 15px; color: red;">
+    Last sync : 2 hours ago
+</a> -->
+<button mat-icon-button [matMenuTriggerFor]="sync" class="m-r-5" >
+    <mat-icon>sync_alt</mat-icon>
 </button>
-<a [matMenuTriggerFor]="profile" class="m-r-5">{{username}}</a>
+<mat-menu #sync="matMenu" class="customize">
+    <div class="card">
+        <div class="card-header" (click)="doNotClose($event)"><h5>Synchronization</h5></div>
+        <div class="card-body" (click)="doNotClose($event)">
+            <p style="font-size: 15px; color: red;">Last sync : 2 hours ago</p>
+            <div class="button-container  mr-4">
+                <div class="spinner-container" *ngIf="loading">
+                    <mat-spinner diameter="24"></mat-spinner>
+                </div>
+                <button (click)="synchornizeNow($event)" mat-raised-button  [disabled]="loading">
+                    Synchronize Now
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-menu>
+<button mat-icon-button [matMenuTriggerFor]="profile" class="m-r-5">
+    <mat-icon>settings</mat-icon>
+</button>
 <mat-menu #profile="matMenu" class="mymegamenu">
     <button mat-menu-item [routerLink]="['/company-config-connection']">
         <mat-icon>settings</mat-icon> Settings Connection</button>
