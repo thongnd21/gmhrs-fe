@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenService } from './../api-services/authen.services';
 import { ToastrService } from 'ngx-toastr';
@@ -9,7 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { NgOtpInputModule } from 'ng-otp-input';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import 'rxjs/add/observable/interval';
 
 
@@ -19,9 +19,10 @@ import 'rxjs/add/observable/interval';
   templateUrl: './check-otp.component.html',
   styleUrls: ['./check-otp.component.css']
 })
-export class CheckOtpComponent implements OnInit {
+export class CheckOtpComponent implements OnInit, OnDestroy {
   otp: any;
-  sub: any;
+  subscription: Subscription;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -45,6 +46,8 @@ export class CheckOtpComponent implements OnInit {
       (res) => {
         if (res) {
           this.toast.success('Validation successful!');
+          localStorage.setItem('isLoggedin', 'true');
+          localStorage.removeItem('two_fa_status');
           this.router.navigate(['/dashboard']);
         } else {
           this.toast.error('Invalid OTP!');
@@ -54,20 +57,22 @@ export class CheckOtpComponent implements OnInit {
   }
   ngOnInit(): void {
     let username = localStorage.getItem('username');
-    this.sub = Observable.interval(2000).subscribe((val) => {
+    this.subscription = Observable.interval(2000).subscribe((val) => {
       this.twoFaAuthService.checkBypassOtp(username).subscribe(
         res => {
           console.log(res);
           if (res) {
-            this.sub.unsubscribe();
+            localStorage.setItem('isLoggedin', 'true');
+            localStorage.removeItem('two_fa_status');
             this.toast.success('You have bypassed by mobile application!')
             this.router.navigate(['/dashboard']);
           }
         }
       );
     })
-
-
+  }
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
   }
 
 }

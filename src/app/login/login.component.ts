@@ -60,17 +60,16 @@ export class LoginComponent implements OnInit {
                 console.log(res);
                 const userInfo: any = res;
                 localStorage.setItem('two_fa_status', userInfo.profile.two_fa_status);
+                localStorage.setItem('username', userInfo.profile.username);
+                localStorage.setItem('id', userInfo.profile.id);
+                localStorage.setItem('token', userInfo.token);
+                localStorage.setItem('roleId', userInfo.profile.role.id);
                 if (userInfo.profile.two_fa_status === 1) {
                     this.router.navigate(['/checkotp']);
                 } else {
                     localStorage.setItem('isLoggedin', 'true');
-                    localStorage.setItem('id', userInfo.profile.id);
-                    localStorage.setItem('username', userInfo.profile.username);
-                    localStorage.setItem('token', userInfo.token);
-                    localStorage.setItem('roleId', userInfo.profile.role.id);
                     this.router.navigate(['/dashboard']);
                 }
-
             },
             (err) => {
                 if (err.status == 0) {
