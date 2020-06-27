@@ -34,7 +34,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
   weekDayChoose;
   timeChoose;
   uploadedFiles: Array<File>;
-
+  loading = false;
+  loadingConfirm = false;
+  loadingSubmit = false;
   days = [
     {
       id: 0,
@@ -229,21 +231,33 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   changeCheckSync(event) {
-    this.checkSync = !this.checkSync;
+    this.loadingConfirm = true;
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
-    account['is_schedule'] = this.checkSync;
+    account['is_schedule'] = !this.checkSync;
     console.log(account);
     this.companyConnectionService.changeSchedule(account).subscribe(
       (res: any) => {
         this.toast.success(res.message);
+        this.loadingConfirm = false;
         this.dialog.closeAll();
         this.getSchedule();
+      },(err)=>{
+        this.loadingConfirm = false;
+        this.dialog.closeAll();
+        if (err.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (err.status == 400) {
+          this.toast.error("Server is not available!");
+        }
+        this.toast.error("Server is not available!");
       }
     )
   }
 
   saveScheduleTime() {
+    this.loadingSubmit = true;
+    console.log(this.loadingSubmit);
     let minute = '*';
     let hours = '*';
     let dayInMonth = '*';
@@ -286,17 +300,27 @@ export class CompanyConfigConnectionComponent implements OnInit {
     account['schedule_time'] = minute + ' ' + hours + ' ' + dayInMonth + ' * ' + dayInWeek;
     this.companyConnectionService.saveSchedule(account).subscribe(
       (res: any) => {
+        this.loadingSubmit = false;
         this.toast.success(res.message);
         this.getSchedule();
+      },(err)=>{
+        this.loadingSubmit = false;
+        if (err.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (err.status == 400) {
+          this.toast.error("Server is not available!");
+        }
+        this.toast.error("Server is not available!");
       }
     )
   }
 
   async getSchedule() {
+    this.loading =true;
     const id = Number.parseInt(localStorage.getItem('id'));
     this.companyConnectionService.getSchedule(id).subscribe(
       (res: any) => {
-        console.log(res);
+        this.loading =false;
         this.checkSync = res.is_schedule;
         let time = res.schedule_time + "";
         if (time.length > 0) {
@@ -304,6 +328,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.parseTimeCron(arrTime);
         }
       }, (error) => {
+        this.loading =false;
         if (error.status == 0) {
           this.toast.error("Connection timeout!");
         } if (error.status == 400) {
@@ -337,7 +362,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     }
     let month = "";
     if (arrTime[2] !== "*") {
-      month = " on day-of-month " + arrTime[2];
+      month = " on day " + arrTime[2] + " of month.";
     }
     let week = "";
     if (arrTime[4] !== "*") {
