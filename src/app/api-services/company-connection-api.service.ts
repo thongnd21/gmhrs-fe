@@ -27,7 +27,7 @@ export class CompanyConnectionService {
   }
 
   synchonize(){
-    return this.httpClient.get('http://localhost:3000/api/gsuite/sync-all/firstSync?emailAdmin=z@capstonesummer2020-fu.page&apiEndpoint=https://hrms123.herokuapp.com/api/data-hrms&fileKeyName=gmhrs-auth-gsuite.json&accountId=1');
+    return this.httpClient.get(this.URL+'gsuite/sync-all/firstSync?emailAdmin=z@capstonesummer2020-fu.page&apiEndpoint=https://hrms123.herokuapp.com/api/data-hrms&fileKeyName=gmhrs-auth-gsuite.json&accountId=1');
   }
 
   getSchedule(accountId) {
