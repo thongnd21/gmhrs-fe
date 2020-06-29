@@ -1,19 +1,35 @@
 <mat-card class="center-screen-div">
     <mat-card-header class="center-screen-div">
-        <!-- <div mat-card-avatar class="example-header-image"></div> -->
         <mat-card-title>You account is activated 2FA</mat-card-title>
-        <!-- <mat-card-subtitle class="red-text">For sercurity, please do not share this QR for any one!</mat-card-subtitle> -->
     </mat-card-header>
-    <!-- <img class="qr-code-img" mat-card-image src={{this.QrCodeLink}}> -->
     <mat-card-content>
         <p>
-            Your account is activated 2FA function. If you want to disable 2FA function please press button
+            Your account is activated 2FA function. If you want to disable 2FA function please input OTP then press
+            button
             under. Note that if you disable 2FA, your token in mobile is not available more. If you want to
-            use 2FA function you must active it again!
+            use 2FA function you must active it and <b style="color: red;">SCAN QR AGAIN!</b>
         </p>
     </mat-card-content>
-    <mat-card-actions>
-        <button mat-raise-button color="warn" (click)=(disable2FA())>Disable TWO FACTOR AUTHENTICATION</button>
-    </mat-card-actions>
-
+    <mat-card-content>
+        <p>
+            <span class="row justify-content-md-center">
+                <mat-card-title>Enter your OTP got from your mobile to activate 2FA on your account
+                </mat-card-title>
+            </span>
+        </p>
+        <p>
+            <span class="row justify-content-md-center" autocomplete="off">
+                <ng-otp-input (keydown)="keyDownFunction($event)" #ngOtpInput (onInputChange)="onOtpChange($event)"
+                    [config]="{length:6, allowNumbersOnly: true}">
+                </ng-otp-input>
+            </span>
+        </p>
+        <p>
+            <span class="row justify-content-md-center">
+                <button mat-raised-button color="accent" (click)="onSubmitOtp()">
+                    Activate
+                </button>
+            </span>
+        </p>
+    </mat-card-content>
 </mat-card>

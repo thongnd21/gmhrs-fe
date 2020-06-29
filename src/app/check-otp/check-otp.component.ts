@@ -64,7 +64,7 @@ export class CheckOtpComponent implements OnInit, OnDestroy {
           if (res) {
             localStorage.setItem('isLoggedin', 'true');
             localStorage.removeItem('two_fa_status');
-            this.toast.success('You have bypassed by mobile application!')
+            this.toast.success('You have approved by mobile application!')
             this.router.navigate(['/dashboard']);
           }
         }

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from 'ngx-custom-validators';
 import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-two-fa-auth',
@@ -21,7 +22,8 @@ export class TwoFaAuthComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
     private authenticationService: AuthenService,
-    private twoFaAuthService: TwoFaAuthService
+    private twoFaAuthService: TwoFaAuthService,
+    private _sanitizer: DomSanitizer,
   ) {
 
   }
@@ -61,8 +63,14 @@ export class TwoFaAuthComponent implements OnInit {
           let username = localStorage.getItem('username');
           this.twoFaAuthService.getQrCode(username).subscribe(
             (res) => {
-              this.QrCodeLink = res;
+              console.log('qr content: ' + res);
+              if (res === null) {
+                console.log('reload bs server err!');
+
+                this.ngOnInit();
+              }
               this.showOrNot = true;
+              this.QrCodeLink = res;
             }
           );
         } else {
