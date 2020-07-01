@@ -42,7 +42,7 @@ export class TwoFaAuthComponent implements OnInit {
     this.twoFaAuthService.activated2FA(this.otp, username).subscribe(
       (res) => {
         if (res) {
-          this.toast.success('Validation successful!');
+          this.toast.success('Activated 2FA successful!');
           this.router.navigate(['/dashboard']);
         } else {
           this.toast.error('Invalid OTP!');
@@ -68,6 +68,7 @@ export class TwoFaAuthComponent implements OnInit {
                 console.log('reload bs server err!');
 
                 this.ngOnInit();
+                return;
               }
               this.showOrNot = true;
               this.QrCodeLink = res;

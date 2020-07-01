@@ -38,7 +38,7 @@ export class Activated2faComponent implements OnInit {
     this.twoFaAuthService.deactivated2FA(this.otp, username).subscribe(
       (res) => {
         if (res) {
-          this.toast.success('Deactive 2FA successful!');
+          this.toast.success('Disable 2FA successful!');
           this.router.navigate(['/dashboard']);
         } else {
           this.toast.error('Invalid OTP!');
