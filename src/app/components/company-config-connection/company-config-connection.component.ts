@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray, FormControlName } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyServices } from '../../api-services/company.services';
 import { AccountCompanyModel } from '../../model/accounts';
@@ -9,6 +9,7 @@ import { FileUpload } from '../../api-services/file-upload-api.service';
 import { from } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { data } from 'jquery';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-company-config-connection',
@@ -18,6 +19,7 @@ import { data } from 'jquery';
 export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
   connection = true;
+  timeMonthDate = true;
   isOptional = false;
   gsuiteCredentialForm: FormGroup;
   APIEndpointForm: FormGroup;
@@ -27,8 +29,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
   companyConnection;
   controls;
   typeSync;
-  dayInMonth : Array<Number>= []; 
+  dayInMonth: Array<Number> = [];
+  monthDayChoose;
+  weekDayChoose;
+  timeChoose;
   uploadedFiles: Array<File>;
+  loading = false;
+  loadingConfirm = false;
+  loadingSubmit = false;
   days = [
     {
       id: 0,
@@ -59,6 +67,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
       name: 'Saturday'
     },
   ];
+  checkSync;
+  monthTime;
+  dailyTime;
+  weekTime;
+  schedule = {};
+  timeSchedule = "";
   constructor(
     private toast: ToastrService,
     private companyServices: CompanyServices,
@@ -66,17 +80,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
     private fileUploadServices: FileUpload,
     private fb: FormBuilder,
     private http: HttpClient,
+    public dialog: MatDialog
   ) {
 
   }
 
   ngOnInit() {
+    this.getSchedule();
     this.createAForm();
     this.createFormApiEndpoint();
-    for(let i = 1; i < 32; i++){
+    for (let i = 1; i < 32; i++) {
       this.dayInMonth.push(i);
     }
     this.createGsuiteCredentialForm();
+    console.log(this.checkSync);
   }
 
   createAForm() {
@@ -203,18 +220,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
     )
   }
 
-  submit() {
-    let date = JSON.stringify(this.fileContent);
-    this.fileUploadServices.uploadFile(date).subscribe(
-      (res) => {
-        this.toast.success("Save connection success!");
-      },
-      (error) => {
-        this.toast.error("Server is not available!");
-      }
-    )
-  }
-
   public onChange(fileList: FileList): void {
     let file = fileList[0];
     let fileReader: FileReader = new FileReader();
@@ -223,5 +228,157 @@ export class CompanyConfigConnectionComponent implements OnInit {
       self.fileContent = fileReader.result;
     }
     fileReader.readAsText(file);
+  }
+
+  changeCheckSync(event) {
+    this.loadingConfirm = true;
+    let account = {};
+    account['id'] = Number.parseInt(localStorage.getItem('id'));
+    account['is_schedule'] = !this.checkSync;
+    console.log(account);
+    this.companyConnectionService.changeSchedule(account).subscribe(
+      (res: any) => {
+        this.toast.success(res.message);
+        this.loadingConfirm = false;
+        this.dialog.closeAll();
+        this.getSchedule();
+      },(err)=>{
+        this.loadingConfirm = false;
+        this.dialog.closeAll();
+        if (err.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (err.status == 400) {
+          this.toast.error("Server is not available!");
+        }
+        this.toast.error("Server is not available!");
+      }
+    )
+  }
+
+  saveScheduleTime() {
+    this.loadingSubmit = true;
+    console.log(this.loadingSubmit);
+    let minute = '*';
+    let hours = '*';
+    let dayInMonth = '*';
+    let dayInWeek = '*';
+    console.log("start parst time");
+    if (this.typeSync === 1) {
+      dayInMonth = '';
+      console.log(this.monthDayChoose);
+      for (let i = 0; i < this.monthDayChoose.length; i++) {
+        dayInMonth += this.monthDayChoose[i];
+        if (i != this.monthDayChoose.length - 1) {
+          dayInMonth += ',';
+        }
+      }
+      hours = this.monthTime.split(':', 1);
+      let n = this.monthTime.indexOf(":");
+      let length = this.monthTime.length;
+      minute = this.monthTime.slice(n + 1, length);
+    } else
+      if (this.typeSync === 2) {
+        dayInWeek = '';
+        for (let i = 0; i < this.weekDayChoose.length; i++) {
+          dayInWeek += this.weekDayChoose[i];
+          if (i != this.weekDayChoose.length - 1) {
+            dayInWeek += ',';
+          }
+        }
+        hours = this.weekTime.split(':', 1);
+        let n = this.weekTime.indexOf(":");
+        let lenght = this.weekTime.length;
+        minute = this.weekTime.slice(n + 1, lenght);
+      } else {
+        hours = this.dailyTime.split(':', 1);
+        let n = this.dailyTime.indexOf("@");
+        let lenght = this.dailyTime.length;
+        minute = this.dailyTime.slice(n + 1, lenght);
+      }
+    let account = {};
+    account['id'] = Number.parseInt(localStorage.getItem('id'));
+    account['schedule_time'] = minute + ' ' + hours + ' ' + dayInMonth + ' * ' + dayInWeek;
+    this.companyConnectionService.saveSchedule(account).subscribe(
+      (res: any) => {
+        this.loadingSubmit = false;
+        this.toast.success(res.message);
+        this.getSchedule();
+      },(err)=>{
+        this.loadingSubmit = false;
+        if (err.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (err.status == 400) {
+          this.toast.error("Server is not available!");
+        }
+        this.toast.error("Server is not available!");
+      }
+    )
+  }
+
+  async getSchedule() {
+    this.loading =true;
+    const id = Number.parseInt(localStorage.getItem('id'));
+    this.companyConnectionService.getSchedule(id).subscribe(
+      (res: any) => {
+        this.loading =false;
+        this.checkSync = res.is_schedule;
+        let time = res.schedule_time + "";
+        if (time.length > 0) {
+          let arrTime = time.split(' ', 5);
+          this.parseTimeCron(arrTime);
+        }
+      }, (error) => {
+        this.loading =false;
+        if (error.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (error.status == 400) {
+          this.toast.error("Server is not available!");
+        }
+        this.toast.error("Server is not available!");
+      }
+    )
+  }
+
+  //Open dialog confirm On/Off synchronize schedule's
+  openDialogScheduleConfirm(dialog, event) {
+    console.log(this.checkSync);
+    event.source.checked = this.checkSync;
+    const dialogRef = this.dialog.open(dialog);
+  }
+
+  parseTimeCron(arrTime) {
+    if (arrTime[2] === "*" && arrTime[4] === "*") {
+      this.typeSync=3;
+      this.dailyTime = arrTime[1]+":"+arrTime[0];
+    }else if (arrTime[2] === "*" && arrTime[4] !== "*") {
+      this.typeSync=2;
+      this.weekDayChoose= arrTime[4].split(',').map(x=>+x);
+      this.weekTime = arrTime[1]+":"+arrTime[0];
+    }else{
+      this.typeSync=1;
+      this.monthDayChoose= arrTime[2].split(',').map(x=>+x);
+      console.log(this.monthDayChoose);
+      this.monthTime = arrTime[1]+":"+arrTime[0];
+    }
+    let month = "";
+    if (arrTime[2] !== "*") {
+      month = " on day " + arrTime[2] + " of month.";
+    }
+    let week = "";
+    if (arrTime[4] !== "*") {
+      week = " on ";
+      let dayWeek = arrTime[4].split(',')
+      dayWeek.forEach(dayChoose => {
+        this.days.forEach(element => {
+          if (Number(dayChoose) === element.id) {
+            week += element.name + ',';
+          }
+        });
+      });
+    }
+    week = week.substring(0, week.length - 1);
+    this.timeSchedule = "At " + arrTime[1] + ":" + arrTime[0] + month + week;
+
+    console.log(this.timeSchedule);
   }
 }

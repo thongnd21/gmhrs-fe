@@ -49,10 +49,10 @@ export class EmployeeComponent implements OnInit {
       prop: 'phone',
       name: 'phone'
     },
-    {
-      prop: 'depName',
-      name: 'depName'
-    },
+    // {
+    //   prop: 'depName',
+    //   name: 'depName'
+    // },
     {
       prop: 'created_date',
       name: 'CreateAt'
@@ -89,7 +89,7 @@ export class EmployeeComponent implements OnInit {
             item['name'] = element.first_name +" "+ element.last_name;
             item['status'] = element.status_id;
             item['is_sync'] = element.is_sync;
-            item['departmentName'] = element.department.name;
+            // item['departmentName'] = element.department.name;
             item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
             item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
             listAccount.push(item);
