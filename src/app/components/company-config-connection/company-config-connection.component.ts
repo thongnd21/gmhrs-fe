@@ -6,7 +6,7 @@ import { AccountCompanyModel } from '../../model/accounts';
 import { CompanyConnection } from '../../model/company_connection';
 import { CompanyConnectionService } from '../../api-services/company-connection-api.service';
 import { FileUpload } from '../../api-services/file-upload-api.service';
-import { from } from 'rxjs';
+import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { data } from 'jquery';
 import { MatDialog } from '@angular/material';
@@ -264,6 +264,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     let dayInWeek = '*';
     console.log("start parst time");
     if (this.typeSync === 1) {
+      this.monthTime = moment(this.monthTime,'HH:mm').utc().format('HH:mm');
       dayInMonth = '';
       console.log(this.monthDayChoose);
       for (let i = 0; i < this.monthDayChoose.length; i++) {
@@ -278,6 +279,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       minute = this.monthTime.slice(n + 1, length);
     } else
       if (this.typeSync === 2) {
+        this.weekTime = moment(this.weekTime,'HH:mm').utc().format('HH:mm');
         dayInWeek = '';
         for (let i = 0; i < this.weekDayChoose.length; i++) {
           dayInWeek += this.weekDayChoose[i];
@@ -290,6 +292,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         let lenght = this.weekTime.length;
         minute = this.weekTime.slice(n + 1, lenght);
       } else {
+        this.dailyTime = moment(this.dailyTime,'HH:mm').utc().format('HH:mm');
         hours = this.dailyTime.split(':', 1);
         let n = this.dailyTime.indexOf("@");
         let lenght = this.dailyTime.length;
@@ -347,18 +350,21 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   parseTimeCron(arrTime) {
+    let time = moment.utc(arrTime[1]+":"+arrTime[0],'HH:mm').local().format('HH:mm');
     if (arrTime[2] === "*" && arrTime[4] === "*") {
       this.typeSync=3;
-      this.dailyTime = arrTime[1]+":"+arrTime[0];
+      this.dailyTime = time;
+      console.log(this.dailyTime);
     }else if (arrTime[2] === "*" && arrTime[4] !== "*") {
       this.typeSync=2;
       this.weekDayChoose= arrTime[4].split(',').map(x=>+x);
-      this.weekTime = arrTime[1]+":"+arrTime[0];
+      this.weekTime = time;
     }else{
       this.typeSync=1;
       this.monthDayChoose= arrTime[2].split(',').map(x=>+x);
-      console.log(this.monthDayChoose);
-      this.monthTime = arrTime[1]+":"+arrTime[0];
+      console.log(arrTime[1]+":"+arrTime[0]);
+      this.monthTime = time;
+      console.log(this.monthTime);
     }
     let month = "";
     if (arrTime[2] !== "*") {
@@ -376,8 +382,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
         });
       });
     }
+    console.log(time);
+    const arTime = time.split(':',2);
+    console.log(arTime);
     week = week.substring(0, week.length - 1);
-    this.timeSchedule = "At " + arrTime[1] + ":" + arrTime[0] + month + week;
+    this.timeSchedule = "At " + arTime[0] + ":" + arTime[1] + month + week;
 
     console.log(this.timeSchedule);
   }
