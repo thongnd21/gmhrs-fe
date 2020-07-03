@@ -18,6 +18,7 @@ import { MenuItems } from '../../../shared/menu-items/menu-items';
 export class AppSidebarComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
 
+
   private _mobileQueryListener: () => void;
 
   constructor(
@@ -29,6 +30,7 @@ export class AppSidebarComponent implements OnDestroy {
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
+  username = localStorage.getItem('username');
   role = Number.parseInt(localStorage.getItem('roleId'));
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
