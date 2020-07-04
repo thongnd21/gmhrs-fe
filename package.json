@@ -41,6 +41,7 @@
     "ng-chartist": "4.1.0",
     "ng-lazyload-image": "^8.0.1",
     "ng-otp-input": "^1.7.1",
+    "ng-zorro-antd": "^9.2.2",
     "ngx-custom-validators": "^9.1.0",
     "ngx-toastr": "^11.1.0",
     "node-sass": "^4.14.1",
