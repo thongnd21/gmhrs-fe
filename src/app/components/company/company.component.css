@@ -14,3 +14,8 @@
     tr {
         margin-bottom: 10px;
     }
+
+    button, input[type="button"], input[type="submit"]{
+        border: none;
+        outline: none;
+      }
