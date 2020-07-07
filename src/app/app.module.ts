@@ -21,8 +21,7 @@ import { AuthGuard } from './shared/guard/auth.guard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
-
-
+import { EmailEditorModule } from 'angular-email-editor';
 
 @NgModule({
   declarations: [
@@ -34,6 +33,7 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
   ],
   imports: [
     BrowserModule,
+    EmailEditorModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
     FormsModule,

@@ -25,7 +25,7 @@
                 <div class="spinner-container" *ngIf="loading">
                     <mat-spinner diameter="24"></mat-spinner>
                 </div>
-                <button (click)="synchornizeNow($event)" mat-raised-button  [disabled]="loading">
+                <button (click)="synchornizeNow($event,create)" mat-raised-button  [disabled]="loading">
                     Synchronize Now
                 </button>
             </div>
@@ -45,5 +45,14 @@
     <button mat-menu-item (click)="signOut()" [routerLink]="['/']">
         <mat-icon>exit_to_app</mat-icon> Sign Out </button>
 </mat-menu>
+
+<!-- Modal create  account company-->
+<ng-template #create let-modal>
+    <div class="modal-body">
+      <div class="card-body">
+        
+      </div>
+    </div>
+  </ng-template>
 
  
