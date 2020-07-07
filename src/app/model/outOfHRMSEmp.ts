@@ -3,5 +3,6 @@ export class OutOfHMRSEmp{
         familyName: string
         fullName: string
         givenName: string
+        primary_email:string
     }
 }

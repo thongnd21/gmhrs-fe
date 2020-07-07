@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {ViewEncapsulation } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -9,6 +9,7 @@ import { EmployeeSync } from '../../../model/listSyncEmp';
 import { Department } from '../../../model/department';
 import { Team } from '../../../model/team';
 import { Employee } from '../../../model/employee';
+import { MatMenuTrigger } from '@angular/material';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,8 +18,11 @@ import { Employee } from '../../../model/employee';
 })
 
 export class AppHeaderComponent {
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   username;
   loading = false;
+  panelOpenState = false;
+  listItemSynch = {};
   open = (modal) =>
     this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
@@ -33,13 +37,12 @@ export class AppHeaderComponent {
   }
 
   synchornizeNow(event,modal){
+    this.loading = true;
     let check = localStorage.getItem('is_first_sync');
-    console.log(check);
     let accountId= localStorage.getItem('id');
-    console.log(accountId);
     this.syncService.getListSynchronize(accountId,check).subscribe(
       (res : any) => {
-        if(check){
+        if(check == 'true'){
           const listSync ={
             department : new DepartmentSync,
             team : new TeamSync,
@@ -76,6 +79,7 @@ export class AppHeaderComponent {
             return {
               id:o.id, 
               name:o.name,
+              email:o.email,
               description:o.description,
               modified_date : o.modified_date,
               created_date:o.created_date
@@ -85,6 +89,7 @@ export class AppHeaderComponent {
             return {
               id:o.id, 
               name:o.name,
+              email:o.email,
               description:o.description,
               modified_date : o.modified_date,
               created_date:o.created_date
@@ -101,20 +106,26 @@ export class AppHeaderComponent {
           // employee
           listSync.employee.matchedEmployee = res.employees.matchedEmployee.map(o=>{
             return {
-              id:o.id, 
-              name:o.name,
-              description:o.description,
-              modified_date : o.modified_date,
-              created_date:o.created_date
+              address: o.address,
+              first_name: o.first_name,
+              id: o.id,
+              last_name: o.last_name,
+              modified_date: o.modified_date,
+              personal_email: o.personal_email,
+              phone: o.phone,
+              primary_email: o.primary_email
             }
           });
           listSync.employee.newEmployee = res.employees.newEmployee.map(o=>{
             return {
-              id:o.id, 
-              name:o.name,
-              description:o.description,
-              modified_date : o.modified_date,
-              created_date:o.created_date
+              address: o.address,
+              first_name: o.first_name,
+              id: o.id,
+              last_name: o.last_name,
+              modified_date: o.modified_date,
+              personal_email: o.personal_email,
+              phone: o.phone,
+              primary_email: o.primary_email
             }
           });
           listSync.employee.outOfHRMS = res.employees.outOfHRMS.map(o=>{
@@ -122,23 +133,18 @@ export class AppHeaderComponent {
               familyName:o.name.familyName,
               fullName:o.name.fullName,
               givenName:o.name.givenName,
+              primary_email: o.primaryEmail
             }
           });
-          // listSync.department.newDepartment.push(res.departments.newDepartment);
-          // listSync.department.outOfHRMS.push(res.departments.outOfHRMS);
-          // listSync.team.matchedTeam.push(res.teams.matchedTeam);
-          // listSync.team.newTeam.push(res.teams.newTeam);
-          // listSync.team.outOfHRMS.push(res.teams.outOfHRMS);
-          // listSync.employee.matchedEmployee.push(res.employees.matchedEmployee);
-          // listSync.employee.newEmployee.push(res.employees.newEmployee);
-          // listSync.employee.outOfHRMS.push(res.employees.outOfHRMS);
-          this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-          console.log(res);
-          console.log(listSync);
-        }else{
-          this.loading = true;
+          this.listItemSynch = listSync;
           event.stopPropagation();
-          setTimeout(() => this.loading = false, 2000);
+          this.loading = false;
+          this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          this.trigger.closeMenu()
+        }else{
+          event.stopPropagation();
+          this.loading = false;
+          this.toast.success(res.status);
         }
       },
       (err) => {
@@ -153,7 +159,29 @@ export class AppHeaderComponent {
       }
     );
   }
-
+  synchornize(){
+    localStorage.setItem('is_first_sync', 'false');
+    let check = localStorage.getItem('is_first_sync');
+    let accountId= localStorage.getItem('id');
+    this.loading = true;
+    this.syncService.getListSynchronize(accountId,check).subscribe(
+      (res : any) => {
+        this.loading = false;
+        this.toast.success(res.status);
+        this.closeModal();
+      },
+      (err) => {
+          if (err.status == 0) {
+              this.toast.error('Connection time out');
+          } else
+              if (err.status == 500) {
+                  this.toast.error('Server error');
+          } else {
+              this.toast.error('Username or password invalid');
+          }
+      }
+    );
+  }
   closeModal() {
     this.modalService.dismissAll();
   }
