@@ -45,19 +45,34 @@ export class AppHeaderComponent {
             team : new TeamSync,
             employee : new EmployeeSync
           }
-          console.log(res.departments);
-          console.log(res.departments['newDepartment']);
-          const dep = res.departments;
-          // listSync.department.matchedDepartment = dep.matchedDepartment.map(o=>{
-          //   return {
-          //     id:o.id, 
-          //     name:o.name,
-          //     description:o.description,
-          //     modified_date : o.modified_date,
-          //     created_date:o.created_date
-          //   }
-          // });
-          listSync.department.newDepartment = res.departments.newDepartment.map(o=>{
+          console.log(res);
+          // department
+          listSync.department.matchedDepartment = res.departments.matchedDepartment.map(d=>{
+            return {
+              id:d.id, 
+              name:d.name,
+              description:d.description,
+              modified_date : d.modified_date,
+              created_date:d.created_date
+            }
+          });
+          listSync.department.newDepartment = res.departments.newDepartment.map(d=>{
+            return {
+              id:d.id, 
+              name:d.name,
+              description:d.description,
+              modified_date : d.modified_date,
+              created_date:d.created_date
+            }
+          });
+          listSync.department.outOfHRMS = res.departments.outOfHRMS.map(d=>{
+            return { 
+              name:d.name,
+              description:d.description,
+            }
+          });
+          // team
+          listSync.team.matchedTeam = res.teams.matchedTeam.map(o=>{
             return {
               id:o.id, 
               name:o.name,
@@ -66,13 +81,49 @@ export class AppHeaderComponent {
               created_date:o.created_date
             }
           });
-          listSync.department.outOfHRMS = res.departments.outOfHRMS.map(o=>{
-            return { 
+          listSync.team.newTeam = res.teams.newTeam.map(o=>{
+            return {
+              id:o.id, 
               name:o.name,
+              description:o.description,
+              modified_date : o.modified_date,
+              created_date:o.created_date
+            }
+          });
+          listSync.team.outOfHRMS = res.teams.outOfHRMS.map(o=>{
+            return { 
+              id: o.id,
+              name:o.name,
+              email:o.email,
               description:o.description,
             }
           });
-          console.log(listSync);
+          // employee
+          listSync.employee.matchedEmployee = res.employees.matchedEmployee.map(o=>{
+            return {
+              id:o.id, 
+              name:o.name,
+              description:o.description,
+              modified_date : o.modified_date,
+              created_date:o.created_date
+            }
+          });
+          listSync.employee.newEmployee = res.employees.newEmployee.map(o=>{
+            return {
+              id:o.id, 
+              name:o.name,
+              description:o.description,
+              modified_date : o.modified_date,
+              created_date:o.created_date
+            }
+          });
+          listSync.employee.outOfHRMS = res.employees.outOfHRMS.map(o=>{
+            return { 
+              familyName:o.name.familyName,
+              fullName:o.name.fullName,
+              givenName:o.name.givenName,
+            }
+          });
           // listSync.department.newDepartment.push(res.departments.newDepartment);
           // listSync.department.outOfHRMS.push(res.departments.outOfHRMS);
           // listSync.team.matchedTeam.push(res.teams.matchedTeam);
@@ -82,7 +133,8 @@ export class AppHeaderComponent {
           // listSync.employee.newEmployee.push(res.employees.newEmployee);
           // listSync.employee.outOfHRMS.push(res.employees.outOfHRMS);
           this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-          
+          console.log(res);
+          console.log(listSync);
         }else{
           this.loading = true;
           event.stopPropagation();
