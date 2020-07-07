@@ -24,13 +24,14 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { CheckOTPGuard } from './shared/guard/checkotp.guard';
 import { LoginPageGuard } from './shared/guard/loginpage.guard';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     FullComponent,
     AppHeaderComponent,
     SpinnerComponent,
-    AppSidebarComponent,
+    AppSidebarComponent
   ],
   imports: [
     BrowserModule,

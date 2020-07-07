@@ -31,6 +31,11 @@ export const AppRoutes: Routes = [
           () => import('./two-fa-auth/two-fa-auth.module').then(m => m.TwoFaAuthModule)
       },
       {
+        path: 'signaturetemplate',
+        loadChildren:
+          () => import('./signature-template/signature-template.module').then(m => m.SignatureTemplateModule)
+      },
+      {
         path: 'activated2fa',
         loadChildren:
           () => import('./activated2fa/activated2fa.module').then(m => m.Activated2faModule)

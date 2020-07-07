@@ -62,4 +62,11 @@
             <span fxFlex></span>
         </a>
     </mat-list-item>
+    <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/signaturetemplate']" *ngIf="role === 2">
+            <mat-icon>spellcheck</mat-icon>
+            <span>Signature Template</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
 </mat-nav-list>
