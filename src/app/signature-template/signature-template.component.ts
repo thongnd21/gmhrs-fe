@@ -7,20 +7,41 @@ import { CustomValidators } from 'ngx-custom-validators';
 import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { data } from 'jquery';
 
 interface ItemData {
   id: string;
   name: string;
-  age: string;
-  address: string;
+  contain: string;
+  action: boolean;
+  length: number;
 }
-
+interface Food {
+  value: string;
+  viewValue: string;
+}
+interface Rule {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-signature-template',
   templateUrl: './signature-template.component.html',
   styleUrls: ['./signature-template.component.css']
 })
 export class SignatureTemplateComponent implements OnInit {
+
+  selectedValue: string;
+
+  rules: Rule[] = [
+    { value: 'contain', viewValue: 'Contain' },
+    { value: 'notcontain', viewValue: 'Not Contain' },
+    { value: 'none', viewValue: 'None' }
+  ];
+
+  action = 'Contain';
+
+
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -77,6 +98,8 @@ export class SignatureTemplateComponent implements OnInit {
 
   stopEdit(): void {
     this.editId = null;
+    console.log(this.listOfData);
+
   }
 
   addRow(): void {
@@ -84,20 +107,27 @@ export class SignatureTemplateComponent implements OnInit {
       ...this.listOfData,
       {
         id: `${this.i}`,
-        name: `Edward King ${this.i}`,
-        age: '32',
-        address: `London, Park Lane no. ${this.i}`
+        name: '',
+        contain: '',
+        action: true,
+        length: null
       }
     ];
     this.i++;
   }
-
+  contain(id: string) {
+    this.editId = id;
+    this.action = 'Contain';
+  }
+  notContain(id: string) {
+    this.editId = id;
+    this.action = 'Not Contain';
+  }
   deleteRow(id: string): void {
     this.listOfData = this.listOfData.filter(d => d.id !== id);
   }
 
   ngOnInit(): void {
-    this.addRow();
     this.addRow();
   }
 

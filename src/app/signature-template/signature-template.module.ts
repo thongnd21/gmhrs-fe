@@ -24,7 +24,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 @NgModule({
     imports: [
         RouterModule,
@@ -49,6 +51,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
         AngularEditorModule,
         NzTableModule,
         NzButtonModule,
+        NzPopconfirmModule,
+        NzInputModule,
+        NzCheckboxModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]

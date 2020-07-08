@@ -8,8 +8,10 @@
     <!-- ============================================================== -->
     <!-- Profile - style you can find in header.scss -->
     <!-- ============================================================== -->
-    <div class="profile-text"><input [value]="username" style="color: blueviolet;" readonly /> <i
-            class="ti-angle-down font-12 m-l-5"></i></div>
+    <div class="profile-text">
+        <nz-tag style="width: 100%; font-size: large; text-align: center;" [nzColor]="'cyan'">{{username}}
+        </nz-tag> <i class="ti-angle-down font-12 m-l-5"></i>
+    </div>
     <!-- <mat-menu #sdprofile="matMenu" class="mymegamenu" >
         <button mat-menu-item>
             <mat-icon>settings</mat-icon> Setting Connection

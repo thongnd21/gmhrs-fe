@@ -23,7 +23,7 @@ import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { CheckOTPGuard } from './shared/guard/checkotp.guard';
 import { LoginPageGuard } from './shared/guard/loginpage.guard';
-
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @NgModule({
   declarations: [
@@ -42,6 +42,7 @@ import { LoginPageGuard } from './shared/guard/loginpage.guard';
     HttpClientModule,
     SharedModule,
     NgbModule,
+    NzTagModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot(AppRoutes)
   ],
