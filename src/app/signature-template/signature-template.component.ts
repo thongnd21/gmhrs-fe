@@ -4,26 +4,23 @@ import { AuthenService } from './../api-services/authen.services';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from 'ngx-custom-validators';
-import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
+import { SignatureService } from '../api-services/signature.services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { data } from 'jquery';
+import { parseJSON } from 'jquery';
 
 interface ItemData {
   id: string;
   name: string;
-  contain: string;
+  content: string;
   action: boolean;
   length: number;
 }
-interface Food {
-  value: string;
-  viewValue: string;
-}
-interface Rule {
-  value: string;
-  viewValue: string;
-}
+
+class Template {
+  html: string;
+};
+
 @Component({
   selector: 'app-signature-template',
   templateUrl: './signature-template.component.html',
@@ -31,20 +28,9 @@ interface Rule {
 })
 export class SignatureTemplateComponent implements OnInit {
 
-  selectedValue: string;
-
-  rules: Rule[] = [
-    { value: 'contain', viewValue: 'Contain' },
-    { value: 'notcontain', viewValue: 'Not Contain' },
-    { value: 'none', viewValue: 'None' }
-  ];
-
-  action = 'Contain';
-
-
-
   editorConfig: AngularEditorConfig = {
     editable: true,
+    sanitize: true,
     spellcheck: true,
     height: '15rem',
     minHeight: '5rem',
@@ -53,10 +39,8 @@ export class SignatureTemplateComponent implements OnInit {
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
     toolbarHiddenButtons: [
-      ['bold'],
+      [''],
       [
-        'link',
-        'unlink',
         'insertVideo',
       ],
     ],
@@ -84,51 +68,121 @@ export class SignatureTemplateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
     private authenticationService: AuthenService,
-    private twoFaAuthService: TwoFaAuthService,
+    private signatureService: SignatureService,
     private _sanitizer: DomSanitizer,
   ) { }
 
   i = 0;
   editId: string | null = null;
-  listOfData: ItemData[] = [];
+  listOfRules: ItemData[] = [];
 
   startEdit(id: string): void {
     this.editId = id;
   }
-
   stopEdit(): void {
     this.editId = null;
-    console.log(this.listOfData);
+    console.log(this.listOfRules);
 
   }
-
+  submitSignatureRules(): void {
+    let username = localStorage.getItem('username');
+    console.log(JSON.stringify(this.listOfRules));
+    let template = new Template;
+    template.html = JSON.stringify(this.listOfRules);
+    this.signatureService.sendSignatureTemplateRules(username, template).subscribe(
+      (res) => {
+        if (res) {
+          this.toast.success('Save signature rules success!');
+        } else {
+          this.toast.error('Save failed!')
+        }
+      }
+    )
+  }
+  submitSignature(): void {
+    let username = localStorage.getItem('username');
+    console.log(this.htmlContent);
+    let template = new Template;
+    template.html = this.htmlContent;
+    this.signatureService.sendSignatureTemplate(username, template).subscribe(
+      (res) => {
+        if (res) {
+          this.toast.success('Update signature success!');
+        } else {
+          this.toast.error('Update signature fail!')
+        }
+      }
+    )
+  }
   addRow(): void {
-    this.listOfData = [
-      ...this.listOfData,
+    this.listOfRules = [
+      ...this.listOfRules,
       {
         id: `${this.i}`,
         name: '',
-        contain: '',
+        content: '',
         action: true,
         length: null
       }
     ];
     this.i++;
   }
-  contain(id: string) {
-    this.editId = id;
-    this.action = 'Contain';
-  }
-  notContain(id: string) {
-    this.editId = id;
-    this.action = 'Not Contain';
+
+  addContent(content): void {
+    if (content === 'phone') {
+      this.htmlContent += '{phoneNumber}';
+    } else if (content === 'email') {
+      this.htmlContent += '{email}';
+    } else if (content === 'name') {
+      this.htmlContent += '{fullname}';
+    }
   }
   deleteRow(id: string): void {
-    this.listOfData = this.listOfData.filter(d => d.id !== id);
+    this.listOfRules = this.listOfRules.filter(d => d.id !== id);
   }
+  loadTemplate(): void {
+    let username = localStorage.getItem('username');
+    this.signatureService.getSignatureTemplate(username).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.htmlContent = res.html;
+        }
+      }
+    );
+  }
+  loadRules(): void {
+    let username = localStorage.getItem('username');
+    this.signatureService.getSignatureTemplateRules(username).subscribe(
+      (res) => {
+        let rulesJson: any = res;
+        console.log('rulesJson: ' + parseJSON(rulesJson));
+        if (rulesJson !== null) {
+          parseJSON(rulesJson).forEach(element => {
+            this.listOfRules = [
+              ...this.listOfRules,
+              {
+                id: element.id,
+                name: element.name,
+                content: element.content,
+                action: element.action,
+                length: element.length
+              }
+            ];
+            this.i++;
+          });
+          console.log(this.listOfRules);
 
+        }
+        if (this.i === 0) {
+          this.addRow();
+        }
+      }
+    );
+  }
   ngOnInit(): void {
-    this.addRow();
+    // this.addRow();
+    this.loadTemplate();
+    this.loadRules();
   }
 
 }

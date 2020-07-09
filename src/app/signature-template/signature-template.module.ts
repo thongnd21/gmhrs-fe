@@ -27,6 +27,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+
 @NgModule({
     imports: [
         RouterModule,
@@ -54,6 +57,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
         NzPopconfirmModule,
         NzInputModule,
         NzCheckboxModule,
+        NzIconModule,
+        NzInputNumberModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]

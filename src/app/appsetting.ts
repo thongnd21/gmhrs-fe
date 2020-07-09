@@ -11,4 +11,8 @@ export class AppSettings {
     public static DEACTIVATED2FA = 'twofa/deactivated2fa/'
     public static CHECK2FASTATUS = 'twofa/check2fastatus/'
     public static CHECKBYPASSOTP = 'twofa/checkbypassotp/'
+    public static SIGNATURETEMPLATE = 'signature/sendSignatureTemplate/'
+    public static SIGNATURETEMPLATERULES = 'signature/sendSignatureTemplateRules/'
+    public static GETSIGNATURE = 'signature/getSignatureTemplate/'
+    public static GETSIGNATURERULES = 'signature/getSignatureTemplateRules/'
 }

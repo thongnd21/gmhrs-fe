@@ -3,6 +3,10 @@
         <mat-tab label="Default Signature Template">
             <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="htmlContent" [config]="editorConfig">
             </angular-editor>
+            <button nz-button (click)="addContent('phone')" nzType="primary">Add employee phone number</button>
+            <button nz-button (click)="addContent('email')" nzType="primary">Add email address</button>
+            <button nz-button (click)="addContent('name')" nzType="primary">Add employee full name</button>
+            <button nz-button (click)="submitSignature()" nzType="primary">Save</button>
             <div>
                 {{htmlContent}}
             </div>
@@ -11,7 +15,7 @@
             <button nz-button (click)="addRow()" nzType="primary">Add</button>
             <br />
             <br />
-            <nz-table #editRowTable nzBordered [nzData]="listOfData">
+            <nz-table #editRowTable nzBordered [nzData]="listOfRules">
                 <thead>
                     <tr>
                         <th nzWidth="20%">Name</th>
@@ -46,9 +50,11 @@
                             <!-- <div class="editable-cell" [hidden]="editId === data.id" (click)="startEdit(data.id)">
                                 {{ data.length }}
                             </div> -->
-                            <!-- <nz-input-number [(ngModel)]="demoValue" [nzMin]="1" [nzMax]="10" [nzStep]="1"></nz-input-number> -->
-                            <nz-input-number [nzMin]="1" [nzMax]="10" [nzStep]="1" [(ngModel)]="data.length"
-                                (click)="startEdit(data.id)" (blur)="stopEdit()"></nz-input-number>
+                            <nz-input-number (click)="startEdit(data.id)" (blur)="stopEdit()" [(ngModel)]="data.length"
+                                [nzMin]="1" [nzMax]="500" [nzStep]="1">
+                            </nz-input-number>
+                            <!-- <nz-input-number [nzMin]="1" [nzMax]="10" [nzStep]="1" [(ngModel)]="data.length"
+                                (click)="startEdit(data.id)" (blur)="stopEdit()"></nz-input-number> -->
                         </td>
                         <td>
                             <a style="color: red;" (click)="deleteRow(data.id)">Delete</a>
@@ -56,6 +62,7 @@
                     </tr>
                 </tbody>
             </nz-table>
+            <button nz-button (click)="submitSignatureRules()" nzType="primary">Save</button>
         </mat-tab>
     </mat-tab-group>
 </div>

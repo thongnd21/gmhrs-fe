@@ -59,6 +59,8 @@ export class CompanyComponent implements OnInit {
   getAllCompany() {
     this.companyServices.getAllCompany().subscribe(
       (data: any) => {
+        console.log(data);
+
         let list = [];
         data.forEach(company => {
           let item = {};

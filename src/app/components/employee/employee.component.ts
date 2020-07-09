@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 import { AccountApiService } from '../../api-services/account-api.service';
 import * as moment from 'moment';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,14 +19,14 @@ import { TeamApiService } from '../../api-services/team-api.service';
 export class EmployeeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   displayedColumns: string[] = [];
   dataSource: any;
   empForm: FormGroup;
   grpForm;
   selection = new SelectionModel<any>(true, []);
   teamId;
-  insEmp ={};
+  insEmp = {};
   departmentList = [];
   listEmployee = [];
   column = [
@@ -58,16 +58,16 @@ export class EmployeeComponent implements OnInit {
       name: 'CreateAt'
     }
   ];
-  listTeam =[];
+  listTeam = [];
 
   constructor(
     private modalService: NgbModal,
-    private accountServices : AccountApiService,
+    private accountServices: AccountApiService,
     private depServices: DepartmentApiService,
     private router: Router,
-    private toast : ToastrService,
-    private teamService :TeamApiService
-    ) { }
+    private toast: ToastrService,
+    private teamService: TeamApiService
+  ) { }
 
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop)
@@ -77,16 +77,18 @@ export class EmployeeComponent implements OnInit {
   getAllAccount() {
     const listAccount = [];
     this.accountServices.getAllEmployee().subscribe(
-      (res)=>{
-        const accounts : any = res;
-        if(accounts != null){
+      (res) => {
+        const accounts: any = res;
+        console.log('account: ' + res);
+
+        if (accounts != null) {
           accounts.forEach(element => {
             let item = {};
             item['id'] = element.id;
             item['primary_email'] = element.primary_email;
             item['personal_email'] = element.personal_email;
             item['phone'] = element.phone;
-            item['name'] = element.first_name +" "+ element.last_name;
+            item['name'] = element.first_name + " " + element.last_name;
             item['status'] = element.status_id;
             item['is_sync'] = element.is_sync;
             // item['departmentName'] = element.department.name;
@@ -100,18 +102,18 @@ export class EmployeeComponent implements OnInit {
           this.dataSource.sort = this.sort;
         }
       },
-      (error)=>{
-        if(error.status == 0){
+      (error) => {
+        if (error.status == 0) {
           this.toast.error("Connection timeout!");
-        }if(error.status == 400){
+        } if (error.status == 400) {
           this.toast.error("Server is not available!");
         }
-          this.toast.error("Server is not available!");
+        this.toast.error("Server is not available!");
       }
     );
   }
 
- 
+
   closeModal() {
     this.modalService.dismissAll();
   }
@@ -130,8 +132,8 @@ export class EmployeeComponent implements OnInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   /** The label for the checkbox on the passed row */
