@@ -7,9 +7,14 @@ import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 
 export const AppRoutes: Routes = [
   {
+    path: 'resetPassword', loadChildren:  () => import('./reset-password/reset-password.module')
+      .then(m => m.ResetPasswordModule)
+  },
+  {
     path: '', loadChildren: () => import('./login/login.module')
       .then(m => m.LoginModule)
   },
+  
   {
     path: 'checkotp',
     loadChildren:

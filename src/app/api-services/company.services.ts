@@ -29,8 +29,6 @@ export class CompanyServices {
     // 'https://gmhrs-api.herokuapp.com/api/accounts', { params: idAccount }
   }
 
-  resetAccountCompanyPassword(accont){
-    return this.httpClient.put("http://localhost:3000/api/accounts/resetPassword",accont);
-  }
+  
 
 }

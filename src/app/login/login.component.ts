@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from 'ngx-custom-validators';
 import { CompanyServices } from '../api-services/company.services';
+import {AccountApiService } from '../api-services/account-api.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
         private toast: ToastrService,
         private authenticationService: AuthenService,
         private companyServices: CompanyServices,
+        private accountServices: AccountApiService
     ) { }
 
     ngOnInit() {
@@ -95,17 +97,19 @@ export class LoginComponent implements OnInit {
         this.login = change; console.log(this.login);
     }
 
-    resetPassword(){
+    sendMail(){
         const account = {
             username: this.resetPasswordForm.controls['username'].value,
             email: this.resetPasswordForm.controls['email'].value,
             phone: this.resetPasswordForm.controls['phone'].value
         };
-        this.companyServices.resetAccountCompanyPassword(account).subscribe(
+        this.accountServices.sendMailToChangPassword(account).subscribe(
             (res) =>{
                 const status: any = res;
                 if (status.status == "success") {
+                    localStorage.setItem('username', account.username);
                     this.toast.success("Reset Password success!");
+                    this.router.navigate(['/resetPassword']);
                 } else if (status.status == "fail") {
                   this.toast.error("Input information again!");
                 }

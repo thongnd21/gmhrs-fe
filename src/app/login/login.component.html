@@ -68,7 +68,8 @@
               </div>
             </div>
           </form>
-          <button mat-raised-button color="primary" class="col-md-4 ml-2" [disabled]="resetPasswordForm.invalid" (click)="resetPassword()">
+          <button mat-raised-button color="primary" class="col-md-4 ml-2"
+           [disabled]="resetPasswordForm.invalid" (click)="sendMail()">
             Reset
           </button>
         </mat-card-content>
