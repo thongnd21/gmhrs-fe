@@ -13,6 +13,7 @@ import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
 })
 export class Activated2faComponent implements OnInit {
   otp: any;
+  isDisableOTPLoading = false;
 
   constructor(
     private router: Router,
@@ -34,6 +35,7 @@ export class Activated2faComponent implements OnInit {
   }
 
   onSubmitOtp() {
+    this.isDisableOTPLoading = true;
     let username = localStorage.getItem('username');
     this.twoFaAuthService.deactivated2FA(this.otp, username).subscribe(
       (res) => {
@@ -43,6 +45,9 @@ export class Activated2faComponent implements OnInit {
         } else {
           this.toast.error('Invalid OTP!');
         }
+        setTimeout(() => {
+          this.isDisableOTPLoading = false;
+        }, 1000);
       }
     );
   }

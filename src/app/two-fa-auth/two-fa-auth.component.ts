@@ -16,6 +16,7 @@ export class TwoFaAuthComponent implements OnInit {
   otp: any;
   QrCodeLink: any;
   showOrNot = false;
+  isSubmitOTPLoading = false;
 
   constructor(
     private router: Router,
@@ -38,6 +39,7 @@ export class TwoFaAuthComponent implements OnInit {
   }
 
   onSubmitOtp() {
+    this.isSubmitOTPLoading = true;
     let username = localStorage.getItem('username');
     this.twoFaAuthService.activated2FA(this.otp, username).subscribe(
       (res) => {
@@ -47,6 +49,9 @@ export class TwoFaAuthComponent implements OnInit {
         } else {
           this.toast.error('Invalid OTP!');
         }
+        setTimeout(() => {
+          this.isSubmitOTPLoading = false;
+        }, 1000);
       }
     );
   }

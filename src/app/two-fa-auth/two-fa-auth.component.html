@@ -23,9 +23,11 @@
         </p>
         <p>
             <span class="row justify-content-md-center">
-                <button mat-raised-button color="accent" (click)="onSubmitOtp()">
+                <button nz-button [nzLoading]="isSubmitOTPLoading" (click)="onSubmitOtp()"
+                    nzType="primary">Activate</button>
+                <!-- <button mat-raised-button color="accent" (click)="onSubmitOtp()">
                     Activate
-                </button>
+                </button> -->
             </span>
         </p>
     </mat-card-content>

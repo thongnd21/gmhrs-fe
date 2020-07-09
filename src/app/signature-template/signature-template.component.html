@@ -3,13 +3,22 @@
         <mat-tab label="Default Signature Template">
             <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="htmlContent" [config]="editorConfig">
             </angular-editor>
-            <button nz-button (click)="addContent('phone')" nzType="primary">Add employee phone number</button>
-            <button nz-button (click)="addContent('email')" nzType="primary">Add email address</button>
-            <button nz-button (click)="addContent('name')" nzType="primary">Add employee full name</button>
-            <button nz-button (click)="submitSignature()" nzType="primary">Save</button>
             <div>
-                {{htmlContent}}
+                <p>
+                    <button nz-button (click)="addContent('phone')" nzType="dashed">Add employee phone number</button>
+                    <button nz-button (click)="addContent('email')" nzType="dashed">Add email address</button>
+                    <button nz-button (click)="addContent('name')" nzType="dashed">Add employee full name</button>
+                </p>
             </div>
+            <div>
+                <p>
+                    <button nz-button [nzLoading]="isSaveTemplateLoading" (click)="submitSignature()"
+                        nzType="primary">Save</button>
+                </p>
+            </div>
+            <p>
+                {{htmlContent}}
+            </p>
         </mat-tab>
         <mat-tab label="Signature Template Rules">
             <button nz-button (click)="addRow()" nzType="primary">Add</button>
@@ -18,8 +27,7 @@
             <nz-table #editRowTable nzBordered [nzData]="listOfRules">
                 <thead>
                     <tr>
-                        <th nzWidth="20%">Name</th>
-                        <th nzWidth="47%">Content</th>
+                        <th nzWidth="67%">Content</th>
                         <th nzWidth="15%">Contain Or Not</th>
                         <th nzWidth="10%">Length</th>
                         <th nzWidth="8%">Delete</th>
@@ -28,17 +36,6 @@
                 <tbody>
                     <tr *ngFor="let data of editRowTable.data" class="editable-row">
                         <td>
-                            <!-- <div class="editable-cell" [hidden]="editId === data.id" (click)="startEdit(data.id)">
-                                {{ data.name }}
-                            </div> -->
-                            <input placeholder="Input rule name" type="text" nz-input [(ngModel)]="data.name"
-                                (click)="startEdit(data.id)" (blur)="stopEdit()" />
-                        </td>
-                        <td>
-                            <!-- <div class="editable-cell" [hidden]="editId === data.id" (click)="startEdit(data.id)">
-                                {{ data.content }}
-                            </div> -->
-                            <!-- <textarea nz-input placeholder="Autosize height based on content lines" nzAutosize></textarea> -->
                             <textarea nzAutosize placeholder="Input content" type="text" nz-input
                                 (click)="startEdit(data.id)" [(ngModel)]="data.content" (blur)="stopEdit()"></textarea>
                         </td>
@@ -47,14 +44,9 @@
 
                         </td>
                         <td>
-                            <!-- <div class="editable-cell" [hidden]="editId === data.id" (click)="startEdit(data.id)">
-                                {{ data.length }}
-                            </div> -->
                             <nz-input-number (click)="startEdit(data.id)" (blur)="stopEdit()" [(ngModel)]="data.length"
                                 [nzMin]="1" [nzMax]="500" [nzStep]="1">
                             </nz-input-number>
-                            <!-- <nz-input-number [nzMin]="1" [nzMax]="10" [nzStep]="1" [(ngModel)]="data.length"
-                                (click)="startEdit(data.id)" (blur)="stopEdit()"></nz-input-number> -->
                         </td>
                         <td>
                             <a style="color: red;" (click)="deleteRow(data.id)">Delete</a>
@@ -62,7 +54,8 @@
                     </tr>
                 </tbody>
             </nz-table>
-            <button nz-button (click)="submitSignatureRules()" nzType="primary">Save</button>
+            <button nz-button (click)="submitSignatureRules()" [nzLoading]="isSaveRulesLoading"
+                nzType="primary">Save</button>
         </mat-tab>
     </mat-tab-group>
 </div>

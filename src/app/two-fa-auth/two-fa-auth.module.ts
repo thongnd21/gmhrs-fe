@@ -8,6 +8,7 @@ import { MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogMo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgOtpInputModule } from 'ng-otp-input';
 import { QRCodeModule } from 'angularx-qrcode';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import { QRCodeModule } from 'angularx-qrcode';
         ReactiveFormsModule,
         NgOtpInputModule,
         QRCodeModule,
+        NzButtonModule,
         RouterModule.forChild(TwoFaAuthRoutes)
     ],
     declarations: [TwoFaAuthComponent]

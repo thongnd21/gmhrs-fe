@@ -11,7 +11,6 @@ import { parseJSON } from 'jquery';
 
 interface ItemData {
   id: string;
-  name: string;
   content: string;
   action: boolean;
   length: number;
@@ -27,6 +26,13 @@ class Template {
   styleUrls: ['./signature-template.component.css']
 })
 export class SignatureTemplateComponent implements OnInit {
+
+  isSaveRulesLoading = false;
+  isSaveTemplateLoading = false;
+  htmlContent = '';
+  i = 0;
+  editId: string | null = null;
+  listOfRules: ItemData[] = [];
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -61,8 +67,6 @@ export class SignatureTemplateComponent implements OnInit {
     ]
   };
 
-  htmlContent = '';
-
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -71,11 +75,6 @@ export class SignatureTemplateComponent implements OnInit {
     private signatureService: SignatureService,
     private _sanitizer: DomSanitizer,
   ) { }
-
-  i = 0;
-  editId: string | null = null;
-  listOfRules: ItemData[] = [];
-
   startEdit(id: string): void {
     this.editId = id;
   }
@@ -85,6 +84,7 @@ export class SignatureTemplateComponent implements OnInit {
 
   }
   submitSignatureRules(): void {
+    this.isSaveRulesLoading = true;
     let username = localStorage.getItem('username');
     console.log(JSON.stringify(this.listOfRules));
     let template = new Template;
@@ -96,10 +96,14 @@ export class SignatureTemplateComponent implements OnInit {
         } else {
           this.toast.error('Save failed!')
         }
+        setTimeout(() => {
+          this.isSaveRulesLoading = false;
+        }, 1000);
       }
     )
   }
   submitSignature(): void {
+    this.isSaveTemplateLoading = true;
     let username = localStorage.getItem('username');
     console.log(this.htmlContent);
     let template = new Template;
@@ -111,6 +115,9 @@ export class SignatureTemplateComponent implements OnInit {
         } else {
           this.toast.error('Update signature fail!')
         }
+        setTimeout(() => {
+          this.isSaveTemplateLoading = false;
+        }, 1000);
       }
     )
   }
@@ -119,7 +126,6 @@ export class SignatureTemplateComponent implements OnInit {
       ...this.listOfRules,
       {
         id: `${this.i}`,
-        name: '',
         content: '',
         action: true,
         length: null
@@ -162,7 +168,6 @@ export class SignatureTemplateComponent implements OnInit {
               ...this.listOfRules,
               {
                 id: element.id,
-                name: element.name,
                 content: element.content,
                 action: element.action,
                 length: element.length

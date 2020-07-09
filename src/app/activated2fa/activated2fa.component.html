@@ -26,9 +26,11 @@
         </p>
         <p>
             <span class="row justify-content-md-center">
-                <button mat-raised-button color="accent" (click)="onSubmitOtp()">
+                <!-- <button mat-raised-button color="accent" (click)="onSubmitOtp()">
                     Disable 2FA
-                </button>
+                </button> -->
+                <button nz-button [nzLoading]="isDisableOTPLoading" (click)="onSubmitOtp()" nzType="primary">Disable
+                    2FA</button>
             </span>
         </p>
     </mat-card-content>

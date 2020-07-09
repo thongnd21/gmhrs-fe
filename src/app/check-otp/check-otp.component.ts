@@ -22,6 +22,7 @@ import 'rxjs/add/observable/interval';
 export class CheckOtpComponent implements OnInit, OnDestroy {
   otp: any;
   subscription: Subscription;
+  isSubmitOTPLoading = false;
 
   constructor(
     private router: Router,
@@ -41,6 +42,7 @@ export class CheckOtpComponent implements OnInit, OnDestroy {
     this.otp = $event;
   }
   onSubmitOtp() {
+    this.isSubmitOTPLoading = true;
     let username = localStorage.getItem('username');
     this.twoFaAuthService.checkOtp(this.otp, username).subscribe(
       (res) => {
@@ -52,6 +54,9 @@ export class CheckOtpComponent implements OnInit, OnDestroy {
         } else {
           this.toast.error('Invalid OTP!');
         }
+        setTimeout(() => {
+          this.isSubmitOTPLoading = false;
+        }, 1000);
       }
     );
   }

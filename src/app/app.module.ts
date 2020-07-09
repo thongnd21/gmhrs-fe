@@ -24,7 +24,15 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { CheckOTPGuard } from './shared/guard/checkotp.guard';
 import { LoginPageGuard } from './shared/guard/loginpage.guard';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
 
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +63,9 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
-    }
+    },
+    { provide: NZ_I18N, useValue: en_US },
+    { provide: NZ_ICONS, useValue: icons }
   ],
   bootstrap: [AppComponent]
 })
