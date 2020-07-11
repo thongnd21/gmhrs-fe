@@ -14,7 +14,7 @@ export class AccountApiService {
     }
 
     updateProfileInfo(account) {
-        return this.httpClient.put(this.URL + AppSettings.EMP , account);
+        return this.httpClient.put(this.URL + AppSettings.EMP, account);
     };
 
     createAccount(account) {
@@ -26,9 +26,15 @@ export class AccountApiService {
     };
 
     addAccountToTeam(account) {
-        const path ='addToTeam/';
+        const path = 'addToTeam/';
         return this.httpClient.post(this.URL + AppSettings.EMP + path, account)
     };
 
+    sendMailToChangPassword(account) {
+        return this.httpClient.put("http://localhost:3000/api/accounts/sendMail", account);
+    };
+    changePassword(account) {
+        return this.httpClient.put("http://localhost:3000/api/accounts/changePassword", account);
+    };
 
 }

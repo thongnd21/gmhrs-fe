@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from 'ngx-custom-validators';
 import { CompanyServices } from '../api-services/company.services';
+import {AccountApiService } from '../api-services/account-api.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -15,6 +17,7 @@ export class LoginComponent implements OnInit {
     password;
     public loading = false;
     registerForm: FormGroup;
+    resetPasswordForm: FormGroup;
     login;
     constructor(
         private router: Router,
@@ -22,10 +25,12 @@ export class LoginComponent implements OnInit {
         private toast: ToastrService,
         private authenticationService: AuthenService,
         private companyServices: CompanyServices,
+        private accountServices: AccountApiService
     ) { }
 
     ngOnInit() {
-        this.login = true;
+        this.login = 0;
+        console.log(this.login);
         const accPassword = new FormControl("", [Validators.required]);
         const confirmPassword = new FormControl(
             "",
@@ -40,8 +45,14 @@ export class LoginComponent implements OnInit {
             ]),
             email: new FormControl("", [Validators.required, Validators.email]),
             password: accPassword,
-            confirmPassword: confirmPassword
+            confirmPassword: confirmPassword,
+            phone: new FormControl("", [
+                Validators.required,
+                Validators.pattern(new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g))
+            ]),
+            address: new FormControl("")
         });
+        this.createFormResetPassword();
     }
 
 
@@ -82,15 +93,42 @@ export class LoginComponent implements OnInit {
         );
     }
 
-    changeToForm() {
-        this.login = !this.login;
+    changeToForm(change) {
+        this.login = change; console.log(this.login);
+    }
+
+    sendMail(){
+        const account = {
+            username: this.resetPasswordForm.controls['username'].value,
+            email: this.resetPasswordForm.controls['email'].value,
+            phone: this.resetPasswordForm.controls['phone'].value
+        };
+        this.accountServices.sendMailToChangPassword(account).subscribe(
+            (res) =>{
+                const status: any = res;
+                if (status.status == "success") {
+                    localStorage.setItem('username', account.username);
+                    this.toast.success("Reset Password success!");
+                    this.router.navigate(['/resetPassword']);
+                } else if (status.status == "fail") {
+                  this.toast.error("Input information again!");
+                }
+                this.resetPasswordForm.reset();
+                
+            },
+            (error) => {
+                this.toast.error("Server is not available!");
+            }
+        )
     }
 
     register() {
         const account = {
             email: this.registerForm.controls['email'].value,
             username: this.registerForm.controls['username'].value,
-            password: this.registerForm.controls['password'].value
+            password: this.registerForm.controls['password'].value,
+            phone: this.registerForm.controls['phone'].value,
+            address: this.registerForm.controls['address'].value
         };
         this.companyServices.createAccountCompany(account).subscribe(
             (res) => {
@@ -102,4 +140,24 @@ export class LoginComponent implements OnInit {
             }
         );
     }
+
+    createFormResetPassword() {
+        this.resetPasswordForm = new FormGroup({
+
+            username: new FormControl("", [
+                Validators.required,
+                Validators.minLength(2),
+                Validators.maxLength(30)
+            ]),
+            //   email: new FormControl(data.email , [Validators.required, Validators.email]),
+            phone: new FormControl("", [
+                Validators.required,
+                Validators.pattern(new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g))
+            ]),
+            email: new FormControl("", [Validators.required, Validators.email]),
+        });
+    }
+
+
+
 }
