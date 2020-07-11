@@ -9,11 +9,15 @@ export class SynchronizeService {
   constructor(private httpClient: HttpClient) { }
   URL = AppSettings.BASEURL;
 
-  getListSynchronize(accountId,check){
+  getListSynchronize(accountId){
+    const path = 'sync-all/preview';
+    const param = new HttpParams().set('accountId',accountId);
+    return this.httpClient.get(this.URL + AppSettings.GSUITE + path,{params:param});
+  }
+
+  synchronize(syncInfo){
     const path = 'sync-all/sync';
-    const param = new HttpParams().set('accountId', accountId).set('checked',check);
-    console.log(this.URL + AppSettings.GSUITE + path, {params : param});
-    return this.httpClient.get(this.URL + AppSettings.GSUITE + path, {params : param});
+    return this.httpClient.post(this.URL + AppSettings.GSUITE + path,syncInfo);
   }
 
 }

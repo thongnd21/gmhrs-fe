@@ -8,4 +8,6 @@ export class Employee{
     phone: string
     primary_email: string
     status_id: Number
+    created_date: string
+    selected : boolean
 }

@@ -51,14 +51,14 @@ export class LoginComponent implements OnInit {
             password: this.password
         };
         this.authenticationService.login(account).subscribe(
-            (res) => {
+            (res:any) => {
                 const userInfo: any = res;
                 localStorage.setItem('isLoggedin', 'true');
                 localStorage.setItem('id', userInfo.profile.id);
                 localStorage.setItem('username', userInfo.profile.username);
                 localStorage.setItem('two_fa_status', userInfo.profile.two_fa_status);
                 localStorage.setItem('token', userInfo.token);
-                localStorage.setItem('is_first_sync', userInfo.is_first_sync == true ? 'true' : 'false');
+                localStorage.setItem('is_first_sync', userInfo.profile.is_first_sync === true ? 'true' : 'false');
                 localStorage.setItem('roleId', userInfo.profile.role.id);
                 if (userInfo.profile.two_fa_status === 1) {
                     this.router.navigate(['/checkotp']);

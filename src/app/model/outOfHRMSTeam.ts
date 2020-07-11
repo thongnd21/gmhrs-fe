@@ -3,4 +3,5 @@ export class OutOfHRMSTeam{
     name : string
     email: string
     description : string
+    selected : boolean
 }

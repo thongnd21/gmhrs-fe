@@ -22,7 +22,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { EmailEditorModule } from 'angular-email-editor';
-
+import {DataTableModule} from "angular2-datatable";
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +33,7 @@ import { EmailEditorModule } from 'angular-email-editor';
   ],
   imports: [
     BrowserModule,
+    DataTableModule,
     EmailEditorModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
