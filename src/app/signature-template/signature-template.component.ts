@@ -33,11 +33,12 @@ export class SignatureTemplateComponent implements OnInit {
   i = 0;
   editId: string | null = null;
   listOfRules: ItemData[] = [];
+  mustContentOrNot = 'Contain this text';
 
   editorConfig: AngularEditorConfig = {
     editable: true,
     sanitize: true,
-    spellcheck: true,
+    spellcheck: false,
     height: '15rem',
     minHeight: '5rem',
     placeholder: 'Enter text here...',
@@ -75,6 +76,13 @@ export class SignatureTemplateComponent implements OnInit {
     private signatureService: SignatureService,
     private _sanitizer: DomSanitizer,
   ) { }
+  changeMustOrNot(rule): void {
+    if (rule) {
+      this.mustContentOrNot = 'Contain this text';
+    } else {
+      this.mustContentOrNot = 'Not contain this text';
+    }
+  }
   startEdit(id: string): void {
     this.editId = id;
   }
@@ -133,14 +141,29 @@ export class SignatureTemplateComponent implements OnInit {
     ];
     this.i++;
   }
-
   addContent(content): void {
+    let closeTag = this.htmlContent.substring(this.htmlContent.lastIndexOf('</'), this.htmlContent.lastIndexOf('>') + 1);
     if (content === 'phone') {
-      this.htmlContent += '{phoneNumber}';
+      if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
+        this.htmlContent = this.htmlContent.substring(0, this.htmlContent.lastIndexOf('<'));
+        this.htmlContent += '{phoneNumber}' + closeTag;
+      } else {
+        this.htmlContent += '{phoneNumber}';
+      }
     } else if (content === 'email') {
-      this.htmlContent += '{email}';
+      if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
+        this.htmlContent = this.htmlContent.substring(0, this.htmlContent.lastIndexOf('<'));
+        this.htmlContent += '{email}' + closeTag;
+      } else {
+        this.htmlContent += '{email}';
+      }
     } else if (content === 'name') {
-      this.htmlContent += '{fullname}';
+      if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
+        this.htmlContent = this.htmlContent.substring(0, this.htmlContent.lastIndexOf('<'));
+        this.htmlContent += '{fullname}' + closeTag;
+      } else {
+        this.htmlContent += '{fullname}';
+      }
     }
   }
   deleteRow(id: string): void {
@@ -162,7 +185,7 @@ export class SignatureTemplateComponent implements OnInit {
       (res) => {
         let rulesJson: any = res;
         console.log('rulesJson: ' + parseJSON(rulesJson));
-        if (rulesJson !== null) {
+        if (rulesJson) {
           parseJSON(rulesJson).forEach(element => {
             this.listOfRules = [
               ...this.listOfRules,

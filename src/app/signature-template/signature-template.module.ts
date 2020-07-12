@@ -29,6 +29,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @NgModule({
     imports: [
@@ -59,6 +61,8 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
         NzCheckboxModule,
         NzIconModule,
         NzInputNumberModule,
+        NzDropDownModule,
+        NzSelectModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]
