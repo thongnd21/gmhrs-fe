@@ -134,9 +134,9 @@ export class CompanyComponent implements OnInit {
     this.modalService.open(update, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
-  openDetail(detail, id) {
+  openDetail(modal, id) {
     this.getAccountCompanyById(id);
-    this.modalService.open(detail, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+    this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
   open(modal) {

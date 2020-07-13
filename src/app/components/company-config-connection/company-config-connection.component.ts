@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { data } from 'jquery';
 import { MatDialog } from '@angular/material';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-company-config-connection',
@@ -25,6 +26,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
   APIEndpointForm: FormGroup;
   account;
   fileContent;
+  accessGsuiteAuthen = {//response test authen gsuite (primary_email + file json)
+    employee: {
+      status: String,
+      message: String
+    },
+    team: {
+      status: String,
+      message: String
+    },
+    department: {
+      status: String,
+      message: String
+    }
+  };
   file;
   companyConnection;
   controls;
@@ -36,6 +51,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   uploadedFiles: Array<File>;
   loading = false;
   loadingConfirm = false;
+  gsuiteAuthenStatus = false;
   loadingSubmit = false;
   days = [
     {
@@ -74,6 +90,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   schedule = {};
   timeSchedule = "";
   constructor(
+    private modalService: NgbModal,
     private toast: ToastrService,
     private companyServices: CompanyServices,
     private companyConnectionService: CompanyConnectionService,
@@ -119,10 +136,10 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.uploadedFiles = element.target.files;
   }
 
-  upload(value) {
+
+  //test file authen guite
+  onTest(modal, value) {
     let formData = new FormData();
-    console.log(this.uploadedFiles);
-    console.log(value.file);
     let company_email = value.company_email;
     let id_company = localStorage.getItem('id');
     for (var i = 0; i < this.uploadedFiles.length; i++) {
@@ -130,14 +147,51 @@ export class CompanyConfigConnectionComponent implements OnInit {
     }
     formData.set("company_email", company_email);
     formData.set("id", id_company);
-    console.log(formData);
 
-    this.account = new AccountCompanyModel();
-    this.account.id = localStorage.getItem('id');
-    this.http.post('https://gmhrs-api.herokuapp.com/api/file/upload', formData)
+    // this.account = new AccountCompanyModel();
+    // this.account.id = localStorage.getItem('id');
+    this.http.post('http://localhost:3000/api/file/upload', formData)
       .subscribe(
         (res) => {
-          this.toast.success("Upload file success!");
+          const testInfor: any = res;
+          this.accessGsuiteAuthen.employee.message = testInfor.checkingAuthGsuiteEmployee.message;
+          this.accessGsuiteAuthen.team.message = testInfor.checkingAuthGsuiteTeam.message;
+          this.accessGsuiteAuthen.department.message = testInfor.checkingAuthGsuiteDepartment.message;
+          this.accessGsuiteAuthen.employee.status = testInfor.checkingAuthGsuiteEmployee.status;
+          this.accessGsuiteAuthen.team.status = testInfor.checkingAuthGsuiteTeam.status;
+          this.accessGsuiteAuthen.department.status = testInfor.checkingAuthGsuiteDepartment.status;
+          console.log(this.accessGsuiteAuthen);
+          // if (testInfor.checkingAuthGsuiteEmployee.status == 200
+          //   && testInfor.checkingAuthGsuiteTeam.status == 200
+          //   && testInfor.checkingAuthGsuiteDepartment === 200) {
+          //     this.gsuiteAuthenStatus = true;
+          // }
+          // console.log(this.gsuiteAuthenStatus);
+          // this.toast.success("Upload file success!");
+          //open modal
+          this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+        },
+        (error) => {
+          this.toast.error("Server is not available!");
+        })
+  }
+
+  //upload file authen gsuite
+  upload(value) {
+    this.account = new AccountCompanyModel;
+    this.account.primary_email = value.company_email;
+    this.account.id = localStorage.getItem('id');
+    console.log(this.account);
+    this.http.post('http://localhost:3000/api/file/save', this.account)
+      .subscribe(
+        (res) => {
+          const result: any = res;
+          if (result.status == "success") {
+            this.toast.success("Con-fig G-Suite Authentication Successfully!");
+          }
+          if (result.status == "fail") {
+            this.toast.success("Con-fig G-Suite Authentication fail!");
+          }
         },
         (error) => {
           this.toast.error("Server is not available!");
@@ -220,6 +274,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
     )
   }
 
+
+  //onchange file
   public onChange(fileList: FileList): void {
     let file = fileList[0];
     let fileReader: FileReader = new FileReader();
@@ -228,6 +284,10 @@ export class CompanyConfigConnectionComponent implements OnInit {
       self.fileContent = fileReader.result;
     }
     fileReader.readAsText(file);
+  }
+
+  closeModal() {
+    this.modalService.dismissAll();
   }
 
   changeCheckSync(event) {
@@ -242,7 +302,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.loadingConfirm = false;
         this.dialog.closeAll();
         this.getSchedule();
-      },(err)=>{
+      }, (err) => {
         this.loadingConfirm = false;
         this.dialog.closeAll();
         if (err.status == 0) {
@@ -264,7 +324,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     let dayInWeek = '*';
     console.log("start parst time");
     if (this.typeSync === 1) {
-      this.monthTime = moment(this.monthTime,'HH:mm').utc().format('HH:mm');
+      this.monthTime = moment(this.monthTime, 'HH:mm').utc().format('HH:mm');
       dayInMonth = '';
       console.log(this.monthDayChoose);
       for (let i = 0; i < this.monthDayChoose.length; i++) {
@@ -279,7 +339,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       minute = this.monthTime.slice(n + 1, length);
     } else
       if (this.typeSync === 2) {
-        this.weekTime = moment(this.weekTime,'HH:mm').utc().format('HH:mm');
+        this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
         dayInWeek = '';
         for (let i = 0; i < this.weekDayChoose.length; i++) {
           dayInWeek += this.weekDayChoose[i];
@@ -292,7 +352,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         let lenght = this.weekTime.length;
         minute = this.weekTime.slice(n + 1, lenght);
       } else {
-        this.dailyTime = moment(this.dailyTime,'HH:mm').utc().format('HH:mm');
+        this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
         hours = this.dailyTime.split(':', 1);
         let n = this.dailyTime.indexOf("@");
         let lenght = this.dailyTime.length;
@@ -306,7 +366,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.loadingSubmit = false;
         this.toast.success(res.message);
         this.getSchedule();
-      },(err)=>{
+      }, (err) => {
         this.loadingSubmit = false;
         if (err.status == 0) {
           this.toast.error("Connection timeout!");
@@ -319,11 +379,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   async getSchedule() {
-    this.loading =true;
+    this.loading = true;
     const id = Number.parseInt(localStorage.getItem('id'));
     this.companyConnectionService.getSchedule(id).subscribe(
       (res: any) => {
-        this.loading =false;
+        this.loading = false;
         this.checkSync = res.is_schedule;
         let time = res.schedule_time + "";
         if (time.length > 0) {
@@ -331,7 +391,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.parseTimeCron(arrTime);
         }
       }, (error) => {
-        this.loading =false;
+        this.loading = false;
         if (error.status == 0) {
           this.toast.error("Connection timeout!");
         } if (error.status == 400) {
@@ -350,19 +410,19 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   parseTimeCron(arrTime) {
-    let time = moment.utc(arrTime[1]+":"+arrTime[0],'HH:mm').local().format('HH:mm');
+    let time = moment.utc(arrTime[1] + ":" + arrTime[0], 'HH:mm').local().format('HH:mm');
     if (arrTime[2] === "*" && arrTime[4] === "*") {
-      this.typeSync=3;
+      this.typeSync = 3;
       this.dailyTime = time;
       console.log(this.dailyTime);
-    }else if (arrTime[2] === "*" && arrTime[4] !== "*") {
-      this.typeSync=2;
-      this.weekDayChoose= arrTime[4].split(',').map(x=>+x);
+    } else if (arrTime[2] === "*" && arrTime[4] !== "*") {
+      this.typeSync = 2;
+      this.weekDayChoose = arrTime[4].split(',').map(x => +x);
       this.weekTime = time;
-    }else{
-      this.typeSync=1;
-      this.monthDayChoose= arrTime[2].split(',').map(x=>+x);
-      console.log(arrTime[1]+":"+arrTime[0]);
+    } else {
+      this.typeSync = 1;
+      this.monthDayChoose = arrTime[2].split(',').map(x => +x);
+      console.log(arrTime[1] + ":" + arrTime[0]);
       this.monthTime = time;
       console.log(this.monthTime);
     }
@@ -383,7 +443,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       });
     }
     console.log(time);
-    const arTime = time.split(':',2);
+    const arTime = time.split(':', 2);
     console.log(arTime);
     week = week.substring(0, week.length - 1);
     this.timeSchedule = "At " + arTime[0] + ":" + arTime[1] + month + week;
