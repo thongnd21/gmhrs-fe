@@ -84,7 +84,7 @@
                             <tr class="col-12" *ngIf="listItemSynch.employee.matchedEmployee.length == 0">
                                 <td>No data</td>
                             </tr>
-                            <tr *ngFor="let item of mf.data; let i=index">
+                            <tr *ngFor="let item of listItemSynch.employee.matchedEmployee; let i=index">
                                 <td>{{ i+1 }}</td>
                                 <td>{{item.first_name}}</td>
                                 <td>{{item.last_name}}</td>
@@ -353,11 +353,11 @@
                     </mat-expansion-panel-header>
                     <!-- table matched -->
                     <p>Mathched Employee :</p>
-                    <table class="table table-striped" [mfData]="listItemSynch.employee.matchedEmployee" #mf="mfDataTable" [mfRowsOnPage]="5">
+                    <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
                             <th scope="col">
-                                <input [disabled]="mf.data.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                                <input [disabled]="listItemSynch.employee.matchedEmployee.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedEmpMatchAll" (change)="selectAllEmpMatch();">
                             </th>
                             <th scope="col">First name</th>
                             <th scope="col">Last name</th>
@@ -368,14 +368,14 @@
                           </tr>
                         </thead>
                         <tbody>
-                            <tr class="col-12" *ngIf="mf.data.length == 0">
+                            <tr class="col-12" *ngIf="listItemSynch.employee.matchedEmployee.length == 0">
                                 <td>No data</td>
                             </tr>
-                            <tr *ngFor="let item of mf.data; let i=index">
+                            <tr *ngFor="let item of listItemSynch.employee.matchedEmployee; let i=index">
                                 <td>
                                     <label>
                                         <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelected(item.username);">
+                                            (change)="checkSelectedEmpMatch(item.id);">
                                     </label>
                                 </td>
                                 <td>{{item.first_name}}</td>
@@ -392,7 +392,9 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.employee.newEmployee.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedEmpNewAll" (change)="selectAllEmpNew();">
+                            </th>
                             <th scope="col">First name</th>
                             <th scope="col">Last name</th>
                             <th scope="col">Address</th>
@@ -406,7 +408,12 @@
                                 <td class="col-12">No data</td>
                             </tr>
                             <tr *ngFor="let item of listItemSynch.employee.newEmployee; let i=index">
-                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelecteEmpNew(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.first_name}}</td>
                                 <td>{{item.last_name}}</td>
                                 <td>{{item.address}}</td>
@@ -418,10 +425,12 @@
                     </table>
                     <!-- table out -->
                     <p>Employee out of your HR system:</p>
-                    <table class="table table-striped">
+                    <table class="table table-striped"  >
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.employee.outOfHRMS.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedEmpOutAll" (change)="selectAllEmpOut();">
+                            </th>
                             <th scope="col">Fist name</th>
                             <th scope="col">last name</th>
                             <th scope="col">Primary email</th>
@@ -433,7 +442,12 @@
                                 No data
                             </tr>
                             <tr *ngFor="let item of listItemSynch.employee.outOfHRMS; let i=index">
-                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelectedEmpOut(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.first_name}}</td>
                                 <td>{{item.last_name}}</td>
                                 <td>{{item.primary_email}}</td>
@@ -457,7 +471,9 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.team.matchedTeam.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedTeamMatchAll" (change)="selectAllTeamMatch();">
+                            </th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Description</th>
@@ -470,7 +486,12 @@
                                 <td>No data</td>
                             </tr>
                             <tr *ngFor="let item of listItemSynch.team.matchedTeam; let i=index">
-                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelectedTeamMatch(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.email}}</td>
                                 <td>{{item.description}}</td>
@@ -484,7 +505,9 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.team.newTeam.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedTeamNewAll" (change)="selectAllTeamNew();">
+                            </th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Description</th>
@@ -497,7 +520,12 @@
                                 <td class="col-12">No data</td>
                             </tr>
                             <tr *ngFor="let item of listItemSynch.team.newTeam; let i=index">
-                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelectedTeamNew(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.email}}</td>
                                 <td>{{item.description}}</td>
@@ -511,7 +539,9 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.team.outOfHRMS.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedTeamOutAll" (change)="selectAllTeamOut();">
+                            </th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Description</th>
@@ -522,7 +552,12 @@
                                 <td class="col-12">No data</td>
                             </tr>
                             <tr *ngFor="let item of listItemSynch.team.outOfHRMS; let i=index"> 
-                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelectedTeamOut(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.email}}</td>
                                 <td>{{item.description}}</td>
@@ -542,10 +577,12 @@
                     </mat-expansion-panel-header>
                     <!-- table matched -->
                     <p>Mathched Department :</p>
-                    <table class="table table-striped" [mfData]="listItemSynch.employee.matchedEmployee" #mf="mfDataTable" [mfRowsOnPage]="5">
+                    <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.employee.matchedEmployee.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepMatchAll" (change)="selectAllDepMatch();">
+                            </th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Modified date</th>
@@ -553,11 +590,16 @@
                           </tr>
                         </thead>
                         <tbody>
-                            <tr class="col-12" *ngIf="mf.data.length == 0">
+                            <tr class="col-12" *ngIf="listItemSynch.employee.matchedEmployee.length == 0">
                                 <td>No data</td>
                             </tr>
-                            <tr *ngFor="let item of mf.data; let i=index">
-                                <td>{{ i+1 }}</td>
+                            <tr *ngFor="let item of listItemSynch.employee.matchedEmployee; let i=index">
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelectedDepMatch(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.description}}</td>
                                 <td>{{item.modified_date}}</td>
@@ -570,7 +612,9 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.department.newDepartment.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepNewAll" (change)="selectAllDepNew();">
+                            </th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Modified date</th>
@@ -582,7 +626,12 @@
                                 <td class="col-12">No data</td>
                             </tr>
                             <tr *ngFor="let item of listItemSynch.department.newDepartment; let i=index">
-                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelectedDepNew(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.description}}</td>
                                 <td>{{item.modified_date}}</td>
@@ -595,7 +644,9 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input [disabled]="listItemSynch.department.outOfHRMS.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepOutAll" (change)="selectAllDepOut();">
+                            </th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                           </tr>
@@ -605,7 +656,12 @@
                                 <td class="col-12">No data</td>
                             </tr>
                             <tr *ngFor="let item of listItemSynch.department.outOfHRMS; let i=index"> 
-                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                            (change)="checkSelectedDepOut(item.id);">
+                                    </label>
+                                </td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.description}}</td>
                             </tr>
