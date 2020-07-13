@@ -9,8 +9,14 @@ import { LoginPageGuard } from './shared/guard/loginpage.guard';
 
 export const AppRoutes: Routes = [
   {
-    path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginPageGuard]
+    path: 'resetPassword', loadChildren: () => import('./reset-password/reset-password.module')
+      .then(m => m.ResetPasswordModule)
   },
+  {
+    path: '', loadChildren: () => import('./login/login.module')
+      .then(m => m.LoginModule), canActivate: [LoginPageGuard]
+  },
+
   {
     path: 'checkotp',
     loadChildren:
