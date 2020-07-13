@@ -1,6 +1,6 @@
 export class AppSettings {
-    public static BASEURL = 'https://gmhrs-api.herokuapp.com/api/';
-    // public static BASEURL = 'http://localhost:3000/api/';
+    // public static BASEURL = 'https://gmhrs-api.herokuapp.com/api/';
+    public static BASEURL = 'http://localhost:3000/api/';
     public static SCHEDULE = 'schedules/'
     public static EMP = 'employees/'
     public static TEAM = 'teams/'
@@ -15,4 +15,5 @@ export class AppSettings {
     public static SIGNATURETEMPLATERULES = 'signature/sendSignatureTemplateRules/'
     public static GETSIGNATURE = 'signature/getSignatureTemplate/'
     public static GETSIGNATURERULES = 'signature/getSignatureTemplateRules/'
+    public static GETINFOTOREVIEW = 'signature/getInfoToReview/'
 }

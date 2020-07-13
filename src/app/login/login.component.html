@@ -6,10 +6,12 @@
         <mat-card-content>
           <mat-card-title>GMHRMS</mat-card-title>
           <mat-form-field>
-            <input matInput [(ngModel)]="username" placeholder="User name" #message />
+            <input matInput (keydown)="keyDownFunction($event)" [(ngModel)]="username" placeholder="User name"
+              #message />
           </mat-form-field>
           <mat-form-field>
-            <input matInput type="password" [(ngModel)]="password" placeholder="Password" #action />
+            <input matInput (keydown)="keyDownFunction($event)" type="password" [(ngModel)]="password"
+              placeholder="Password" #action />
           </mat-form-field>
           <button mat-raised-button color="warn" class="col-md-4 ml-2" (click)="onLogin()">
             Login

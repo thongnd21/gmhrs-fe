@@ -10,6 +10,10 @@ export class SignatureService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
+    getInfoToReview(username) {
+        return this.httpClient.get(this.URL + AppSettings.GETINFOTOREVIEW + username);
+    }
+
     sendSignatureTemplate(username, template) {
         return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATE + username, template);
     }

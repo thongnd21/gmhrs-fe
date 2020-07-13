@@ -1,7 +1,7 @@
 <div>
     <mat-tab-group mat-align-tabs="start">
         <mat-tab label="Default Signature Template">
-            <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="htmlContent" [config]="editorConfig">
+            <angular-editor id="editor1" [(ngModel)]="htmlContent" [config]="editorConfig">
             </angular-editor>
             <div>
                 <p>
@@ -16,28 +16,39 @@
                             <li (click)="addContent('name')" nz-menu-item>Add employee fullname</li>
                         </ul>
                     </nz-dropdown-menu>
-                    <!-- <button nz-button (click)="addContent('phone')" nzType="dashed">Add employee phone number</button>
-                    <button nz-button (click)="addContent('email')" nzType="dashed">Add employee email address</button>
-                    <button nz-button (click)="addContent('name')" nzType="dashed">Add employee fullname</button> -->
                 </p>
             </div>
+            <!-- <p>
+                {{htmlContent}}
+            </p> -->
+            <div><span style="font-size: large; color: blue;">Review</span></div>
+            <div><button nz-button (click)="loadReview()" nzType="primary">Load review</button></div>
+            <br />
+            <angular-editor id="editor2" [(ngModel)]="htmlContentReview" [config]="editorReviewConfig">
+            </angular-editor>
+            <br />
             <div>
                 <p>
                     <button nz-button [nzLoading]="isSaveTemplateLoading" (click)="submitSignature()"
                         nzType="primary">Save</button>
                 </p>
             </div>
-            <p>
-                {{htmlContent}}
-            </p>
         </mat-tab>
         <mat-tab label="Signature Template Rules">
-            <button nz-button (click)="addRow()" nzType="primary">Add</button>
             <br />
-            <br />
-            <!-- (click)="startEdit(data.id)" (blur)="stopEdit()" [(ngModel)]="data.length" -->
-            <nz-input-number [nzMin]="1" [nzMax]="10000" [nzStep]="1">
-            </nz-input-number>
+            <p><button nz-button (click)="addRow()" nzType="primary">Add row</button></p>
+            <nz-input-group nzCompact>
+                <input type="text" readonly nz-input placeholder="Input range of signature length"
+                    style="width: 23%;" />
+                <nz-input-number [(ngModel)]="rules.lengthRule.minLength" [nzMin]="1" [nzMax]="10000"
+                    style="width:100px; text-align: center;">
+                </nz-input-number>
+                <input type="text" disabled nz-input placeholder="~"
+                    style="width: 30px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
+                <nz-input-number [nzMin]="1" [nzMax]="10000" [(ngModel)]="rules.lengthRule.maxLength"
+                    style="width: 100px; text-align: center; border-left: 0px;">
+                </nz-input-number>
+            </nz-input-group>
             <br />
             <nz-table #editRowTable nzBordered [nzData]="listOfRules">
                 <thead>
@@ -50,7 +61,6 @@
                 <tbody>
                     <tr *ngFor="let data of editRowTable.data" class="editable-row">
                         <td>
-                            <!-- <label nz-checkbox [(ngModel)]="data.action"></label> -->
                             <nz-select [(ngModel)]="data.action" nzShowSearch nzAllowClear
                                 nzPlaceHolder="Select action for this text">
                                 <nz-option nzValue="true" nzLabel="Contain this text"></nz-option>

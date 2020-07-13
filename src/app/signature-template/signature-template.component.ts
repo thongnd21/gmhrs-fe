@@ -9,11 +9,18 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { parseJSON } from 'jquery';
 
-interface ItemData {
+
+class Rules {
+  lengthRule: {
+    minLength: number,
+    maxLength: number
+  }
+  listRule: ItemData[]
+}
+class ItemData {
   id: string;
   content: string;
   action: boolean;
-  length: number;
 }
 
 class Template {
@@ -27,13 +34,67 @@ class Template {
 })
 export class SignatureTemplateComponent implements OnInit {
 
+  infoToReview: any;
+  rules: Rules = {
+    lengthRule: {
+      minLength: null,
+      maxLength: null
+    },
+    listRule: null
+  };
   isSaveRulesLoading = false;
   isSaveTemplateLoading = false;
   htmlContent = '';
+  htmlContentReview = '';
   i = 0;
   editId: string | null = null;
   listOfRules: ItemData[] = [];
   mustContentOrNot = 'Contain this text';
+
+  editorReviewConfig: AngularEditorConfig = {
+    editable: false,
+    height: '15rem',
+    minHeight: '5rem',
+    placeholder: 'Enter text to review',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    uploadUrl: 'src/asset/signature/',
+    toolbarHiddenButtons: [
+      [
+        'undo',
+        'redo',
+        'bold',
+        'italic',
+        'underline',
+        'strikeThrough',
+        'subscript',
+        'superscript',
+        'justifyLeft',
+        'justifyCenter',
+        'justifyRight',
+        'justifyFull',
+        'indent',
+        'outdent',
+        'insertUnorderedList',
+        'insertOrderedList',
+        'heading',
+        'fontName'
+      ],
+      [
+        'fontSize',
+        'textColor',
+        'backgroundColor',
+        'customClasses',
+        'link',
+        'unlink',
+        'insertImage',
+        'insertVideo',
+        'insertHorizontalRule',
+        'removeFormat',
+        'toggleEditorMode'
+      ]
+    ]
+  };
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -45,6 +106,7 @@ export class SignatureTemplateComponent implements OnInit {
     translate: 'no',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
+    uploadUrl: 'src/asset/signature/',
     toolbarHiddenButtons: [
       [''],
       [
@@ -83,20 +145,35 @@ export class SignatureTemplateComponent implements OnInit {
       this.mustContentOrNot = 'Not contain this text';
     }
   }
+  loadReview(): void {
+    this.htmlContentReview = this.htmlContent;
+    console.log('htmlContentReview: ' + this.htmlContentReview);
+
+    let firstname = this.infoToReview.first_name;
+    let lastname = this.infoToReview.last_name;
+    let phone = this.infoToReview.phone;
+    let personalEmail = this.infoToReview.personal_email;
+    this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
+    this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
+    this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+  }
   startEdit(id: string): void {
     this.editId = id;
   }
   stopEdit(): void {
     this.editId = null;
     console.log(this.listOfRules);
+    this.rules.listRule = this.listOfRules;
+    console.log(this.rules);
 
   }
   submitSignatureRules(): void {
     this.isSaveRulesLoading = true;
+    this.rules.listRule = this.listOfRules;
     let username = localStorage.getItem('username');
-    console.log(JSON.stringify(this.listOfRules));
+    console.log(JSON.stringify(this.rules));
     let template = new Template;
-    template.html = JSON.stringify(this.listOfRules);
+    template.html = JSON.stringify(this.rules);
     this.signatureService.sendSignatureTemplateRules(username, template).subscribe(
       (res) => {
         if (res) {
@@ -135,8 +212,7 @@ export class SignatureTemplateComponent implements OnInit {
       {
         id: `${this.i}`,
         content: '',
-        action: true,
-        length: null
+        action: true
       }
     ];
     this.i++;
@@ -171,35 +247,51 @@ export class SignatureTemplateComponent implements OnInit {
   }
   loadTemplate(): void {
     let username = localStorage.getItem('username');
-    this.signatureService.getSignatureTemplate(username).subscribe(
-      (res: any) => {
-        if (res.status) {
-          this.htmlContent = res.html;
-        }
+    this.signatureService.getInfoToReview(username).subscribe(
+      async (res) => {
+        this.infoToReview = res;
+        console.log(res);
+        this.signatureService.getSignatureTemplate(username).subscribe(
+          (res: any) => {
+            if (res.status) {
+              this.htmlContent = res.html;
+              this.htmlContentReview = this.htmlContent;
+              console.log('htmlContentReview: ' + this.htmlContentReview);
+              let firstname = this.infoToReview.first_name;
+              let lastname = this.infoToReview.last_name;
+              let phone = this.infoToReview.phone;
+              let personalEmail = this.infoToReview.personal_email;
+              this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
+              this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
+              this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+            }
+          }
+        );
       }
-    );
+    )
+
   }
   loadRules(): void {
     let username = localStorage.getItem('username');
     this.signatureService.getSignatureTemplateRules(username).subscribe(
       (res) => {
         let rulesJson: any = res;
-        console.log('rulesJson: ' + parseJSON(rulesJson));
+        console.log('rulesJson: ' + rulesJson);
         if (rulesJson) {
-          parseJSON(rulesJson).forEach(element => {
+          this.rules.lengthRule.minLength = parseJSON(rulesJson).lengthRule.minLength;
+          this.rules.lengthRule.maxLength = parseJSON(rulesJson).lengthRule.maxLength;
+          parseJSON(rulesJson).listRule.forEach(element => {
             this.listOfRules = [
               ...this.listOfRules,
               {
                 id: element.id,
                 content: element.content,
-                action: element.action,
-                length: element.length
+                action: element.action
               }
             ];
             this.i++;
           });
-          console.log(this.listOfRules);
-
+          console.log(this.rules);
         }
         if (this.i === 0) {
           this.addRow();
@@ -207,10 +299,10 @@ export class SignatureTemplateComponent implements OnInit {
       }
     );
   }
-  ngOnInit(): void {
-    // this.addRow();
+  async ngOnInit(): Promise<void> {
     this.loadTemplate();
     this.loadRules();
+
   }
 
 }
