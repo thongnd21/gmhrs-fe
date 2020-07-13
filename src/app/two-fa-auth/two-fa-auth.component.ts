@@ -68,13 +68,13 @@ export class TwoFaAuthComponent implements OnInit {
           let username = localStorage.getItem('username');
           this.twoFaAuthService.getQrCode(username).subscribe(
             (res) => {
-              console.log('qr content: ' + res);
-              if (res === null) {
-                console.log('reload bs server err!');
+              // console.log('qr content: ' + res);
+              // if (res === null) {
+              //   console.log('reload bs server err!');
 
-                this.ngOnInit();
-                return;
-              }
+              //   this.ngOnInit();
+              //   return;
+              // }
               this.showOrNot = true;
               this.QrCodeLink = res;
             }
