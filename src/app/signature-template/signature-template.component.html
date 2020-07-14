@@ -5,7 +5,7 @@
             </angular-editor>
             <div>
                 <p>
-                    <a style="color: blueviolet;" nz-dropdown [nzDropdownMenu]="menu">
+                    <a style="color: rgb(255, 0, 179); font-size: large;" nz-dropdown [nzDropdownMenu]="menu">
                         Add dynamic content
                         <i nz-icon nzType="down"></i>
                     </a>
@@ -16,6 +16,17 @@
                             <li (click)="addContent('name')" nz-menu-item>Add employee fullname</li>
                         </ul>
                     </nz-dropdown-menu>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <button nz-button style="background-color: coral; border: coral;" [nzType]="'primary'"
+                        (click)="showModal()"><span>Insert Image</span></button>
+                    <nz-modal [(nzVisible)]="insertImgModel" nzTitle="Insert Image" (nzOnCancel)="handleCancelModel()"
+                        (nzOnOk)="handleOkModel()">
+                        <p><input nz-input placeholder="Paste your image link" [(ngModel)]="imageLink" /></p>
+                        <p><img [src]="imageLink" /></p>
+                    </nz-modal>
                 </p>
             </div>
             <!-- <p>

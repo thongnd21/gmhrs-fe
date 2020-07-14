@@ -34,6 +34,8 @@ class Template {
 })
 export class SignatureTemplateComponent implements OnInit {
 
+  imageLink = '';
+  insertImgModel = false;
   infoToReview: any;
   rules: Rules = {
     lengthRule: {
@@ -58,7 +60,6 @@ export class SignatureTemplateComponent implements OnInit {
     placeholder: 'Enter text to review',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
-    uploadUrl: 'src/asset/signature/',
     toolbarHiddenButtons: [
       [
         'undo',
@@ -106,10 +107,10 @@ export class SignatureTemplateComponent implements OnInit {
     translate: 'no',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
-    uploadUrl: 'src/asset/signature/',
     toolbarHiddenButtons: [
-      [''],
+      ['bold'],
       [
+        'insertImage',
         'insertVideo',
       ],
     ],
@@ -138,6 +139,18 @@ export class SignatureTemplateComponent implements OnInit {
     private signatureService: SignatureService,
     private _sanitizer: DomSanitizer,
   ) { }
+  showModal(): void {
+    this.insertImgModel = true;
+  }
+  handleOkModel(): void {
+    this.htmlContent += "<img src='" + this.imageLink + "' />";
+    this.insertImgModel = false;
+    this.imageLink = '';
+  }
+  handleCancelModel(): void {
+    this.insertImgModel = false;
+    this.imageLink = '';
+  }
   changeMustOrNot(rule): void {
     if (rule) {
       this.mustContentOrNot = 'Contain this text';
@@ -299,7 +312,7 @@ export class SignatureTemplateComponent implements OnInit {
       }
     );
   }
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.loadTemplate();
     this.loadRules();
 
