@@ -66,6 +66,11 @@ export const AppRoutes: Routes = [
           () => import('./components/department/department.module').then(m => m.DepartmentModule), canActivate: [CompanyManagerGuard]
       },
       {
+        path: 'auto-reply-mail',
+        loadChildren:
+          () => import('./components/auto-replymail/auto-replymail.module').then(m => m.AutoReplymailModule), canActivate: [CompanyManagerGuard]
+      },
+      {
         path: '',
         loadChildren:
           () => import('./material-component/material.module').then(m => m.MaterialComponentsModule)
