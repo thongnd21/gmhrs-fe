@@ -5,7 +5,8 @@
             </angular-editor>
             <div>
                 <p>
-                    <a style="color: rgb(255, 0, 179); font-size: large;" nz-dropdown [nzDropdownMenu]="menu">
+                    <a style="color: rgb(255, 0, 179); font-size: large; background-color: chartreuse;" nz-dropdown
+                        [nzDropdownMenu]="menu">
                         Add dynamic content
                         <i nz-icon nzType="down"></i>
                     </a>
@@ -22,18 +23,29 @@
                 <p>
                     <button nz-button style="background-color: coral; border: coral;" [nzType]="'primary'"
                         (click)="showModal()"><span>Insert Image</span></button>
-                    <nz-modal [(nzVisible)]="insertImgModel" nzTitle="Insert Image" (nzOnCancel)="handleCancelModel()"
-                        (nzOnOk)="handleOkModel()">
+                    <nz-modal style="display: inline-block;" [(nzVisible)]="insertImgModel" nzTitle="Insert Image"
+                        (nzOnCancel)="handleCancelModel()" (nzOnOk)="handleOkModel()">
                         <p><input nz-input placeholder="Paste your image link" [(ngModel)]="imageLink" /></p>
-                        <p><img [src]="imageLink" /></p>
+                        <input type="text" disabled nz-input placeholder="Width"
+                            style="width: 80px; border-left: 1px; pointer-events: none; background-color: rgb(255, 255, 255);" />
+                        <nz-input-number [(ngModel)]="imgWidth" [nzMin]="1" [nzMax]="400" [nzStep]="1"
+                            [nzFormatter]="formatterpx" [nzParser]="parserpx"></nz-input-number>
+
+                        <input type="text" disabled nz-input placeholder="Heigh"
+                            style="width: 80px; border-left: 1px; pointer-events: none; background-color: rgb(255, 255, 255);" />
+                        <nz-input-number [(ngModel)]="imgHeigh" [nzMin]="1" [nzMax]="400" [nzStep]="1"
+                            [nzFormatter]="formatterpx" [nzParser]="parserpx"></nz-input-number>
+                        <p><img [ngStyle]="{'width':imgWidth + 'px'}" [ngStyle]="{'height':imgHeigh + 'px'}"
+                                [src]="imageLink" />
+                        </p>
                     </nz-modal>
                 </p>
             </div>
             <!-- <p>
                 {{htmlContent}}
             </p> -->
-            <div><span style="font-size: large; color: blue;">Review</span></div>
-            <div><button nz-button (click)="loadReview()" nzType="primary">Load review</button></div>
+            <div><button nz-button style="background-color: darkblue; border: darkblue;" (click)="loadReview()"
+                    nzType="primary">Load review</button></div>
             <br />
             <angular-editor id="editor2" [(ngModel)]="htmlContentReview" [config]="editorReviewConfig">
             </angular-editor>

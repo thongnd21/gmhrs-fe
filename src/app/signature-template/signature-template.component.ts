@@ -34,6 +34,10 @@ class Template {
 })
 export class SignatureTemplateComponent implements OnInit {
 
+  imgWidth = 300;
+  imgHeigh = 100;
+  formatterpx = (value: number) => `${value} px`;
+  parserpx = (value: string) => value.replace(' px', '');
   imageLink = '';
   insertImgModel = false;
   infoToReview: any;
@@ -143,7 +147,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.insertImgModel = true;
   }
   handleOkModel(): void {
-    this.htmlContent += "<img src='" + this.imageLink + "' />";
+    this.htmlContent += "<img style='width: " + this.imgWidth + "px; height: " + this.imgHeigh + "px;' src='" + this.imageLink + "' />";
     this.insertImgModel = false;
     this.imageLink = '';
   }
