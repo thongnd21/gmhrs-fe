@@ -8,6 +8,7 @@ import { SignatureService } from '../api-services/signature.services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { parseJSON } from 'jquery';
+import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 
 
 class Rules {
@@ -33,6 +34,8 @@ class Template {
   styleUrls: ['./signature-template.component.css']
 })
 export class SignatureTemplateComponent implements OnInit {
+
+  topCenterPosition: NzPlacementType = 'topCenter';
 
   imgWidth = 300;
   imgHeigh = 100;
@@ -211,11 +214,15 @@ export class SignatureTemplateComponent implements OnInit {
     let template = new Template;
     template.html = this.htmlContent;
     this.signatureService.sendSignatureTemplate(username, template).subscribe(
-      (res) => {
-        if (res) {
+      (res: any) => {
+        console.log(res);
+
+        if (res.status) {
           this.toast.success('Update signature success!');
         } else {
-          this.toast.error('Update signature fail!')
+          for (let mes of res.message) {
+            this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
+          }
         }
         setTimeout(() => {
           this.isSaveTemplateLoading = false;
@@ -267,13 +274,13 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getInfoToReview(username).subscribe(
       async (res) => {
         this.infoToReview = res;
-        console.log(res);
+        // console.log(res);
         this.signatureService.getSignatureTemplate(username).subscribe(
           (res: any) => {
             if (res.status) {
               this.htmlContent = res.html;
               this.htmlContentReview = this.htmlContent;
-              console.log('htmlContentReview: ' + this.htmlContentReview);
+              // console.log('htmlContentReview: ' + this.htmlContentReview);
               let firstname = this.infoToReview.first_name;
               let lastname = this.infoToReview.last_name;
               let phone = this.infoToReview.phone;
@@ -293,7 +300,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getSignatureTemplateRules(username).subscribe(
       (res) => {
         let rulesJson: any = res;
-        console.log('rulesJson: ' + rulesJson);
+        // console.log('rulesJson: ' + rulesJson);
         if (rulesJson) {
           this.rules.lengthRule.minLength = parseJSON(rulesJson).lengthRule.minLength;
           this.rules.lengthRule.maxLength = parseJSON(rulesJson).lengthRule.maxLength;
@@ -308,7 +315,7 @@ export class SignatureTemplateComponent implements OnInit {
             ];
             this.i++;
           });
-          console.log(this.rules);
+          // console.log(this.rules);
         }
         if (this.i === 0) {
           this.addRow();

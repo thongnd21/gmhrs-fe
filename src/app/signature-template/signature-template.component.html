@@ -5,18 +5,18 @@
             </angular-editor>
             <div>
                 <p>
-                    <a style="color: rgb(255, 0, 179); font-size: large; background-color: chartreuse;" nz-dropdown
-                        [nzDropdownMenu]="menu">
-                        Add dynamic content
-                        <i nz-icon nzType="down"></i>
-                    </a>
-                    <nz-dropdown-menu #menu="nzDropdownMenu">
-                        <ul nz-menu nzSelectable>
-                            <li (click)="addContent('phone')" nz-menu-item>Add employee phone number</li>
-                            <li (click)="addContent('email')" nz-menu-item>Add employee email address</li>
-                            <li (click)="addContent('name')" nz-menu-item>Add employee fullname</li>
-                        </ul>
-                    </nz-dropdown-menu>
+                    <ng-container>
+                        <button nz-button nz-dropdown style="font-size: large;" [nzPlacement]="topCenterPosition"
+                            [nzDropdownMenu]="menu">
+                            Add dynamic content</button>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li (click)="addContent('phone')" nz-menu-item>Add employee phone number</li>
+                                <li (click)="addContent('email')" nz-menu-item>Add employee email address</li>
+                                <li (click)="addContent('name')" nz-menu-item>Add employee fullname</li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </ng-container>
                 </p>
             </div>
             <div>
