@@ -15,21 +15,21 @@ export class AutoReplymailComponent implements OnInit {
   editor = localStorage.getItem('html');
 
   ngOnInit(): void {
-    // this.editorLoaded();
+    this.editorLoaded();
   }
 
-  // editorLoaded() {
-  //   if (this.emailEditor !== undefined) {
-  //     this.emailEditor.loadDesign (JSON.parse(this.editor));
-  //   } else {
-  //     setTimeout (() => this.emailEditor.loadDesign (JSON.parse(this.editor)), 3000);
-  //   }
-  // }
+  editorLoaded() {
+    if (this.emailEditor !== undefined) {
+      this.emailEditor.loadDesign (JSON.parse(this.editor));
+    } else {
+      setTimeout (() => this.emailEditor.loadDesign (JSON.parse(this.editor)), 3000);
+    }
+  }
 
   editorExport( ){
     this.emailEditor.saveDesign((data) => 
-      console.log(data),S
-      localStorage.setItem('html',JSON.stringify(data))
+      console.log(data),
+      // localStorage.setItem('html',JSON.stringify(data))
     );
     this.emailEditor.exportHtml((html) => 
       console.log(html)
