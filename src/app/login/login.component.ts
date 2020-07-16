@@ -71,6 +71,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('token', userInfo.token);
                 localStorage.setItem('is_first_sync', userInfo.profile.is_first_sync === true ? 'true' : 'false');
                 localStorage.setItem('roleId', userInfo.profile.role.id);
+                localStorage.setItem('api_enpoint', userInfo.profile.api_endpoint);
                 if (userInfo.profile.two_fa_status === 1) {
                     this.router.navigate(['/checkotp']);
                 } else {
