@@ -31,13 +31,10 @@ export class AccountApiService {
     };
 
     sendMailToChangPassword(account) {
-        return this.httpClient.put("https://gmhrs-api.herokuapp.com/api/accounts/sendMail", account);
+        return this.httpClient.put("http://localhost:3000/api/accounts/sendMail", account);
     };
     changePassword(account) {
-        return this.httpClient.put("https://gmhrs-api.herokuapp.com/api/accounts/changePassword", account);
+        return this.httpClient.put("http://localhost:3000/api/accounts/changePassword", account);
     };
-    testAPIEndpoint(url){
-        return this.httpClient.get(url);
-      }
 
 }

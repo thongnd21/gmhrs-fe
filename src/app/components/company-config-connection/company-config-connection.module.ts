@@ -15,7 +15,6 @@ import {  MatButtonModule,
       MatSlideToggleModule,
       MatProgressSpinnerModule} from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @NgModule({
     imports: [
@@ -40,7 +39,6 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
         MatMenuModule,
         MatTabsModule,
         MatDialogModule,
-        NgxJsonViewerModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

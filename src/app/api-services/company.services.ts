@@ -14,12 +14,12 @@ export class CompanyServices {
 
   updateAccountCompany(updateAccount) {
     return this.httpClient.put('https://gmhrs-api.herokuapp.com/api/accounts', updateAccount);
-    // return this.httpClient.put('http://localhost:3000/api/accounts', updateAccount);
+    // return this.httpClient.put('https://localhost:3000/api/accounts', updateAccount);
   }
 
   createAccountCompany(newAccount) {
-    return this.httpClient.post('https://gmhrs-api.herokuapp.com/api/accounts', newAccount);
-    // return this.httpClient.post('http://localhost:3000/api/accounts', newAccount);
+    // return this.httpClient.post('https://gmhrs-api.herokuapp.com/api/accounts', newAccount);
+    return this.httpClient.post('http://localhost:3000/api/accounts', newAccount);
   }
 
   getAccountCompanyById(id) {
@@ -29,5 +29,6 @@ export class CompanyServices {
     // 'https://gmhrs-api.herokuapp.com/api/accounts', { params: idAccount }
   }
 
+  
 
 }

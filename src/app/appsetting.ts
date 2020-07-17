@@ -18,5 +18,4 @@ export class AppSettings {
     public static GETINFOTOREVIEW = 'signature/getInfoToReview/'
     public static UPDATESIGNATUREALL = 'signature/updateSignatureTemplateForAllEmployee/'
     public static GETLISTWRONGSIGANTURE = 'signature/getListEmployeesEmailBreakRule/'
-    public static GSUITE = 'gsuite/'
 }

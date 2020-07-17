@@ -74,7 +74,9 @@ export class CompanyComponent implements OnInit {
           item['address'] = company.address;
           item['phone'] = company.phone;
           list.push(item);
+          console.log(item);
         });
+        console.log(list);
         this.dataSource = new MatTableDataSource(list);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -83,9 +85,11 @@ export class CompanyComponent implements OnInit {
   }
 
   getAccountCompanyById(id) {
+    console.log(id);
     this.account = new AccountCompanyModel;
     this.companyServices.getAccountCompanyById(id).subscribe(
       (data: any) => {
+        console.log(data);
         this.account.id = data.id;
         this.account.email = data.email;
         this.account.username = data.username;
@@ -94,12 +98,14 @@ export class CompanyComponent implements OnInit {
         // this.account.role = data.role.name;
         this.account.address = data.address;
         this.account.phone = data.phone;
+        console.log(this.account);
       }
 
     )
   }
 
   opentUpdate(update, data) {
+    console.log(data);
     this.account = new AccountCompanyModel();
     this.account.id = data.id;
     this.account.email = data.email;
@@ -109,6 +115,7 @@ export class CompanyComponent implements OnInit {
     this.account.role = data.role;
     this.account.address = data.address;
     this.account.phone = data.phone;
+    console.log(this.account);
     this.accountCompanyForm = new FormGroup({
       id: new FormControl(this.account.id),
       email: new FormControl(this.account.email, [Validators.required, Validators.email]),
@@ -129,9 +136,9 @@ export class CompanyComponent implements OnInit {
     this.modalService.open(update, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
-  openDetail(modal, id) {
+  openDetail(detail, id) {
     this.getAccountCompanyById(id);
-    this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+    this.modalService.open(detail, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
   open(modal) {
@@ -169,6 +176,8 @@ export class CompanyComponent implements OnInit {
     this.account.phone = data.phone;
     // this.account.api_endpoint = data.api_endpoint,
     // this.account.connection_database = data.connection_database
+
+    console.log(this.account);;
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res) => {
         this.toast.success("Update Account success!");
@@ -188,6 +197,9 @@ export class CompanyComponent implements OnInit {
     this.account.email = this.accountCompanyForm.controls['email'].value,
       this.account.username = this.accountCompanyForm.controls['username'].value,
       this.account.password = this.accountCompanyForm.controls['password'].value,
+
+
+      console.log(this.account);
     this.companyServices.createAccountCompany(this.account).subscribe(
       (res) => {
         this.toast.success("Create Account success!");
