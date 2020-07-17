@@ -112,7 +112,7 @@
                             </mat-form-field>
                             <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
                                 type="file" name="file" style="margin: 40px;" />
-                            <button mat-raised-button (click)="onTest(responseTestFile,gsuiteCredentialForm.value)"
+                            <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton" (click)="onTest(responseTestFile,gsuiteCredentialForm.value)"
                                 color="primary">
                                 Test Connection
                             </button>
@@ -288,12 +288,43 @@
                         <br />
                     </td>
                 </tr>
+                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.member.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.member.status!=200}">
+                    <td>
+                        Member
+                    </td>
+                    <td>
+                        {{accessGsuiteAuthen.member.message}}
+                    </td>
+                    <td>
+                        <mat-icon *ngIf="accessGsuiteAuthen.member.status==200" style="color: green;">done
+                        </mat-icon>
+                        <mat-icon *ngIf="accessGsuiteAuthen.member.status!=200" style="color: red;">close</mat-icon>
+                        <br />
+                    </td>
+                </tr>
+                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.member.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.member.status!=200}">
+                    <td>
+                        Gmail
+                    </td>
+                    <td>
+                        {{accessGsuiteAuthen.gmail.message}}
+                    </td>
+                    <td>
+                        <mat-icon *ngIf="accessGsuiteAuthen.gmail.status==200" style="color: green;">done
+                        </mat-icon>
+                        <mat-icon *ngIf="accessGsuiteAuthen.gmail.status!=200" style="color: red;">close</mat-icon>
+                        <br />
+                    </td>
+                </tr>
             </table>
             <button mat-flat-button class="col-md-2 ml-2" color="primary" (click)="closeModal()">
                 Close
             </button>
             <button mat-flat-button class="col-md-2 ml-2" style="margin-left: 40px;"
-                (click)="upload(gsuiteCredentialForm.value)" color="primary">
+                (click)="upload(gsuiteCredentialForm.value)" color="primary"
+                [disabled] = "gsuiteAuthenStatus">
                 Upload
             </button>
         </div>
