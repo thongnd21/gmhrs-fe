@@ -9,6 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { parseJSON } from 'jquery';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 
 class Rules {
@@ -35,14 +36,18 @@ class Template {
 })
 export class SignatureTemplateComponent implements OnInit {
 
+  isDisableSaveRule = false;
+  listRulesCheckErr = new Array();
+  listWrongSignature = new Array();
   topCenterPosition: NzPlacementType = 'topCenter';
-
   imgWidth = 300;
   imgHeigh = 100;
   formatterpx = (value: number) => `${value} px`;
   parserpx = (value: string) => value.replace(' px', '');
   imageLink = '';
   insertImgModel = false;
+  showCheckErrModel = false;
+  showListWrongSignature = false;
   infoToReview: any;
   rules: Rules = {
     lengthRule: {
@@ -51,8 +56,10 @@ export class SignatureTemplateComponent implements OnInit {
     },
     listRule: null
   };
+  isShowListWrongSignatureLoading = false;
   isSaveRulesLoading = false;
   isSaveTemplateLoading = false;
+  isUpdatedTemplateLoading = false;
   htmlContent = '';
   htmlContentReview = '';
   i = 0;
@@ -145,7 +152,49 @@ export class SignatureTemplateComponent implements OnInit {
     private authenticationService: AuthenService,
     private signatureService: SignatureService,
     private _sanitizer: DomSanitizer,
+    private modal: NzModalService,
   ) { }
+  getListWrongSignature(): void {
+    this.isShowListWrongSignatureLoading = true;
+    let username = localStorage.getItem('username');
+    this.signatureService.getListWrongSignature(username).subscribe(
+      (res: any) => {
+        this.listWrongSignature = res;
+        this.showListWrongSignature = true;
+        this.isShowListWrongSignatureLoading = false;
+      })
+  }
+  showConfirmSaveSignatureRules(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Do you Want to Save this signature rules?</i>',
+      nzContent: '<b>If you Save this signature rules, it will save signature rule to database and notify to all employees by company gmail.</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.submitSignatureRules()
+    });
+  }
+  showConfirmUpdateAllSignature(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Do you Want to Update this signature for all employees NOW?</i>',
+      nzContent: '<b>If you Update this signature for all employees NOW, it will update all employees signature immediately.</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.syncSignatureAll()
+    });
+  }
+  showConfirmSaveSignature(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Do you Want to Save this signature?</i>',
+      nzContent: '<b>If you Save this signature, it will update all employees signature when the next Synchronize employees infomation is processed.</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.submitSignature()
+    });
+  }
+  showRulesCheckModel(): void {
+    this.showCheckErrModel = true;
+  }
+  handleCloseModel(): void {
+    this.showCheckErrModel = false;
+    this.showListWrongSignature = false;
+  }
   showModal(): void {
     this.insertImgModel = true;
   }
@@ -194,7 +243,7 @@ export class SignatureTemplateComponent implements OnInit {
     console.log(JSON.stringify(this.rules));
     let template = new Template;
     template.html = JSON.stringify(this.rules);
-    this.signatureService.sendSignatureTemplateRules(username, template).subscribe(
+    this.signatureService.saveSignatureTemplateRules(username, template).subscribe(
       (res) => {
         if (res) {
           this.toast.success('Save signature rules success!');
@@ -207,21 +256,46 @@ export class SignatureTemplateComponent implements OnInit {
       }
     )
   }
-  submitSignature(): void {
-    this.isSaveTemplateLoading = true;
+  syncSignatureAll(): void {
+    this.isUpdatedTemplateLoading = true;
     let username = localStorage.getItem('username');
-    console.log(this.htmlContent);
     let template = new Template;
     template.html = this.htmlContent;
-    this.signatureService.sendSignatureTemplate(username, template).subscribe(
+    this.signatureService.updateSignatureForAllEmployees(username, template).subscribe(
       (res: any) => {
         console.log(res);
 
-        if (res.status) {
-          this.toast.success('Update signature success!');
+        if (res === true) {
+          this.toast.success('Update signature to all employees success!');
+          this.listRulesCheckErr = [];
         } else {
-          for (let mes of res.message) {
+          for (let mes of res) {
             this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
+            this.listRulesCheckErr = res;
+          }
+        }
+        setTimeout(() => {
+          this.isUpdatedTemplateLoading = false;
+        }, 1000);
+      }
+    )
+  }
+  submitSignature(): void {
+    this.isSaveTemplateLoading = true;
+    let username = localStorage.getItem('username');
+    let template = new Template;
+    template.html = this.htmlContent;
+    this.signatureService.saveSignatureTemplate(username, template).subscribe(
+      (res: any) => {
+        console.log(res);
+
+        if (res === true) {
+          this.toast.success('Save signature success!');
+          this.listRulesCheckErr = [];
+        } else {
+          for (let mes of res) {
+            this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
+            this.listRulesCheckErr = res;
           }
         }
         setTimeout(() => {
@@ -300,11 +374,11 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getSignatureTemplateRules(username).subscribe(
       (res) => {
         let rulesJson: any = res;
-        // console.log('rulesJson: ' + rulesJson);
+        console.log('rulesJson: ' + rulesJson);
         if (rulesJson) {
-          this.rules.lengthRule.minLength = parseJSON(rulesJson).lengthRule.minLength;
-          this.rules.lengthRule.maxLength = parseJSON(rulesJson).lengthRule.maxLength;
-          parseJSON(rulesJson).listRule.forEach(element => {
+          this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
+          this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
+          rulesJson.listRule.forEach(element => {
             this.listOfRules = [
               ...this.listOfRules,
               {
