@@ -40,6 +40,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
     department: {
       status: String,
       message: String
+    },
+    member: {
+      status: String,
+      message: String
+    },
+    gmail: {
+      status: String,
+      message: String
     }
   };
   file;
@@ -53,7 +61,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   uploadedFiles: Array<File>;
   loading = false;
   loadingConfirm = false;
-  gsuiteAuthenStatus = false;
+  gsuiteAuthenStatus = true;
   loadingSubmit = false;
   days = [
     {
@@ -132,7 +140,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     }
 
   };
-  
+
 
   apiEndpointResultEmployeeList = [];
   apiEndpointResultDepartmentList = [];
@@ -202,9 +210,15 @@ export class CompanyConfigConnectionComponent implements OnInit {
     })
   }
 
-
+  disableTestAuthenGsuiteButton = true;
   fileChange(element) {
     this.uploadedFiles = element.target.files;
+    if (this.uploadedFiles[0].name.split('.')[1] != "json") {
+      this.toast.error("Please input only JSON file!");
+      this.disableTestAuthenGsuiteButton = true;
+    } else {
+      this.disableTestAuthenGsuiteButton = false;
+    }
   }
 
 
@@ -219,8 +233,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
     formData.set("company_email", company_email);
     formData.set("id", id_company);
 
-    // this.account = new AccountCompanyModel();
-    // this.account.id = localStorage.getItem('id');
     this.http.post('http://localhost:3000/api/file/upload', formData)
       .subscribe(
         (res) => {
@@ -228,15 +240,25 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.accessGsuiteAuthen.employee.message = testInfor.checkingAuthGsuiteEmployee.message;
           this.accessGsuiteAuthen.team.message = testInfor.checkingAuthGsuiteTeam.message;
           this.accessGsuiteAuthen.department.message = testInfor.checkingAuthGsuiteDepartment.message;
+          this.accessGsuiteAuthen.member.message = testInfor.checkingAuthGsuiteMember.message;
+          this.accessGsuiteAuthen.gmail.message = testInfor.checkingAuthGsuiteMail.message;
           this.accessGsuiteAuthen.employee.status = testInfor.checkingAuthGsuiteEmployee.status;
           this.accessGsuiteAuthen.team.status = testInfor.checkingAuthGsuiteTeam.status;
           this.accessGsuiteAuthen.department.status = testInfor.checkingAuthGsuiteDepartment.status;
+          this.accessGsuiteAuthen.member.status = testInfor.checkingAuthGsuiteMember.status;
+          this.accessGsuiteAuthen.gmail.status = testInfor.checkingAuthGsuiteMail.status;
+          console.log(testInfor);
           console.log(this.accessGsuiteAuthen);
-          // if (testInfor.checkingAuthGsuiteEmployee.status == 200
-          //   && testInfor.checkingAuthGsuiteTeam.status == 200
-          //   && testInfor.checkingAuthGsuiteDepartment === 200) {
-          //     this.gsuiteAuthenStatus = true;
-          // }
+
+          if (testInfor.checkingAuthGsuiteEmployee.status == 200
+            && testInfor.checkingAuthGsuiteTeam.status == 200
+            && testInfor.checkingAuthGsuiteDepartment.status === 200
+            && testInfor.checkingAuthGsuiteMember.status === 200
+            && testInfor.checkingAuthGsuiteMail.status === 200) {
+            this.gsuiteAuthenStatus = false;
+          } else {
+            this.gsuiteAuthenStatus = true;
+          }
           // console.log(this.gsuiteAuthenStatus);
           // this.toast.success("Upload file success!");
           //open modal
@@ -252,16 +274,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.account = new AccountCompanyModel;
     this.account.primary_email = value.company_email;
     this.account.id = localStorage.getItem('id');
-    console.log(this.account);
     this.http.post('http://localhost:3000/api/file/save', this.account)
       .subscribe(
         (res) => {
           const result: any = res;
           if (result.status == "success") {
             this.toast.success("Con-fig G-Suite Authentication Successfully!");
+            this.closeModal();
           }
           if (result.status == "fail") {
-            this.toast.success("Con-fig G-Suite Authentication fail!");
+            this.toast.error("Con-fig G-Suite Authentication fail!");
           }
         },
         (error) => {
@@ -302,8 +324,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.apiEndpointResultDepartmentList = res.departments.length > 0 ? res.departments : null;
         this.apiEndpointResultTeamList = res.teams.length > 0 ? res.teams : null;
         var check = this.checkingFormatData(
-          this.apiEndpointResultEmployeeList, 
-          this.apiEndpointResultDepartmentList, 
+          this.apiEndpointResultEmployeeList,
+          this.apiEndpointResultDepartmentList,
           this.apiEndpointResultTeamList);
         this.anableButtonSaveAPIEndpoint = check;
         this.enableDataAPIResult = true;
