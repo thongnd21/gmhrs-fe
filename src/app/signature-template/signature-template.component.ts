@@ -348,23 +348,25 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getInfoToReview(username).subscribe(
       async (res) => {
         this.infoToReview = res;
-        // console.log(res);
-        this.signatureService.getSignatureTemplate(username).subscribe(
-          (res: any) => {
-            if (res.status) {
-              this.htmlContent = res.html;
-              this.htmlContentReview = this.htmlContent;
-              // console.log('htmlContentReview: ' + this.htmlContentReview);
-              let firstname = this.infoToReview.first_name;
-              let lastname = this.infoToReview.last_name;
-              let phone = this.infoToReview.phone;
-              let personalEmail = this.infoToReview.personal_email;
-              this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
-              this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
-              this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+        console.log(res);
+        if (this.infoToReview != null) {
+          this.signatureService.getSignatureTemplate(username).subscribe(
+            (res: any) => {
+              if (res.status) {
+                this.htmlContent = res.html;
+                this.htmlContentReview = this.htmlContent;
+                console.log('htmlContentReview: ' + this.htmlContentReview);
+                let firstname = this.infoToReview.first_name;
+                let lastname = this.infoToReview.last_name;
+                let phone = this.infoToReview.phone;
+                let personalEmail = this.infoToReview.personal_email;
+                this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
+                this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
+                this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+              }
             }
-          }
-        );
+          );
+        }
       }
     )
 
