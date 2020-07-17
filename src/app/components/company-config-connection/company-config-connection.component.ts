@@ -226,14 +226,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
   onTest(modal, value) {
     let formData = new FormData();
     let company_email = value.company_email;
-    let id_company = localStorage.getItem('id');
     for (var i = 0; i < this.uploadedFiles.length; i++) {
       formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
     }
     formData.set("company_email", company_email);
-    formData.set("id", id_company);
 
-    this.http.post('http://localhost:3000/api/file/upload', formData)
+    this.http.post('https://gmhrs-api.herokuapp.com/api/file/upload', formData)
       .subscribe(
         (res) => {
           const testInfor: any = res;
@@ -274,7 +272,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.account = new AccountCompanyModel;
     this.account.primary_email = value.company_email;
     this.account.id = localStorage.getItem('id');
-    this.http.post('http://localhost:3000/api/file/save', this.account)
+    this.http.post('https://gmhrs-api.herokuapp.com/api/file/save', this.account)
       .subscribe(
         (res) => {
           const result: any = res;
