@@ -9,9 +9,7 @@ export class SignatureService {
     // URL = 'http://localhost:3000/api/';
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
-    sendMailRemindEmployees(username) {
-        return this.httpClient.get(this.URL + AppSettings.SENDMAILREMIND + username)
-    }
+
     getListWrongSignature(username) {
         return this.httpClient.get(this.URL + AppSettings.GETLISTWRONGSIGANTURE + username);
     }

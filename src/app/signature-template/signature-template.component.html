@@ -1,7 +1,8 @@
 <div style="margin: auto;">
     <mat-tab-group mat-align-tabs="start">
         <mat-tab label="Default Signature Template" style="display: list-item;">
-            <div style="display: inline-flex; padding: 0.5cm; z-index: 2; background-color: white; width: 100%;">
+            <div
+                style="display: inline-flex; padding: 0.5cm; position: fixed; z-index: 2; background-color: white; width: 100%;">
                 <ng-container style="margin-left: 5mm;">
                     <button nz-button nz-dropdown style="font-size: large;" [nzPlacement]="topCenterPosition"
                         [nzDropdownMenu]="menu">
@@ -118,8 +119,8 @@
                 </tbody>
             </nz-table>
             <nz-modal style="display: inline-block;" [(nzVisible)]="showListWrongSignature"
-                nzTitle="List employee wrong signature" nzCancelText="Close" nzOkText="Send mail remind employees"
-                (nzOnCancel)="handleCloseModel()" (nzOnOk)="sendMailRemind()">
+                nzTitle="List employee wrong signature" nzCancelText="Close" (nzOnCancel)="handleCloseModel()"
+                (nzOnOk)="handleCloseModel()">
                 <ul *ngFor="let element of listWrongSignature">Email: {{element.email}}
                     <li *ngFor="let mes of element.message">{{mes}}</li>
                 </ul>
