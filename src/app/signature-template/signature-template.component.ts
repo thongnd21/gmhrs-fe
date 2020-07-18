@@ -154,11 +154,24 @@ export class SignatureTemplateComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private modal: NzModalService,
   ) { }
+  sendMailRemind(): void {
+    let username = localStorage.getItem('username');
+    this.signatureService.sendMailRemindEmployees(username).subscribe(
+      (res) => {
+        if (res) {
+          this.toast.success('Send mails success!');
+        } else {
+          this.toast.error('Some Error!')
+        }
+      }
+    )
+  }
   getListWrongSignature(): void {
     this.isShowListWrongSignatureLoading = true;
     let username = localStorage.getItem('username');
     this.signatureService.getListWrongSignature(username).subscribe(
       (res: any) => {
+        console.log(res);
         this.listWrongSignature = res;
         this.showListWrongSignature = true;
         this.isShowListWrongSignatureLoading = false;
@@ -348,7 +361,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getInfoToReview(username).subscribe(
       async (res) => {
         this.infoToReview = res;
-        console.log(res);
+        console.log('Info to review: ' + res);
         if (this.infoToReview != null) {
           this.signatureService.getSignatureTemplate(username).subscribe(
             (res: any) => {
