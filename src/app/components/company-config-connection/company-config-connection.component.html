@@ -67,7 +67,7 @@
             <div class="card-body" *ngIf="connection == false">
                 <mat-card class="p-0">
                     <mat-card-content>
-                        <form [formGroup]="APIEndpointForm" (ngSubmit)="onSubmitURLConection(APIEndpointForm.value)">
+                        <form [formGroup]="APIEndpointForm">
                             <div fxLayout="row wrap">
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
@@ -78,10 +78,25 @@
                                     </div>
                                 </div>
                             </div>
-                            <button mat-raised-button type="submit" color="primary">
+                            <button [disabled]="!anableButtonSaveAPIEndpoint"
+                                (click)="onSubmitURLConection(APIEndpointForm.value)" mat-raised-button color="primary">
                                 Save
                             </button>
+                            <button style="margin-left: 40px;" mat-raised-button
+                                (click)="onTestURLConection(APIEndpointForm.value)" color="primary">
+                                Test
+                            </button>
+
                         </form>
+                        <br/>
+                        <div *ngIf="enableDataAPIResult">
+                            <h1>Employee</h1>
+                            <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
+                            <h1>Department</h1>
+                            <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
+                            <h1>Team</h1>
+                            <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
+                        </div>
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -90,16 +105,16 @@
             <div class="card-body">
                 <mat-card class="p-0">
                     <mat-card-content>
-                        <form class="col-md-4" [formGroup]="gsuiteCredentialForm"
-                            (ngSubmit)="upload(gsuiteCredentialForm.value)">
+                        <form class="col-md-4" [formGroup]="gsuiteCredentialForm">
                             <mat-form-field class="full-width">
                                 <input matInput name="company_email" formControlName="company_email"
                                     placeholder="Company Email" value="" />
                             </mat-form-field>
                             <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
-                                type="file" name="file" />
-                            <button mat-raised-button type="submit" color="primary">
-                                Upload
+                                type="file" name="file" style="margin: 40px;" />
+                            <button mat-raised-button (click)="onTest(responseTestFile,gsuiteCredentialForm.value)"
+                                color="primary">
+                                Test Connection
                             </button>
                         </form>
                     </mat-card-content>
@@ -147,48 +162,49 @@
                             <!-- Choose day in month -->
                             <div class="col-md-8 pt-4" *ngIf="typeSync == 1">
                                 <h3>Monthly synchronize</h3>
-                                    <mat-form-field>
-                                        <mat-select [(ngModel)]="monthDayChoose" placeholder="Choose days" multiple>
-                                            <mat-option *ngFor="let date of dayInMonth" [value]="date">{{ date }}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <label>Time:</label>
-                                    <mat-form-field>
-                                        <input matInput  [(ngModel)]="monthTime" type="time" />
-                                    </mat-form-field>
+                                <mat-form-field>
+                                    <mat-select [(ngModel)]="monthDayChoose" placeholder="Choose days" multiple>
+                                        <mat-option *ngFor="let date of dayInMonth" [value]="date">{{ date }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <label>Time:</label>
+                                <mat-form-field>
+                                    <input matInput [(ngModel)]="monthTime" type="time" />
+                                </mat-form-field>
                             </div>
                             <!-- Choose day in week -->
                             <div class="col-md-8 pt-4" *ngIf="typeSync == 2">
                                 <h3>
                                     Weekly synchronize
                                 </h3>
-                                    <mat-form-field>
-                                        <mat-select [(ngModel)]="weekDayChoose" placeholder="Choose days" multiple>
-                                            <mat-option *ngFor="let date of days" [value]="date.id">{{ date.name }}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <label>Time </label>
-                                    <mat-form-field>
-                                        <input matInput  [(ngModel)]="weekTime" type="time" />
-                                    </mat-form-field>
+                                <mat-form-field>
+                                    <mat-select [(ngModel)]="weekDayChoose" placeholder="Choose days" multiple>
+                                        <mat-option *ngFor="let date of days" [value]="date.id">{{ date.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <label>Time </label>
+                                <mat-form-field>
+                                    <input matInput [(ngModel)]="weekTime" type="time" />
+                                </mat-form-field>
                             </div>
                             <!-- Choose time daily -->
                             <div class="col-md-8 pt-4" *ngIf="typeSync == 3">
                                 <h3>
                                     Daily synchronize
                                 </h3>
-                                    <label>Time:</label>
-                                    <mat-form-field>
-                                        <input matInput  [(ngModel)]="dailyTime" type="time" />
-                                    </mat-form-field>
+                                <label>Time:</label>
+                                <mat-form-field>
+                                    <input matInput [(ngModel)]="dailyTime" type="time" />
+                                </mat-form-field>
                             </div>
                             <div class="button-container mr-6">
                                 <div class="spinner-container" *ngIf="loadingSubmit">
                                     <mat-spinner diameter="24"></mat-spinner>
                                 </div>
-                                <button style="margin-left: 10px;" mat-raised-button color="primary" (click)="saveScheduleTime()"  [disabled]="loadingSubmit">
+                                <button style="margin-left: 10px;" mat-raised-button color="primary"
+                                    (click)="saveScheduleTime()" [disabled]="loadingSubmit">
                                     Submit
                                 </button>
                             </div>
@@ -220,4 +236,66 @@
         </div>
         <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
     </mat-dialog-actions>
+</ng-template>
+
+<ng-template #responseTestFile let-modal>
+    <div class="modal-header">
+        <h4>Access Information</h4>
+    </div>
+    <div class="modal-body">
+        <div class="card-body">
+            <table class="table">
+                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.employee.status==200 ,
+                 'response-status-fail' : accessGsuiteAuthen.employee.status!=200}">
+                    <td>
+                        Employee
+                    </td>
+                    <td>
+                        {{accessGsuiteAuthen.employee.message}}
+                    </td>
+                    <td>
+                        <mat-icon *ngIf="accessGsuiteAuthen.employee.status==200" style="color: green;">done</mat-icon>
+                        <mat-icon *ngIf="accessGsuiteAuthen.employee.status!=200" style="color: red;">close</mat-icon>
+                        <br />
+                    </td>
+                </tr>
+                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.team.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.team.status!=200}">
+                    <td>
+                        Team
+                    </td>
+                    <td>
+                        {{accessGsuiteAuthen.team.message}}
+                    </td>
+                    <td>
+                        <mat-icon *ngIf="accessGsuiteAuthen.team.status==200" style="color: green;">done</mat-icon>
+                        <mat-icon *ngIf="accessGsuiteAuthen.team.status!=200" style="color: red;">close</mat-icon>
+                        <br />
+                    </td>
+                </tr>
+                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.department.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.department.status!=200}">
+                    <td>
+                        Department
+                    </td>
+                    <td>
+                        {{accessGsuiteAuthen.department.message}}
+                    </td>
+                    <td>
+                        <mat-icon *ngIf="accessGsuiteAuthen.department.status==200" style="color: green;">done
+                        </mat-icon>
+                        <mat-icon *ngIf="accessGsuiteAuthen.department.status!=200" style="color: red;">close</mat-icon>
+                        <br />
+                    </td>
+                </tr>
+            </table>
+            <button mat-flat-button class="col-md-2 ml-2" color="primary" (click)="closeModal()">
+                Close
+            </button>
+            <button mat-flat-button class="col-md-2 ml-2" style="margin-left: 40px;"
+                (click)="upload(gsuiteCredentialForm.value)" color="primary">
+                Upload
+            </button>
+        </div>
+    </div>
 </ng-template>

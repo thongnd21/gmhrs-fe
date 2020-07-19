@@ -19,4 +19,5 @@ export class AppSettings {
     public static UPDATESIGNATUREALL = 'signature/updateSignatureTemplateForAllEmployee/'
     public static GETLISTWRONGSIGANTURE = 'signature/getListEmployeesEmailBreakRule/'
     public static SENDMAILREMIND = 'signature/sendMailRemindEmployees/'
+    public static GSUITE = 'gsuite/'
 }

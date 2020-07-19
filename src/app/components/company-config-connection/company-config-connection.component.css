@@ -14,3 +14,9 @@
     display: inline-block;
     position: relative;
   } 
+.response-status-fail{
+  color: red;
+}
+.response-status-success{
+  color: green;
+}
