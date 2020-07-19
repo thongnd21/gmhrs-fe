@@ -33,7 +33,8 @@ export class AppHeaderComponent {
   selectedEmpMatchAll = true;
   selectedEmpNewAll = true;
   selectedEmpOutAll = true;
-
+  employee_new_match = {};
+  employee_out_match = {};
   loading = false;
   constructor(
     private companyConnectionService: CompanyConnectionService,
@@ -43,33 +44,33 @@ export class AppHeaderComponent {
   ) { }
   panelOpenState = false;
   listItemSynch: any;
+  listNewEmp = [];
+  listOutEmp = [];
   listSyncFinal: any;
   isFirstSync = null;
+  listSynchonize = {
+    employees: {
+      matchedEmployee: [],
+      newEmployee: [],
+      outOfHRMS: [],
+    },
+    departments: {
+      matchedDepartment: [],
+      newDepartment: [],
+      outOfHRMS: [],
+    },
+    teams: {
+      matchedTeam: [],
+      newTeam: [],
+      outOfHRMS: [],
+    }
+  };
   open = (modal) =>
-    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+    this.modalService.open(modal, { windowClass: 'my-class', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
 
   ngOnInit() {
     this.username = localStorage.getItem('username');
-  }
-
-  synchornizeNow(event) {
-    this.loading = true;
-    event.stopPropagation();
-    this.companyConnectionService.synchonize().subscribe(
-      (res) => {
-        this.loading = false;
-        this.toast.success("Synchronize success!")
-      },
-      (error) => {
-        this.loading = false;
-        if (error.status == 0) {
-          this.toast.error("Connection timeout!");
-        } if (error.status == 400) {
-          this.toast.error("Server is not available!");
-        }
-        this.toast.error("Server is not available!");
-      });
   }
 
   getListSynchronize(event, first, second) {
@@ -78,7 +79,7 @@ export class AppHeaderComponent {
     this.syncService.getListSynchronize(accountId).subscribe(
       (res: any) => {
         this.isFirstSync = res.is_first_sync;
-        this.listSyncFinal = res;
+        this.listItemSynch = res;
         const listSync = {
           department: new DepartmentSync,
           team: new TeamSync,
@@ -188,16 +189,26 @@ export class AppHeaderComponent {
             selected: true
           }
         });
-        this.listItemSynch = listSync;
+        this.listSyncFinal = listSync;
+        this.listItemSynch = res;
+        this.selectAllDepMatch(true);
+        this.selectAllDepNew(true);
+        this.selectAllDepOut(true);
+        this.selectAllTeamMatch(true);
+        this.selectAllTeamNew(true);
+        this.selectAllTeamOut(true);
+        this.selectAllEmpMatch(true);
+        this.selectAllEmpNew(true);
+        this.selectAllEmpOut(true);
         event.stopPropagation();
         this.loading = false;
         if (this.isFirstSync == true) {
-          this.modalService.open(first, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          this.modalService.open(first, { windowClass: 'my-class', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           this.trigger.closeMenu()
           event.stopPropagation();
           this.loading = false;
         } else {
-          this.modalService.open(second, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          this.modalService.open(second, { windowClass: 'my-class', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           this.trigger.closeMenu()
           event.stopPropagation();
           this.loading = false;
@@ -220,20 +231,17 @@ export class AppHeaderComponent {
     let accountId = localStorage.getItem('id');
     let syncList = {
       accountId: accountId,
-      employees: this.listSyncFinal.employees,
-      teams: this.listSyncFinal.teams,
-      departments: this.listSyncFinal.departments
+      is_first_sync: this.isFirstSync,
+      employees: this.listSynchonize.employees,
+      teams: this.listSynchonize.teams,
+      departments: this.listSynchonize.departments
     }
-    console.log(syncList);
+    console.log(JSON.stringify(syncList));
     if (this.isFirstSync != null) {
-      if (this.isFirstSync == true) {
-
-      } else {
-
-      }
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
           this.toast.success('Synchronize success!');
+          this.closeModal();
         },
         (err) => {
           if (err.status == 0) {
@@ -264,65 +272,69 @@ export class AppHeaderComponent {
   }
 
   // select dep match
-  selectAllDepMatch() {
-    console.log(this.listItemSynch.department.matchedDepartment);
+  selectAllDepMatch(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedDepMatchAll = true;
+    }
     if (this.selectedDepMatchAll) {
-      this.listItemSynch.department.matchedDepartment.forEach((e, index) => {
+      this.listSyncFinal.department.matchedDepartment.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.departments.matchedDepartment[index].selected = true;
+        this.listSynchonize.departments.matchedDepartment.push(this.listItemSynch.departments.matchedDepartment[index]);
       });
     }
     else {
-      this.listItemSynch.department.matchedDepartment.forEach((e, index) => {
+      this.listSynchonize.departments.matchedDepartment = [];
+      this.listSyncFinal.department.matchedDepartment.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.departments.matchedDepartment[index].selected = false;
       });
     }
   }
 
   checkSelectedDepMatch(id) {
-    var index = this.listItemSynch.department.matchedDepartment.findIndex(x => x.id == id);
-    this.listItemSynch.department.matchedDepartment[index].selected = !this.listItemSynch.department.matchedDepartment[index].selected;
-    if (this.listItemSynch.department.matchedDepartment[index].selected == false) {
-      console.log(this.listItemSynch.department.matchedDepartment[index].selected);
-      this.listSyncFinal.departments.matchedDepartment[index].selected = false;
+    var index = this.listSyncFinal.department.matchedDepartment.findIndex(x => x.id == id);
+    this.listSyncFinal.department.matchedDepartment[index].selected = !this.listSyncFinal.department.matchedDepartment[index].selected;
+    if (this.listSyncFinal.department.matchedDepartment[index].selected == false) {
+      this.listSynchonize.departments.matchedDepartment.splice(index, 1);
       this.selectedDepMatchAll = false;
     } else {
-      this.listSyncFinal.departments.matchedDepartment[index].selected = true;
-      const check = this.listItemSynch.department.matchedDepartment.find(x => x.selected == false);
-      console.log(check);
+      this.listSynchonize.departments.matchedDepartment.push(this.listItemSynch.departments.matchedDepartment[index]);
+      const check = this.listSyncFinal.department.matchedDepartment.find(x => x.selected == false);
       if (!check) {
         this.selectedDepMatchAll = true;
       }
     }
   }
   // select dep new
-  selectAllDepNew() {
-    console.log(this.listItemSynch.department.newDepartment);
+  selectAllDepNew(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedDepNewAll = true;
+    }
     if (this.selectedDepNewAll) {
-      this.listItemSynch.department.newDepartment.forEach((e, index) => {
+      this.listSyncFinal.department.newDepartment.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.departments.newDepartment[index].selected = true;
+        this.listSynchonize.departments.newDepartment.push(this.listItemSynch.departments.newDepartment[index]);
       });
     }
     else {
-      this.listItemSynch.department.newDepartment.forEach((e, index) => {
+      this.listSynchonize.departments.newDepartment = [];
+      this.listSyncFinal.department.newDepartment.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.departments.newDepartment[index].selected = false;
+
       });
     }
   }
 
   checkSelectedDepNew(id) {
-    var index = this.listItemSynch.department.newDepartment.findIndex(x => x.id == id);
-    this.listItemSynch.department.newDepartment[index].selected = !this.listItemSynch.department.newDepartment[index].selected;
-    if (this.listItemSynch.department.newDepartment[index].selected == false) {
-      console.log(this.listItemSynch.department.newDepartment[index].selected);
+    var index = this.listSyncFinal.department.newDepartment.findIndex(x => x.id == id);
+    this.listSyncFinal.department.newDepartment[index].selected = !this.listSyncFinal.department.newDepartment[index].selected;
+    if (this.listSyncFinal.department.newDepartment[index].selected == false) {
+      this.listSynchonize.departments.newDepartment.splice(index, 1);
       this.listSyncFinal.departments.newDepartment[index].selected = false;
       this.selectedDepNewAll = false;
     } else {
+      this.listSynchonize.departments.newDepartment.push(this.listItemSynch.departments.newDepartment[index]);
       this.listSyncFinal.departments.newDepartment[index].selected = true;
-      const check = this.listItemSynch.department.newDepartment.find(x => x.selected == false);
+      const check = this.listSyncFinal.department.newDepartment.find(x => x.selected == false);
       console.log(check);
       if (!check) {
         this.selectedDepNewAll = true;
@@ -330,32 +342,34 @@ export class AppHeaderComponent {
     }
   }
   // select dep out
-  selectAllDepOut() {
-    console.log(this.listItemSynch.department.OutOfHRMS);
+  selectAllDepOut(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedDepOutAll = true;
+    }
     if (this.selectedDepOutAll) {
-      this.listItemSynch.department.OutOfHRMSDep.forEach((e, index) => {
+      this.listSyncFinal.department.outOfHRMS.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.departments.OutOfHRMSDep[index].selected = true;
+        this.listSynchonize.departments.outOfHRMS.push(this.listItemSynch.departments.outOfHRMS[index]);
+
       });
     }
     else {
-      this.listItemSynch.department.OutOfHRMS.forEach((e, index) => {
+      this.listSynchonize.departments.outOfHRMS = [];
+      this.listSyncFinal.department.outOfHRMS.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.departments.OutOfHRMS[index].selected = false;
       });
     }
   }
 
   checkSelectedDepOut(id) {
-    var index = this.listItemSynch.department.OutOfHRMS.findIndex(x => x.id == id);
-    this.listItemSynch.department.OutOfHRMS[index].selected = !this.listItemSynch.department.OutOfHRMS[index].selected;
-    if (this.listItemSynch.department.OutOfHRMS[index].selected == false) {
-      console.log(this.listItemSynch.department.OutOfHRMS[index].selected);
-      this.listSyncFinal.departments.OutOfHRMS[index].selected = false;
+    var index = this.listSyncFinal.department.OutOfHRMS.findIndex(x => x.id == id);
+    this.listSyncFinal.department.OutOfHRMS[index].selected = !this.listSyncFinal.department.OutOfHRMS[index].selected;
+    if (this.listSyncFinal.department.OutOfHRMS[index].selected == false) {
+      this.listSynchonize.departments.outOfHRMS.splice(index, 1);
       this.selectedDepOutAll = false;
     } else {
-      this.listSyncFinal.departments.OutOfHRMS[index].selected = true;
-      const check = this.listItemSynch.department.OutOfHRMS.find(x => x.selected == false);
+      this.listSynchonize.departments.outOfHRMS.push(this.listItemSynch.departments.OutOfHRMSDep[index]);
+      const check = this.listSyncFinal.department.OutOfHRMS.find(x => x.selected == false);
       console.log(check);
       if (!check) {
         this.selectedDepOutAll = true;
@@ -364,65 +378,70 @@ export class AppHeaderComponent {
   }
 
   // select emp match
-  selectAllEmpMatch() {
-    console.log(this.listItemSynch.employee.matchedEmployee);
+  selectAllEmpMatch(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedEmpMatchAll = true;
+    }
     if (this.selectedEmpMatchAll) {
-      this.listItemSynch.employee.matchedEmployee.forEach((e, index) => {
+      this.listSyncFinal.employee.matchedEmployee.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.employees.matchedEmployee[index].selected = true;
+        this.listSynchonize.employees.matchedEmployee.push(this.listItemSynch.employees.matchedEmployee[index]);
       });
     }
     else {
-      this.listItemSynch.employee.matchedEmployee.forEach((e, index) => {
+      this.listSynchonize.employees.matchedEmployee = [];
+      this.listSyncFinal.employee.matchedEmployee.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.employees.matchedEmployee[index].selected = false;
       });
     }
   }
 
   checkSelectedEmpMatch(id) {
-    var index = this.listItemSynch.employee.matchedEmployee.findIndex(x => x.id == id);
-    this.listItemSynch.employee.matchedEmployee[index].selected = !this.listItemSynch.employee.matchedEmployee[index].selected;
-    if (this.listItemSynch.employee.matchedEmployee[index].selected == false) {
-      console.log(this.listItemSynch.employee.matchedEmployee[index].selected);
-      this.listSyncFinal.employees.matchedEmployee[index].selected = false;
+    var index = this.listSyncFinal.employee.matchedEmployee.findIndex(x => x.id == id);
+    this.listSyncFinal.employee.matchedEmployee[index].selected = !this.listSyncFinal.employee.matchedEmployee[index].selected;
+    if (this.listSyncFinal.employee.matchedEmployee[index].selected == false) {
+      this.listSynchonize.employees.matchedEmployee.splice(index, 1);
       this.selectedEmpMatchAll = false;
     } else {
-      this.listSyncFinal.employees.matchedEmployee[index].selected = true;
-      const check = this.listItemSynch.employee.matchedEmployee.find(x => x.selected == false);
-      console.log(check);
+      this.listSynchonize.employees.matchedEmployee.push(this.listItemSynch.employees.matchedEmployee[index]);
+      const check = this.listSyncFinal.employee.matchedEmployee.find(x => x.selected == false);
       if (!check) {
         this.selectedEmpMatchAll = true;
       }
     }
   }
   // select Emp new
-  selectAllEmpNew() {
-    console.log(this.listItemSynch.employee.newEmployee);
+  selectAllEmpNew(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedEmpNewAll = true;
+    }
     if (this.selectedEmpNewAll) {
-      this.listItemSynch.employee.newEmployee.forEach((e, index) => {
+      this.listSyncFinal.employee.newEmployee.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.employees.newEmployee[index].selected = true;
+        this.listSynchonize.employees.newEmployee.push(this.listItemSynch.employees.newEmployee[index]);
       });
     }
     else {
-      this.listItemSynch.employee.newEmployee.forEach((e, index) => {
+      this.listSynchonize.employees.newEmployee = [];
+      this.listSyncFinal.employee.newEmployee.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.employees.newEmployee[index].selected = false;
       });
     }
   }
 
   checkSelecteEmpNew(id) {
-    var index = this.listItemSynch.employee.newEmployee.findIndex(x => x.id == id);
-    this.listItemSynch.employee.newEmployee[index].selected = !this.listItemSynch.employee.newEmployee[index].selected;
-    if (this.listItemSynch.employee.newEmployee[index].selected == false) {
-      console.log(this.listItemSynch.employee.newEmployee[index].selected);
-      this.listSyncFinal.employees.newEmployee[index].selected = false;
+    var index = this.listSyncFinal.employee.newEmployee.findIndex(x => x.id == id);
+    this.listSyncFinal.employee.newEmployee[index].selected = !this.listSyncFinal.employee.newEmployee[index].selected;
+    console.log(this.listSyncFinal.employee.newEmployee[index].selected);
+    if (this.listSyncFinal.employee.newEmployee[index].selected == false) {
+      console.log(this.listSynchonize.employees.newEmployee);
+      console.log(index);
+      this.listSynchonize.employees.newEmployee.splice(index, 1);
+      console.log(this.listSynchonize.employees.newEmployee);
       this.selectedEmpNewAll = false;
     } else {
-      this.listSyncFinal.employees.newEmployee[index].selected = true;
-      const check = this.listItemSynch.employee.newEmployee.find(x => x.selected == false);
+      this.listSynchonize.employees.newEmployee.push(this.listItemSynch.employees.newEmployee[index]);
+      const check = this.listSyncFinal.employee.newEmployee.find(x => x.selected == false);
       console.log(check);
       if (!check) {
         this.selectedEmpNewAll = true;
@@ -430,32 +449,34 @@ export class AppHeaderComponent {
     }
   }
   // select Emp out
-  selectAllEmpOut() {
-    console.log(this.listItemSynch.employee.outOfHRMS);
+  selectAllEmpOut(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedEmpOutAll = true;
+    }
     if (this.selectedEmpOutAll) {
-      this.listItemSynch.employee.outOfHRMS.forEach((e, index) => {
+      this.listSyncFinal.employee.outOfHRMS.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.employees.outOfHRMS[index].selected = true;
+        this.listSynchonize.employees.outOfHRMS.push(this.listSyncFinal.employee.outOfHRMS[index]);
       });
     }
     else {
-      this.listItemSynch.employee.outOfHRMS.forEach((e, index) => {
+
+      this.listSynchonize.employees.outOfHRMS = [];
+      this.listSyncFinal.employee.outOfHRMS.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.employees.outOfHRMS[index].selected = false;
       });
     }
   }
 
   checkSelectedEmpOut(id) {
-    var index = this.listItemSynch.employee.outOfHRMS.findIndex(x => x.id == id);
-    this.listItemSynch.employee.outOfHRMS[index].selected = !this.listItemSynch.employee.outOfHRMS[index].selected;
-    if (this.listItemSynch.employee.outOfHRMS[index].selected == false) {
-      console.log(this.listItemSynch.employee.outOfHRMS[index].selected);
-      this.listSyncFinal.employees.outOfHRMS[index].selected = false;
+    var index = this.listSyncFinal.employee.outOfHRMS.findIndex(x => x.id == id);
+    this.listSyncFinal.employee.outOfHRMS[index].selected = !this.listSyncFinal.employee.outOfHRMS[index].selected;
+    if (this.listSyncFinal.employee.outOfHRMS[index].selected == false) {
+      this.listSynchonize.employees.outOfHRMS.splice(index, 1);
       this.selectedEmpOutAll = false;
     } else {
-      this.listSyncFinal.employees.outOfHRMS[index].selected = true;
-      const check = this.listItemSynch.employee.outOfHRMS.find(x => x.selected == false);
+      this.listSynchonize.employees.outOfHRMS.push(this.listSyncFinal.employee.outOfHRMS[index]);
+      const check = this.listSyncFinal.employee.outOfHRMS.find(x => x.selected == false);
       console.log(check);
       if (!check) {
         this.selectedEmpOutAll = true;
@@ -464,31 +485,32 @@ export class AppHeaderComponent {
   }
 
   // select team match
-  selectAllTeamMatch() {
-    console.log(this.listItemSynch.team.matchedTeam);
+  selectAllTeamMatch(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedTeamMatchAll = true;
+    }
     if (this.selectedTeamMatchAll) {
-      this.listItemSynch.team.matchedTeam.forEach((e, index) => {
+      this.listSyncFinal.team.matchedTeam.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.teams.matchedTeam[index].selected = true;
+        this.listSynchonize.teams.matchedTeam.push(this.listSyncFinal.team.matchedTeam[index]);
       });
     }
     else {
-      this.listItemSynch.team.matchedTeam.forEach((e, index) => {
+      this.listSynchonize.teams.matchedTeam = [];
+      this.listSyncFinal.team.matchedTeam.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.teams.matchedTeam[index].selected = false;
       });
     }
   }
   checkSelectedTeamMatch(id) {
-    var index = this.listItemSynch.team.matchedTeam.findIndex(x => x.id == id);
-    this.listItemSynch.team.matchedTeam[index].selected = !this.listItemSynch.team.matchedTeam[index].selected;
-    if (this.listItemSynch.team.matchedTeam[index].selected == false) {
-      console.log(this.listItemSynch.team.matchedTeam[index].selected);
-      this.listSyncFinal.teams.matchedTeam[index].selected = false;
+    var index = this.listSyncFinal.team.matchedTeam.findIndex(x => x.id == id);
+    this.listSyncFinal.team.matchedTeam[index].selected = !this.listSyncFinal.team.matchedTeam[index].selected;
+    if (this.listSyncFinal.team.matchedTeam[index].selected == false) {
+      this.listSynchonize.teams.matchedTeam.splice(index, 1);
       this.selectedTeamMatchAll = false;
     } else {
-      this.listSyncFinal.teams.matchedTeam[index].selected = true;
-      const check = this.listItemSynch.team.matchedTeam.find(x => x.selected == false);
+      this.listSynchonize.teams.matchedTeam.push(this.listSyncFinal.team.matchedTeam[index]);
+      const check = this.listSyncFinal.team.matchedTeam.find(x => x.selected == false);
       console.log(check);
       if (!check) {
         this.selectedTeamMatchAll = true;
@@ -497,65 +519,66 @@ export class AppHeaderComponent {
   }
 
   // select team new
-  selectAllTeamNew() {
-    console.log(this.listItemSynch.team.newTeam);
+  selectAllTeamNew(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedTeamNewAll = true;
+    }
     if (this.selectedTeamNewAll) {
-      this.listItemSynch.team.newTeam.forEach((e, index) => {
+      this.listSyncFinal.team.newTeam.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.teams.newTeam[index].selected = true;
+        this.listSynchonize.teams.newTeam.push(this.listSyncFinal.team.newTeam[index]);
       });
     }
     else {
-      this.listItemSynch.team.newTeam.forEach((e, index) => {
+      this.listSynchonize.teams.newTeam = [];
+      this.listSyncFinal.team.newTeam.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.teams.newTeam[index].selected = false;
       });
     }
   }
 
-  checkSelecteTeamNew(id) {
-    var index = this.listItemSynch.team.newTeam.findIndex(x => x.id == id);
-    this.listItemSynch.team.newTeam[index].selected = !this.listItemSynch.team.newTeam[index].selected;
-    if (this.listItemSynch.team.newTeam[index].selected == false) {
-      console.log(this.listItemSynch.team.newTeam[index].selected);
-      this.listSyncFinal.teams.newTeam[index].selected = false;
+  checkSelectedTeamNew(id) {
+    var index = this.listSyncFinal.team.newTeam.findIndex(x => x.id == id);
+    this.listSyncFinal.team.newTeam[index].selected = !this.listSyncFinal.team.newTeam[index].selected;
+    if (this.listSyncFinal.team.newTeam[index].selected == false) {
+      this.listSynchonize.teams.newTeam.splice(index, 1);
       this.selectedTeamNewAll = false;
     } else {
-      this.listSyncFinal.teams.newTeam[index].selected = true;
-      const check = this.listItemSynch.team.newTeam.find(x => x.selected == false);
-      console.log(check);
+      this.listSynchonize.teams.newTeam.push(this.listSyncFinal.team.newTeam[index]);
+      const check = this.listSyncFinal.team.newTeam.find(x => x.selected == false);
       if (!check) {
         this.selectedTeamNewAll = true;
       }
     }
   }
   // select Team out
-  selectAllTeamOut() {
-    console.log(this.listItemSynch.team.outOfHRMS);
+  selectAllTeamOut(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedTeamOutAll = true;
+    }
     if (this.selectedTeamOutAll) {
-      this.listItemSynch.team.outOfHRMS.forEach((e, index) => {
+      this.listSyncFinal.team.outOfHRMS.forEach((e, index) => {
         e.selected = true;
-        this.listSyncFinal.teams.outOfHRMS[index].selected = true;
+        this.listSynchonize.teams.outOfHRMS.push(this.listSyncFinal.team.outOfHRMS[index]);
       });
     }
     else {
-      this.listItemSynch.team.outOfHRMS.forEach((e, index) => {
+      this.listSynchonize.teams.outOfHRMS = [];
+      this.listSyncFinal.team.outOfHRMS.forEach((e, index) => {
         e.selected = false;
-        this.listSyncFinal.teams.outOfHRMS[index].selected = false;
       });
     }
   }
 
   checkSelectedTeamOut(id) {
-    var index = this.listItemSynch.team.outOfHRMS.findIndex(x => x.id == id);
-    this.listItemSynch.team.outOfHRMS[index].selected = !this.listItemSynch.team.outOfHRMS[index].selected;
-    if (this.listItemSynch.team.outOfHRMS[index].selected == false) {
-      console.log(this.listItemSynch.team.outOfHRMS[index].selected);
-      this.listSyncFinal.teams.outOfHRMS[index].selected = false;
+    var index = this.listSyncFinal.team.outOfHRMS.findIndex(x => x.id == id);
+    this.listSyncFinal.team.outOfHRMS[index].selected = !this.listSyncFinal.team.outOfHRMS[index].selected;
+    if (this.listSyncFinal.team.outOfHRMS[index].selected == false) {
+      this.listSynchonize.teams.outOfHRMS.splice(index, 1);
       this.selectedTeamOutAll = false;
     } else {
-      this.listSyncFinal.teams.outOfHRMS[index].selected = true;
-      const check = this.listItemSynch.team.outOfHRMS.find(x => x.selected == false);
+      this.listSynchonize.teams.outOfHRMS.push(this.listSyncFinal.team.outOfHRMS[index]);
+      const check = this.listSyncFinal.team.outOfHRMS.find(x => x.selected == false);
       console.log(check);
       if (!check) {
         this.selectedTeamOutAll = true;
@@ -564,4 +587,45 @@ export class AppHeaderComponent {
   }
 
 
+  rowNewSelected(item) {
+    if (this.listNewEmp.length > 0) {
+      if (this.listNewEmp[0].id === item.id) {
+        this.listNewEmp = [];
+      } else {
+        this.listNewEmp[0] = item;
+      }
+    } else {
+      this.listNewEmp.push(item);
+    }
+    console.log(this.listNewEmp);
+  }
+
+  rowOutSelected(item) {
+    if (this.listOutEmp.length > 0) {
+      if (this.listOutEmp[0].id === item.id) {
+        this.listOutEmp = [];
+      } else {
+        this.listOutEmp[0] = item;
+      }
+    } else {
+      console.log(item);
+      this.listOutEmp.push(item);
+    }
+    console.log(this.listOutEmp);
+  }
+
+  matchNewAndOut() {
+    this.listNewEmp[0]['gsuiteId'] = this.listOutEmp[0].id;
+    const index_new: number = this.listSyncFinal.employee.newEmployee.indexOf(this.listNewEmp[0]);
+    if (index_new !== -1) {
+      this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
+    }
+    const index_out: number = this.listSyncFinal.employee.outOfHRMS.indexOf(this.listOutEmp[0]);
+    if (index_out !== -1) {
+      this.listSyncFinal.employee.outOfHRMS.splice(index_out, 1);
+    }
+    this.listSyncFinal.employee.matchedEmployee.push(this.listNewEmp[0]);
+    this.listNewEmp = [];
+    this.listOutEmp = [];
+  }
 }
