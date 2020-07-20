@@ -9,6 +9,9 @@ export class SignatureService {
     // URL = 'http://localhost:3000/api/';
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
+    sendMailRulesChanges(username) {
+        return this.httpClient.get(this.URL + AppSettings.SENDMAILRULESCHANGES + username)
+    }
     sendMailRemindEmployees(username) {
         return this.httpClient.get(this.URL + AppSettings.SENDMAILREMIND + username)
     }

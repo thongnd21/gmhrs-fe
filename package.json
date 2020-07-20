@@ -30,9 +30,8 @@
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
     "@swimlane/ngx-charts": "^13.0.2",
     "@swimlane/ngx-datatable": "^16.0.3",
-    "angularx-qrcode": "^2.3.4",
     "angular-email-editor": "^0.7.1",
-    "angular2-datatable": "^0.6.0",
+    "angularx-qrcode": "^2.3.4",
     "asn1": "^0.2.4",
     "bootstrap": "^4.5.0",
     "chartist": "^0.11.3",
@@ -43,9 +42,10 @@
     "moment": "^2.26.0",
     "ng-chartist": "4.1.0",
     "ng-lazyload-image": "^8.0.1",
-    "ng-zorro-antd": "^9.2.2",
     "ng-otp-input": "^1.7.1",
+    "ng-zorro-antd": "^9.2.2",
     "ngx-custom-validators": "^9.1.0",
+    "ngx-json-viewer": "2.2.0",
     "ngx-toastr": "^11.1.0",
     "node-sass": "^4.14.1",
     "rxjs": "^6.5.4",
@@ -54,8 +54,7 @@
     "tslib": "^1.10.0",
     "typescript": "3.7.5",
     "websocket": "^1.0.31",
-    "zone.js": "~0.10.2",
-    "ngx-json-viewer": "2.2.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.901.7",

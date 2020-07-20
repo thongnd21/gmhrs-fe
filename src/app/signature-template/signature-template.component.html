@@ -16,19 +16,19 @@
                 </ng-container>
                 <button nz-button style="background-color: coral; border: coral; margin-left: 5mm;" [nzType]="'primary'"
                     (click)="showModal()"><span>Insert Image</span></button>
-                <nz-modal style="display: inline-block;" [(nzVisible)]="insertImgModel" nzTitle="Insert Image"
-                    (nzOnCancel)="handleCancelModel()" (nzOnOk)="handleOkModel()">
+                <nz-modal style="display: inline-flex;" [(nzVisible)]="insertImgModel" nzTitle="Insert Image"
+                    (nzOnCancel)="handleCancelModel()" (nzOnOk)="insertImghandleOkModel()">
                     <input nz-input placeholder="Paste your image link" [(ngModel)]="imageLink" />
                     <input type="text" disabled nz-input placeholder="Width"
-                        style="width: 80px; border-left: 1px; pointer-events: none; background-color: rgb(255, 255, 255);" />
-                    <nz-input-number [(ngModel)]="imgWidth" [nzMin]="1" [nzMax]="400" [nzStep]="1"
-                        [nzFormatter]="formatterpx" [nzParser]="parserpx"></nz-input-number>
+                        style="width: 25%; border-left: 1px; pointer-events: none; background-color: white;" />
+                    <nz-input-number style="width: 25%;" [(ngModel)]="imgWidth" [nzMin]="1" [nzMax]="400" [nzStep]="1">
+                    </nz-input-number>
                     <input type="text" disabled nz-input placeholder="Heigh"
-                        style="width: 80px; border-left: 1px; pointer-events: none; background-color: rgb(255, 255, 255);" />
-                    <nz-input-number [(ngModel)]="imgHeigh" [nzMin]="1" [nzMax]="400" [nzStep]="1"
-                        [nzFormatter]="formatterpx" [nzParser]="parserpx"></nz-input-number>
+                        style="width: 25%; border-left: 1px; pointer-events: none; background-color: white;" />
+                    <nz-input-number style="width: 25%;" [(ngModel)]="imgHeigh" [nzMin]="1" [nzMax]="400" [nzStep]="1">
+                    </nz-input-number>
                     <img [ngStyle]="{'width':imgWidth + 'px'}" [ngStyle]="{'height':imgHeigh + 'px'}"
-                        style="width: 100%; " [src]="imageLink" />
+                        style="width: 100%; height: 100%;" [src]="imageLink" alt="" />
                 </nz-modal>
                 <button nz-button style="background-color: darkblue; border: darkblue; margin-left: 5mm;"
                     (click)="loadReview()" nzType="primary">Load review</button>
@@ -44,9 +44,9 @@
                     </nz-alert>
                 </nz-modal>
             </div>
-            <div style="margin-top: 2cm;">
-                <angular-editor style="outline-color: white;" id="editor1" [(ngModel)]="htmlContent"
-                    [config]="editorConfig">
+            <div style="margin-top: 1cm;">
+                <angular-editor (focus)="select($event)" style="outline-color: white;" id="editor1"
+                    [(ngModel)]="htmlContent" [config]="editorConfig">
                 </angular-editor>
             </div>
 
@@ -78,13 +78,15 @@
             </p>
             <br />
             <nz-input-group nzCompact>
-                <input type="text" readonly nz-input placeholder="Input range of signature length"
-                    style="width: 23%;" />
+                <input type="text" disabled readonly nz-input placeholder="Input range of signature length"
+                    style="width: 23%; pointer-events: none; background-color: white" />
+                <input type="text" disabled nz-input placeholder="Minimum length"
+                    style="width: 150px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
                 <nz-input-number [(ngModel)]="rules.lengthRule.minLength" [nzMin]="1" [nzMax]="10000"
                     style="width:100px; text-align: center;">
                 </nz-input-number>
-                <input type="text" disabled nz-input placeholder="~"
-                    style="width: 30px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
+                <input type="text" disabled nz-input placeholder="Maximum length"
+                    style="width: 150px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
                 <nz-input-number [nzMin]="1" [nzMax]="10000" [(ngModel)]="rules.lengthRule.maxLength"
                     style="width: 100px; text-align: center; border-left: 0px;">
                 </nz-input-number>
@@ -108,8 +110,9 @@
                             </nz-select>
                         </td>
                         <td>
-                            <textarea nzAutosize placeholder="Input content" type="text" nz-input
-                                (click)="startEdit(data.id)" [(ngModel)]="data.content" (blur)="stopEdit()"></textarea>
+                            <textarea (select)="select($event)" nzAutosize placeholder="Input content" type="text"
+                                nz-input (click)="startEdit(data.id); select($event)" [(ngModel)]="data.content"
+                                (blur)="stopEdit()"></textarea>
                         </td>
                         <td>
                             <a style="color: red;" (click)="deleteRow(data.id)">Delete</a>
@@ -126,11 +129,13 @@
             </nz-modal>
             <button nz-tooltip nzTooltipTitle="prompt text" [disabled]="isDisableSaveRule" nz-button
                 style="margin-right: 1cm;" (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
-                nzType="primary">Save and
-                notify to all emloyees</button>
-            <button nz-tooltip nzTooltipTitle="prompt text" [disabled]="isDisableSaveRule" nz-button
-                style="margin-right: 1cm;" (click)="getListWrongSignature()"
-                [nzLoading]="isShowListWrongSignatureLoading" nzType="primary">Show list wrong signature
+                nzType="primary">Save</button>
+            <button nz-tooltip [disabled]="isDisableSaveRule" nz-button style="margin-right: 1cm;"
+                (click)="showConfirmNotifySignatureRules()" [nzLoading]="isSendNotifyRulesLoading" nzType="primary">
+                Notify to all emloyees</button>
+            <button nz-tooltip [disabled]="isDisableSaveRule" nz-button style="margin-right: 1cm;"
+                (click)="getListWrongSignature()" [nzLoading]="isShowListWrongSignatureLoading" nzType="primary">Show
+                list wrong signature
                 employee</button>
         </mat-tab>
     </mat-tab-group>

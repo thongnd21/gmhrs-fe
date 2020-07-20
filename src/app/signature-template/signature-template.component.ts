@@ -42,8 +42,6 @@ export class SignatureTemplateComponent implements OnInit {
   topCenterPosition: NzPlacementType = 'topCenter';
   imgWidth = 300;
   imgHeigh = 100;
-  formatterpx = (value: number) => `${value} px`;
-  parserpx = (value: string) => value.replace(' px', '');
   imageLink = '';
   insertImgModel = false;
   showCheckErrModel = false;
@@ -56,6 +54,7 @@ export class SignatureTemplateComponent implements OnInit {
     },
     listRule: null
   };
+  isSendNotifyRulesLoading = false;
   isShowListWrongSignatureLoading = false;
   isSaveRulesLoading = false;
   isSaveTemplateLoading = false;
@@ -154,7 +153,29 @@ export class SignatureTemplateComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private modal: NzModalService,
   ) { }
+  select(event) {
+    const start = event.target.selectionStart;
+    const end = event.target.selectionEnd;
+    console.log(start + ', ' + end)
+  }
+  formatNumber(value: string): string {
+    const stringValue = `${value}`;
+    const list = stringValue.split('.');
+    const prefix = list[0].charAt(0) === '-' ? '-' : '';
+    let num = prefix ? list[0].slice(1) : list[0];
+    let result = '';
+    while (num.length > 3) {
+      result = `,${num.slice(-3)}${result}`;
+      num = num.slice(0, num.length - 3);
+    }
+    if (num) {
+      result = num + result;
+    }
+    return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+  }
   sendMailRemind(): void {
+    this.handleCloseModel();
+    this.isShowListWrongSignatureLoading = true;
     let username = localStorage.getItem('username');
     this.signatureService.sendMailRemindEmployees(username).subscribe(
       (res) => {
@@ -163,6 +184,7 @@ export class SignatureTemplateComponent implements OnInit {
         } else {
           this.toast.error('Some Error!')
         }
+        this.isShowListWrongSignatureLoading = false;
       }
     )
   }
@@ -172,15 +194,27 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getListWrongSignature(username).subscribe(
       (res: any) => {
         console.log(res);
-        this.listWrongSignature = res;
-        this.showListWrongSignature = true;
+        if (res.length === 0) {
+          this.toast.success('There is not employees wrong signature!', 'Wrong signature status', { disableTimeOut: true });
+        } else {
+          this.listWrongSignature = res;
+          this.showListWrongSignature = true;
+        }
         this.isShowListWrongSignatureLoading = false;
       })
+  }
+  showConfirmNotifySignatureRules(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Do you Want to send notify mail?</i>',
+      nzContent: '<b>It will send mail notify to all employees by company gmail.</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.sendMailNotifyRules()
+    });
   }
   showConfirmSaveSignatureRules(): void {
     this.modal.confirm({
       nzTitle: '<i>Do you Want to Save this signature rules?</i>',
-      nzContent: '<b>If you Save this signature rules, it will save signature rule to database and notify to all employees by company gmail.</b>',
+      nzContent: '<b>If you Save this signature rules, it will save signature rule to database.</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.submitSignatureRules()
     });
@@ -201,8 +235,26 @@ export class SignatureTemplateComponent implements OnInit {
       nzOnOk: () => this.submitSignature()
     });
   }
+  sendMailNotifyRules(): void {
+    this.isSendNotifyRulesLoading = true;
+    let username = localStorage.getItem('username');
+    this.signatureService.sendMailRulesChanges(username).subscribe(
+      (res) => {
+        if (res) {
+          this.toast.success('Send mail notify to all employees success!')
+        } else {
+          this.toast.error('Some error occurs!')
+        }
+        this.isSendNotifyRulesLoading = false;
+      }
+    )
+  }
   showRulesCheckModel(): void {
-    this.showCheckErrModel = true;
+    if (this.listRulesCheckErr.length !== 0) {
+      this.showCheckErrModel = true;
+    } else {
+      this.toast.success('There is not error occurs!');
+    }
   }
   handleCloseModel(): void {
     this.showCheckErrModel = false;
@@ -211,10 +263,16 @@ export class SignatureTemplateComponent implements OnInit {
   showModal(): void {
     this.insertImgModel = true;
   }
-  handleOkModel(): void {
-    this.htmlContent += "<img style='width: " + this.imgWidth + "px; height: " + this.imgHeigh + "px;' src='" + this.imageLink + "' />";
-    this.insertImgModel = false;
-    this.imageLink = '';
+  insertImghandleOkModel(): void {
+    if (this.imageLink === '') {
+      this.insertImgModel = false;
+    } else {
+      this.htmlContent += "<img style='width: " + this.imgWidth + "px; height: " + this.imgHeigh + "px;' src='" + this.imageLink + "' />";
+      console.log('htmlContent: ' + this.htmlContent);
+      this.insertImgModel = false;
+      this.imageLink = '';
+    }
+
   }
   handleCancelModel(): void {
     this.insertImgModel = false;
@@ -230,7 +288,7 @@ export class SignatureTemplateComponent implements OnInit {
   loadReview(): void {
     this.htmlContentReview = this.htmlContent;
     console.log('htmlContentReview: ' + this.htmlContentReview);
-
+    console.log('htmlContent: ' + this.htmlContent);
     let firstname = this.infoToReview.first_name;
     let lastname = this.infoToReview.last_name;
     let phone = this.infoToReview.phone;
@@ -261,7 +319,7 @@ export class SignatureTemplateComponent implements OnInit {
         if (res) {
           this.toast.success('Save signature rules success!');
         } else {
-          this.toast.error('Save failed!')
+          this.toast.error('Please check signature length!');
         }
         setTimeout(() => {
           this.isSaveRulesLoading = false;
@@ -308,8 +366,8 @@ export class SignatureTemplateComponent implements OnInit {
         } else {
           for (let mes of res) {
             this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
-            this.listRulesCheckErr = res;
           }
+          this.listRulesCheckErr = res;
         }
         setTimeout(() => {
           this.isSaveTemplateLoading = false;
@@ -361,14 +419,14 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getInfoToReview(username).subscribe(
       async (res) => {
         this.infoToReview = res;
-        console.log('Info to review: ' + res);
+        // console.log('Info to review: ' + res);
         if (this.infoToReview != null) {
           this.signatureService.getSignatureTemplate(username).subscribe(
             (res: any) => {
               if (res.status) {
                 this.htmlContent = res.html;
                 this.htmlContentReview = this.htmlContent;
-                console.log('htmlContentReview: ' + this.htmlContentReview);
+                // console.log('htmlContentReview: ' + this.htmlContentReview);
                 let firstname = this.infoToReview.first_name;
                 let lastname = this.infoToReview.last_name;
                 let phone = this.infoToReview.phone;
@@ -389,7 +447,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getSignatureTemplateRules(username).subscribe(
       (res) => {
         let rulesJson: any = res;
-        console.log('rulesJson: ' + rulesJson);
+        // console.log('rulesJson: ' + rulesJson);
         if (rulesJson) {
           this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
           this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
@@ -406,9 +464,6 @@ export class SignatureTemplateComponent implements OnInit {
           });
           // console.log(this.rules);
         }
-        if (this.i === 0) {
-          this.addRow();
-        }
       }
     );
   }
@@ -417,5 +472,11 @@ export class SignatureTemplateComponent implements OnInit {
     this.loadRules();
 
   }
+  // ngOnDestroy() {
+  //   if (this.router) {
+  //     this.router.unsubscribe();
+  //   }
+  //   document.body.removeChild(this.elem.nativeElement);
+  // }
 
 }
