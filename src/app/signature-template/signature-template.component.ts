@@ -156,7 +156,7 @@ export class SignatureTemplateComponent implements OnInit {
   select(event) {
     const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
-    console.log(start + ', ' + end)
+    // console.log(start + ', ' + end)
   }
   formatNumber(value: string): string {
     const stringValue = `${value}`;
@@ -193,7 +193,7 @@ export class SignatureTemplateComponent implements OnInit {
     let username = localStorage.getItem('username');
     this.signatureService.getListWrongSignature(username).subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
         if (res.length === 0) {
           this.toast.success('There is not employees wrong signature!', 'Wrong signature status', { disableTimeOut: true });
         } else {
@@ -287,8 +287,8 @@ export class SignatureTemplateComponent implements OnInit {
   }
   loadReview(): void {
     this.htmlContentReview = this.htmlContent;
-    console.log('htmlContentReview: ' + this.htmlContentReview);
-    console.log('htmlContent: ' + this.htmlContent);
+    // console.log('htmlContentReview: ' + this.htmlContentReview);
+    // console.log('htmlContent: ' + this.htmlContent);
     let firstname = this.infoToReview.first_name;
     let lastname = this.infoToReview.last_name;
     let phone = this.infoToReview.phone;
@@ -302,16 +302,16 @@ export class SignatureTemplateComponent implements OnInit {
   }
   stopEdit(): void {
     this.editId = null;
-    console.log(this.listOfRules);
+    // console.log(this.listOfRules);
     this.rules.listRule = this.listOfRules;
-    console.log(this.rules);
+    // console.log(this.rules);
 
   }
   submitSignatureRules(): void {
     this.isSaveRulesLoading = true;
     this.rules.listRule = this.listOfRules;
     let username = localStorage.getItem('username');
-    console.log(JSON.stringify(this.rules));
+    // console.log(JSON.stringify(this.rules));
     let template = new Template;
     template.html = JSON.stringify(this.rules);
     this.signatureService.saveSignatureTemplateRules(username, template).subscribe(
@@ -334,7 +334,7 @@ export class SignatureTemplateComponent implements OnInit {
     template.html = this.htmlContent;
     this.signatureService.updateSignatureForAllEmployees(username, template).subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
 
         if (res === true) {
           this.toast.success('Update signature to all employees success!');
