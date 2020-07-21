@@ -31,6 +31,11 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
     imports: [
@@ -63,6 +68,11 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
         NzInputNumberModule,
         NzDropDownModule,
         NzSelectModule,
+        NzModalModule,
+        NzBadgeModule,
+        NzAffixModule,
+        NzAlertModule,
+        NzToolTipModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]

@@ -9,12 +9,25 @@ export class SignatureService {
     // URL = 'http://localhost:3000/api/';
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
+    sendMailRulesChanges(username) {
+        return this.httpClient.get(this.URL + AppSettings.SENDMAILRULESCHANGES + username)
+    }
+    sendMailRemindEmployees(username) {
+        return this.httpClient.get(this.URL + AppSettings.SENDMAILREMIND + username)
+    }
+    getListWrongSignature(username) {
+        return this.httpClient.get(this.URL + AppSettings.GETLISTWRONGSIGANTURE + username);
+    }
+
+    updateSignatureForAllEmployees(username, template) {
+        return this.httpClient.post(this.URL + AppSettings.UPDATESIGNATUREALL + username, template);
+    }
 
     getInfoToReview(username) {
         return this.httpClient.get(this.URL + AppSettings.GETINFOTOREVIEW + username);
     }
 
-    sendSignatureTemplate(username, template) {
+    saveSignatureTemplate(username, template) {
         return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATE + username, template);
     }
 
@@ -22,7 +35,7 @@ export class SignatureService {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURE + username);
     }
 
-    sendSignatureTemplateRules(username, rules) {
+    saveSignatureTemplateRules(username, rules) {
         return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATERULES + username, rules);
     }
 

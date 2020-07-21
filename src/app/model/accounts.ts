@@ -11,4 +11,5 @@ export class AccountCompanyModel {
     connection_database: string
     is_schedule : boolean
     schedule_time: string
+    primary_email: string
 }
