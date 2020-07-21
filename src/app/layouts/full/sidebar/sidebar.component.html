@@ -30,6 +30,13 @@
 </div>
 <mat-nav-list appAccordion>
     <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/']" *ngIf="role === 2">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dasdboard</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+    <mat-list-item appAccordionLink routerLinkActive="selected">
         <a class="" appAccordionToggle [routerLink]="['/employee']" *ngIf="role === 2">
             <mat-icon>account_circle</mat-icon>
             <span>Employee</span>
