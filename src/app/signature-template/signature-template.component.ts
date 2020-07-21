@@ -37,9 +37,11 @@ class Template {
 })
 export class SignatureTemplateComponent implements OnInit {
 
-  isDisableSaveRule = false;
+  isSetPrimaryDisable = false;
+  isSaveRuleDisable = false;
   listRulesCheckErr = new Array();
   listWrongSignature = new Array();
+  listSignatureTemplate = new Array();
   topCenterPosition: NzPlacementType = 'topCenter';
   imgWidth = 300;
   imgHeigh = 100;
@@ -47,6 +49,7 @@ export class SignatureTemplateComponent implements OnInit {
   signatureName = '';
   insertImgModel = false;
   showCheckErrModel = false;
+  showListSignatureTemplate = false;
   showListWrongSignature = false;
   infoToReview: any;
   rules: Rules = {
@@ -56,6 +59,9 @@ export class SignatureTemplateComponent implements OnInit {
     },
     listRule: null
   };
+  isDeleteTemplateLoading = false;
+  isSetPrimaryTemplateLoading = false;
+  isGetAllSignatureLoading = false;
   isSendNotifyRulesLoading = false;
   isShowListWrongSignatureLoading = false;
   isSaveRulesLoading = false;
@@ -155,10 +161,33 @@ export class SignatureTemplateComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private modal: NzModalService,
   ) { }
+  handleCloseModel(): void {
+    this.showCheckErrModel = false;
+    this.showListWrongSignature = false;
+    this.showListSignatureTemplate = false;
+  }
   select(event) {
     const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
     // console.log(start + ', ' + end)
+  }
+  setPrimaryTemplate(): void {
+    this.isSetPrimaryTemplateLoading = true;
+    let id = localStorage.getItem('id');
+    let data = new Signature();
+    data.account_id = id;
+    data.name = this.signatureName;
+    this.signatureService.setPrimaryTemplate(data).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.isSetPrimaryDisable = true;
+          this.toast.success(res.message);
+        } else {
+          this.toast.error(res.message);
+        }
+        this.isSetPrimaryTemplateLoading = false;
+      }
+    )
   }
   formatNumber(value: string): string {
     const stringValue = `${value}`;
@@ -232,7 +261,7 @@ export class SignatureTemplateComponent implements OnInit {
   showConfirmSaveSignature(): void {
     this.modal.confirm({
       nzTitle: '<i>Do you Want to Save this signature?</i>',
-      nzContent: '<b>If you Save this signature, it will update all employees signature when the next Synchronize employees infomation is processed.</b>',
+      nzContent: '<b>If name of this signature existed in DB, it will update this siganture template for this name. Else it will create the new one!</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.submitSignature()
     });
@@ -258,10 +287,6 @@ export class SignatureTemplateComponent implements OnInit {
       this.toast.success('There is not error occurs!');
     }
   }
-  handleCloseModel(): void {
-    this.showCheckErrModel = false;
-    this.showListWrongSignature = false;
-  }
   showModal(): void {
     this.insertImgModel = true;
   }
@@ -270,7 +295,7 @@ export class SignatureTemplateComponent implements OnInit {
       this.insertImgModel = false;
     } else {
       this.htmlContent += "<img style='width: " + this.imgWidth + "px; height: " + this.imgHeigh + "px;' src='" + this.imageLink + "' />";
-      console.log('htmlContent: ' + this.htmlContent);
+      // console.log('htmlContent: ' + this.htmlContent);
       this.insertImgModel = false;
       this.imageLink = '';
     }
@@ -377,6 +402,67 @@ export class SignatureTemplateComponent implements OnInit {
       }
     )
   }
+  getSignatureTemplateByName(name: any): void {
+    this.isGetAllSignatureLoading = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.getSignatureTemplateByName(id, name).subscribe(
+      (res: any) => {
+        // console.log('result get by name' + res);
+
+        if (res.status) {
+          this.htmlContent = res.data.content;
+          this.signatureName = res.data.name;
+          this.loadReview();
+          this.showListSignatureTemplate = false;
+          this.isSetPrimaryDisable = res.data.is_primary > 0;
+          this.toast.success('Load sinature name: ' + this.signatureName + ' success!');
+        } else {
+          this.toast.warning(res.message);
+        }
+        this.isGetAllSignatureLoading = false;
+      }
+    )
+  }
+  deleteSignatureTemplateByName(name: any): void {
+    this.isDeleteTemplateLoading = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.deleteSignatureTemplateByName(id, name).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.signatureService.getAllsigantureTemplate(id).subscribe(
+            (res: any) => {
+              if (res.status) {
+                this.listSignatureTemplate = res.data;
+              } else {
+                this.toast.warning(res.message);
+              }
+            }
+          )
+          this.toast.success(res.message);
+        } else {
+          this.toast.warning(res.message);
+        }
+        this.isDeleteTemplateLoading = false;
+      }
+    )
+  }
+  getAllSignature(): void {
+    this.isGetAllSignatureLoading = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.getAllsigantureTemplate(id).subscribe(
+      (res: any) => {
+        // console.log('list siganture: ' + res);
+
+        if (res.status) {
+          this.listSignatureTemplate = res.data;
+          this.showListSignatureTemplate = true;
+        } else {
+          this.toast.warning(res.message);
+        }
+        this.isGetAllSignatureLoading = false;
+      }
+    )
+  }
   addRow(): void {
     this.listOfRules = [
       ...this.listOfRules,
@@ -427,10 +513,11 @@ export class SignatureTemplateComponent implements OnInit {
           this.signatureService.getSignatureTemplate(id).subscribe(
             (res: any) => {
               if (res.status) {
-                console.log('siganture: ' + res);
+                // console.log('siganture: ' + res);
 
                 this.htmlContent = res.data.content;
                 this.signatureName = res.data.name;
+                this.isSetPrimaryDisable = res.data.is_primary > 0;
                 this.htmlContentReview = this.htmlContent;
                 // console.log('htmlContentReview: ' + this.htmlContentReview);
                 let firstname = this.infoToReview.first_name;
