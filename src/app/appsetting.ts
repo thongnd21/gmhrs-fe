@@ -21,4 +21,8 @@ export class AppSettings {
     public static SENDMAILREMIND = 'signature/sendMailRemindEmployees/'
     public static SENDMAILRULESCHANGES = 'signature/sendMailRulesChanges/'
     public static GSUITE = 'gsuite/'
+    public static GETALLSIGNATURETEMPLATE = 'signature/getAllSignatures/'
+    public static GETSIGNATURETEMPLATEBYNAME = 'signature/getSignatureTemplateByName/'
+    public static SETPRIMARYTEMPLATE = 'signature/setPrimaryTemplate/'
+    public static DELETETEMPLATEBYNAME = 'signature/deleteTemplateByName/'
 }
