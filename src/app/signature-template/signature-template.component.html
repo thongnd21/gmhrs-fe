@@ -44,7 +44,10 @@
                     </nz-alert>
                 </nz-modal>
             </div>
-            <div style="margin-top: 1cm;">
+            <nz-input-group style="margin-top: 1cm;" nzAddOnBefore="Signature name">
+                <input type="text" placeholder="Signature name" nz-input [(ngModel)]="signatureName" />
+            </nz-input-group>
+            <div style="margin-top: 1mm;">
                 <angular-editor (focus)="select($event)" style="outline-color: white;" id="editor1"
                     [(ngModel)]="htmlContent" [config]="editorConfig">
                 </angular-editor>

@@ -10,6 +10,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { parseJSON } from 'jquery';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Signature } from '../model/signature';;
 
 
 class Rules {
@@ -43,6 +44,7 @@ export class SignatureTemplateComponent implements OnInit {
   imgWidth = 300;
   imgHeigh = 100;
   imageLink = '';
+  signatureName = '';
   insertImgModel = false;
   showCheckErrModel = false;
   showListWrongSignature = false;
@@ -353,21 +355,21 @@ export class SignatureTemplateComponent implements OnInit {
   }
   submitSignature(): void {
     this.isSaveTemplateLoading = true;
-    let username = localStorage.getItem('username');
-    let template = new Template;
-    template.html = this.htmlContent;
-    this.signatureService.saveSignatureTemplate(username, template).subscribe(
+    let signature = new Signature;
+    let id = localStorage.getItem('id');
+    signature.name = this.signatureName;
+    signature.content = this.htmlContent;
+    signature.account_id = id;
+    this.signatureService.saveSignatureTemplate(id, signature).subscribe(
       (res: any) => {
-        console.log(res);
-
-        if (res === true) {
-          this.toast.success('Save signature success!');
+        if (res.status === true) {
+          this.toast.success(res.message);
           this.listRulesCheckErr = [];
         } else {
-          for (let mes of res) {
+          for (let mes of res.message) {
             this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
           }
-          this.listRulesCheckErr = res;
+          this.listRulesCheckErr = res.message;
         }
         setTimeout(() => {
           this.isSaveTemplateLoading = false;
@@ -416,15 +418,19 @@ export class SignatureTemplateComponent implements OnInit {
   }
   loadTemplate(): void {
     let username = localStorage.getItem('username');
+    let id = localStorage.getItem('id');
     this.signatureService.getInfoToReview(username).subscribe(
       async (res) => {
         this.infoToReview = res;
         // console.log('Info to review: ' + res);
         if (this.infoToReview != null) {
-          this.signatureService.getSignatureTemplate(username).subscribe(
+          this.signatureService.getSignatureTemplate(id).subscribe(
             (res: any) => {
               if (res.status) {
-                this.htmlContent = res.html;
+                console.log('siganture: ' + res);
+
+                this.htmlContent = res.data.content;
+                this.signatureName = res.data.name;
                 this.htmlContentReview = this.htmlContent;
                 // console.log('htmlContentReview: ' + this.htmlContentReview);
                 let firstname = this.infoToReview.first_name;
@@ -434,6 +440,8 @@ export class SignatureTemplateComponent implements OnInit {
                 this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
                 this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
                 this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+              } else {
+                this.toast.warning(res.message);
               }
             }
           );
@@ -443,8 +451,8 @@ export class SignatureTemplateComponent implements OnInit {
 
   }
   loadRules(): void {
-    let username = localStorage.getItem('username');
-    this.signatureService.getSignatureTemplateRules(username).subscribe(
+    let id = localStorage.getItem('id');
+    this.signatureService.getSignatureTemplateRules(id).subscribe(
       (res) => {
         let rulesJson: any = res;
         // console.log('rulesJson: ' + rulesJson);
@@ -472,11 +480,4 @@ export class SignatureTemplateComponent implements OnInit {
     this.loadRules();
 
   }
-  // ngOnDestroy() {
-  //   if (this.router) {
-  //     this.router.unsubscribe();
-  //   }
-  //   document.body.removeChild(this.elem.nativeElement);
-  // }
-
 }
