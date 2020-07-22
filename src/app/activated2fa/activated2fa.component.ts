@@ -12,7 +12,7 @@ import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
   styleUrls: ['./activated2fa.component.css']
 })
 export class Activated2faComponent implements OnInit {
-  otp: any;
+  otp = 0;
   isDisableOTPLoading = false;
 
   constructor(

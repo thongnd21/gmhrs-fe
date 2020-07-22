@@ -20,7 +20,7 @@ import 'rxjs/add/observable/interval';
   styleUrls: ['./check-otp.component.css']
 })
 export class CheckOtpComponent implements OnInit, OnDestroy {
-  otp: any;
+  otp = 0;
   subscription: Subscription;
   isSubmitOTPLoading = false;
 

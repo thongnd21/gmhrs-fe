@@ -1,6 +1,8 @@
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+@import "~ng-zorro-antd/style/index.min.css";
+@import "~ng-zorro-antd/button/style/index.min.css"; 
 
-
-.editable-cell {
+/* .editable-cell {
     position: relative;
     padding: 5px 12px;
     cursor: pointer;
@@ -10,4 +12,9 @@
     border: 1px solid #d9d9d9;
     border-radius: 4px;
     padding: 4px 11px;
-}
+} */
+
+/* button, input[type="button"], input[type="submit"] { 
+    border: none;
+    outline: none;
+}  */
