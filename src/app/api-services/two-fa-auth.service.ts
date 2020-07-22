@@ -11,8 +11,9 @@ export class TwoFaAuthService {
     constructor(private httpClient: HttpClient) { }
 
     checkBypassOtp(username) {
-        console.log(this.URL + AppSettings.CHECKBYPASSOTP);
-        return this.httpClient.get(this.URL + AppSettings.CHECKBYPASSOTP + username);
+        console.log('https://gmhrs-api.herokuapp.com/api/' + AppSettings.CHECKBYPASSOTP);
+        // return this.httpClient.get(this.URL + AppSettings.CHECKBYPASSOTP + username);
+        return this.httpClient.get('https://gmhrs-api.herokuapp.com/api/' + AppSettings.CHECKBYPASSOTP + username);
     }
 
     getQrCode(username) {
@@ -34,11 +35,4 @@ export class TwoFaAuthService {
     check2faStatus(username) {
         return this.httpClient.get(this.URL + AppSettings.CHECK2FASTATUS + username);
     }
-    // updateTeam(team) {    
-    //     return this.httpClient.put(this.URL + AppSettings.TEAM,team);
-    // }
-
-    // getTeamDetail(id){
-    //     return this.httpClient.get(this.URL + AppSettings.TEAM + id);
-    // }
 }
