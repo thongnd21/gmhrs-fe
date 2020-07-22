@@ -36,6 +36,9 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
     imports: [
@@ -73,6 +76,9 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
         NzAffixModule,
         NzAlertModule,
         NzToolTipModule,
+        NzTagModule,
+        NzCollapseModule,
+        NzSpinModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]

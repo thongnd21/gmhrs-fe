@@ -37,6 +37,7 @@ class Template {
 })
 export class SignatureTemplateComponent implements OnInit {
 
+  isSpinning = false;
   isSetPrimaryDisable = false;
   isSaveRuleDisable = false;
   listRulesCheckErr = new Array();
@@ -173,6 +174,7 @@ export class SignatureTemplateComponent implements OnInit {
   }
   setPrimaryTemplate(): void {
     this.isSetPrimaryTemplateLoading = true;
+    this.isSpinning = true;
     let id = localStorage.getItem('id');
     let data = new Signature();
     data.account_id = id;
@@ -186,6 +188,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.error(res.message);
         }
         this.isSetPrimaryTemplateLoading = false;
+        this.isSpinning = false;
       }
     )
   }
@@ -207,6 +210,7 @@ export class SignatureTemplateComponent implements OnInit {
   sendMailRemind(): void {
     this.handleCloseModel();
     this.isShowListWrongSignatureLoading = true;
+    this.isSpinning = true;
     let username = localStorage.getItem('username');
     this.signatureService.sendMailRemindEmployees(username).subscribe(
       (res) => {
@@ -216,11 +220,13 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.error('Some Error!')
         }
         this.isShowListWrongSignatureLoading = false;
+        this.isSpinning = false;
       }
     )
   }
   getListWrongSignature(): void {
     this.isShowListWrongSignatureLoading = true;
+    this.isSpinning = true;
     let username = localStorage.getItem('username');
     this.signatureService.getListWrongSignature(username).subscribe(
       (res: any) => {
@@ -232,7 +238,16 @@ export class SignatureTemplateComponent implements OnInit {
           this.showListWrongSignature = true;
         }
         this.isShowListWrongSignatureLoading = false;
+        this.isSpinning = false;
       })
+  }
+  showConfirmDeleteSiganture(name) {
+    this.modal.confirm({
+      nzTitle: '<i>Are you sure?</i>',
+      nzContent: '<b>If you delete, it will not be recovered!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.deleteSignatureTemplateByName(name)
+    });
   }
   showConfirmNotifySignatureRules(): void {
     this.modal.confirm({
@@ -268,6 +283,7 @@ export class SignatureTemplateComponent implements OnInit {
   }
   sendMailNotifyRules(): void {
     this.isSendNotifyRulesLoading = true;
+    this.isSpinning = true;
     let username = localStorage.getItem('username');
     this.signatureService.sendMailRulesChanges(username).subscribe(
       (res) => {
@@ -277,6 +293,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.error('Some error occurs!')
         }
         this.isSendNotifyRulesLoading = false;
+        this.isSpinning = false;
       }
     )
   }
@@ -336,6 +353,7 @@ export class SignatureTemplateComponent implements OnInit {
   }
   submitSignatureRules(): void {
     this.isSaveRulesLoading = true;
+    this.isSpinning = true;
     this.rules.listRule = this.listOfRules;
     let username = localStorage.getItem('username');
     // console.log(JSON.stringify(this.rules));
@@ -348,14 +366,14 @@ export class SignatureTemplateComponent implements OnInit {
         } else {
           this.toast.error('Please check signature length!');
         }
-        setTimeout(() => {
-          this.isSaveRulesLoading = false;
-        }, 1000);
+        this.isSaveRulesLoading = false;
+        this.isSpinning = false;
       }
     )
   }
   syncSignatureAll(): void {
     this.isUpdatedTemplateLoading = true;
+    this.isSpinning = true;
     let username = localStorage.getItem('username');
     let template = new Template;
     template.html = this.htmlContent;
@@ -372,14 +390,14 @@ export class SignatureTemplateComponent implements OnInit {
             this.listRulesCheckErr = res;
           }
         }
-        setTimeout(() => {
-          this.isUpdatedTemplateLoading = false;
-        }, 1000);
+        this.isUpdatedTemplateLoading = false;
+        this.isSpinning = false;
       }
     )
   }
   submitSignature(): void {
     this.isSaveTemplateLoading = true;
+    this.isSpinning = true;
     let signature = new Signature;
     let id = localStorage.getItem('id');
     signature.name = this.signatureName;
@@ -389,6 +407,9 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status === true) {
           this.toast.success(res.message);
+          if (res.action === 'create') {
+            this.isSetPrimaryDisable = false;
+          }
           this.listRulesCheckErr = [];
         } else {
           for (let mes of res.message) {
@@ -396,19 +417,18 @@ export class SignatureTemplateComponent implements OnInit {
           }
           this.listRulesCheckErr = res.message;
         }
-        setTimeout(() => {
-          this.isSaveTemplateLoading = false;
-        }, 1000);
+        this.isSaveTemplateLoading = false;
+        this.isSpinning = false;
       }
     )
   }
   getSignatureTemplateByName(name: any): void {
     this.isGetAllSignatureLoading = true;
+    this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.getSignatureTemplateByName(id, name).subscribe(
       (res: any) => {
         // console.log('result get by name' + res);
-
         if (res.status) {
           this.htmlContent = res.data.content;
           this.signatureName = res.data.name;
@@ -420,11 +440,13 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.warning(res.message);
         }
         this.isGetAllSignatureLoading = false;
+        this.isSpinning = false;
       }
     )
   }
   deleteSignatureTemplateByName(name: any): void {
     this.isDeleteTemplateLoading = true;
+    this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.deleteSignatureTemplateByName(id, name).subscribe(
       (res: any) => {
@@ -443,11 +465,13 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.warning(res.message);
         }
         this.isDeleteTemplateLoading = false;
+        this.isSpinning = false;
       }
     )
   }
   getAllSignature(): void {
     this.isGetAllSignatureLoading = true;
+    this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.getAllsigantureTemplate(id).subscribe(
       (res: any) => {
@@ -460,6 +484,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.warning(res.message);
         }
         this.isGetAllSignatureLoading = false;
+        this.isSpinning = false;
       }
     )
   }
@@ -503,6 +528,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.listOfRules = this.listOfRules.filter(d => d.id !== id);
   }
   loadTemplate(): void {
+    this.isSpinning = true;
     let username = localStorage.getItem('username');
     let id = localStorage.getItem('id');
     this.signatureService.getInfoToReview(username).subscribe(
@@ -530,6 +556,7 @@ export class SignatureTemplateComponent implements OnInit {
               } else {
                 this.toast.warning(res.message);
               }
+              this.isSpinning = false;
             }
           );
         }
