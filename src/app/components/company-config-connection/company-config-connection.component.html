@@ -53,13 +53,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <button mat-raised-button (click)="onSubmitConection(accessDBForm.value)" color="primary">
+                            <button style="margin-right: 40px;" mat-raised-button
+                                (click)="onSubmitConection(accessDBForm.value)" color="primary"
+                                [disabled]="!disableSaveConnectionStringButton">
                                 Save
                             </button>
-                            <button style="margin: 40px;" mat-raised-button
-                                (click)="onTestConection(accessDBForm.value)" color="primary">
-                                Test Connection
-                            </button>
+                            <div class="button-container mr-6">
+                                <div class="spinner-container" *ngIf="loadingTestConnection">
+                                    <mat-spinner diameter="24"></mat-spinner>
+                                </div>
+                                <button mat-raised-button (click)="onTestConection(accessDBForm.value)" color="primary"
+                                    [disabled]="loadingTestConnection">
+                                    Test Connection
+                                </button>
+                            </div>
+
                         </form>
                     </mat-card-content>
                 </mat-card>
@@ -78,24 +86,32 @@
                                     </div>
                                 </div>
                             </div>
-                            <button [disabled]="!anableButtonSaveAPIEndpoint"
+                            <button [disabled]="!anableButtonSaveAPIEndpoint"  style="margin-right: 40px;"
                                 (click)="onSubmitURLConection(APIEndpointForm.value)" mat-raised-button color="primary">
                                 Save
                             </button>
-                            <button style="margin-left: 40px;" mat-raised-button
-                                (click)="onTestURLConection(APIEndpointForm.value)" color="primary">
-                                Test
-                            </button>
+                            <div class="button-container  mr-6">
+                                <div class="spinner-container" *ngIf="loadingTestAPI">
+                                    <mat-spinner diameter="24"></mat-spinner>
+                                </div>
+                                <button mat-raised-button
+                                    (click)="onTestURLConection(APIEndpointForm.value)" color="primary"
+                                    [disabled]="loadingTestAPI">
+                                    Test
+                                </button>
+                            </div>
+
 
                         </form>
-                        <br/>
+                        <br />
                         <div *ngIf="enableDataAPIResult">
-                            <h1>Employee</h1>
-                            <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
-                            <h1>Department</h1>
-                            <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
-                            <h1>Team</h1>
-                            <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
+                            <ngx-json-viewer *ngIf="employeeValidate==false" [json]="employees"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
+                            <ngx-json-viewer *ngIf="departmentValidate==false" [json]="departments"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
+                            <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Pass</h2>
+                            <ngx-json-viewer *ngIf="teamValidate==false" [json]="teams"></ngx-json-viewer>
                         </div>
                     </mat-card-content>
                 </mat-card>
@@ -112,8 +128,8 @@
                             </mat-form-field>
                             <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
                                 type="file" name="file" style="margin: 40px;" />
-                            <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton" (click)="onTest(responseTestFile,gsuiteCredentialForm.value)"
-                                color="primary">
+                            <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton"
+                                (click)="onTest(responseTestFile,gsuiteCredentialForm.value)" color="primary">
                                 Test Connection
                             </button>
                         </form>
@@ -323,8 +339,7 @@
                 Close
             </button>
             <button mat-flat-button class="col-md-2 ml-2" style="margin-left: 40px;"
-                (click)="upload(gsuiteCredentialForm.value)" color="primary"
-                [disabled] = "gsuiteAuthenStatus">
+                (click)="upload(gsuiteCredentialForm.value)" color="primary" [disabled]="gsuiteAuthenStatus">
                 Upload
             </button>
         </div>
