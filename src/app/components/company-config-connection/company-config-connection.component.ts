@@ -549,6 +549,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         }
       },
       (error) => {
+        this.loadingTestConnection = false;
         this.toast.error("Server is not available!");
       }
     )
