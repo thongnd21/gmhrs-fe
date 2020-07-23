@@ -538,15 +538,19 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
       (res) => {
         const status: any = res;
-        if (status.status == 0) {
-          this.loadingTestConnection = false;
-          this.disableSaveConnectionStringButton = false;
-          this.toast.error("Connection fail!!");
-        } else if (status.status == 200) {
-          this.loadingTestConnection = false;
-          this.disableSaveConnectionStringButton = true;
-          this.toast.success("Database connection success!");
-        }
+        console.log(res);
+        this.loadingTestConnection = false;
+        
+        // if (status.status == 0) {
+        //   this.loadingTestConnection = false;
+        //   this.disableSaveConnectionStringButton = false;
+        //   console.log(res);
+        //   this.toast.error("Connection fail!!");
+        // } else if (status.status == 200) {
+        //   this.loadingTestConnection = false;
+        //   this.disableSaveConnectionStringButton = true;
+        //   this.toast.success("Database connection success!");
+        // }
       },
       (error) => {
         this.loadingTestConnection = false;
