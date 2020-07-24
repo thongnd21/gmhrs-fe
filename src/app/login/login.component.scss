@@ -37,24 +37,24 @@ $topnav-background-color: linear-gradient( #3e5ae8, rgba(255, 11, 11, 0.83));
         border-bottom: 2px solid black;
         box-shadow: none;
     }
-    .rounded-btn {
-        -webkit-border-radius: 50px;
-        border-radius: 50px;
-        color: rgba(255, 255, 255, 0.8);
-        background: $topnav-background-color;
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        font-size: 18px;
-        line-height: 40px;
-        padding: 0 25px;
-    }
-    .rounded-btn:hover,
-    .rounded-btn:focus,
-    .rounded-btn:active,
-    .rounded-btn:visited {
-        color: rgba(255, 255, 255, 1);
-        border: 2px solid rgba(255, 255, 255, 1);
-        outline: none;
-    }
+    // .rounded-btn {
+    //     -webkit-border-radius: 50px;
+    //     border-radius: 50px;
+    //     color: rgba(255, 255, 255, 0.8);
+    //     background: $topnav-background-color;
+    //     border: 2px solid rgba(255, 255, 255, 0.8);
+    //     font-size: 18px;
+    //     line-height: 40px;
+    //     padding: 0 25px;
+    // }
+    // .rounded-btn:hover,
+    // .rounded-btn:focus,
+    // .rounded-btn:active,
+    // .rounded-btn:visited {
+    //     color: rgba(255, 255, 255, 1);
+    //     border: 2px solid rgba(255, 255, 255, 1);
+    //     outline: none;
+    // }
 
     h1 {
         font-weight: 300;
@@ -90,11 +90,6 @@ $topnav-background-color: linear-gradient( #3e5ae8, rgba(255, 11, 11, 0.83));
         border: 2px solid #fff;
     }
 
-    .login{
-        background-color: #fff;
-        border: black 1px solid;
-        border-radius: 5%;
-    }
     .button{
         padding-bottom: 20px;
     }

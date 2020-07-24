@@ -20,7 +20,7 @@ import 'rxjs/add/observable/interval';
   styleUrls: ['./check-otp.component.css']
 })
 export class CheckOtpComponent implements OnInit, OnDestroy {
-  otp = 0;
+  otp = '';
   subscription: Subscription;
   isSubmitOTPLoading = false;
 
@@ -42,23 +42,27 @@ export class CheckOtpComponent implements OnInit, OnDestroy {
     this.otp = $event;
   }
   onSubmitOtp() {
-    this.isSubmitOTPLoading = true;
-    let username = localStorage.getItem('username');
-    this.twoFaAuthService.checkOtp(this.otp, username).subscribe(
-      (res) => {
-        if (res) {
-          this.toast.success('Validation successful!');
-          localStorage.setItem('isLoggedin', 'true');
-          localStorage.removeItem('two_fa_status');
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.toast.error('Invalid OTP!');
+    if (this.otp !== '') {
+      this.isSubmitOTPLoading = true;
+      let username = localStorage.getItem('username');
+      this.twoFaAuthService.checkOtp(this.otp, username).subscribe(
+        (res) => {
+          if (res) {
+            this.toast.success('Validation successful!');
+            localStorage.setItem('isLoggedin', 'true');
+            localStorage.removeItem('two_fa_status');
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.toast.error('Invalid OTP!');
+          }
+          setTimeout(() => {
+            this.isSubmitOTPLoading = false;
+          }, 1000);
         }
-        setTimeout(() => {
-          this.isSubmitOTPLoading = false;
-        }, 1000);
-      }
-    );
+      );
+    } else {
+      this.toast.warning('Input OTP!');
+    }
   }
   ngOnInit(): void {
     let username = localStorage.getItem('username');
