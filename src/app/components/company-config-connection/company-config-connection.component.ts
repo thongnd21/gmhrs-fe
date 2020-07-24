@@ -569,35 +569,53 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnection.dialect = value.dialect;
     console.log(this.companyConnection);
     this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
-      (res) => {
-        const result: any = res;
+      (res: any) => {
+        // const result: any = res;
+        // console.log(result);
         console.log(res);
-        this.loadingTestConnection = false;
+        
+        if (res.checkConnection.status == true) {
+          this.loadingTestConnection = false;
+          this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
+          this.apiEndpointResultDepartmentList = res.departments.length > 0 ? res.departments : null;
+          this.apiEndpointResultTeamList = res.teams.length > 0 ? res.teams : null;
+          var check = this.checkingFormatData(
+            this.apiEndpointResultEmployeeList,
+            this.apiEndpointResultDepartmentList,
+            this.apiEndpointResultTeamList);
+          this.enableDataAPIResult = true;
+          console.log(this.dataAPIEndpoindEmployee);
+        } else {
+          this.loadingTestConnection = false;
+          this.enableDataAPIResult = true;
+        }
+
+
         // console.log(result.checkConnection);
 
-        if (result.checkConnection.status == true) {
-          //employee
-          result.employee.id === undefined ? this.connectionStringDataResponseEmployee.employee.id = "Table Missing Field" : this.connectionStringDataResponseEmployee.employee.id = "Pass";
-          result.employee.primary_email === undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
-          result.employee.personal_email === undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
-          result.employee.first_name === undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
-          result.employee.last_name === undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
-          result.employee.phone === undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Missing Field" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
-          result.employee.address === undefined ? this.connectionStringDataResponseEmployee.employee.address = "Missing Field" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
-          result.employee.department_id === undefined ? this.connectionStringDataResponseEmployee.employee.department_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department_id = "Pass";
-          //department
-          result.department.id === undefined ? this.connectionStringDataResponseDepartment.department.id = "Missing Field" : this.connectionStringDataResponseDepartment.department.id = "Pass";
-          result.department.name === undefined ? this.connectionStringDataResponseDepartment.department.name = "Missing Field" : this.connectionStringDataResponseDepartment.department.name = "Pass";
-          //team
-          result.team.id === undefined ? this.connectionStringDataResponseTeam.team.id = "Missing Field" : this.connectionStringDataResponseTeam.team.id = "Pass";
-          result.team.name === undefined ? this.connectionStringDataResponseTeam.team.name = "Missing Field" : this.connectionStringDataResponseTeam.team.name = "Pass";
-          result.team.email === undefined ? this.connectionStringDataResponseTeam.team.email = "Missing Field" : this.connectionStringDataResponseTeam.team.email = "Pass";
-          //team_employee
-          result.team_employee.employee_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Pass";
-          result.team_employee.team_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Pass";
-          //open modal
-          this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-        }
+        // if (result.checkConnection.status == true) {
+        //   //employee
+        //   result.employee.id === undefined ? this.connectionStringDataResponseEmployee.employee.id = "Table Missing Field" : this.connectionStringDataResponseEmployee.employee.id = "Pass";
+        //   result.employee.primary_email === undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
+        //   result.employee.personal_email === undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
+        //   result.employee.first_name === undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
+        //   result.employee.last_name === undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
+        //   result.employee.phone === undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Missing Field" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
+        //   result.employee.address === undefined ? this.connectionStringDataResponseEmployee.employee.address = "Missing Field" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
+        //   result.employee.department_id === undefined ? this.connectionStringDataResponseEmployee.employee.department_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department_id = "Pass";
+        //   //department
+        //   result.department.id === undefined ? this.connectionStringDataResponseDepartment.department.id = "Missing Field" : this.connectionStringDataResponseDepartment.department.id = "Pass";
+        //   result.department.name === undefined ? this.connectionStringDataResponseDepartment.department.name = "Missing Field" : this.connectionStringDataResponseDepartment.department.name = "Pass";
+        //   //team
+        //   result.team.id === undefined ? this.connectionStringDataResponseTeam.team.id = "Missing Field" : this.connectionStringDataResponseTeam.team.id = "Pass";
+        //   result.team.name === undefined ? this.connectionStringDataResponseTeam.team.name = "Missing Field" : this.connectionStringDataResponseTeam.team.name = "Pass";
+        //   result.team.email === undefined ? this.connectionStringDataResponseTeam.team.email = "Missing Field" : this.connectionStringDataResponseTeam.team.email = "Pass";
+        //   //team_employee
+        //   result.team_employee.employee_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Pass";
+        //   result.team_employee.team_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Pass";
+        //   //open modal
+        //   this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+        // }
         // if (status.status == 0) {
         //   this.loadingTestConnection = false;
         //   this.disableSaveConnectionStringButton = false;

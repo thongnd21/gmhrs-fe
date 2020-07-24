@@ -68,7 +68,18 @@
                                     Test Connection
                                 </button>
                             </div>
-
+                            <br />
+                            <div *ngIf="enableDataAPIResult">
+                                <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
+                                <h2 style="color: red;" *ngIf="employeeValidate==false">Team Not Passed</h2>
+                                <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
+                                <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
+                                <h2 style="color: red;" *ngIf="departmentValidate==false">Team Not Passed</h2>
+                                <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
+                                <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
+                                <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
+                                <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
+                            </div>
                         </form>
                     </mat-card-content>
                 </mat-card>
@@ -348,7 +359,7 @@
     </div>
 </ng-template>
 
-<ng-template #responseConnectionString let-modal>
+<!-- <ng-template #responseConnectionString let-modal>
     <div class="modal-header">
         <h4>Connection Table Information</h4>
     </div>
@@ -571,4 +582,4 @@
             </button>
         </div>
     </div>
-</ng-template>
+</ng-template> -->
