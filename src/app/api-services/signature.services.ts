@@ -9,8 +9,14 @@ export class SignatureService {
     // URL = 'http://localhost:3000/api/';
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
+    getAllSignatureTemplateRules(id) {
+        return this.httpClient.get(this.URL + AppSettings.GETALLSIGNATURERULE + id);
+    }
     setPrimaryTemplate(data) {
         return this.httpClient.put(this.URL + AppSettings.SETPRIMARYTEMPLATE, data);
+    }
+    setPrimaryTemplateRule(data) {
+        return this.httpClient.put(this.URL + AppSettings.SETPRIMARYTEMPLATERULE, data);
     }
     sendMailRulesChanges(username) {
         return this.httpClient.get(this.URL + AppSettings.SENDMAILRULESCHANGES + username)
@@ -21,14 +27,17 @@ export class SignatureService {
     getListWrongSignature(username) {
         return this.httpClient.get(this.URL + AppSettings.GETLISTWRONGSIGANTURE + username);
     }
-    updateSignatureForAllEmployees(username, template) {
-        return this.httpClient.post(this.URL + AppSettings.UPDATESIGNATUREALL + username, template);
+    updateSignatureForAllEmployees(id) {
+        return this.httpClient.get(this.URL + AppSettings.UPDATESIGNATUREALL + id);
     }
     getInfoToReview(username) {
         return this.httpClient.get(this.URL + AppSettings.GETINFOTOREVIEW + username);
     }
     getAllsigantureTemplate(id) {
         return this.httpClient.get(this.URL + AppSettings.GETALLSIGNATURETEMPLATE + id);
+    }
+    deleteSignatureRuleByID(id, name) {
+        return this.httpClient.delete(this.URL + AppSettings.DELETETEMPLATERULEBYID + id + '/' + name);
     }
     deleteSignatureTemplateByName(id, name) {
         return this.httpClient.delete(this.URL + AppSettings.DELETETEMPLATEBYNAME + id + '/' + name);
@@ -44,11 +53,14 @@ export class SignatureService {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURE + username);
     }
 
-    saveSignatureTemplateRules(username, rules) {
-        return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATERULES + username, rules);
+    saveSignatureTemplateRules(signature) {
+        return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATERULES, signature);
     }
 
     getSignatureTemplateRules(username) {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURERULES + username);
+    }
+    getSignatureRuleByID(id) {
+        return this.httpClient.get(this.URL + AppSettings.GETSIGNATURERULEBYID + id);
     }
 }

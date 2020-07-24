@@ -88,15 +88,10 @@
                     <input type="text" placeholder="Signature name" nz-input [(ngModel)]="signatureName" />
                 </nz-input-group>
                 <div style="margin-top: 1mm;">
-                    <angular-editor (focus)="select($event)" style="outline-color: white;" id="editor1"
-                        [(ngModel)]="htmlContent" [config]="editorConfig">
+                    <angular-editor style="outline-color: white;" id="editor1" [(ngModel)]="htmlContent"
+                        [config]="editorConfig">
                     </angular-editor>
                 </div>
-
-
-                <!-- <p>
-                    {{htmlContent}}
-                </p> -->
                 <br />
                 <div>
                     <angular-editor style="background-color: white;" id="editor2" [(ngModel)]="htmlContentReview"
@@ -107,23 +102,32 @@
                 <br />
                 <div>
                     <p>
-                        <button nz-button style="margin-right: 1cm;" [nzLoading]="isSaveTemplateLoading"
-                            (click)="showConfirmSaveSignature()" nzType="primary">Save</button>
+                        <button nz-button style="margin-right: 1cm;" [disabled]="isSaveTemplateDisable"
+                            [nzLoading]="isSaveTemplateLoading" (click)="showConfirmSaveSignature()"
+                            nzType="primary">Save</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmUpdateAllSignature()"
                             [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Synchronize now</button>
                         <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplate()"
                             [disabled]="isSetPrimaryDisable" [nzLoading]="isSetPrimaryTemplateLoading"
                             nzType="primary">Set
-                            primary</button>
+                            default</button>
                     </p>
                 </div>
             </mat-tab>
             <mat-tab label="Signature Template Rules">
                 <br />
-                <p>
+                <div>
                     <button nz-button (click)="addRow()" nzType="primary">Add row</button>
-                </p>
+                    <button nz-button style="float: right;" (click)="getAllSignatureRule()"
+                        [nzLoading]="isGetAllSignatureRuleLoading" nzType="primary">All signature Rule</button>
+                </div>
+                <div>
+                    <nz-input-group style="margin-top: 1cm;" nzAddOnBefore="Signature rule name">
+                        <input type="text" placeholder="Signature rule name" nz-input [(ngModel)]="signatureRuleName" />
+                    </nz-input-group>
+                </div>
                 <br />
+                <!-- Max min -->
                 <nz-input-group nzCompact>
                     <input type="text" disabled readonly nz-input placeholder="Input range of signature length"
                         style="width: 23%; pointer-events: none; background-color: white" />
@@ -139,6 +143,7 @@
                     </nz-input-number>
                 </nz-input-group>
                 <br />
+                <!-- Rule table -->
                 <nz-table #editRowTable nzBordered [nzData]="listOfRules">
                     <thead>
                         <tr>
@@ -167,8 +172,9 @@
                         </tr>
                     </tbody>
                 </nz-table>
+                <!-- List wrong signature -->
                 <nz-modal style="display: inline-block;" [(nzVisible)]="showListWrongSignature"
-                    nzTitle="List employee wrong signature" nzCancelText="Close" nzOkText="Send mail remind employees"
+                    nzTitle="List wrong signature employee" nzCancelText="Close" nzOkText="Send mail remind employees"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="sendMailRemind()">
                     <nz-collapse nzAccordion>
                         <nz-collapse-panel *ngFor="let element of listWrongSignature" [nzHeader]="element.email">
@@ -179,21 +185,57 @@
                             </p>
                         </nz-collapse-panel>
                     </nz-collapse>
-                    <!-- <ul *ngFor="let element of listWrongSignature">Email: {{element.email}}
-                        <li *ngFor="let mes of element.message">{{mes}}</li>
-                    </ul> -->
                 </nz-modal>
-                <button nz-tooltip nzTooltipTitle="prompt text" [disabled]="isSaveRuleDisable" nz-button
-                    style="margin-right: 1cm;" (click)="showConfirmSaveSignatureRules()"
-                    [nzLoading]="isSaveRulesLoading" nzType="primary">Save</button>
-                <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
-                    (click)="showConfirmNotifySignatureRules()" [nzLoading]="isSendNotifyRulesLoading" nzType="primary">
-                    Notify to all emloyees</button>
-                <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
-                    (click)="getListWrongSignature()" [nzLoading]="isShowListWrongSignatureLoading"
-                    nzType="primary">Show
-                    list wrong signature
-                    employee</button>
+                <!-- List all template rule -->
+                <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showListSignatureTemplateRule"
+                    nzTitle="Signature templates Rule" nzCancelText="Close" (nzOnCancel)="handleCloseModel()"
+                    (nzOnOk)="handleCloseModel()">
+                    <nz-table #columnTable [nzData]="listSignatureTemplateRule" [nzScroll]="{ x: '200px' }">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Name</th>
+                                <th style="width: 30%;">Default</th>
+                                <th style="width: 20%;">Load</th>
+                                <th style="width: 20%;">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of listSignatureTemplateRule">
+                                <td style="font-size: large;">{{ data.name }}</td>
+                                <td><i *ngIf="data.is_primary === 1" nz-icon style="font-size: x-large;"
+                                        [nzType]="'check-circle'" [nzTheme]="'twotone'"
+                                        [nzTwotoneColor]="'#52c41a'"></i></td>
+                                <td>
+                                    <button nz-button style="float: right;"
+                                        (click)="getSignatureTemplateRuleByID(data.id)"
+                                        [nzLoading]="isGetAllSignatureRuleLoading" nzType="primary">Load</button>
+                                </td>
+                                <td>
+
+                                    <button nz-button nzDanger style="float: right;"
+                                        (click)="showConfirmDeleteSigantureRule(data.id, data.name)"
+                                        [nzLoading]="isDeleteTemplateRuleLoading" nzType="primary">Delete</button>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-modal>
+                <div>
+                    <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
+                        (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
+                        nzType="primary">Save</button>
+                    <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
+                        (click)="showConfirmNotifySignatureRules()" [nzLoading]="isSendNotifyRulesLoading"
+                        nzType="primary">
+                        Notify to all emloyees</button>
+                    <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
+                        (click)="getListWrongSignature()" [nzLoading]="isShowListWrongSignatureLoading"
+                        nzType="primary">Wrong signature</button>
+                    <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplateRule()"
+                        [disabled]="isSetPrimaryRuleDisable" [nzLoading]="isSetPrimaryTemplateRuleLoading"
+                        nzType="primary">Set default</button>
+                </div>
             </mat-tab>
         </mat-tab-group>
     </div>

@@ -12,7 +12,7 @@ import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
   styleUrls: ['./activated2fa.component.css']
 })
 export class Activated2faComponent implements OnInit {
-  otp = 0;
+  otp = '';
   isDisableOTPLoading = false;
 
   constructor(
@@ -35,21 +35,25 @@ export class Activated2faComponent implements OnInit {
   }
 
   onSubmitOtp() {
-    this.isDisableOTPLoading = true;
-    let username = localStorage.getItem('username');
-    this.twoFaAuthService.deactivated2FA(this.otp, username).subscribe(
-      (res) => {
-        if (res) {
-          this.toast.success('Disable 2FA successful!');
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.toast.error('Invalid OTP!');
+    if (this.otp !== '') {
+      this.isDisableOTPLoading = true;
+      let username = localStorage.getItem('username');
+      this.twoFaAuthService.deactivated2FA(this.otp, username).subscribe(
+        (res) => {
+          if (res) {
+            this.toast.success('Disable 2FA successful!');
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.toast.error('Invalid OTP!');
+          }
+          setTimeout(() => {
+            this.isDisableOTPLoading = false;
+          }, 1000);
         }
-        setTimeout(() => {
-          this.isDisableOTPLoading = false;
-        }, 1000);
-      }
-    );
+      );
+    } else {
+      this.toast.warning('Input OTP!')
+    }
   }
 
   ngOnInit(): void {
