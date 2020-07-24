@@ -610,7 +610,7 @@ export class AppHeaderComponent {
       }
     } else {
       let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
-      this.listNewEmp.push(emp);
+      this.listNewEmp[0]=emp;
     }
     console.log(item.id);
     console.log(this.listNewEmp[0].id);
@@ -626,14 +626,14 @@ export class AppHeaderComponent {
       }
     } else {
       let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
-      this.listOutEmp.push(emp);
+      this.listOutEmp[0]=emp;
     }
     console.log(item.id);
     console.log(this.listOutEmp[0].id);
   }
 
   matchFirstNewAndOut() {
-    this.listNewEmp[0]['gsuiteId'] = this.listOutEmp[0].id;
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
     const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x=> x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
@@ -682,7 +682,7 @@ export class AppHeaderComponent {
   }
 
   matchNewAndOut() {
-    this.listNewEmp[0]['gsuiteId'] = this.listOutEmp[0].id;
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
     const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x=> x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
