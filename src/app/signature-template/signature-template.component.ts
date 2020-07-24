@@ -40,17 +40,23 @@ export class SignatureTemplateComponent implements OnInit {
   isSpinning = false;
   isSetPrimaryDisable = false;
   isSaveRuleDisable = false;
+  isSaveTemplateDisable = false;
+  isSetPrimaryRuleDisable = false;
   listRulesCheckErr = new Array();
   listWrongSignature = new Array();
   listSignatureTemplate = new Array();
+  listSignatureTemplateRule = new Array();
   topCenterPosition: NzPlacementType = 'topCenter';
   imgWidth = 300;
   imgHeigh = 100;
   imageLink = '';
   signatureName = '';
+  signatureRuleName = '';
+  signatureRuleID = '';
   insertImgModel = false;
   showCheckErrModel = false;
   showListSignatureTemplate = false;
+  showListSignatureTemplateRule = false;
   showListWrongSignature = false;
   infoToReview: any;
   rules: Rules = {
@@ -60,6 +66,9 @@ export class SignatureTemplateComponent implements OnInit {
     },
     listRule: null
   };
+  isSetPrimaryTemplateRuleLoading = false;
+  isGetAllSignatureRuleLoading = false;
+  isDeleteTemplateRuleLoading = false;
   isDeleteTemplateLoading = false;
   isSetPrimaryTemplateLoading = false;
   isGetAllSignatureLoading = false;
@@ -162,10 +171,12 @@ export class SignatureTemplateComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private modal: NzModalService,
   ) { }
+
   handleCloseModel(): void {
     this.showCheckErrModel = false;
     this.showListWrongSignature = false;
     this.showListSignatureTemplate = false;
+    this.showListSignatureTemplateRule = false;
   }
   select(event) {
     const start = event.target.selectionStart;
@@ -189,6 +200,25 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isSetPrimaryTemplateLoading = false;
         this.isSpinning = false;
+      }
+    )
+  }
+  setPrimaryTemplateRule(): void {
+    this.isSetPrimaryTemplateRuleLoading = true;
+    this.isSpinning = true;
+    let data = new Signature();
+    data.account_id = localStorage.getItem('id');
+    data.name = this.signatureRuleName;
+    this.signatureService.setPrimaryTemplateRule(data).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.isSetPrimaryRuleDisable = true;
+          this.toast.success(res.message);
+        } else {
+          this.toast.error(res.message);
+        }
+        this.isSpinning = false;
+        this.isSetPrimaryTemplateRuleLoading = false;
       }
     )
   }
@@ -241,6 +271,14 @@ export class SignatureTemplateComponent implements OnInit {
         this.isSpinning = false;
       })
   }
+  showConfirmDeleteSigantureRule(id, name): void {
+    this.modal.confirm({
+      nzTitle: '<i>Are you sure?</i>',
+      nzContent: '<b>If you delete, it will not be recovered!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.deleteSignatureTemplateRuleByID(id, name)
+    });
+  }
   showConfirmDeleteSiganture(name) {
     this.modal.confirm({
       nzTitle: '<i>Are you sure?</i>',
@@ -260,15 +298,15 @@ export class SignatureTemplateComponent implements OnInit {
   showConfirmSaveSignatureRules(): void {
     this.modal.confirm({
       nzTitle: '<i>Do you Want to Save this signature rules?</i>',
-      nzContent: '<b>If you Save this signature rules, it will save signature rule to database.</b>',
+      nzContent: '<b>If this rule name existed in DB it will update, unless it will create new one.</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.submitSignatureRules()
     });
   }
   showConfirmUpdateAllSignature(): void {
     this.modal.confirm({
-      nzTitle: '<i>Do you Want to Update this signature for all employees NOW?</i>',
-      nzContent: '<b>If you Update this signature for all employees NOW, it will update all employees signature immediately.</b>',
+      nzTitle: '<i>Do you Want to Update signature for all employees NOW?</i>',
+      nzContent: '<b>It will update signature for all employees base on signature template <b>default</b> immediately.</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.syncSignatureAll()
     });
@@ -355,16 +393,20 @@ export class SignatureTemplateComponent implements OnInit {
     this.isSaveRulesLoading = true;
     this.isSpinning = true;
     this.rules.listRule = this.listOfRules;
-    let username = localStorage.getItem('username');
-    // console.log(JSON.stringify(this.rules));
-    let template = new Template;
-    template.html = JSON.stringify(this.rules);
-    this.signatureService.saveSignatureTemplateRules(username, template).subscribe(
-      (res) => {
-        if (res) {
-          this.toast.success('Save signature rules success!');
+    let id = localStorage.getItem('id');
+    let signature = new Signature();
+    signature.account_id = id;
+    signature.content = JSON.stringify(this.rules);
+    signature.name = this.signatureRuleName;
+    this.signatureService.saveSignatureTemplateRules(signature).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.toast.success(res.message);
+          if (res.action === 'create') {
+            this.isSetPrimaryRuleDisable = false;
+          }
         } else {
-          this.toast.error('Please check signature length!');
+          this.toast.error(res.message);
         }
         this.isSaveRulesLoading = false;
         this.isSpinning = false;
@@ -374,20 +416,20 @@ export class SignatureTemplateComponent implements OnInit {
   syncSignatureAll(): void {
     this.isUpdatedTemplateLoading = true;
     this.isSpinning = true;
-    let username = localStorage.getItem('username');
+    let id = localStorage.getItem('id');
     let template = new Template;
     template.html = this.htmlContent;
-    this.signatureService.updateSignatureForAllEmployees(username, template).subscribe(
+    this.signatureService.updateSignatureForAllEmployees(id).subscribe(
       (res: any) => {
-        // console.log(res);
+        console.log(res);
 
-        if (res === true) {
-          this.toast.success('Update signature to all employees success!');
+        if (res.status) {
+          this.toast.success(res.message);
           this.listRulesCheckErr = [];
         } else {
-          for (let mes of res) {
+          for (let mes of res.message) {
             this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
-            this.listRulesCheckErr = res;
+            this.listRulesCheckErr = res.message;
           }
         }
         this.isUpdatedTemplateLoading = false;
@@ -396,6 +438,10 @@ export class SignatureTemplateComponent implements OnInit {
     )
   }
   submitSignature(): void {
+    if (this.signatureName === '') {
+      this.toast.error('Input signature name!');
+      return;
+    }
     this.isSaveTemplateLoading = true;
     this.isSpinning = true;
     let signature = new Signature;
@@ -424,6 +470,7 @@ export class SignatureTemplateComponent implements OnInit {
   }
   getSignatureTemplateByName(name: any): void {
     this.isGetAllSignatureLoading = true;
+    this.showListSignatureTemplate = false;
     this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.getSignatureTemplateByName(id, name).subscribe(
@@ -435,7 +482,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.loadReview();
           this.showListSignatureTemplate = false;
           this.isSetPrimaryDisable = res.data.is_primary > 0;
-          this.toast.success('Load sinature name: ' + this.signatureName + ' success!');
+          this.toast.success('Load sinature: ' + this.signatureName + ' success!');
         } else {
           this.toast.warning(res.message);
         }
@@ -446,20 +493,12 @@ export class SignatureTemplateComponent implements OnInit {
   }
   deleteSignatureTemplateByName(name: any): void {
     this.isDeleteTemplateLoading = true;
+    this.showListSignatureTemplate = false;
     this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.deleteSignatureTemplateByName(id, name).subscribe(
       (res: any) => {
         if (res.status) {
-          this.signatureService.getAllsigantureTemplate(id).subscribe(
-            (res: any) => {
-              if (res.status) {
-                this.listSignatureTemplate = res.data;
-              } else {
-                this.toast.warning(res.message);
-              }
-            }
-          )
           this.toast.success(res.message);
         } else {
           this.toast.warning(res.message);
@@ -487,6 +526,23 @@ export class SignatureTemplateComponent implements OnInit {
         this.isSpinning = false;
       }
     )
+  }
+  getAllSignatureRule(): void {
+    this.isGetAllSignatureRuleLoading = true;
+    this.isSpinning = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.getAllSignatureTemplateRules(id).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.listSignatureTemplateRule = res.data;
+          this.showListSignatureTemplateRule = true;
+        } else {
+          this.toast.error(res.message);
+        }
+        this.isGetAllSignatureRuleLoading = false;
+        this.isSpinning = false;
+      }
+    );
   }
   addRow(): void {
     this.listOfRules = [
@@ -564,13 +620,65 @@ export class SignatureTemplateComponent implements OnInit {
     )
 
   }
+  getSignatureTemplateRuleByID(id): void {
+    this.isSpinning = true;
+    this.showListSignatureTemplateRule = false;
+    this.signatureService.getSignatureRuleByID(id).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.isSetPrimaryRuleDisable = res.data.is_primary === 1
+          this.signatureRuleName = res.data.name;
+          this.signatureRuleID = res.data.id;
+          let rulesJson = JSON.parse(res.data.content);
+          // console.log('rulesJson: ' + rulesJson.lengthRule.minLength);
+          this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
+          this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
+          this.listOfRules = [];
+          rulesJson.listRule.forEach(element => {
+            this.listOfRules = [
+              ...this.listOfRules,
+              {
+                id: element.id,
+                content: element.content,
+                action: element.action
+              }
+            ];
+            this.i++;
+          });
+          this.toast.success('Load rule: ' + this.signatureRuleName + ' success!');
+        } else {
+          this.toast.error(res.message);
+        }
+        this.isSpinning = false;
+      }
+    )
+  }
+  deleteSignatureTemplateRuleByID(id, name): void {
+    this.isDeleteTemplateRuleLoading = true;
+    this.showListSignatureTemplateRule = false;
+    this.isSpinning = true;
+    this.signatureService.deleteSignatureRuleByID(id, name).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.toast.success(res.message);
+        } else {
+          this.toast.error(res.message);
+        }
+        this.isDeleteTemplateRuleLoading = false;
+        this.isSpinning = false;
+      }
+    )
+  }
   loadRules(): void {
+    this.isSetPrimaryRuleDisable = true;
     let id = localStorage.getItem('id');
     this.signatureService.getSignatureTemplateRules(id).subscribe(
-      (res) => {
-        let rulesJson: any = res;
-        // console.log('rulesJson: ' + rulesJson);
-        if (rulesJson) {
+      (res: any) => {
+        let rulesJson = JSON.parse(res.data.content);
+        // console.log('rulesJson: ' + rulesJson.lengthRule.minLength);
+        if (res.status) {
+          this.signatureRuleName = res.data.name;
+          this.signatureRuleID = res.data.id;
           this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
           this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
           rulesJson.listRule.forEach(element => {
@@ -584,7 +692,7 @@ export class SignatureTemplateComponent implements OnInit {
             ];
             this.i++;
           });
-          // console.log(this.rules);
+          // console.log('this.rule: ' + this.rules);
         }
       }
     );
@@ -592,6 +700,5 @@ export class SignatureTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.loadTemplate();
     this.loadRules();
-
   }
 }
