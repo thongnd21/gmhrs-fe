@@ -7,7 +7,6 @@ import { CustomValidators } from 'ngx-custom-validators';
 import { SignatureService } from '../api-services/signature.services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { parseJSON } from 'jquery';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Signature } from '../model/signature';;
@@ -342,7 +341,7 @@ export class SignatureTemplateComponent implements OnInit {
       this.toast.success('There is not error occurs!');
     }
   }
-  showModal(): void {
+  showInsertImgModal(): void {
     this.insertImgModel = true;
   }
   insertImghandleOkModel(): void {

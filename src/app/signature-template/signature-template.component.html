@@ -16,7 +16,7 @@
                         </nz-dropdown-menu>
                     </ng-container>
                     <button nz-button style="background-color: coral; border: coral; margin-left: 5mm;"
-                        [nzType]="'primary'" (click)="showModal()"><span>Insert Image</span></button>
+                        [nzType]="'primary'" (click)="showInsertImgModal()"><span>Insert Image</span></button>
                     <nz-modal style="display: inline-flex;" [(nzVisible)]="insertImgModel" nzTitle="Insert Image"
                         (nzOnCancel)="handleCancelModel()" (nzOnOk)="insertImghandleOkModel()">
                         <input nz-input placeholder="Paste your image link" [(ngModel)]="imageLink" />
