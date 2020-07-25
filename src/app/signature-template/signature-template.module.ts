@@ -17,7 +17,8 @@ import {
     MatSortModule,
     MatInputModule,
     MatSlideToggleModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatToolbarModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -39,6 +40,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
 
 @NgModule({
     imports: [
@@ -59,6 +61,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
         MatInputModule,
         MatSlideToggleModule,
         MatProgressSpinnerModule,
+        MatToolbarModule,
         ReactiveFormsModule,
         HttpClientModule,
         AngularEditorModule,
@@ -79,6 +82,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
         NzTagModule,
         NzCollapseModule,
         NzSpinModule,
+        NzMenuModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]

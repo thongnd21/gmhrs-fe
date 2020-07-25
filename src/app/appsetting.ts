@@ -24,5 +24,9 @@ export class AppSettings {
     public static GETALLSIGNATURETEMPLATE = 'signature/getAllSignatures/'
     public static GETSIGNATURETEMPLATEBYNAME = 'signature/getSignatureTemplateByName/'
     public static SETPRIMARYTEMPLATE = 'signature/setPrimaryTemplate/'
+    public static SETPRIMARYTEMPLATERULE = 'signature/setPrimaryTemplateRule/'
     public static DELETETEMPLATEBYNAME = 'signature/deleteTemplateByName/'
+    public static GETALLSIGNATURERULE = 'signature/getAllSignatureRule/'
+    public static GETSIGNATURERULEBYID = 'signature/getSignatureRuleByID/'
+    public static DELETETEMPLATERULEBYID = 'signature/deleteTemplateRuleByID/'
 }

@@ -13,7 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./two-fa-auth.component.css']
 })
 export class TwoFaAuthComponent implements OnInit {
-  otp: any;
+  otp = '';
   QrCodeLink: any;
   showOrNot = false;
   isSubmitOTPLoading = false;
@@ -39,21 +39,25 @@ export class TwoFaAuthComponent implements OnInit {
   }
 
   onSubmitOtp() {
-    this.isSubmitOTPLoading = true;
-    let username = localStorage.getItem('username');
-    this.twoFaAuthService.activated2FA(this.otp, username).subscribe(
-      (res) => {
-        if (res) {
-          this.toast.success('Activated 2FA successful!');
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.toast.error('Invalid OTP!');
+    if (this.otp !== '') {
+      this.isSubmitOTPLoading = true;
+      let username = localStorage.getItem('username');
+      this.twoFaAuthService.activated2FA(this.otp, username).subscribe(
+        (res) => {
+          if (res) {
+            this.toast.success('Activated 2FA successful!');
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.toast.error('Invalid OTP!');
+          }
+          setTimeout(() => {
+            this.isSubmitOTPLoading = false;
+          }, 1000);
         }
-        setTimeout(() => {
-          this.isSubmitOTPLoading = false;
-        }, 1000);
-      }
-    );
+      );
+    } else {
+      this.toast.warning('Input OTP!')
+    }
   }
   ngOnInit(): void {
     let username = localStorage.getItem('username');
