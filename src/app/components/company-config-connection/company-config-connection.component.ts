@@ -104,6 +104,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   timeSchedule = "";
   anableButtonSaveAPIEndpoint = false;// disable button save api endpoint
   enableDataAPIResult = false;// enable/disable json checking api endpoint when click button test
+  enableDataConnectionResult = false
   dataAPIEndpoindEmployee = { // json format employee to admin company checking field when input api endpoint
     employee: {
       id: "Required",
@@ -141,6 +142,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
       description: "Optional",
 
     }
+  };
+  connectionString = {
+    host: " ",
+    dbName: " ",
+    port: " ",
+    username: " ",
+    password: " ",
+    type: " "
   };
   apiEndpointResultEmployeeList = [];
   apiEndpointResultDepartmentList = [];
@@ -201,6 +210,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
       team_id: "Required"
     }
   };
+  connectionFail = false;
+  apiEndpointFail = false;
   constructor(
     private modalService: NgbModal,
     private toast: ToastrService,
@@ -246,6 +257,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
         if (res.connection_database != undefined && res.connection_database.length > 1) {
           this.account.connection_database = res.connection_database;
           console.log(res.connection_database);
+          this.connectionString.dbName = res.connection_database.split(" ")[0];
+          this.connectionString.host = res.connection_database.split(" ")[1];
+          this.connectionString.port = res.connection_database.split(" ")[2];
+          this.connectionString.username = res.connection_database.split(" ")[3];
+          this.connectionString.password = res.connection_database.split(" ")[4];
+          this.connectionString.type = res.connection_database.split(" ")[5];
           this.accessDBForm = this.fb.group({
             dbName: new FormControl(res.connection_database.split(" ")[0], [Validators.required]),
             host: new FormControl(res.connection_database.split(" ")[1], [Validators.required]),
@@ -255,12 +272,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
             dialect: new FormControl(res.connection_database.split(" ")[5]),
           });
           this.disableSaveConnectionStringButton = false;
-          this.disableTestConnectionStringButton = false;
+          // this.disableTestConnectionStringButton = false;
         }
         else {
           console.log("else")
           this.disableSaveConnectionStringButton = false;
-          this.disableTestConnectionStringButton = true;
+          // this.disableTestConnectionStringButton = true;
         }
 
       },
@@ -385,8 +402,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
     console.log(value);
     const endpoint = value.url
     this.loadingTestAPI = true;
+    this.enableDataAPIResult = false;
+    this.apiEndpointFail = false;
+    this.anableButtonSaveAPIEndpoint = false;
     this.accountServices.testAPIEndpoint(endpoint).subscribe(
       (res: any) => {
+        // if(res.employees.length>0 && res.departments.length>0 &&)
         this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
         this.apiEndpointResultDepartmentList = res.departments.length > 0 ? res.departments : null;
         this.apiEndpointResultTeamList = res.teams.length > 0 ? res.teams : null;
@@ -395,12 +416,35 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.apiEndpointResultDepartmentList,
           this.apiEndpointResultTeamList);
         this.anableButtonSaveAPIEndpoint = check;
+        this.apiEndpointFail = false;
         this.enableDataAPIResult = true;
         this.loadingTestAPI = false;
       },
       (error) => {
+        this.employeeValidate = false;
+        this.teamValidate = false;
+        this.departmentValidate = false;
+        this.dataAPIEndpoindEmployee.employee.id = "Required";
+        this.dataAPIEndpoindEmployee.employee.primary_email = "Required";
+        this.dataAPIEndpoindEmployee.employee.personal_email = "Required";
+        this.dataAPIEndpoindEmployee.employee.first_name = "Required";
+        this.dataAPIEndpoindEmployee.employee.last_name = "Required";
+        this.dataAPIEndpoindEmployee.employee.phone = "Required";
+        this.dataAPIEndpoindEmployee.employee.address = "Required";
+        this.dataAPIEndpoindEmployee.employee.department.id = "Required";
+        this.dataAPIEndpoindEmployee.employee.department.name = "Required";
+        this.dataAPIEndpoindDepartment.department.id = "Required";
+        this.dataAPIEndpoindDepartment.department.name = "Required";
+        this.dataAPIEndpoindTeam.team.id = "Required";
+        this.dataAPIEndpoindTeam.team.name = "Required";
+        this.dataAPIEndpoindTeam.team.email = "Required";
+        this.dataAPIEndpoindTeam.team.member[0].id = "Required";
+        this.dataAPIEndpoindTeam.team.member[0].primary_email = "Required";
+        this.apiEndpointFail = true;
         this.loadingTestAPI = false;
-        this.toast.error(error.message);
+        this.enableDataAPIResult = true;
+        this.anableButtonSaveAPIEndpoint = false;
+        // this.toast.error(error.message);
         console.log(error);
       }
     )
@@ -567,13 +611,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnection.username = value.username;
     this.companyConnection.password = value.password;
     this.companyConnection.dialect = value.dialect;
+    this.enableDataConnectionResult = false;
+    this.connectionFail = false;
+    this.disableSaveConnectionStringButton = false;
     console.log(this.companyConnection);
     this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
       (res: any) => {
         // const result: any = res;
         // console.log(result);
         console.log(res);
-        
+
         if (res.checkConnection.status == true) {
           this.loadingTestConnection = false;
           this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
@@ -583,11 +630,34 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.apiEndpointResultEmployeeList,
             this.apiEndpointResultDepartmentList,
             this.apiEndpointResultTeamList);
-          this.enableDataAPIResult = true;
+          this.enableDataConnectionResult = true;
+          this.connectionFail = false;
+          this.disableSaveConnectionStringButton = check;
           console.log(this.dataAPIEndpoindEmployee);
-        } else {
+        } if (res.checkConnection.status == false) {
+          this.employeeValidate = false;
+          this.teamValidate = false;
+          this.departmentValidate = false;
+          this.dataAPIEndpoindEmployee.employee.id = "Required";
+          this.dataAPIEndpoindEmployee.employee.primary_email = "Required";
+          this.dataAPIEndpoindEmployee.employee.personal_email = "Required";
+          this.dataAPIEndpoindEmployee.employee.first_name = "Required";
+          this.dataAPIEndpoindEmployee.employee.last_name = "Required";
+          this.dataAPIEndpoindEmployee.employee.phone = "Required";
+          this.dataAPIEndpoindEmployee.employee.address = "Required";
+          this.dataAPIEndpoindEmployee.employee.department.id = "Required";
+          this.dataAPIEndpoindEmployee.employee.department.name = "Required";
+          this.dataAPIEndpoindDepartment.department.id = "Required";
+          this.dataAPIEndpoindDepartment.department.name = "Required";
+          this.dataAPIEndpoindTeam.team.id = "Required";
+          this.dataAPIEndpoindTeam.team.name = "Required";
+          this.dataAPIEndpoindTeam.team.email = "Required";
+          this.dataAPIEndpoindTeam.team.member[0].id = "Required";
+          this.dataAPIEndpoindTeam.team.member[0].primary_email = "Required";
+          this.enableDataConnectionResult = true;
+          this.connectionFail = true;
           this.loadingTestConnection = false;
-          this.enableDataAPIResult = true;
+          // this.enableDataConnectionResult = true;
         }
 
 

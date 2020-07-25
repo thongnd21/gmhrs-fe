@@ -14,32 +14,32 @@
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="dbName" formControlName="dbName"
-                                                placeholder="Connection Name" value="" />
+                                                placeholder="Connection Name"  />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="host" formControlName="host" placeholder="Hostname"
-                                                value="" />
+                                                 />
                                         </mat-form-field>
                                     </div>
 
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="port" formControlName="port" placeholder="Port"
-                                                value="" />
+                                                />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="username" formControlName="username"
-                                                placeholder="Username" value="" />
+                                                placeholder="Username" />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput type="password" name="password" formControlName="password"
-                                                placeholder="Password" value="" />
+                                                placeholder="Password"  />
                                         </mat-form-field>
                                     </div>
                                     <div>
@@ -69,17 +69,21 @@
                                 </button>
                             </div>
                             <br />
-                            <div *ngIf="enableDataAPIResult">
+                            <div *ngIf="connectionFail">
+                                <h2 style="color: red;">Connection Fail. Please input information Again</h2>
+                            </div>
+                            <div *ngIf="enableDataConnectionResult">
                                 <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
-                                <h2 style="color: red;" *ngIf="employeeValidate==false">Team Not Passed</h2>
+                                <h2 style="color: red;" *ngIf="employeeValidate==false">Employee Not Passed</h2>
                                 <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
                                 <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
-                                <h2 style="color: red;" *ngIf="departmentValidate==false">Team Not Passed</h2>
+                                <h2 style="color: red;" *ngIf="departmentValidate==false">Department Not Passed</h2>
                                 <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
                                 <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
                                 <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
                                 <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
                             </div>
+                            
                         </form>
                     </mat-card-content>
                 </mat-card>
@@ -115,12 +119,15 @@
 
                         </form>
                         <br />
+                        <div *ngIf="apiEndpointFail">
+                            <h2 style="color: red;">Connection Fail. Please input information Again</h2>
+                        </div>
                         <div *ngIf="enableDataAPIResult">
                             <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
-                            <h2 style="color: red;" *ngIf="employeeValidate==false">Team Not Passed</h2>
+                            <h2 style="color: red;" *ngIf="employeeValidate==false">Employee Not Passed</h2>
                             <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
                             <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
-                            <h2 style="color: red;" *ngIf="departmentValidate==false">Team Not Passed</h2>
+                            <h2 style="color: red;" *ngIf="departmentValidate==false">Department Not Passed</h2>
                             <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
                             <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
                             <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
