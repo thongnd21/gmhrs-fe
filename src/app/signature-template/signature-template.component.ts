@@ -256,8 +256,8 @@ export class SignatureTemplateComponent implements OnInit {
   getListWrongSignature(): void {
     this.isShowListWrongSignatureLoading = true;
     this.isSpinning = true;
-    let username = localStorage.getItem('username');
-    this.signatureService.getListWrongSignature(username).subscribe(
+    let id = localStorage.getItem('id');
+    this.signatureService.getListWrongSignature(id).subscribe(
       (res: any) => {
         // console.log(res);
         if (res.length === 0) {
@@ -321,13 +321,13 @@ export class SignatureTemplateComponent implements OnInit {
   sendMailNotifyRules(): void {
     this.isSendNotifyRulesLoading = true;
     this.isSpinning = true;
-    let username = localStorage.getItem('username');
-    this.signatureService.sendMailRulesChanges(username).subscribe(
-      (res) => {
-        if (res) {
+    let id = localStorage.getItem('id');
+    this.signatureService.sendMailRulesChanges(id).subscribe(
+      (res: any) => {
+        if (res.status) {
           this.toast.success('Send mail notify to all employees success!')
         } else {
-          this.toast.error('Some error occurs!')
+          this.toast.error(res.message)
         }
         this.isSendNotifyRulesLoading = false;
         this.isSpinning = false;
