@@ -60,13 +60,24 @@
    
                 <div class="message-widget contact-widget" *ngFor="let employee of signatureInvalid">
                     <!-- Message -->
-                    <a href="javascript:void(0)"  nz-popover nzPopoverTitle="Detail"   [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click">
+                    <a href="javascript:void(0)"  nz-popover nzPopoverTitle="{{employee.firstName}} {{employee.lastName}}" (click)="setDefault(employee)"   [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click">
                         <div class="mail-contnet">
                             <h5>{{employee.firstName}} {{employee.lastName}}</h5> <span class="mail-desc">{{employee.email}}</span>
                         </div>
                         <ng-template #contentTemplate>
-                            <div>
-                              <p>{{employee.message}}</p>
+                            <div style="color:warning">
+                                        <!-- <nz-alert nzType="warning" *ngFor="let mes of employeeSelected" nzMessage="{{mes}}"
+                                            style="font-size: medium;" nzShowIcon>
+                                        </nz-alert> -->
+                                        <nz-list nzItemLayout="horizontal">
+                                        <nz-list-item *ngFor="let item of employeeSelected">
+                                            <nz-list-item-meta>
+                                              <nz-list-item-meta-title>
+                                                <a href="javascript:void(0)">{{ item }}</a>
+                                              </nz-list-item-meta-title>
+                                            </nz-list-item-meta>
+                                          </nz-list-item>
+                                        </nz-list>
                               <!-- <p>Content</p> -->
                             </div>
                           </ng-template>

@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit {
 	disableBtnRevert: boolean= false;
 	isSendNotifyRulesLoading = false;
 	isSpinning= false;
+	employeeSelected: any;
 
 	constructor(
 		private employeeApi: AccountApiService,
@@ -92,6 +93,7 @@ export class DashboardComponent implements OnInit {
 	}
 
 	getNewEmployees() {
+		
 		this.employeeApi.getAllEmployee().subscribe((res) => {
 			// const employeesData: any = res;
 			this.employees = res;
@@ -125,26 +127,32 @@ export class DashboardComponent implements OnInit {
 		  nzTitle: '<i>Do you want to send notify mail?</i>',
 		  nzContent: '<b>It will send mail notify to all employees by company gmail.</b>',
 		  nzOkText: "OK, do it!",
-		  nzOnOk: () => this.sendMailNotifyRules()
+		  nzOnOk: () => this.sendMailRemind()
 		});
 	  }
 
-	  sendMailNotifyRules(): void {
+	  sendMailRemind(): void {
+		// this.handleCloseModel();
 		this.isSendNotifyRulesLoading = true;
 		this.isSpinning = true;
-		let username = localStorage.getItem('username');
-		this.signatureService.sendMailRulesChanges(username).subscribe(
+		let id = localStorage.getItem('id');
+		this.signatureService.sendMailRemindEmployees(id).subscribe(
 		  (res) => {
 			if (res) {
-			  this.toast.success('Send mail notify to all of the employees successfully!')
+			  this.toast.success('Send mails success!');
 			} else {
-			console.log(res);
-			
-			  this.toast.error('Some error occurs!')
+			  this.toast.error('Some Error!')
 			}
+			
 			this.isSendNotifyRulesLoading = false;
 			this.isSpinning = false;
 		  }
 		)
+	  }
+
+	  setDefault(emp): void {
+		this.employeeSelected = emp.message;
+		console.log(this.employeeSelected);
+		
 	  }
 }

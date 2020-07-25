@@ -10,7 +10,7 @@ export class AccountApiService {
     constructor(private httpClient: HttpClient) { }
 
     getAllEmployee() {
-        return this.httpClient.get(this.URL + AppSettings.EMP);
+        return this.httpClient.get(this.URL + AppSettings.EMP + 'getAll/' + localStorage.getItem("id"));
     }
 
     updateProfileInfo(account) {
@@ -43,7 +43,7 @@ export class AccountApiService {
     };
 
     getInvalidSignature(){
-        return this.httpClient.get("http://localhost:3000/api/signature/getListEmployeesEmailBreakRule/" + localStorage.getItem("username"));
+        return this.httpClient.get("http://localhost:3000/api/signature/getListEmployeesEmailBreakRule/" + localStorage.getItem("id"));
     };
 
 

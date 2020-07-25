@@ -21,8 +21,8 @@ export class SignatureService {
     sendMailRulesChanges(id) {
         return this.httpClient.get(this.URL + AppSettings.SENDMAILRULESCHANGES + id)
     }
-    sendMailRemindEmployees(username) {
-        return this.httpClient.get(this.URL + AppSettings.SENDMAILREMIND + username)
+    sendMailRemindEmployees(id) {
+        return this.httpClient.get(this.URL + AppSettings.SENDMAILREMIND + id)
     }
     getListWrongSignature(id) {
         return this.httpClient.get(this.URL + AppSettings.GETLISTWRONGSIGANTURE + id);
