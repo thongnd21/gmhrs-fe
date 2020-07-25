@@ -43,7 +43,7 @@ export class AccountApiService {
     };
 
     getInvalidSignature(){
-        return this.httpClient.get("http://localhost:3000/api/signature/getListEmployeesEmailBreakRule/" + localStorage.getItem("id"));
+        return this.httpClient.get("https://gmhrs-api.herokuapp.com/api/signature/getListEmployeesEmailBreakRule/" + localStorage.getItem("id"));
     };
 
 
