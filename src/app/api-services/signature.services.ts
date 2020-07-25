@@ -18,14 +18,14 @@ export class SignatureService {
     setPrimaryTemplateRule(data) {
         return this.httpClient.put(this.URL + AppSettings.SETPRIMARYTEMPLATERULE, data);
     }
-    sendMailRulesChanges(username) {
-        return this.httpClient.get(this.URL + AppSettings.SENDMAILRULESCHANGES + username)
+    sendMailRulesChanges(id) {
+        return this.httpClient.get(this.URL + AppSettings.SENDMAILRULESCHANGES + id)
     }
     sendMailRemindEmployees(username) {
         return this.httpClient.get(this.URL + AppSettings.SENDMAILREMIND + username)
     }
-    getListWrongSignature(username) {
-        return this.httpClient.get(this.URL + AppSettings.GETLISTWRONGSIGANTURE + username);
+    getListWrongSignature(id) {
+        return this.httpClient.get(this.URL + AppSettings.GETLISTWRONGSIGANTURE + id);
     }
     updateSignatureForAllEmployees(id) {
         return this.httpClient.get(this.URL + AppSettings.UPDATESIGNATUREALL + id);
