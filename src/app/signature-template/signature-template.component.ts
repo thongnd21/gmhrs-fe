@@ -240,8 +240,8 @@ export class SignatureTemplateComponent implements OnInit {
     this.handleCloseModel();
     this.isShowListWrongSignatureLoading = true;
     this.isSpinning = true;
-    let username = localStorage.getItem('username');
-    this.signatureService.sendMailRemindEmployees(username).subscribe(
+    let id = localStorage.getItem('id');
+    this.signatureService.sendMailRemindEmployees(id).subscribe(
       (res) => {
         if (res) {
           this.toast.success('Send mails success!');
@@ -259,12 +259,16 @@ export class SignatureTemplateComponent implements OnInit {
     let id = localStorage.getItem('id');
     this.signatureService.getListWrongSignature(id).subscribe(
       (res: any) => {
-        // console.log(res);
-        if (res.length === 0) {
+        console.log(res);
+        if (res.status) {
           this.toast.success('There is not employees wrong signature!', 'Wrong signature status', { disableTimeOut: true });
         } else {
-          this.listWrongSignature = res;
-          this.showListWrongSignature = true;
+          if (res.data !== undefined) {
+            this.listWrongSignature = res.data;
+            this.showListWrongSignature = true;
+          } else {
+            this.toast.error(res.message)
+          }
         }
         this.isShowListWrongSignatureLoading = false;
         this.isSpinning = false;
@@ -674,9 +678,8 @@ export class SignatureTemplateComponent implements OnInit {
     let id = localStorage.getItem('id');
     this.signatureService.getSignatureTemplateRules(id).subscribe(
       (res: any) => {
-        let rulesJson = JSON.parse(res.data.content);
-        // console.log('rulesJson: ' + rulesJson.lengthRule.minLength);
         if (res.status) {
+          let rulesJson = JSON.parse(res.data.content);
           this.signatureRuleName = res.data.name;
           this.signatureRuleID = res.data.id;
           this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
@@ -693,6 +696,8 @@ export class SignatureTemplateComponent implements OnInit {
             this.i++;
           });
           // console.log('this.rule: ' + this.rules);
+        } else {
+          this.toast.warning(res.message)
         }
       }
     );
