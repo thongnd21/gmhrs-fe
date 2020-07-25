@@ -377,6 +377,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
     this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
     this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+    this.toast.success('Load review success!');
   }
   startEdit(id: string): void {
     this.editId = id;

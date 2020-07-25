@@ -2,91 +2,101 @@
     <div style="margin: auto;">
         <mat-tab-group mat-align-tabs="start">
             <mat-tab label="Default Signature Template" style="display: list-item;">
-                <div style="display: inline-block; padding: 0.5cm; z-index: 2; background-color: white; width: 100%;">
-                    <ng-container style="margin-left: 5mm;">
-                        <button nz-button nz-dropdown style="font-size: large;" [nzPlacement]="topCenterPosition"
-                            [nzDropdownMenu]="menu">
-                            Add dynamic content</button>
-                        <nz-dropdown-menu #menu="nzDropdownMenu">
-                            <ul nz-menu>
-                                <li (click)="addContent('phone')" nz-menu-item>Add employee phone number</li>
-                                <li (click)="addContent('email')" nz-menu-item>Add employee email address</li>
-                                <li (click)="addContent('name')" nz-menu-item>Add employee fullname</li>
-                            </ul>
-                        </nz-dropdown-menu>
-                    </ng-container>
-                    <button nz-button style="background-color: coral; border: coral; margin-left: 5mm;"
-                        [nzType]="'primary'" (click)="showInsertImgModal()"><span>Insert Image</span></button>
-                    <nz-modal style="display: inline-flex;" [(nzVisible)]="insertImgModel" nzTitle="Insert Image"
-                        (nzOnCancel)="handleCancelModel()" (nzOnOk)="insertImghandleOkModel()">
-                        <input nz-input placeholder="Paste your image link" [(ngModel)]="imageLink" />
-                        <input type="text" disabled nz-input placeholder="Width"
-                            style="width: 25%; border-left: 1px; pointer-events: none; background-color: white;" />
-                        <nz-input-number style="width: 25%;" [(ngModel)]="imgWidth" [nzMin]="1" [nzMax]="400"
+                <!-- Signature menu -->
+                <ul nz-menu nzMode="horizontal">
+                    <li nz-menu-item (click)="getAllSignature()" style="width: 20%; text-align: center;">
+                        <i nz-icon nzType="database" nzTheme="outline"></i>
+                        Show all template
+                    </li>
+                    <li nz-submenu nzTitle="Add dynamic content" nzIcon="appstore-add"
+                        style="width: 20%; text-align: center;">
+                        <ul>
+                            <li (click)="addContent('phone')" nz-menu-item>Add employee phone number</li>
+                            <li (click)="addContent('email')" nz-menu-item>Add employee email address</li>
+                            <li (click)="addContent('name')" nz-menu-item>Add employee fullname</li>
+                        </ul>
+                    </li>
+                    <li nz-menu-item (click)="showInsertImgModal()" style="width: 20%; text-align: center;">
+                        <i nz-icon nzType="file-image"></i>
+                        Insert Image
+                    </li>
+                    <li nz-menu-item (click)="loadReview()" style="width: 20%; text-align: center;">
+                        <i nz-icon nzType="reload"></i>
+                        Load review
+                    </li>
+                    <li nz-menu-item (click)="loadReview()" style="width: 20%; text-align: center;">
+                        <nz-badge [nzCount]="listRulesCheckErr.length">
+                            <a class="head-example" (click)="showRulesCheckModel()">
+                                <i nz-icon style="font-size: x-large; margin-left: 5mm;" nzType="notification"></i>
+                            </a>
+                        </nz-badge>
+                    </li>
+                </ul>
+                <!-- Insert image -->
+                <nz-modal style="display: inline-block;" [(nzVisible)]="insertImgModel" nzTitle="Insert Image"
+                    (nzOnCancel)="handleCancelModel()" (nzOnOk)="insertImghandleOkModel()">
+                    <input nz-input placeholder="Paste your image link" [(ngModel)]="imageLink" />
+                    <nz-input-group nzAddOnBefore="Width">
+                        <nz-input-number style="width: 100%;" [(ngModel)]="imgWidth" [nzMin]="1" [nzMax]="400"
                             [nzStep]="1">
                         </nz-input-number>
-                        <input type="text" disabled nz-input placeholder="Heigh"
-                            style="width: 25%; border-left: 1px; pointer-events: none; background-color: white;" />
-                        <nz-input-number style="width: 25%;" [(ngModel)]="imgHeigh" [nzMin]="1" [nzMax]="400"
+                    </nz-input-group>
+                    <nz-input-group nzAddOnBefore="Height">
+                        <nz-input-number style="width: 100%;" [(ngModel)]="imgHeigh" [nzMin]="1" [nzMax]="400"
                             [nzStep]="1">
                         </nz-input-number>
-                        <img [ngStyle]="{'width':imgWidth + 'px'}" [ngStyle]="{'height':imgHeigh + 'px'}"
-                            style="width: 100%; height: 100%;" [src]="imageLink" alt="" />
-                    </nz-modal>
-                    <button nz-button style="background-color: darkblue; border: darkblue; margin-left: 5mm;"
-                        (click)="loadReview()" nzType="primary">Load review</button>
-                    <nz-badge [nzCount]="listRulesCheckErr.length">
-                        <a class="head-example" (click)="showRulesCheckModel()">
-                            <i nz-icon style="font-size: x-large; margin-left: 5mm;" nzType="notification"></i>
-                        </a>
-                    </nz-badge>
-                    <button nz-button style="float: right;" (click)="getAllSignature()"
-                        [nzLoading]="isGetAllSignatureLoading" nzType="primary">All signature template</button>
-                    <nz-modal style="display: inline-block;" [(nzVisible)]="showCheckErrModel"
-                        nzTitle="Signature template rules check" nzCancelText="Close" (nzOnCancel)="handleCloseModel()"
-                        (nzOnOk)="handleCloseModel()">
-                        <nz-alert nzType="warning" *ngFor="let err of listRulesCheckErr;" nzMessage="{{err}}"
-                            nzShowIcon>
-                        </nz-alert>
-                    </nz-modal>
-                    <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showListSignatureTemplate"
-                        nzTitle="Signature templates" nzCancelText="Close" (nzOnCancel)="handleCloseModel()"
-                        (nzOnOk)="handleCloseModel()">
-                        <nz-table #columnTable [nzData]="listSignatureTemplate" [nzScroll]="{ x: '200px' }">
-                            <thead>
-                                <tr>
-                                    <th style="width: 30%;">Name</th>
-                                    <th style="width: 30%;">Default</th>
-                                    <th style="width: 20%;">Load</th>
-                                    <th style="width: 20%;">Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let data of listSignatureTemplate">
-                                    <td style="font-size: large;">{{ data.name }}</td>
-                                    <td><i *ngIf="data.is_primary === 1" nz-icon style="font-size: x-large;"
-                                            [nzType]="'check-circle'" [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#52c41a'"></i></td>
-                                    <td>
-                                        <button nz-button style="float: right;"
-                                            (click)="getSignatureTemplateByName(data.name)"
-                                            [nzLoading]="isGetAllSignatureLoading" nzType="primary">Load</button>
-                                    </td>
-                                    <td>
+                    </nz-input-group>
+                    <img [ngStyle]="{'width':imgWidth + 'px'}" [ngStyle]="{'height':imgHeigh + 'px'}"
+                        style="width: 100%; height: 100%;" [src]="imageLink" alt="" />
+                </nz-modal>
+                <!-- List error -->
+                <nz-modal style="display: inline-block;" [(nzVisible)]="showCheckErrModel"
+                    nzTitle="Signature template rules check" nzCancelText="Close" (nzOnCancel)="handleCloseModel()"
+                    (nzOnOk)="handleCloseModel()">
+                    <nz-alert nzType="warning" *ngFor="let err of listRulesCheckErr;" nzMessage="{{err}}" nzShowIcon>
+                    </nz-alert>
+                </nz-modal>
+                <!-- All signature template -->
+                <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showListSignatureTemplate"
+                    nzTitle="Signature templates" nzCancelText="Close" (nzOnCancel)="handleCloseModel()"
+                    (nzOnOk)="handleCloseModel()">
+                    <nz-table #columnTable [nzData]="listSignatureTemplate" [nzScroll]="{ x: '200px' }">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Name</th>
+                                <th style="width: 30%;">Default</th>
+                                <th style="width: 20%;">Load</th>
+                                <th style="width: 20%;">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of listSignatureTemplate">
+                                <td style="font-size: large;">{{ data.name }}</td>
+                                <td><i *ngIf="data.is_primary === 1" nz-icon style="font-size: x-large;"
+                                        [nzType]="'check-circle'" [nzTheme]="'twotone'"
+                                        [nzTwotoneColor]="'#52c41a'"></i></td>
+                                <td>
+                                    <button nz-button style="float: right;"
+                                        (click)="getSignatureTemplateByName(data.name)"
+                                        [nzLoading]="isGetAllSignatureLoading" nzType="primary">Load</button>
+                                </td>
+                                <td>
 
-                                        <button nz-button nzDanger style="float: right;"
-                                            (click)="showConfirmDeleteSiganture(data.name)"
-                                            [nzLoading]="isDeleteTemplateLoading" nzType="primary">Delete</button>
+                                    <button nz-button nzDanger style="float: right;"
+                                        (click)="showConfirmDeleteSiganture(data.name)"
+                                        [nzLoading]="isDeleteTemplateLoading" nzType="primary">Delete</button>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </nz-modal>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-modal>
+                <div style="margin-top: 1cm;">
+                    <nz-input-group nzAddOnBefore="Signature name">
+                        <input type="text" placeholder="Signature name" nz-input [(ngModel)]="signatureName" />
+                    </nz-input-group>
                 </div>
-                <nz-input-group style="margin-top: 1cm;" nzAddOnBefore="Signature name">
-                    <input type="text" placeholder="Signature name" nz-input [(ngModel)]="signatureName" />
-                </nz-input-group>
+
                 <div style="margin-top: 1mm;">
                     <angular-editor style="outline-color: white;" id="editor1" [(ngModel)]="htmlContent"
                         [config]="editorConfig">
@@ -98,7 +108,6 @@
                         [config]="editorReviewConfig">
                     </angular-editor>
                 </div>
-                <br />
                 <br />
                 <div>
                     <p>
@@ -115,34 +124,48 @@
                 </div>
             </mat-tab>
             <mat-tab label="Signature Template Rules">
-                <br />
-                <div>
-                    <button nz-button (click)="addRow()" nzType="primary">Add row</button>
-                    <button nz-button style="float: right;" (click)="getAllSignatureRule()"
-                        [nzLoading]="isGetAllSignatureRuleLoading" nzType="primary">All signature Rule</button>
-                </div>
+                <!-- Signature rule menu -->
+                <ul nz-menu nzMode="horizontal">
+                    <li nz-menu-item (click)="addRow()" style="width: 25%; text-align: center;">
+                        <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
+                        Add row
+                    </li>
+                    <li nz-menu-item (click)="getAllSignatureRule()" style="width: 25%; text-align: center;">
+                        <i nz-icon nzType="database"></i>
+                        Show all rule
+                    </li>
+                    <li nz-menu-item (click)="showConfirmNotifySignatureRules()"
+                        style="width: 25%; text-align: center;">
+                        <i nz-icon nzType="mail"></i>
+                        Notify to all emloyees
+                    </li>
+                    <li nz-menu-item (click)="getListWrongSignature()" style="width: 25%; text-align: center;">
+                        <i nz-icon nzType="close-circle"></i>
+                        Wrong signature employees
+                    </li>
+                </ul>
                 <div>
                     <nz-input-group style="margin-top: 1cm;" nzAddOnBefore="Signature rule name">
                         <input type="text" placeholder="Signature rule name" nz-input [(ngModel)]="signatureRuleName" />
                     </nz-input-group>
                 </div>
-                <br />
                 <!-- Max min -->
-                <nz-input-group nzCompact>
-                    <input type="text" disabled readonly nz-input placeholder="Input range of signature length"
-                        style="width: 23%; pointer-events: none; background-color: white" />
-                    <input type="text" disabled nz-input placeholder="Minimum length"
-                        style="width: 150px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
-                    <nz-input-number [(ngModel)]="rules.lengthRule.minLength" [nzMin]="1" [nzMax]="10000"
-                        style="width:100px; text-align: center;">
-                    </nz-input-number>
-                    <input type="text" disabled nz-input placeholder="Maximum length"
-                        style="width: 150px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
-                    <nz-input-number [nzMin]="1" [nzMax]="10000" [(ngModel)]="rules.lengthRule.maxLength"
-                        style="width: 100px; text-align: center; border-left: 0px;">
-                    </nz-input-number>
-                </nz-input-group>
-                <br />
+                <div>
+                    <nz-input-group nzCompact>
+                        <input type="text" readonly nz-input placeholder="Signature length"
+                            style="width: 20%; pointer-events: none; background-color: white" />
+                        <input type="text" nz-input placeholder="Minimum length"
+                            style="width: 20%; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
+                        <nz-input-number [(ngModel)]="rules.lengthRule.minLength" [nzMin]="1" [nzMax]="10000"
+                            style="width: 20%; text-align: center;">
+                        </nz-input-number>
+                        <input type="text" nz-input placeholder="Maximum length"
+                            style="width: 20%; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);" />
+                        <nz-input-number [nzMin]="1" [nzMax]="10000" [(ngModel)]="rules.lengthRule.maxLength"
+                            style="width: 20%; text-align: center; border-left: 0px;">
+                        </nz-input-number>
+                    </nz-input-group>
+                </div>
                 <!-- Rule table -->
                 <nz-table #editRowTable nzBordered [nzData]="listOfRules">
                     <thead>
@@ -225,13 +248,6 @@
                     <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
                         nzType="primary">Save</button>
-                    <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
-                        (click)="showConfirmNotifySignatureRules()" [nzLoading]="isSendNotifyRulesLoading"
-                        nzType="primary">
-                        Notify to all emloyees</button>
-                    <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
-                        (click)="getListWrongSignature()" [nzLoading]="isShowListWrongSignatureLoading"
-                        nzType="primary">Wrong signature</button>
                     <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplateRule()"
                         [disabled]="isSetPrimaryRuleDisable" [nzLoading]="isSetPrimaryTemplateRuleLoading"
                         nzType="primary">Set default</button>
