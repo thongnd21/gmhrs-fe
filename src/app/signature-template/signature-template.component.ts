@@ -267,7 +267,7 @@ export class SignatureTemplateComponent implements OnInit {
     let id = localStorage.getItem('id');
     this.signatureService.getListWrongSignature(id).subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
         if (res.status) {
           this.toast.success('There is not employees wrong signature!', 'Wrong signature status', { disableTimeOut: true });
         } else {
@@ -387,8 +387,8 @@ export class SignatureTemplateComponent implements OnInit {
     let phone = this.infoToReview.phone;
     let personalEmail = this.infoToReview.personal_email;
     this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
-    this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
-    this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+    this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
+    this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
     this.toast.success('Load review success!');
   }
   startEdit(id: string): void {
@@ -433,7 +433,7 @@ export class SignatureTemplateComponent implements OnInit {
     template.html = this.htmlContent;
     this.signatureService.updateSignatureForAllEmployees(id).subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
 
         if (res.status) {
           this.toast.success(res.message);
@@ -592,7 +592,6 @@ export class SignatureTemplateComponent implements OnInit {
             (res: any) => {
               if (res.status) {
                 // console.log('siganture: ' + res);
-
                 this.htmlContent = res.data.content;
                 this.signatureName = res.data.name;
                 this.isSetPrimaryDisable = res.data.is_primary > 0;
@@ -603,8 +602,8 @@ export class SignatureTemplateComponent implements OnInit {
                 let phone = this.infoToReview.phone;
                 let personalEmail = this.infoToReview.personal_email;
                 this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
-                this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
-                this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+                this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
+                this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
               } else {
                 this.toast.warning(res.message);
               }
@@ -720,6 +719,17 @@ export class SignatureTemplateComponent implements OnInit {
                     this.rules.dynamicRule = initDynamicRule;
                   } else {
                     this.rules.dynamicRule = rulesJson.dynamicRule;
+                    for (let dyOri of initDynamicRule) {
+                      let check = true;
+                      for (let dySet of this.rules.dynamicRule) {
+                        if (dyOri.name === dySet.name) {
+                          check = false;
+                        }
+                      }
+                      if (check) {
+                        this.rules.dynamicRule.push(dyOri);
+                      }
+                    }
                   }
                   rulesJson.listRule.forEach(element => {
                     this.listOfRules = [
@@ -752,7 +762,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getDynamicRule().subscribe(
       (res: any) => {
         if (res.status) {
-          console.log(res.data);
+          // console.log(res.data);
 
           this.dynamicRule = res.data;
         } else {
