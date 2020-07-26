@@ -11,9 +11,8 @@
                     <li nz-submenu nzTitle="Add dynamic content" nzIcon="appstore-add"
                         style="width: 20%; text-align: center;">
                         <ul>
-                            <li (click)="addContent('phone')" nz-menu-item>Add employee phone number</li>
-                            <li (click)="addContent('email')" nz-menu-item>Add employee email address</li>
-                            <li (click)="addContent('name')" nz-menu-item>Add employee fullname</li>
+                            <li *ngFor="let data of dynamicRule" (click)="addContent(data.name)" nz-menu-item>
+                                {{data.content}}</li>
                         </ul>
                     </li>
                     <li nz-menu-item (click)="showInsertImgModal()" style="width: 20%; text-align: center;">
@@ -24,9 +23,9 @@
                         <i nz-icon nzType="reload"></i>
                         Load review
                     </li>
-                    <li nz-menu-item (click)="loadReview()" style="width: 20%; text-align: center;">
+                    <li nz-menu-item (click)="showRulesCheckModel()" style="width: 20%; text-align: center;">
                         <nz-badge [nzCount]="listRulesCheckErr.length">
-                            <a class="head-example" (click)="showRulesCheckModel()">
+                            <a class="head-example">
                                 <i nz-icon style="font-size: x-large; margin-left: 5mm;" nzType="notification"></i>
                             </a>
                         </nz-badge>
@@ -126,22 +125,32 @@
             <mat-tab label="Signature Template Rules">
                 <!-- Signature rule menu -->
                 <ul nz-menu nzMode="horizontal">
-                    <li nz-menu-item (click)="addRow()" style="width: 25%; text-align: center;">
+                    <li nz-menu-item (click)="addRow()" style="width: 20%; text-align: center;">
                         <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
                         Add row
                     </li>
-                    <li nz-menu-item (click)="getAllSignatureRule()" style="width: 25%; text-align: center;">
+                    <li nz-menu-item (click)="getAllSignatureRule()" style="width: 20%; text-align: center;">
                         <i nz-icon nzType="database"></i>
                         Show all rule
                     </li>
+                    <li nz-submenu nzTitle="Dynamic content rule" nzIcon="appstore-add"
+                        style="width: 20%; text-align: center;">
+                        <ul>
+                            <li *ngFor="let data of rules.dynamicRule" (click)="checklog()" nz-menu-item>
+                                <label [(ngModel)]="data.action" nz-checkbox>
+                                    {{data.content}}
+                                </label>
+                            </li>
+                        </ul>
+                    </li>
                     <li nz-menu-item (click)="showConfirmNotifySignatureRules()"
-                        style="width: 25%; text-align: center;">
+                        style="width: 20%; text-align: center;">
                         <i nz-icon nzType="mail"></i>
                         Notify to all emloyees
                     </li>
-                    <li nz-menu-item (click)="getListWrongSignature()" style="width: 25%; text-align: center;">
+                    <li nz-menu-item (click)="getListWrongSignature()" style="width: 20%; text-align: center;">
                         <i nz-icon nzType="close-circle"></i>
-                        Wrong signature employees
+                        Break rule employees
                     </li>
                 </ul>
                 <div>

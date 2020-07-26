@@ -63,4 +63,7 @@ export class SignatureService {
     getSignatureRuleByID(id) {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURERULEBYID + id);
     }
+    getDynamicRule() {
+        return this.httpClient.get(this.URL + AppSettings.GETDYNAMICRULE);
+    }
 }
