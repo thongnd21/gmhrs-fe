@@ -29,4 +29,5 @@ export class AppSettings {
     public static GETALLSIGNATURERULE = 'signature/getAllSignatureRule/'
     public static GETSIGNATURERULEBYID = 'signature/getSignatureRuleByID/'
     public static DELETETEMPLATERULEBYID = 'signature/deleteTemplateRuleByID/'
+    public static GETDYNAMICRULE = 'signature/getDynamicRule/'
 }

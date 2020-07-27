@@ -18,6 +18,12 @@ class Rules {
     maxLength: number
   }
   listRule: ItemData[]
+  dynamicRule: DynamicRuleItem[]
+}
+class DynamicRuleItem {
+  name: string;
+  content: string;
+  action: boolean;
 }
 class ItemData {
   id: string;
@@ -41,6 +47,7 @@ export class SignatureTemplateComponent implements OnInit {
   isSaveRuleDisable = false;
   isSaveTemplateDisable = false;
   isSetPrimaryRuleDisable = false;
+  dynamicRule = new Array();
   listRulesCheckErr = new Array();
   listWrongSignature = new Array();
   listSignatureTemplate = new Array();
@@ -63,7 +70,8 @@ export class SignatureTemplateComponent implements OnInit {
       minLength: null,
       maxLength: null
     },
-    listRule: null
+    listRule: null,
+    dynamicRule: []
   };
   isSetPrimaryTemplateRuleLoading = false;
   isGetAllSignatureRuleLoading = false;
@@ -240,8 +248,8 @@ export class SignatureTemplateComponent implements OnInit {
     this.handleCloseModel();
     this.isShowListWrongSignatureLoading = true;
     this.isSpinning = true;
-    let username = localStorage.getItem('username');
-    this.signatureService.sendMailRemindEmployees(username).subscribe(
+    let id = localStorage.getItem('id');
+    this.signatureService.sendMailRemindEmployees(id).subscribe(
       (res) => {
         if (res) {
           this.toast.success('Send mails success!');
@@ -260,11 +268,15 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getListWrongSignature(id).subscribe(
       (res: any) => {
         // console.log(res);
-        if (res.length === 0) {
+        if (res.status) {
           this.toast.success('There is not employees wrong signature!', 'Wrong signature status', { disableTimeOut: true });
         } else {
-          this.listWrongSignature = res;
-          this.showListWrongSignature = true;
+          if (res.data !== undefined) {
+            this.listWrongSignature = res.data;
+            this.showListWrongSignature = true;
+          } else {
+            this.toast.error(res.message)
+          }
         }
         this.isShowListWrongSignatureLoading = false;
         this.isSpinning = false;
@@ -375,8 +387,8 @@ export class SignatureTemplateComponent implements OnInit {
     let phone = this.infoToReview.phone;
     let personalEmail = this.infoToReview.personal_email;
     this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
-    this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
-    this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+    this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
+    this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
     this.toast.success('Load review success!');
   }
   startEdit(id: string): void {
@@ -390,6 +402,10 @@ export class SignatureTemplateComponent implements OnInit {
 
   }
   submitSignatureRules(): void {
+    if (this.signatureRuleName === '' || this.rules.listRule === null) {
+      this.toast.error('Please input rule name and rule content!');
+      return;
+    }
     this.isSaveRulesLoading = true;
     this.isSpinning = true;
     this.rules.listRule = this.listOfRules;
@@ -421,7 +437,7 @@ export class SignatureTemplateComponent implements OnInit {
     template.html = this.htmlContent;
     this.signatureService.updateSignatureForAllEmployees(id).subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
 
         if (res.status) {
           this.toast.success(res.message);
@@ -557,27 +573,11 @@ export class SignatureTemplateComponent implements OnInit {
   }
   addContent(content): void {
     let closeTag = this.htmlContent.substring(this.htmlContent.lastIndexOf('</'), this.htmlContent.lastIndexOf('>') + 1);
-    if (content === 'phone') {
-      if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
-        this.htmlContent = this.htmlContent.substring(0, this.htmlContent.lastIndexOf('<'));
-        this.htmlContent += '{phoneNumber}' + closeTag;
-      } else {
-        this.htmlContent += '{phoneNumber}';
-      }
-    } else if (content === 'email') {
-      if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
-        this.htmlContent = this.htmlContent.substring(0, this.htmlContent.lastIndexOf('<'));
-        this.htmlContent += '{email}' + closeTag;
-      } else {
-        this.htmlContent += '{email}';
-      }
-    } else if (content === 'name') {
-      if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
-        this.htmlContent = this.htmlContent.substring(0, this.htmlContent.lastIndexOf('<'));
-        this.htmlContent += '{fullname}' + closeTag;
-      } else {
-        this.htmlContent += '{fullname}';
-      }
+    if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
+      this.htmlContent = this.htmlContent.substring(0, this.htmlContent.lastIndexOf('<'));
+      this.htmlContent += '{' + content + '}' + closeTag;
+    } else {
+      this.htmlContent += '{' + content + '}';
     }
   }
   deleteRow(id: string): void {
@@ -596,7 +596,6 @@ export class SignatureTemplateComponent implements OnInit {
             (res: any) => {
               if (res.status) {
                 // console.log('siganture: ' + res);
-
                 this.htmlContent = res.data.content;
                 this.signatureName = res.data.name;
                 this.isSetPrimaryDisable = res.data.is_primary > 0;
@@ -607,8 +606,8 @@ export class SignatureTemplateComponent implements OnInit {
                 let phone = this.infoToReview.phone;
                 let personalEmail = this.infoToReview.personal_email;
                 this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
-                this.htmlContentReview = this.htmlContentReview.split('{fullname}').join(firstname + ' ' + lastname);
-                this.htmlContentReview = this.htmlContentReview.split('{phoneNumber}').join(phone);
+                this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
+                this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
               } else {
                 this.toast.warning(res.message);
               }
@@ -623,29 +622,52 @@ export class SignatureTemplateComponent implements OnInit {
   getSignatureTemplateRuleByID(id): void {
     this.isSpinning = true;
     this.showListSignatureTemplateRule = false;
-    this.signatureService.getSignatureRuleByID(id).subscribe(
+    this.signatureService.getDynamicRule().subscribe(
       (res: any) => {
         if (res.status) {
-          this.isSetPrimaryRuleDisable = res.data.is_primary === 1
-          this.signatureRuleName = res.data.name;
-          this.signatureRuleID = res.data.id;
-          let rulesJson = JSON.parse(res.data.content);
-          // console.log('rulesJson: ' + rulesJson.lengthRule.minLength);
-          this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
-          this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
-          this.listOfRules = [];
-          rulesJson.listRule.forEach(element => {
-            this.listOfRules = [
-              ...this.listOfRules,
-              {
-                id: element.id,
-                content: element.content,
-                action: element.action
+          if (res.data.length > 0) {
+            let initDynamicRule = new Array<DynamicRuleItem>();
+            for (let data of res.data) {
+              let dynamicTemp = new DynamicRuleItem();
+              dynamicTemp.name = data.name;
+              dynamicTemp.content = data.content;
+              dynamicTemp.action = false;
+              initDynamicRule.push(dynamicTemp);
+            }
+            this.signatureService.getSignatureRuleByID(id).subscribe(
+              (res: any) => {
+                if (res.status) {
+                  this.isSetPrimaryRuleDisable = res.data.is_primary === 1
+                  let rulesJson = JSON.parse(res.data.content);
+                  this.signatureRuleName = res.data.name;
+                  this.signatureRuleID = res.data.id;
+                  this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
+                  this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
+                  if (rulesJson.dynamicRule === undefined) {
+                    this.rules.dynamicRule = initDynamicRule;
+                  } else {
+                    this.rules.dynamicRule = rulesJson.dynamicRule;
+                  }
+                  this.listOfRules = [];
+                  rulesJson.listRule.forEach(element => {
+                    this.listOfRules = [
+                      ...this.listOfRules,
+                      {
+                        id: element.id,
+                        content: element.content,
+                        action: element.action
+                      }
+                    ];
+                    this.i++;
+                  });
+                  this.toast.success('Load rule: ' + this.signatureRuleName + ' success!');
+                  // console.log('this.rule: ' + this.rules);
+                } else {
+                  this.toast.warning(res.message)
+                }
               }
-            ];
-            this.i++;
-          });
-          this.toast.success('Load rule: ' + this.signatureRuleName + ' success!');
+            );
+          }
         } else {
           this.toast.error(res.message);
         }
@@ -669,36 +691,94 @@ export class SignatureTemplateComponent implements OnInit {
       }
     )
   }
+  checklog() {
+    this.rules;
+    return;
+  }
   loadRules(): void {
+    this.isSpinning = true;
     this.isSetPrimaryRuleDisable = true;
     let id = localStorage.getItem('id');
-    this.signatureService.getSignatureTemplateRules(id).subscribe(
+    this.signatureService.getDynamicRule().subscribe(
       (res: any) => {
-        let rulesJson = JSON.parse(res.data.content);
-        // console.log('rulesJson: ' + rulesJson.lengthRule.minLength);
         if (res.status) {
-          this.signatureRuleName = res.data.name;
-          this.signatureRuleID = res.data.id;
-          this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
-          this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
-          rulesJson.listRule.forEach(element => {
-            this.listOfRules = [
-              ...this.listOfRules,
-              {
-                id: element.id,
-                content: element.content,
-                action: element.action
+          if (res.data.length > 0) {
+            let initDynamicRule = new Array<DynamicRuleItem>();
+            for (let data of res.data) {
+              let dynamicTemp = new DynamicRuleItem();
+              dynamicTemp.name = data.name;
+              dynamicTemp.content = data.content;
+              dynamicTemp.action = false;
+              initDynamicRule.push(dynamicTemp);
+            }
+            this.signatureService.getSignatureTemplateRules(id).subscribe(
+              (res: any) => {
+                if (res.status) {
+                  let rulesJson = JSON.parse(res.data.content);
+                  this.signatureRuleName = res.data.name;
+                  this.signatureRuleID = res.data.id;
+                  this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
+                  this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
+                  if (rulesJson.dynamicRule === undefined) {
+                    this.rules.dynamicRule = initDynamicRule;
+                  } else {
+                    this.rules.dynamicRule = rulesJson.dynamicRule;
+                    for (let dyOri of initDynamicRule) {
+                      let check = true;
+                      for (let dySet of this.rules.dynamicRule) {
+                        if (dyOri.name === dySet.name) {
+                          check = false;
+                        }
+                      }
+                      if (check) {
+                        this.rules.dynamicRule.push(dyOri);
+                      }
+                    }
+                  }
+                  rulesJson.listRule.forEach(element => {
+                    this.listOfRules = [
+                      ...this.listOfRules,
+                      {
+                        id: element.id,
+                        content: element.content,
+                        action: element.action
+                      }
+                    ];
+                    this.i++;
+                  });
+                  // console.log('this.rule: ' + this.rules);
+                } else {
+                  this.toast.warning(res.message)
+                }
               }
-            ];
-            this.i++;
-          });
-          // console.log('this.rule: ' + this.rules);
+            );
+          }
+        } else {
+          this.toast.error(res.message);
         }
+        this.isSpinning = false;
       }
-    );
+    )
+
+  }
+  loadDynamicRule(): void {
+    this.isSpinning = true;
+    this.signatureService.getDynamicRule().subscribe(
+      (res: any) => {
+        if (res.status) {
+          // console.log(res.data);
+
+          this.dynamicRule = res.data;
+        } else {
+          this.toast.error(res.message);
+        }
+        this.isSpinning = false;
+      }
+    )
   }
   ngOnInit(): void {
     this.loadTemplate();
     this.loadRules();
+    this.loadDynamicRule();
   }
 }
