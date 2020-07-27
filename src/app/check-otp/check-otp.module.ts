@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgOtpInputModule } from 'ng-otp-input';
+import { NzButtonModule } from 'ng-zorro-antd/button'
 
 @NgModule({
     imports: [
@@ -26,6 +27,7 @@ import { NgOtpInputModule } from 'ng-otp-input';
         MatInputModule,
         ReactiveFormsModule,
         NgOtpInputModule,
+        NzButtonModule,
         RouterModule.forChild(CheckOtpRoutes)
     ],
     declarations: [CheckOtpComponent]

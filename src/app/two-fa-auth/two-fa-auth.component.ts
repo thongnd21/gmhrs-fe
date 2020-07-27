@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from 'ngx-custom-validators';
 import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-two-fa-auth',
@@ -12,33 +13,51 @@ import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
   styleUrls: ['./two-fa-auth.component.css']
 })
 export class TwoFaAuthComponent implements OnInit {
-  otp: any;
+  otp = '';
   QrCodeLink: any;
+  showOrNot = false;
+  isSubmitOTPLoading = false;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
     private authenticationService: AuthenService,
-    private twoFaAuthService: TwoFaAuthService
+    private twoFaAuthService: TwoFaAuthService,
+    private _sanitizer: DomSanitizer,
   ) {
 
   }
   onOtpChange($event) {
     this.otp = $event;
   }
+
+  keyDownFunction(event) {
+    if (event.keyCode === 13) {
+      this.onSubmitOtp();
+    }
+  }
+
   onSubmitOtp() {
-    let username = localStorage.getItem('username');
-    this.twoFaAuthService.activated2FA(this.otp, username).subscribe(
-      (res) => {
-        if (res) {
-          this.toast.success('Validation successful!');
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.toast.error('Invalid OTP!');
+    if (this.otp !== '') {
+      this.isSubmitOTPLoading = true;
+      let username = localStorage.getItem('username');
+      this.twoFaAuthService.activated2FA(this.otp, username).subscribe(
+        (res) => {
+          if (res) {
+            this.toast.success('Activated 2FA successful!');
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.toast.error('Invalid OTP!');
+          }
+          setTimeout(() => {
+            this.isSubmitOTPLoading = false;
+          }, 1000);
         }
-      }
-    );
+      );
+    } else {
+      this.toast.warning('Input OTP!')
+    }
   }
   ngOnInit(): void {
     let username = localStorage.getItem('username');
@@ -53,6 +72,14 @@ export class TwoFaAuthComponent implements OnInit {
           let username = localStorage.getItem('username');
           this.twoFaAuthService.getQrCode(username).subscribe(
             (res) => {
+              // console.log('qr content: ' + res);
+              // if (res === null) {
+              //   console.log('reload bs server err!');
+
+              //   this.ngOnInit();
+              //   return;
+              // }
+              this.showOrNot = true;
               this.QrCodeLink = res;
             }
           );

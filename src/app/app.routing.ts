@@ -4,21 +4,23 @@ import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './shared/guard/auth.guard';
 import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
+import { CheckOTPGuard } from './shared/guard/checkotp.guard';
+import { LoginPageGuard } from './shared/guard/loginpage.guard';
 
 export const AppRoutes: Routes = [
   {
-    path: 'resetPassword', loadChildren:  () => import('./reset-password/reset-password.module')
+    path: 'resetPassword', loadChildren: () => import('./reset-password/reset-password.module')
       .then(m => m.ResetPasswordModule)
   },
   {
     path: '', loadChildren: () => import('./login/login.module')
-      .then(m => m.LoginModule)
+      .then(m => m.LoginModule), canActivate: [LoginPageGuard]
   },
-  
+
   {
     path: 'checkotp',
     loadChildren:
-      () => import('./check-otp/check-otp.module').then(m => m.CheckOtpModule)
+      () => import('./check-otp/check-otp.module').then(m => m.CheckOtpModule), canActivate: [CheckOTPGuard]
   },
   {
     path: '',
@@ -33,6 +35,11 @@ export const AppRoutes: Routes = [
         path: 'twofaauth',
         loadChildren:
           () => import('./two-fa-auth/two-fa-auth.module').then(m => m.TwoFaAuthModule)
+      },
+      {
+        path: 'signaturetemplate',
+        loadChildren:
+          () => import('./signature-template/signature-template.module').then(m => m.SignatureTemplateModule)
       },
       {
         path: 'activated2fa',

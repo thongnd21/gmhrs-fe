@@ -20,3 +20,8 @@
     align-items: center;
     background-color: white;
   }
+
+  button, input[type="button"], input[type="submit"]{
+    border: none;
+    outline: none;
+  }

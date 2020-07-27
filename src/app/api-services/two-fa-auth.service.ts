@@ -10,6 +10,12 @@ export class TwoFaAuthService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
+    checkBypassOtp(username) {
+        console.log('https://gmhrs-api.herokuapp.com/api/' + AppSettings.CHECKBYPASSOTP);
+        // return this.httpClient.get(this.URL + AppSettings.CHECKBYPASSOTP + username);
+        return this.httpClient.get('https://gmhrs-api.herokuapp.com/api/' + AppSettings.CHECKBYPASSOTP + username);
+    }
+
     getQrCode(username) {
         console.log(this.URL + AppSettings.TWOFAAUTHGETQRCODE);
         return this.httpClient.get(this.URL + AppSettings.TWOFAAUTHGETQRCODE + username);
@@ -23,17 +29,10 @@ export class TwoFaAuthService {
         return this.httpClient.get(this.URL + AppSettings.ACTIVATED2FA + otp + '/' + username);
     }
 
-    deactivated2FA(username) {
-        return this.httpClient.get(this.URL + AppSettings.DEACTIVATED2FA + username)
+    deactivated2FA(otp, username) {
+        return this.httpClient.get(this.URL + AppSettings.DEACTIVATED2FA + otp + '/' + username)
     }
     check2faStatus(username) {
         return this.httpClient.get(this.URL + AppSettings.CHECK2FASTATUS + username);
     }
-    // updateTeam(team) {    
-    //     return this.httpClient.put(this.URL + AppSettings.TEAM,team);
-    // }
-
-    // getTeamDetail(id){
-    //     return this.httpClient.get(this.URL + AppSettings.TEAM + id);
-    // }
 }

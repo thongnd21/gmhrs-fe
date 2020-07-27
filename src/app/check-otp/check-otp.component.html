@@ -9,16 +9,18 @@
                 </p>
                 <p>
                     <span class="row justify-content-md-center">
-                        <ng-otp-input #ngOtpInput (onInputChange)="onOtpChange($event)"
-                            [config]="{length:6, allowNumbersOnly: true}">
+                        <ng-otp-input (keydown)="keyDownFunction($event)" #ngOtpInput
+                            (onInputChange)="onOtpChange($event)" [config]="{length:6, allowNumbersOnly: true}">
                         </ng-otp-input>
                     </span>
                 </p>
                 <p>
                     <span class="row justify-content-md-center">
-                        <button mat-raised-button color="accent" (click)="onSubmitOtp()">
+                        <!-- <button mat-raised-button color="accent" (click)="onSubmitOtp()">
                             Submit
-                        </button>
+                        </button> -->
+                        <button nz-button [nzLoading]="isSubmitOTPLoading" (click)="onSubmitOtp()"
+                            nzType="primary">Submit</button>
                     </span>
                 </p>
             </mat-card-content>
