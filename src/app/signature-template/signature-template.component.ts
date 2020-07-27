@@ -402,6 +402,10 @@ export class SignatureTemplateComponent implements OnInit {
 
   }
   submitSignatureRules(): void {
+    if (this.signatureRuleName === '' || this.rules.listRule === null) {
+      this.toast.error('Please input rule name and rule content!');
+      return;
+    }
     this.isSaveRulesLoading = true;
     this.isSpinning = true;
     this.rules.listRule = this.listOfRules;
