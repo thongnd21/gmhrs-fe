@@ -11,6 +11,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,6 +23,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
     NzButtonModule,
     NzModalModule,
     NzListModule,
+    NzTagModule,
     RouterModule.forChild(DashboardRoutes)
   ],
   declarations: [DashboardComponent]

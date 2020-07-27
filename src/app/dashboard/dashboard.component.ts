@@ -3,7 +3,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import * as Chartist from 'chartist';
 import { ChartType, ChartEvent } from 'ng-chartist';
 declare var require: any;
-
+import * as moment from 'moment';
 const data: any = require('./data.json');
 import { AccountApiService } from './../api-services/account-api.service';
 import { ToastrService } from 'ngx-toastr';
@@ -93,10 +93,20 @@ export class DashboardComponent implements OnInit {
 	}
 
 	getNewEmployees() {
-		
+		const listAccount = [];
 		this.employeeApi.getAllEmployee().subscribe((res) => {
 			// const employeesData: any = res;
 			this.employees = res;
+			this.employees.forEach((element => {
+				let item = {};
+				item['id'] = element.id;
+				item['primary_email'] = element.primary_email;
+				item['first_name'] = element.first_name;
+				item['last_name'] = element.last_name;
+				item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
+				listAccount.push(item);
+			}))
+			this.employees = listAccount;
 			console.log(res);
 		},
 			(error) => {
@@ -109,7 +119,7 @@ export class DashboardComponent implements OnInit {
 			// const employeesData: any = res;
 			this.signatureInvalid = res;
 			console.log(res);
-			if(this.signatureInvalid.length === 0){
+			if(!this.signatureInvalid.data || !this.signatureInvalid.data){
 				this.disableBtnRevert = true;
 			} else {
 				this.disableBtnRevert = false;
