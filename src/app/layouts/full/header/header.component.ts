@@ -124,6 +124,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
+            gsuite_id : o.gsuite_id,
             selected: true
           }
         });
@@ -135,6 +136,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
+            gsuite_id : o.gsuite_id,
             selected: true
           }
         });
@@ -456,7 +458,7 @@ export class AppHeaderComponent {
     if (this.selectedEmpOutAll) {
       this.listSyncFinal.employee.outOfHRMS.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.employees.outOfHRMS.push(this.listSyncFinal.employee.outOfHRMS[index]);
+        this.listSynchonize.employees.outOfHRMS.push(this.listItemSynch.employees.outOfHRMS[index]);
       });
     }
     else {
@@ -475,7 +477,7 @@ export class AppHeaderComponent {
       this.listSynchonize.employees.outOfHRMS.splice(index, 1);
       this.selectedEmpOutAll = false;
     } else {
-      this.listSynchonize.employees.outOfHRMS.push(this.listSyncFinal.employee.outOfHRMS[index]);
+      this.listSynchonize.employees.outOfHRMS.push(this.listItemSynch.employees.outOfHRMS[index]);
       const check = this.listSyncFinal.employee.outOfHRMS.find(x => x.selected == false);
       console.log(check);
       if (!check) {
@@ -492,7 +494,7 @@ export class AppHeaderComponent {
     if (this.selectedTeamMatchAll) {
       this.listSyncFinal.team.matchedTeam.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.teams.matchedTeam.push(this.listSyncFinal.team.matchedTeam[index]);
+        this.listSynchonize.teams.matchedTeam.push(this.listItemSynch.teams.matchedTeam[index]);
       });
     }
     else {
@@ -509,7 +511,7 @@ export class AppHeaderComponent {
       this.listSynchonize.teams.matchedTeam.splice(index, 1);
       this.selectedTeamMatchAll = false;
     } else {
-      this.listSynchonize.teams.matchedTeam.push(this.listSyncFinal.team.matchedTeam[index]);
+      this.listSynchonize.teams.matchedTeam.push(this.listItemSynch.teams.matchedTeam[index]);
       const check = this.listSyncFinal.team.matchedTeam.find(x => x.selected == false);
       console.log(check);
       if (!check) {
@@ -526,7 +528,7 @@ export class AppHeaderComponent {
     if (this.selectedTeamNewAll) {
       this.listSyncFinal.team.newTeam.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.teams.newTeam.push(this.listSyncFinal.team.newTeam[index]);
+        this.listSynchonize.teams.newTeam.push(this.listItemSynch.teams.newTeam[index]);
       });
     }
     else {
@@ -544,7 +546,7 @@ export class AppHeaderComponent {
       this.listSynchonize.teams.newTeam.splice(index, 1);
       this.selectedTeamNewAll = false;
     } else {
-      this.listSynchonize.teams.newTeam.push(this.listSyncFinal.team.newTeam[index]);
+      this.listSynchonize.teams.newTeam.push(this.listItemSynch.teams.newTeam[index]);
       const check = this.listSyncFinal.team.newTeam.find(x => x.selected == false);
       if (!check) {
         this.selectedTeamNewAll = true;
@@ -559,7 +561,7 @@ export class AppHeaderComponent {
     if (this.selectedTeamOutAll) {
       this.listSyncFinal.team.outOfHRMS.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.teams.outOfHRMS.push(this.listSyncFinal.team.outOfHRMS[index]);
+        this.listSynchonize.teams.outOfHRMS.push(this.listItemSynch.team.outOfHRMS[index]);
       });
     }
     else {
@@ -577,7 +579,7 @@ export class AppHeaderComponent {
       this.listSynchonize.teams.outOfHRMS.splice(index, 1);
       this.selectedTeamOutAll = false;
     } else {
-      this.listSynchonize.teams.outOfHRMS.push(this.listSyncFinal.team.outOfHRMS[index]);
+      this.listSynchonize.teams.outOfHRMS.push(this.listItemSynch.team.outOfHRMS[index]);
       const check = this.listSyncFinal.team.outOfHRMS.find(x => x.selected == false);
       console.log(check);
       if (!check) {
