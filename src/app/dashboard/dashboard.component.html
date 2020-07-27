@@ -3,39 +3,9 @@
 <!-- ============================================================== -->
 <div fxLayout="row wrap">
     <!-- column -->    
-    <div fxFlex.gt-lg="66" fxFlex.gt-md="66" fxFlex.gt-xs="100" fxFlex="100">
-        <mat-card>
-            <mat-card-content>
-                <div class="d-flex flex-wrap">
-                    <div>
-                        <mat-card-title>Synchronize overview</mat-card-title>
-                         <mat-card-subtitle></mat-card-subtitle> 
-                     </div>
-                    <div class="ml-auto">
-                        <ul class="list-inline">
-                            
-                            <li>
-                                <h6 class="text-12 m-0">Current year</h6> </li>
-                            <li>
-                                <h6 class="text-success m-0"><i class="mdi mdi-checkbox-blank-circle font-10 m-r-10 "></i>Employee</h6> </li>
-                            <li>
-                                <h6 class=" text-info m-0"><i class="mdi mdi-checkbox-blank-circle font-10 m-r-10"></i>Team</h6> </li>
-                                <li>
-                                    <h6 class=" text-yellow m-0" style="color: #f4c63d"><i class="mdi mdi-checkbox-blank-circle font-10 m-r-10"></i>Department</h6> </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="barchrt" style="height:360px;">
-                    <x-chartist class="" [data]="barChart1.data" [type]="barChart1.type" [options]="barChart1.options" [responsiveOptions]="barChart1.responsiveOptions"
-                        [events]="barChart1.events"> </x-chartist>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
     <!-- column -->    
     <!-- column -->    
-    <div fxFlex.gt-lg="33" fxFlex.gt-md="33"  fxFlex.gt-xs="100" fxFlex="100">
+    <!-- <div fxFlex.gt-lg="33" fxFlex.gt-md="33"  fxFlex.gt-xs="100" fxFlex="100">
         <mat-card>
             <mat-card-content>
                 <mat-card-title>Total of Employee, Team, Department</mat-card-title>
@@ -63,7 +33,7 @@
                 </ul>
             </mat-card-content>
         </mat-card>
-    </div>
+    </div> -->
     <!-- column -->    
 </div>
 
@@ -75,16 +45,57 @@
     <div fxFlex.gt-lg="25" fxFlex.gt-md="40" fxFlex.gt-xs="100" fxFlex="100">
 
         <mat-card>
+            <div class="p-20 bg-warning position-relative">
+                <h4 class="card-title text-white m-0">Employee's signature warning </h4>
+                <!-- <h6 class="card-subtitle text-white m-0 op-5">5 minutes ago</h6> -->
+            </div>
+            <div class="p-20 bg-warning position-relative">
+                <button nz-tooltip [disabled]="disableBtnRevert" nz-button style="margin-right: 1cm;"
+                (click)="showConfirmNotifySignatureRules()" nzShape="round" [nzLoading]="isSendNotifyRulesLoading" nzType="primary">
+                Notify to all of the emloyees</button>
+                <!-- <button nz-button nzType="primary" [nzSize]="size" nzShape="round" [disabled]="disableBtnRevert">Revert all to default signature template</button> -->
+                <!-- <h6 class="card-subtitle text-white m-0 op-5">5 minutes ago</h6> -->
+            </div>
+            <div class="message-box contact-box p-20">
+   
+                <div class="message-widget contact-widget" *ngFor="let employee of signatureInvalid">
+                    <!-- Message -->
+                    <a href="javascript:void(0)"  nz-popover nzPopoverTitle="{{employee.firstName}} {{employee.lastName}}" (click)="setDefault(employee)"   [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click">
+                        <div class="mail-contnet">
+                            <h5>{{employee.firstName}} {{employee.lastName}}</h5> <span class="mail-desc">{{employee.email}}</span>
+                        </div>
+                        <ng-template #contentTemplate>
+                            <div style="color:warning">
+                                        <!-- <nz-alert nzType="warning" *ngFor="let mes of employeeSelected" nzMessage="{{mes}}"
+                                            style="font-size: medium;" nzShowIcon>
+                                        </nz-alert> -->
+                                        <nz-list nzItemLayout="horizontal">
+                                        <nz-list-item *ngFor="let item of employeeSelected">
+                                            <nz-list-item-meta>
+                                              <nz-list-item-meta-title>
+                                                <a href="javascript:void(0)">{{ item }}</a>
+                                              </nz-list-item-meta-title>
+                                            </nz-list-item-meta>
+                                          </nz-list-item>
+                                        </nz-list>
+                              <!-- <p>Content</p> -->
+                            </div>
+                          </ng-template>
+                    </a>
+                </div>
+            </div>
+        </mat-card>
+        <mat-card>
             <div class="p-20 bg-info position-relative">
                 <h4 class="card-title text-white m-0">New Employees</h4>
-                <h6 class="card-subtitle text-white m-0 op-5">5 minutes ago</h6>
+                <!-- <h6 class="card-subtitle text-white m-0 op-5">5 minutes ago</h6> -->
             </div>
             <div class="message-box contact-box p-20">
                 <div class="message-widget contact-widget" *ngFor="let employee of employees">
                     <!-- Message -->
                     <a href="#">
-                        <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user"
-                                class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                        <!-- <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user"
+                                class="img-circle"> <span class="profile-status online pull-right"></span> </div> -->
                         <div class="mail-contnet">
                             <h5>{{employee.first_name}} {{employee.last_name}}</h5> <span class="mail-desc">{{employee.primary_email}}</span>
                         </div>
