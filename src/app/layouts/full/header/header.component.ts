@@ -253,7 +253,6 @@ export class AppHeaderComponent {
     if(this.isFirstSync != null ){
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
-          console.log(res);
           this.lastSyncTime = res.last_sync_date
           this.toast.success('Synchronize success!');
           this.closeModal();

@@ -1,0 +1,37 @@
+.mat-table{
+    width: 100%;
+}
+.mat-table__wrapper .mat-table {
+    min-width: auto !important;
+    width: 100% !important;
+}
+.mat-header-row {
+    width: 100%;
+}
+.mat-row {
+    width: 100%;
+}
+.mat-column-count{
+    flex: 0 0 5% !important;
+    width: 5% !important;
+}
+.mat-column-templateName{
+    flex: 0 0 40% !important;
+    width: 40% !important;
+}
+.mat-column-status{
+    flex: 0 0 10% !important;
+    width: 10% !important;
+}
+.mat-column-create_at{
+    flex: 0 0 30% !important;
+    width: 30% !important;
+}
+.mat-column-action{
+    flex: 0 0 15% !important;
+    width: 15% !important;
+}
+::ng-deep .my-class .modal-dialog { 
+    max-width:1200px;
+    width: 1200px;
+}
