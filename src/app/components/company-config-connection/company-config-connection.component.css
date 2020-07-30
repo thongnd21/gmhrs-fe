@@ -20,3 +20,6 @@
 .response-status-success{
   color: green;
 }
+::ng-deep .mat-horizontal-stepper-header{
+  pointer-events: none !important;
+}

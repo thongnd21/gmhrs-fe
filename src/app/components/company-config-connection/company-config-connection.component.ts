@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray, FormControlName } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyServices } from '../../api-services/company.services';
@@ -9,10 +9,10 @@ import { FileUpload } from '../../api-services/file-upload-api.service';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { data } from 'jquery';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatStepper } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountApiService } from '../../api-services/account-api.service';
-import { STRING_TYPE } from '@angular/compiler';
+import { STRING_TYPE, ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -219,13 +219,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
       team_id: "Required"
     }
   };
-  connectionStatus={
+  connectionStatus = {
     connection: {
       status: "",
     }
   }
   connectionFail = false;
   apiEndpointFail = false;
+  nextButonConditon = false;
+  @ViewChild('stepper') stepper: MatStepper;
+
   constructor(
     private modalService: NgbModal,
     private toast: ToastrService,
@@ -255,9 +258,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
   // form connection String
   createConnectionStringForm() {
     const accountId = localStorage.getItem('id');
-    this.account = new AccountCompanyModel;
+    // this.account = new AccountCompanyModel;
 
-    // var stringConection: any;
     this.accessDBForm = this.fb.group({
       dbName: new FormControl('', [Validators.required]),
       host: new FormControl('', [Validators.required]),
@@ -269,7 +271,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
         if (res.connection_database != undefined && res.connection_database.length > 1) {
-          this.account.connection_database = res.connection_database;
           console.log(res.connection_database);
           this.connectionString.dbName = res.connection_database.split(" ")[0];
           this.connectionString.host = res.connection_database.split(" ")[1];
@@ -306,6 +307,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
       company_email: new FormControl('', [Validators.required, Validators.email]),
       file: new FormControl('')
     })
+  }
+
+  nextClicked() {
+    // complete the current step
+    this.stepper.selected.completed = true;
+    // move to next step
+    if (this.nextButonConditon == true) {
+      this.stepper.next();
+      this.nextButonConditon = false;
+      console.log(this.nextButonConditon);
+    } else {
+      this.toast.warning("Please complete this step!");
+    }
+
   }
 
   disableTestAuthenGsuiteButton = true;
@@ -377,21 +392,43 @@ export class CompanyConfigConnectionComponent implements OnInit {
           const result: any = res;
           if (result.status == "success") {
             this.toast.success("Con-fig G-Suite Authentication Successfully!");
+            this.nextButonConditon = true;
             this.closeModal();
           }
           if (result.status == "fail") {
             this.toast.error("Con-fig G-Suite Authentication fail!");
+            this.nextButonConditon = false;
           }
         },
         (error) => {
           this.toast.error("Server is not available!");
+          this.nextButonConditon = false;
         })
   }
 
   createFormApiEndpoint() {
+    const accountId = localStorage.getItem('id');
     this.APIEndpointForm = this.fb.group({
       url: new FormControl('', [Validators.required]),
     });
+    this.companyServices.getAccountCompanyById(accountId).subscribe(
+      (res: any) => {
+        console.log(res);
+
+        if (res.api_endpoint != undefined && res.api_endpoint.length > 1) {
+          console.log(res.connection_database);
+          this.APIEndpointForm = this.fb.group({
+            url: new FormControl(res.api_endpoint, [Validators.required]),
+          });
+
+          this.disableSaveConnectionStringButton = false;
+          // this.disableTestConnectionStringButton = false;
+        }
+        else {
+          console.log("else")
+          // this.disableTestConnectionStringButton = true;
+        }
+      })
   }
 
 
@@ -402,11 +439,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.account.api_endpoint = value.url;
     console.log(this.account);
     this.companyServices.updateAccountCompany(this.account).subscribe(
-      (res) => {
-        this.toast.success("Update Account success!");
+      (res: any) => {
+        if (res.status == "success") {
+          this.toast.success("Save API Endpoint success!");
+          this.nextButonConditon = true;
+          this.closeModal();
+        }
+        if (res.status == "fail") {
+          this.toast.error("Save API Endpoint fail!");
+          this.nextButonConditon = false;
+        }
       },
       (error) => {
         this.toast.error("Server is not available!");
+        this.nextButonConditon = false;
       }
     )
   }
@@ -765,44 +811,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           // this.enableDataConnectionResult = true;
         }
-
-
-        // console.log(result.checkConnection);
-
-        // if (result.checkConnection.status == true) {
-        //   //employee
-        //   result.employee.id === undefined ? this.connectionStringDataResponseEmployee.employee.id = "Table Missing Field" : this.connectionStringDataResponseEmployee.employee.id = "Pass";
-        //   result.employee.primary_email === undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
-        //   result.employee.personal_email === undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
-        //   result.employee.first_name === undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
-        //   result.employee.last_name === undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
-        //   result.employee.phone === undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Missing Field" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
-        //   result.employee.address === undefined ? this.connectionStringDataResponseEmployee.employee.address = "Missing Field" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
-        //   result.employee.department_id === undefined ? this.connectionStringDataResponseEmployee.employee.department_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department_id = "Pass";
-        //   //department
-        //   result.department.id === undefined ? this.connectionStringDataResponseDepartment.department.id = "Missing Field" : this.connectionStringDataResponseDepartment.department.id = "Pass";
-        //   result.department.name === undefined ? this.connectionStringDataResponseDepartment.department.name = "Missing Field" : this.connectionStringDataResponseDepartment.department.name = "Pass";
-        //   //team
-        //   result.team.id === undefined ? this.connectionStringDataResponseTeam.team.id = "Missing Field" : this.connectionStringDataResponseTeam.team.id = "Pass";
-        //   result.team.name === undefined ? this.connectionStringDataResponseTeam.team.name = "Missing Field" : this.connectionStringDataResponseTeam.team.name = "Pass";
-        //   result.team.email === undefined ? this.connectionStringDataResponseTeam.team.email = "Missing Field" : this.connectionStringDataResponseTeam.team.email = "Pass";
-        //   //team_employee
-        //   result.team_employee.employee_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Pass";
-        //   result.team_employee.team_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Pass";
-        //   //open modal
-        //   this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-        // }
-        // if (status.status == 0) {
-        //   this.loadingTestConnection = false;
-        //   this.disableSaveConnectionStringButton = false;
-        //   console.log(res);
-        //   this.toast.error("Connection fail!!");
-        // } else if (status.status == 200) {
-        //   this.loadingTestConnection = false;
-        //   this.disableSaveConnectionStringButton = true;
-        //   this.toast.success("Database connection success!");
-        // }
-
       },
       (error) => {
         this.loadingTestConnection = false;
@@ -834,11 +842,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.account.connection_database = connectionString;
     console.log(this.account.connection_database);
     this.companyServices.updateAccountCompany(this.account).subscribe(
-      (res) => {
-        this.toast.success("Save connection success!");
+      (res: any) => {
+        if (res.status == "success") {
+          this.toast.success("Save connection success!");
+          this.nextButonConditon = true;
+          this.closeModal();
+        };
+        if (res.status == "fail") {
+          this.toast.error("Save connection fail!");
+          this.nextButonConditon = false;
+        }
       },
       (error) => {
         this.toast.error("Server is not available!");
+        this.nextButonConditon = false;
       }
     )
   }

@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                matStepperNext>Next</button>
+                                (click)="nextClicked()">Next</button>
                             <div class="button-container mr-6">
                                 <div class="spinner-container" *ngIf="loadingTestConnection">
                                     <mat-spinner diameter="24"></mat-spinner>
@@ -68,22 +68,6 @@
                                 </button>
                             </div>
                         </form>
-
-                        <br />
-                        <!-- <div *ngIf="connectionFail">
-                            <h2 style="color: red;">Connection Fail. Please input information Again</h2>
-                        </div>
-                        <div *ngIf="enableDataConnectionResult">
-                            <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
-                            <h2 style="color: red;" *ngIf="employeeValidate==false">Employee Not Passed</h2>
-                            <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
-                            <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
-                            <h2 style="color: red;" *ngIf="departmentValidate==false">Department Not Passed</h2>
-                            <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
-                            <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
-                            <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
-                            <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
-                        </div> -->
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -91,7 +75,7 @@
                 <mat-card class="p-0">
                     <mat-card-content>
                         <form [formGroup]="APIEndpointForm">
-                            <ng-template matStepLabel>API EndPoint</ng-template>
+                            <ng-template matStepLabel>Data Connect</ng-template>
                             <div fxLayout="row wrap">
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
@@ -103,7 +87,7 @@
                                 </div>
                             </div>
                             <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                matStepperNext>Next</button>
+                                (click)="nextClicked()">Next</button>
                             <div class="button-container  mr-6">
                                 <div class="spinner-container" *ngIf="loadingTestAPI">
                                     <mat-spinner diameter="24"></mat-spinner>
@@ -148,8 +132,11 @@
                             </mat-form-field>
                             <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
                                 type="file" name="file" style="margin: 40px;" />
+                            <br />
                             <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                matStepperNext>Next</button>
+                                matStepperPrevious>Back</button>
+                            <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                (click)="nextClicked()">Next</button>
                             <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton"
                                 (click)="onTest(responseTestFile,gsuiteCredentialForm.value)" color="primary">
                                 Test Connection
@@ -242,6 +229,8 @@
                                 <div class="spinner-container" *ngIf="loadingSubmit">
                                     <mat-spinner diameter="24"></mat-spinner>
                                 </div>
+                                <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                    matStepperPrevious>Back</button>
                                 <button style="margin-left: 10px;" mat-raised-button color="primary"
                                     (click)="saveScheduleTime()" [disabled]="loadingSubmit">
                                     Submit
