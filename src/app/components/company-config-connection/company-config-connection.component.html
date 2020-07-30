@@ -80,8 +80,7 @@
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="url" formControlName="url" placeholder="URL"
-                                                value="" />
+                                            <input matInput name="url" formControlName="url" placeholder="URL" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -125,22 +124,33 @@
             <div class="card-body">
                 <mat-card class="p-0">
                     <mat-card-content>
-                        <form class="col-md-4" [formGroup]="gsuiteCredentialForm">
+                        <form [formGroup]="gsuiteCredentialForm">
                             <mat-form-field class="full-width">
                                 <input matInput name="company_email" formControlName="company_email"
-                                    placeholder="Company Email" value="" />
+                                    placeholder="Company Email" />
                             </mat-form-field>
-                            <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
-                                type="file" name="file" style="margin: 40px;" />
+                            <mat-form-field class="full-width">
+                                <ngx-mat-file-input matInput (change)="fileChange($event)" matInput name="company_email"
+                                    formControlName="file" enctype="multipart/form-data" name="file"
+                                    placeholder="File JSON" valuePlaceholder="{{file_name_auth_gsuite_company}}">
+                                </ngx-mat-file-input>
+                                <mat-icon matSuffix>folder</mat-icon>
+                            </mat-form-field>
+
+                            <!-- <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
+                                type="file" name="file" style="margin: 40px;" /> -->
                             <br />
-                            <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                matStepperPrevious>Back</button>
-                            <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                (click)="nextClicked()">Next</button>
-                            <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton"
-                                (click)="onTest(responseTestFile,gsuiteCredentialForm.value)" color="primary">
-                                Test Connection
-                            </button>
+                            <div style="width: 400px; height: 50px;">
+                                <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                    matStepperPrevious>Back</button>
+                                <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                    (click)="nextClicked()">Next</button>
+                                <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton"
+                                    (click)="onTest(responseTestFile,gsuiteCredentialForm.value)" color="primary">
+                                    Test
+                                </button>
+                            </div>
+
                         </form>
                     </mat-card-content>
                 </mat-card>

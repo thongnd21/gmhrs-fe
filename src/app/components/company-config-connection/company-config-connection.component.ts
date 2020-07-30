@@ -227,6 +227,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   connectionFail = false;
   apiEndpointFail = false;
   nextButonConditon = false;
+  file_name_auth_gsuite_company;
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(
@@ -259,6 +260,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   createConnectionStringForm() {
     const accountId = localStorage.getItem('id');
     // this.account = new AccountCompanyModel;
+    this.nextButonConditon = false;
 
     this.accessDBForm = this.fb.group({
       dbName: new FormControl('', [Validators.required]),
@@ -287,11 +289,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
             dialect: new FormControl(res.connection_database.split(" ")[5]),
           });
           this.disableSaveConnectionStringButton = false;
+          this.nextButonConditon = true;
           // this.disableTestConnectionStringButton = false;
         }
         else {
-          console.log("else")
           this.disableSaveConnectionStringButton = false;
+          this.nextButonConditon = false;
           // this.disableTestConnectionStringButton = true;
         }
 
@@ -301,12 +304,34 @@ export class CompanyConfigConnectionComponent implements OnInit {
       }
     );
   }
-
   createGsuiteCredentialForm() {
+    const accountId = localStorage.getItem('id');
+    this.nextButonConditon = false;
     this.gsuiteCredentialForm = this.fb.group({
       company_email: new FormControl('', [Validators.required, Validators.email]),
       file: new FormControl('')
-    })
+    });
+    this.companyServices.getAccountCompanyById(accountId).subscribe(
+      (res: any) => {
+
+        if (res.company_email != undefined) {
+          console.log(res.company_email);
+          this.gsuiteCredentialForm = this.fb.group({
+            company_email: new FormControl(res.company_email, [Validators.required]),
+            file: new FormControl(res.file_name_auth_gsuite_company)
+          });
+          this.file_name_auth_gsuite_company = res.file_name_auth_gsuite_company;
+          this.disableSaveConnectionStringButton = false;
+          this.nextButonConditon = true;
+          // this.disableTestConnectionStringButton = false;
+        }
+        else {
+          console.log("else");
+          this.nextButonConditon = false;
+          // this.disableTestConnectionStringButton = true;
+        }
+      })
+
   }
 
   nextClicked() {
@@ -315,7 +340,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
     // move to next step
     if (this.nextButonConditon == true) {
       this.stepper.next();
-      this.nextButonConditon = false;
       console.log(this.nextButonConditon);
     } else {
       this.toast.warning("Please complete this step!");
@@ -422,10 +446,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
           });
 
           this.disableSaveConnectionStringButton = false;
+          this.nextButonConditon = true;
           // this.disableTestConnectionStringButton = false;
         }
         else {
-          console.log("else")
+          console.log("else");
+          this.nextButonConditon = false;
           // this.disableTestConnectionStringButton = true;
         }
       })
@@ -766,53 +792,59 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
       (res: any) => {
         // const result: any = res;
-        // console.log(result);
         console.log(res);
-
-        if (res.checkConnection.status == true) {
-          this.connectionStatus.connection.status = "Success";
+        
+        if (res.checkConnection != undefined) {
+          if (res.checkConnection.status == true) {
+            this.connectionStatus.connection.status = "Success";
+            this.loadingTestConnection = false;
+            this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
+            this.apiEndpointResultDepartmentList = res.departments.length > 0 ? res.departments : null;
+            this.apiEndpointResultTeamList = res.teams.length > 0 ? res.teams : null;
+            var check = this.checkingFormatDataConnectionString(
+              this.apiEndpointResultEmployeeList,
+              this.apiEndpointResultDepartmentList,
+              this.apiEndpointResultTeamList);
+            this.enableDataConnectionResult = true;
+            this.connectionFail = false;
+            this.disableSaveConnectionStringButton = check;
+            console.log(this.dataAPIEndpoindEmployee);
+            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          } if (res.checkConnection.status == false || res.status == 0) {
+            this.connectionStatus.connection.status = "Fail";
+            this.employeeValidate = false;
+            this.teamValidate = false;
+            this.departmentValidate = false;
+            this.connectionStringDataResponseEmployee.employee.id = "Required";
+            this.connectionStringDataResponseEmployee.employee.primary_email = "Required";
+            this.connectionStringDataResponseEmployee.employee.personal_email = "Required";
+            this.connectionStringDataResponseEmployee.employee.first_name = "Required";
+            this.connectionStringDataResponseEmployee.employee.last_name = "Required";
+            this.connectionStringDataResponseEmployee.employee.phone = "Required";
+            this.connectionStringDataResponseEmployee.employee.address = "Required";
+            this.connectionStringDataResponseEmployee.employee.department.id = "Required";
+            this.connectionStringDataResponseEmployee.employee.department.name = "Required";
+            this.connectionStringDataResponseDepartment.department.id = "Required";
+            this.connectionStringDataResponseDepartment.department.name = "Required";
+            this.connectionStringDataResponseTeam.team.id = "Required";
+            this.connectionStringDataResponseTeam.team.name = "Required";
+            this.connectionStringDataResponseTeam.team.email = "Required";
+            this.connectionStringDataResponseTeam.team.member[0].id = "Required";
+            this.connectionStringDataResponseTeam.team.member[0].primary_email = "Required";
+            this.enableDataConnectionResult = true;
+            this.connectionFail = true;
+            this.loadingTestConnection = false;
+            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+            // this.enableDataConnectionResult = true;
+          }
+        }else{
           this.loadingTestConnection = false;
-          this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
-          this.apiEndpointResultDepartmentList = res.departments.length > 0 ? res.departments : null;
-          this.apiEndpointResultTeamList = res.teams.length > 0 ? res.teams : null;
-          var check = this.checkingFormatDataConnectionString(
-            this.apiEndpointResultEmployeeList,
-            this.apiEndpointResultDepartmentList,
-            this.apiEndpointResultTeamList);
-          this.enableDataConnectionResult = true;
-          this.connectionFail = false;
-          this.disableSaveConnectionStringButton = check;
-          console.log(this.dataAPIEndpoindEmployee);
-          this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-        } if (res.checkConnection.status == false) {
-          this.connectionStatus.connection.status = "Fail";
-          this.employeeValidate = false;
-          this.teamValidate = false;
-          this.departmentValidate = false;
-          this.connectionStringDataResponseEmployee.employee.id = "Required";
-          this.connectionStringDataResponseEmployee.employee.primary_email = "Required";
-          this.connectionStringDataResponseEmployee.employee.personal_email = "Required";
-          this.connectionStringDataResponseEmployee.employee.first_name = "Required";
-          this.connectionStringDataResponseEmployee.employee.last_name = "Required";
-          this.connectionStringDataResponseEmployee.employee.phone = "Required";
-          this.connectionStringDataResponseEmployee.employee.address = "Required";
-          this.connectionStringDataResponseEmployee.employee.department.id = "Required";
-          this.connectionStringDataResponseEmployee.employee.department.name = "Required";
-          this.connectionStringDataResponseDepartment.department.id = "Required";
-          this.connectionStringDataResponseDepartment.department.name = "Required";
-          this.connectionStringDataResponseTeam.team.id = "Required";
-          this.connectionStringDataResponseTeam.team.name = "Required";
-          this.connectionStringDataResponseTeam.team.email = "Required";
-          this.connectionStringDataResponseTeam.team.member[0].id = "Required";
-          this.connectionStringDataResponseTeam.team.member[0].primary_email = "Required";
-          this.enableDataConnectionResult = true;
-          this.connectionFail = true;
-          this.loadingTestConnection = false;
-          this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-          // this.enableDataConnectionResult = true;
+          console.log(res);
         }
+
       },
       (error) => {
+        console.log(error);
         this.loadingTestConnection = false;
         this.toast.error("Server is not available!");
       }
