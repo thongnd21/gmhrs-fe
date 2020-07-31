@@ -14,12 +14,12 @@ import { Signature } from '../model/signature';;
 class DepartmentSpec {
   id: number;
   name: string;
-  ruleID: number;
+  signaturerule_id: number;
 }
 class PositionSpec {
   id: number;
   name: string;
-  ruleID: string;
+  signaturerule_id: string;
 }
 class SpecRuleCheck {
   department: DepartmentSpec[];
@@ -73,8 +73,6 @@ export class SignatureTemplateComponent implements OnInit {
   signatureID = '';
   signatureRuleName = '';
   signatureRuleID = '';
-  specDepartmentID = null;
-  specPositionID = null;
   insertImgModel = false;
   showSpecificModel = false;
   showCheckErrModel = false;
@@ -218,13 +216,12 @@ export class SignatureTemplateComponent implements OnInit {
               } else {
                 this.toast.error(resRule.message);
               }
+              this.isSpinning = false;
             }
           );
-
         } else {
           this.toast.error(res.message);
         }
-        this.isSpinning = false;
       }
     )
   }
@@ -337,17 +334,18 @@ export class SignatureTemplateComponent implements OnInit {
     let id = localStorage.getItem('id');
     let data = {
       id: id,
-      departmentSpecID: this.specDepartmentID,
-      positionSpecID: this.specPositionID,
+      departmentSpec: this.specRuleCheck.department,
+      positionSpec: this.specRuleCheck.position,
       signatureID: this.signatureID
     }
     this.signatureService.saveSpecSignature(data).subscribe(
       (res: any) => {
         if (res.status) {
-
+          this.toast.success(res.message);
         } else {
-
+          this.toast.error(res.message);
         }
+        this.isSpinning = false;
       }
     )
   }

@@ -106,17 +106,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <nz-radio-group [(ngModel)]="specDepartmentID">
-                                <tr>
-                                    <label style="font-size: large;" nz-radio [nzValue]="null">None</label>
-                                </tr>
-                                <tr *ngFor="let data of specRuleCheck.department">
-                                    <td>
-                                        <label style="font-size: large;" nz-radio
-                                            [nzValue]="data.id">{{data.name}}</label>
-                                    </td>
-                                </tr>
-                            </nz-radio-group>
+                            <tr *ngFor="let data of specRuleCheck.department">
+                                <td>
+                                    <label nz-checkbox [(ngModel)]="data.signaturerule_id">{{data.name}}</label>
+                                </td>
+                            </tr>
                         </tbody>
                     </nz-table>
                     <nz-table #columnTable [nzData]="specRuleCheck.position" [nzScroll]="{ x: '200px' }">
@@ -126,17 +120,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <nz-radio-group [(ngModel)]="specPositionID">
-                                <tr>
-                                    <label style="font-size: large;" nz-radio [nzValue]="null">None</label>
-                                </tr>
-                                <tr *ngFor="let data of specRuleCheck.position">
-                                    <td>
-                                        <label style="font-size: large;" nz-radio
-                                            [nzValue]="data.id">{{data.name}}</label>
-                                    </td>
-                                </tr>
-                            </nz-radio-group>
+                            <tr *ngFor="let data of specRuleCheck.position">
+                                <td>
+                                    <label nz-checkbox [(ngModel)]="data.signaturerule_id">{{data.name}}</label>
+                                </td>
+                            </tr>
                         </tbody>
                     </nz-table>
                 </nz-modal>
