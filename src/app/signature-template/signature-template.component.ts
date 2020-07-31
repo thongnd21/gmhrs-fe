@@ -11,20 +11,33 @@ import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Signature } from '../model/signature';;
 
-
+class DepartmentSpec {
+  id: number;
+  name: string;
+  ruleID: number;
+}
+class PositionSpec {
+  id: number;
+  name: string;
+  ruleID: string;
+}
+class SpecRuleCheck {
+  department: DepartmentSpec[];
+  position: PositionSpec[];
+}
 class Rules {
   lengthRule: {
     minLength: number,
     maxLength: number
   }
   listRule: ItemData[]
-  dynamicRule: DynamicRuleItem[]
+  // dynamicRule: DynamicRuleItem[]
 }
-class DynamicRuleItem {
-  name: string;
-  content: string;
-  action: boolean;
-}
+// class DynamicRuleItem {
+//   name: string;
+//   content: string;
+//   action: boolean;
+// }
 class ItemData {
   id: string;
   content: string;
@@ -57,21 +70,29 @@ export class SignatureTemplateComponent implements OnInit {
   imgHeigh = 100;
   imageLink = '';
   signatureName = '';
+  signatureID = '';
   signatureRuleName = '';
   signatureRuleID = '';
+  specDepartmentID = null;
+  specPositionID = null;
   insertImgModel = false;
+  showSpecificModel = false;
   showCheckErrModel = false;
   showListSignatureTemplate = false;
   showListSignatureTemplateRule = false;
   showListWrongSignature = false;
   infoToReview: any;
+  specRuleCheck: SpecRuleCheck = {
+    department: [],
+    position: []
+  };
   rules: Rules = {
     lengthRule: {
       minLength: null,
       maxLength: null
     },
     listRule: null,
-    dynamicRule: []
+    // dynamicRule: []
   };
   isSetPrimaryTemplateRuleLoading = false;
   isGetAllSignatureRuleLoading = false;
@@ -179,11 +200,40 @@ export class SignatureTemplateComponent implements OnInit {
     private modal: NzModalService,
   ) { }
 
+  loadSpecificRuleCheck(): void {
+    this.isSpinning = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.getSpecificRule(id).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.signatureService.getAllSignatureTemplateRules(id).subscribe(
+            (resRule: any) => {
+              if (resRule.status) {
+                this.listSignatureTemplateRule = resRule.data;
+                this.specRuleCheck = new SpecRuleCheck();
+                this.specRuleCheck.department = res.data.depertment;
+                this.specRuleCheck.position = res.data.position;
+                this.showSpecificModel = true;
+                this.toast.success(res.message);
+              } else {
+                this.toast.error(resRule.message);
+              }
+            }
+          );
+
+        } else {
+          this.toast.error(res.message);
+        }
+        this.isSpinning = false;
+      }
+    )
+  }
   handleCloseModel(): void {
     this.showCheckErrModel = false;
     this.showListWrongSignature = false;
     this.showListSignatureTemplate = false;
     this.showListSignatureTemplateRule = false;
+    this.showSpecificModel = false;
   }
   select(event) {
     const start = event.target.selectionStart;
@@ -281,6 +331,33 @@ export class SignatureTemplateComponent implements OnInit {
         this.isShowListWrongSignatureLoading = false;
         this.isSpinning = false;
       })
+  }
+  saveSpecTemplate(): void {
+    this.isSpinning = true;
+    let id = localStorage.getItem('id');
+    let data = {
+      id: id,
+      departmentSpecID: this.specDepartmentID,
+      positionSpecID: this.specPositionID,
+      signatureID: this.signatureID
+    }
+    this.signatureService.saveSpecSignature(data).subscribe(
+      (res: any) => {
+        if (res.status) {
+
+        } else {
+
+        }
+      }
+    )
+  }
+  showConfirmSaveSpecTem(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Are you sure?</i>',
+      nzContent: '<b>It will update this signature template to who pass conditional abow!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.saveSpecTemplate()
+    });
   }
   showConfirmDeleteSigantureRule(id, name): void {
     this.modal.confirm({
@@ -495,6 +572,7 @@ export class SignatureTemplateComponent implements OnInit {
         if (res.status) {
           this.htmlContent = res.data.content;
           this.signatureName = res.data.name;
+          this.signatureID = res.data.id;
           this.loadReview();
           this.showListSignatureTemplate = false;
           this.isSetPrimaryDisable = res.data.is_primary > 0;
@@ -598,6 +676,7 @@ export class SignatureTemplateComponent implements OnInit {
                 // console.log('siganture: ' + res);
                 this.htmlContent = res.data.content;
                 this.signatureName = res.data.name;
+                this.signatureID = res.data.id;
                 this.isSetPrimaryDisable = res.data.is_primary > 0;
                 this.htmlContentReview = this.htmlContent;
                 // console.log('htmlContentReview: ' + this.htmlContentReview);
@@ -626,14 +705,14 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           if (res.data.length > 0) {
-            let initDynamicRule = new Array<DynamicRuleItem>();
-            for (let data of res.data) {
-              let dynamicTemp = new DynamicRuleItem();
-              dynamicTemp.name = data.name;
-              dynamicTemp.content = data.content;
-              dynamicTemp.action = false;
-              initDynamicRule.push(dynamicTemp);
-            }
+            // let initDynamicRule = new Array<DynamicRuleItem>();
+            // for (let data of res.data) {
+            //   let dynamicTemp = new DynamicRuleItem();
+            //   dynamicTemp.name = data.name;
+            //   dynamicTemp.content = data.content;
+            //   dynamicTemp.action = false;
+            //   initDynamicRule.push(dynamicTemp);
+            // }
             this.signatureService.getSignatureRuleByID(id).subscribe(
               (res: any) => {
                 if (res.status) {
@@ -643,11 +722,11 @@ export class SignatureTemplateComponent implements OnInit {
                   this.signatureRuleID = res.data.id;
                   this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
                   this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
-                  if (rulesJson.dynamicRule === undefined) {
-                    this.rules.dynamicRule = initDynamicRule;
-                  } else {
-                    this.rules.dynamicRule = rulesJson.dynamicRule;
-                  }
+                  // if (rulesJson.dynamicRule === undefined) {
+                  //   this.rules.dynamicRule = initDynamicRule;
+                  // } else {
+                  //   this.rules.dynamicRule = rulesJson.dynamicRule;
+                  // }
                   this.listOfRules = [];
                   rulesJson.listRule.forEach(element => {
                     this.listOfRules = [
@@ -692,8 +771,7 @@ export class SignatureTemplateComponent implements OnInit {
     )
   }
   checklog() {
-    this.rules;
-    return;
+    console.log(this.rules);
   }
   loadRules(): void {
     this.isSpinning = true;
@@ -703,14 +781,14 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           if (res.data.length > 0) {
-            let initDynamicRule = new Array<DynamicRuleItem>();
-            for (let data of res.data) {
-              let dynamicTemp = new DynamicRuleItem();
-              dynamicTemp.name = data.name;
-              dynamicTemp.content = data.content;
-              dynamicTemp.action = false;
-              initDynamicRule.push(dynamicTemp);
-            }
+            // let initDynamicRule = new Array<DynamicRuleItem>();
+            // for (let data of res.data) {
+            //   let dynamicTemp = new DynamicRuleItem();
+            //   dynamicTemp.name = data.name;
+            //   dynamicTemp.content = data.content;
+            //   dynamicTemp.action = false;
+            //   initDynamicRule.push(dynamicTemp);
+            // }
             this.signatureService.getSignatureTemplateRules(id).subscribe(
               (res: any) => {
                 if (res.status) {
@@ -719,22 +797,22 @@ export class SignatureTemplateComponent implements OnInit {
                   this.signatureRuleID = res.data.id;
                   this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
                   this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
-                  if (rulesJson.dynamicRule === undefined) {
-                    this.rules.dynamicRule = initDynamicRule;
-                  } else {
-                    this.rules.dynamicRule = rulesJson.dynamicRule;
-                    for (let dyOri of initDynamicRule) {
-                      let check = true;
-                      for (let dySet of this.rules.dynamicRule) {
-                        if (dyOri.name === dySet.name) {
-                          check = false;
-                        }
-                      }
-                      if (check) {
-                        this.rules.dynamicRule.push(dyOri);
-                      }
-                    }
-                  }
+                  // if (rulesJson.dynamicRule === undefined) {
+                  //   this.rules.dynamicRule = initDynamicRule;
+                  // } else {
+                  //   this.rules.dynamicRule = rulesJson.dynamicRule;
+                  //   for (let dyOri of initDynamicRule) {
+                  //     let check = true;
+                  //     for (let dySet of this.rules.dynamicRule) {
+                  //       if (dyOri.name === dySet.name) {
+                  //         check = false;
+                  //       }
+                  //     }
+                  //     if (check) {
+                  //       this.rules.dynamicRule.push(dyOri);
+                  //     }
+                  //   }
+                  // }
                   rulesJson.listRule.forEach(element => {
                     this.listOfRules = [
                       ...this.listOfRules,

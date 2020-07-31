@@ -9,6 +9,12 @@ export class SignatureService {
     // URL = 'http://localhost:3000/api/';
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
+    saveSpecSignature(data) {
+        return this.httpClient.put(this.URL + AppSettings.SAVESPECSIGNATURE, data);
+    }
+    getSpecificRule(id) {
+        return this.httpClient.get(this.URL + AppSettings.GETSPECIFICRULE + id);
+    }
     getAllSignatureTemplateRules(id) {
         return this.httpClient.get(this.URL + AppSettings.GETALLSIGNATURERULE + id);
     }
