@@ -2,7 +2,7 @@
 
     <mat-horizontal-stepper linear #stepper>
         <!-- #docregion editable -->
-        <mat-step [stepControl]="accessDBForm">
+        <mat-step [stepControl]="accessDBForm" >
             <!-- #enddocregion editable -->
             <mat-radio-group [(ngModel)]="connection" aria-label="Select an option">
                 <mat-radio-button [value]="true">Database Connection</mat-radio-button>
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                (click)="nextClicked()">Next</button>
+                                (click)="nextClicked(1)">Next</button>
                             <div class="button-container mr-6">
                                 <div class="spinner-container" *ngIf="loadingTestConnection">
                                     <mat-spinner diameter="24"></mat-spinner>
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                (click)="nextClicked()">Next</button>
+                                (click)="nextClicked(1)">Next</button>
                             <div class="button-container  mr-6">
                                 <div class="spinner-container" *ngIf="loadingTestAPI">
                                     <mat-spinner diameter="24"></mat-spinner>
@@ -144,7 +144,7 @@
                                 <button mat-raised-button style="margin-right: 40px;" color="primary"
                                     matStepperPrevious>Back</button>
                                 <button mat-raised-button style="margin-right: 40px;" color="primary"
-                                    (click)="nextClicked()">Next</button>
+                                    (click)="nextClicked(3)">Next</button>
                                 <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton"
                                     (click)="onTest(responseTestFile,gsuiteCredentialForm.value)" color="primary">
                                     Test
@@ -385,6 +385,7 @@
                         <tr>
                             <th>CONNECTION TYPE</th>
                             <th>STATUS</th>
+                            <th>MESSAGE</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -392,6 +393,7 @@
                     'response-status-fail' : connectionStatus.connection.status!='Success'}">
                         <td>Database Connection String</td>
                         <td>{{connectionStatus.connection.status}}</td>
+                        <td>{{connectionStatus.connection.message}}</td>
                         <td>
                             <mat-icon *ngIf="connectionStatus.connection.status=='Success'" style="color: green;">done
                             </mat-icon>

@@ -176,6 +176,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   employeeValidate = false;
   departmentValidate = false;
   teamValidate = false;
+  connectionStringDataResponseEmployeeJSON;
   connectionStringDataResponseEmployee = { // json format employee to admin company checking field when input api endpoint
     employee: {
       id: "Required",
@@ -222,11 +223,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
   connectionStatus = {
     connection: {
       status: "",
+      message: ""
     }
   }
   connectionFail = false;
   apiEndpointFail = false;
-  nextButonConditon = false;
+  nextButonConditonConnectionString = false;
+  nextButonConditonApiEnpoint = false;
+  nextButonConditonGSuiteCredential = false;
   file_name_auth_gsuite_company;
   @ViewChild('stepper') stepper: MatStepper;
 
@@ -260,7 +264,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   createConnectionStringForm() {
     const accountId = localStorage.getItem('id');
     // this.account = new AccountCompanyModel;
-    this.nextButonConditon = false;
+    this.nextButonConditonConnectionString = false;
 
     this.accessDBForm = this.fb.group({
       dbName: new FormControl('', [Validators.required]),
@@ -268,7 +272,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       port: new FormControl('', [Validators.required]),
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
-      dialect: new FormControl(''),
+      dialect: new FormControl('mysql'),
     });
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
@@ -289,12 +293,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
             dialect: new FormControl(res.connection_database.split(" ")[5]),
           });
           this.disableSaveConnectionStringButton = false;
-          this.nextButonConditon = true;
+          this.nextButonConditonConnectionString = true;
           // this.disableTestConnectionStringButton = false;
         }
         else {
           this.disableSaveConnectionStringButton = false;
-          this.nextButonConditon = false;
+          this.nextButonConditonConnectionString = false;
           // this.disableTestConnectionStringButton = true;
         }
 
@@ -306,14 +310,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
   createGsuiteCredentialForm() {
     const accountId = localStorage.getItem('id');
-    this.nextButonConditon = false;
+    this.nextButonConditonGSuiteCredential = false;
     this.gsuiteCredentialForm = this.fb.group({
       company_email: new FormControl('', [Validators.required, Validators.email]),
       file: new FormControl('')
     });
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
-
         if (res.company_email != undefined) {
           console.log(res.company_email);
           this.gsuiteCredentialForm = this.fb.group({
@@ -322,25 +325,31 @@ export class CompanyConfigConnectionComponent implements OnInit {
           });
           this.file_name_auth_gsuite_company = res.file_name_auth_gsuite_company;
           this.disableSaveConnectionStringButton = false;
-          this.nextButonConditon = true;
+          this.nextButonConditonGSuiteCredential = true;
+          this.disableTestAuthenGsuiteButton = false;
           // this.disableTestConnectionStringButton = false;
         }
         else {
           console.log("else");
-          this.nextButonConditon = false;
+          this.nextButonConditonGSuiteCredential = false;
           // this.disableTestConnectionStringButton = true;
         }
       })
 
   }
 
-  nextClicked() {
+  nextClicked(status) {
     // complete the current step
     this.stepper.selected.completed = true;
     // move to next step
-    if (this.nextButonConditon == true) {
+    if (status == 1 && this.nextButonConditonConnectionString == true) {
       this.stepper.next();
-      console.log(this.nextButonConditon);
+      // console.log(this.nextButonConditon);
+    } else if (status == 1 && this.nextButonConditonApiEnpoint == true) {
+      this.stepper.next();
+    }
+    else if (status == 3 && this.nextButonConditonGSuiteCredential == true) {
+      this.stepper.next();
     } else {
       this.toast.warning("Please complete this step!");
     }
@@ -363,12 +372,25 @@ export class CompanyConfigConnectionComponent implements OnInit {
   onTest(modal, value) {
     let formData = new FormData();
     let company_email = value.company_email;
-    for (var i = 0; i < this.uploadedFiles.length; i++) {
-      formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
+    if (this.uploadedFiles != undefined) {
+      for (var i = 0; i < this.uploadedFiles.length; i++) {
+        formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
+        formData.set("company_email", company_email);
+        this.sendFile(modal, formData);
+      }
     }
-    formData.set("company_email", company_email);
+    if(this.uploadedFiles == undefined){
+      var authenGsuite = {
+        company_email : value.company_email,
+        fileName: this.file_name_auth_gsuite_company
+      }
+      this.sendFile(modal,authenGsuite);
+    }
 
-    this.http.post('http://localhost:3000/api/file/upload', formData)
+  }
+
+  sendFile(modal, data) {
+    this.http.post('http://localhost:3000/api/file/upload', data)
       // this.http.post('https://gmhrs-api.herokuapp.com/api/file/upload', formData)
       .subscribe(
         (res) => {
@@ -416,17 +438,17 @@ export class CompanyConfigConnectionComponent implements OnInit {
           const result: any = res;
           if (result.status == "success") {
             this.toast.success("Con-fig G-Suite Authentication Successfully!");
-            this.nextButonConditon = true;
+            this.nextButonConditonGSuiteCredential = true;
             this.closeModal();
           }
           if (result.status == "fail") {
             this.toast.error("Con-fig G-Suite Authentication fail!");
-            this.nextButonConditon = false;
+            this.nextButonConditonGSuiteCredential = false;
           }
         },
         (error) => {
           this.toast.error("Server is not available!");
-          this.nextButonConditon = false;
+          this.nextButonConditonGSuiteCredential = false;
         })
   }
 
@@ -446,12 +468,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
           });
 
           this.disableSaveConnectionStringButton = false;
-          this.nextButonConditon = true;
+          this.nextButonConditonApiEnpoint = true;
           // this.disableTestConnectionStringButton = false;
         }
         else {
           console.log("else");
-          this.nextButonConditon = false;
+          this.nextButonConditonApiEnpoint = false;
           // this.disableTestConnectionStringButton = true;
         }
       })
@@ -468,17 +490,17 @@ export class CompanyConfigConnectionComponent implements OnInit {
       (res: any) => {
         if (res.status == "success") {
           this.toast.success("Save API Endpoint success!");
-          this.nextButonConditon = true;
+          this.nextButonConditonApiEnpoint = true;
           this.closeModal();
         }
         if (res.status == "fail") {
           this.toast.error("Save API Endpoint fail!");
-          this.nextButonConditon = false;
+          this.nextButonConditonApiEnpoint = false;
         }
       },
       (error) => {
         this.toast.error("Server is not available!");
-        this.nextButonConditon = false;
+        this.nextButonConditonApiEnpoint = false;
       }
     )
   }
@@ -793,9 +815,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
       (res: any) => {
         // const result: any = res;
         console.log(res);
-        
+
         if (res.checkConnection != undefined) {
-          if (res.checkConnection.status == true) {
+          if (res.checkConnection.status == "success") {
             this.connectionStatus.connection.status = "Success";
             this.loadingTestConnection = false;
             this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
@@ -810,8 +832,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.disableSaveConnectionStringButton = check;
             console.log(this.dataAPIEndpoindEmployee);
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-          } if (res.checkConnection.status == false || res.status == 0) {
+          } if (res.checkConnection.status == "fail" || res.status == 0) {
             this.connectionStatus.connection.status = "Fail";
+            this.connectionStatus.connection.message = res.checkConnection.message;
             this.employeeValidate = false;
             this.teamValidate = false;
             this.departmentValidate = false;
@@ -835,9 +858,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionFail = true;
             this.loadingTestConnection = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-            // this.enableDataConnectionResult = true;
+            this.enableDataConnectionResult = true;
           }
-        }else{
+        } else {
           this.loadingTestConnection = false;
           console.log(res);
         }
@@ -877,17 +900,17 @@ export class CompanyConfigConnectionComponent implements OnInit {
       (res: any) => {
         if (res.status == "success") {
           this.toast.success("Save connection success!");
-          this.nextButonConditon = true;
+          this.nextButonConditonConnectionString = true;
           this.closeModal();
         };
         if (res.status == "fail") {
           this.toast.error("Save connection fail!");
-          this.nextButonConditon = false;
+          this.nextButonConditonConnectionString = false;
         }
       },
       (error) => {
         this.toast.error("Server is not available!");
-        this.nextButonConditon = false;
+        this.nextButonConditonConnectionString = false;
       }
     )
   }
