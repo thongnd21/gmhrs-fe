@@ -26,7 +26,7 @@
                     <li nz-menu-item (click)="showRulesCheckModel()" style="width: 20%; text-align: center;">
                         <nz-badge [nzCount]="listRulesCheckErr.length">
                             <a class="head-example">
-                                <i nz-icon style="font-size: x-large; margin-left: 5mm;" nzType="notification"></i>
+                                <i nz-icon style="font-size: x-large; " nzType="notification"></i>
                             </a>
                         </nz-badge>
                     </li>
@@ -93,7 +93,7 @@
                 <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showSpecificModel"
                     [nzAutofocus]="null" nzTitle="Apply template for specific" nzCancelText="Close"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="showConfirmSaveSpecTem()">
-                    <div style="margin-top: 5mm;">
+                    <div>
                         <nz-input-group nzAddOnBefore="Signature name">
                             <input readonly type="text" style="text-align: center; color: darkblue; font-weight: bold;"
                                 placeholder="Signature name" nz-input [value]="signatureName" spellcheck="false" />
@@ -108,7 +108,7 @@
                         <tbody>
                             <tr *ngFor="let data of specRuleCheck.department">
                                 <td>
-                                    <label nz-checkbox [(ngModel)]="data.signaturerule_id">{{data.name}}</label>
+                                    <label nz-checkbox [(ngModel)]="data.status">{{data.name}}</label>
                                 </td>
                             </tr>
                         </tbody>
@@ -122,14 +122,14 @@
                         <tbody>
                             <tr *ngFor="let data of specRuleCheck.position">
                                 <td>
-                                    <label nz-checkbox [(ngModel)]="data.signaturerule_id">{{data.name}}</label>
+                                    <label nz-checkbox [(ngModel)]="data.status">{{data.name}}</label>
                                 </td>
                             </tr>
                         </tbody>
                     </nz-table>
                 </nz-modal>
                 <!-- Siganture name -->
-                <div style="margin-top: 5mm;">
+                <div>
                     <nz-input-group nzAddOnBefore="Signature name">
                         <input type="text" style="text-align: center; color: darkblue; font-weight: bold;"
                             placeholder="Signature name" nz-input [(ngModel)]="signatureName" spellcheck="false" />

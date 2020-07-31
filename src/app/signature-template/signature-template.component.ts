@@ -15,11 +15,13 @@ class DepartmentSpec {
   id: number;
   name: string;
   signaturerule_id: number;
+  status: boolean;
 }
 class PositionSpec {
   id: number;
   name: string;
-  signaturerule_id: string;
+  signaturerule_id: number;
+  status: boolean;
 }
 class SpecRuleCheck {
   department: DepartmentSpec[];
@@ -31,13 +33,7 @@ class Rules {
     maxLength: number
   }
   listRule: ItemData[]
-  // dynamicRule: DynamicRuleItem[]
 }
-// class DynamicRuleItem {
-//   name: string;
-//   content: string;
-//   action: boolean;
-// }
 class ItemData {
   id: string;
   content: string;
@@ -204,21 +200,27 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getSpecificRule(id).subscribe(
       (res: any) => {
         if (res.status) {
-          this.signatureService.getAllSignatureTemplateRules(id).subscribe(
-            (resRule: any) => {
-              if (resRule.status) {
-                this.listSignatureTemplateRule = resRule.data;
-                this.specRuleCheck = new SpecRuleCheck();
-                this.specRuleCheck.department = res.data.depertment;
-                this.specRuleCheck.position = res.data.position;
-                this.showSpecificModel = true;
-                this.toast.success(res.message);
-              } else {
-                this.toast.error(resRule.message);
-              }
-              this.isSpinning = false;
+          this.specRuleCheck = new SpecRuleCheck();
+          this.specRuleCheck.department = res.data.depertment;
+          for (let de of this.specRuleCheck.department) {
+            if (de.signaturerule_id === parseInt(this.signatureID)) {
+              de.status = true;
+            } else {
+              de.status = false;
             }
-          );
+          }
+          this.specRuleCheck.position = res.data.position;
+          for (let po of this.specRuleCheck.position) {
+            if (po.signaturerule_id === parseInt(this.signatureID)) {
+              po.status = true;
+            } else {
+              po.status = false;
+            }
+          }
+          this.showSpecificModel = true;
+          this.toast.success(res.message);
+          this.isSpinning = false;
+
         } else {
           this.toast.error(res.message);
         }
@@ -331,6 +333,7 @@ export class SignatureTemplateComponent implements OnInit {
   }
   saveSpecTemplate(): void {
     this.isSpinning = true;
+    this.showSpecificModel = false;
     let id = localStorage.getItem('id');
     let data = {
       id: id,
