@@ -101,6 +101,8 @@ export class SignatureTemplateComponent implements OnInit {
   isUpdatedTemplateLoading = false;
   htmlContent = '';
   htmlContentReview = '';
+  indexPoniterRule = null;
+  currentEditID = null;
   i = 0;
   editId: string | null = null;
   listOfRules: ItemData[] = [];
@@ -237,7 +239,7 @@ export class SignatureTemplateComponent implements OnInit {
   select(event) {
     const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
-    // console.log(start + ', ' + end)
+    console.log('editor: ' + event)
   }
   setPrimaryTemplate(): void {
     this.isSetPrimaryTemplateLoading = true;
@@ -469,8 +471,23 @@ export class SignatureTemplateComponent implements OnInit {
     this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
     this.toast.success('Load review success!');
   }
-  startEdit(id: string): void {
+  addDynamicContentRule(addContent): void {
+    addContent = '{' + addContent + '}';
+    for (let rule of this.rules.listRule) {
+      if (rule.id === this.currentEditID) {
+        let currentContent = rule.content;
+        let pre = currentContent.substring(0, this.indexPoniterRule);
+        let sub = currentContent.substring(this.indexPoniterRule, currentContent.length);
+        rule.content = pre + ' ' + addContent + ' ' + sub;
+      }
+    }
+  }
+  startEdit(id: string, event): void {
     this.editId = id;
+    console.log(this.rules.listRule);
+    this.indexPoniterRule = event.target.selectionStart;
+    console.log('start: ' + this.indexPoniterRule);
+    this.currentEditID = id;
   }
   stopEdit(): void {
     this.editId = null;

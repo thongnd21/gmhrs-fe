@@ -137,8 +137,8 @@
                 </div>
                 <!-- Editor -->
                 <div style="margin-top: 1mm;">
-                    <angular-editor style="outline-color: white;" id="editor1" [(ngModel)]="htmlContent"
-                        [config]="editorConfig">
+                    <angular-editor style="outline-color: white;" (selectChange)="select($event)" id="editor1"
+                        [(ngModel)]="htmlContent" [config]="editorConfig">
                     </angular-editor>
                 </div>
                 <ul nz-menu nzMode="horizontal">
@@ -178,8 +178,8 @@
                     <li nz-submenu nzTitle="Dynamic content rule" nzIcon="appstore-add"
                         style="width: 25%; text-align: center;">
                         <ul>
-                            <li nz-typography nzCopyable [nzCopyText]="'{'+ data.name +'}'"
-                                *ngFor="let data of dynamicRule" nz-menu-item>
+                            <li (click)="addDynamicContentRule(data.name)" *ngFor="let data of dynamicRule"
+                                nz-menu-item>
                                 {{data.content}}</li>
                         </ul>
                     </li>
@@ -234,7 +234,7 @@
                             </td>
                             <td>
                                 <textarea (select)="select($event)" nzAutosize placeholder="Input content" type="text"
-                                    nz-input (click)="startEdit(data.id); select($event)" [(ngModel)]="data.content"
+                                    nz-input (click)="startEdit(data.id, $event);" [(ngModel)]="data.content"
                                     (blur)="stopEdit()" spellcheck="false"></textarea>
                             </td>
                             <td>
