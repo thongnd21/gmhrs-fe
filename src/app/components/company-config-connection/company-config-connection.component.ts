@@ -379,12 +379,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.sendFile(modal, formData);
       }
     }
-    if(this.uploadedFiles == undefined){
+    if (this.uploadedFiles == undefined) {
       var authenGsuite = {
-        company_email : value.company_email,
+        company_email: value.company_email,
         fileName: this.file_name_auth_gsuite_company
       }
-      this.sendFile(modal,authenGsuite);
+      this.sendFile(modal, authenGsuite);
     }
 
   }
@@ -819,6 +819,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         if (res.checkConnection != undefined) {
           if (res.checkConnection.status == "success") {
             this.connectionStatus.connection.status = "Success";
+            this.connectionStatus.connection.message = "Connect successfully";
             this.loadingTestConnection = false;
             this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
             this.apiEndpointResultDepartmentList = res.departments.length > 0 ? res.departments : null;
@@ -858,7 +859,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionFail = true;
             this.loadingTestConnection = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-            this.enableDataConnectionResult = true;
+
           }
         } else {
           this.loadingTestConnection = false;
