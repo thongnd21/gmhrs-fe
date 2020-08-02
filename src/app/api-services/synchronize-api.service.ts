@@ -16,6 +16,7 @@ export class SynchronizeService {
   }
 
   synchronize(syncInfo){
+    console.log(syncInfo);
     const path = 'sync-all/sync';
     return this.httpClient.post(this.URL + AppSettings.GSUITE + path,syncInfo);
   }

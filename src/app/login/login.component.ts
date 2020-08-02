@@ -5,7 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from 'ngx-custom-validators';
 import { CompanyServices } from '../api-services/company.services';
-import { AccountApiService } from '../api-services/account-api.service';
+import {AccountApiService } from '../api-services/account-api.service';
+import * as moment from 'moment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-login',
@@ -69,9 +70,12 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(account).subscribe(
             (res: any) => {
                 const userInfo: any = res;
-                localStorage.setItem('two_fa_status', userInfo.profile.two_fa_status);
-                localStorage.setItem('username', userInfo.profile.username);
+                console.log(res);
+                localStorage.setItem('isLoggedin', 'true');
                 localStorage.setItem('id', userInfo.profile.id);
+                localStorage.setItem('username', userInfo.profile.username);
+                localStorage.setItem('two_fa_status', userInfo.profile.two_fa_status);
+                localStorage.setItem('last_sync_at', moment.utc(userInfo.profile.last_sync_date).local().format('LLLL'));
                 localStorage.setItem('token', userInfo.token);
                 localStorage.setItem('is_first_sync', userInfo.profile.is_first_sync === true ? 'true' : 'false');
                 localStorage.setItem('roleId', userInfo.profile.role.id);

@@ -5,6 +5,7 @@ export class AppSettings {
     public static EMP = 'employees/'
     public static TEAM = 'teams/'
     public static DEPARTMENT = 'departments/'
+    public static EMAIL = 'email/'
     public static TWOFAAUTHGETQRCODE = 'twofa/getQRCode/'
     public static CHECKOTP = 'twofa/checkotp/'
     public static ACTIVATED2FA = 'twofa/activated2fa/'
