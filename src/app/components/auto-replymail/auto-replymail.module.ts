@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AutoReplymailRoutes } from './auto-replymail.routing';
 import { AutoReplymailComponent } from './auto-replymail.component';
 import { EmailEditorModule } from 'angular-email-editor';
-import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -23,6 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatChipsModule,
     MatSortModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     EmailEditorModule,
     RouterModule.forChild(AutoReplymailRoutes)

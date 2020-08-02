@@ -12,6 +12,7 @@ import { Team } from '../../../model/team';
 import { Employee } from '../../../model/employee';
 import { MatMenuTrigger } from '@angular/material';
 import { CheckOtpModule } from '../../../check-otp/check-otp.module';
+import * as moment from 'moment';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -22,7 +23,7 @@ import { CheckOtpModule } from '../../../check-otp/check-otp.module';
 export class AppHeaderComponent {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   username;
-  lastSyncTime = '';
+  lastSyncTime = localStorage.getItem('last_sync_at');
   selectedAll = true;
   selectedDepMatchAll = true;
   selectedDepNewAll = true;
@@ -253,7 +254,7 @@ export class AppHeaderComponent {
     if(this.isFirstSync != null ){
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
-          this.lastSyncTime = res.last_sync_date
+          this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
           this.toast.success('Synchronize success!');
           this.closeModal();
         },

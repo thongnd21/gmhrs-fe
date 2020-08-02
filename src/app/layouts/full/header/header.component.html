@@ -21,7 +21,8 @@
             <h5>Synchronization</h5>
         </div>
         <div class="card-body" (click)="doNotClose($event)">
-            <p style="font-size: 15px; color: red;">Last sync at: {{lastSyncTime}}</p>
+            <p style="font-size: 15px; ">Last sync at: </p>
+            <p style="font-size: 15px;  color: green;">{{lastSyncTime}}</p>
             <div class="button-container  mr-4">
                 <div class="spinner-container" *ngIf="loading">
                     <mat-spinner diameter="24"></mat-spinner>
