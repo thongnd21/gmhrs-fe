@@ -46,5 +46,9 @@ export class AccountApiService {
         return this.httpClient.get("https://gmhrs-api.herokuapp.com/api/signature/getListEmployeesEmailBreakRule/" + localStorage.getItem("id"));
     };
 
+    getActivityLog(){
+        return this.httpClient.get(this.URL + 'logs?accountId=' + localStorage.getItem("id"));
+    };
+
 
 }
