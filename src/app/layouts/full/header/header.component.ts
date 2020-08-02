@@ -1,8 +1,9 @@
-import { OutOfHRMSDep } from './../../../model/outOfHRMSDep';
 import { Component, ViewChild } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyConnectionService } from '../../../api-services/company-connection-api.service';
 import { ToastrService } from 'ngx-toastr';
+import { OutOfHRMSDep } from './../../../model/outOfHRMSDep';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SynchronizeService } from '../../../api-services/synchronize-api.service';
 import { DepartmentSync } from '../../../model/listSyncDepartment';
 import { TeamSync } from '../../../model/listSyncTeam';
@@ -37,37 +38,38 @@ export class AppHeaderComponent {
   employee_new_match = {};
   employee_out_match = {};
   loading = false;
+  constructor(
+    private companyConnectionService: CompanyConnectionService,
+    private toast: ToastrService,
+    private modalService: NgbModal,
+    private syncService: SynchronizeService,
+  ) { }
   panelOpenState = false;
   listItemSynch: any;
   listNewEmp = [];
   listOutEmp = [];
   listSyncFinal: any;
   isFirstSync = null;
-  listSynchonize= {
-    employees : {
-      matchedEmployee:[],
-      newEmployee:[],
-      outOfHRMS:[],
+  listSynchonize = {
+    employees: {
+      matchedEmployee: [],
+      newEmployee: [],
+      outOfHRMS: [],
     },
     departments: {
-      matchedDepartment:[],
-      newDepartment:[],
-      outOfHRMS:[],
+      matchedDepartment: [],
+      newDepartment: [],
+      outOfHRMS: [],
     },
-    teams :{
-      matchedTeam:[],
-      newTeam:[],
-      outOfHRMS:[],
+    teams: {
+      matchedTeam: [],
+      newTeam: [],
+      outOfHRMS: [],
     }
   };
   open = (modal) =>
     this.modalService.open(modal, { windowClass: 'my-class', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
-  constructor(
-    private modalService: NgbModal,
-    private syncService: SynchronizeService,
-    private toast: ToastrService,
-  ) { }
 
   ngOnInit() {
     this.username = localStorage.getItem('username');
@@ -86,7 +88,7 @@ export class AppHeaderComponent {
           employee: new EmployeeSync
         }
         console.log(res);
-        // department 
+        // department
         listSync.department.matchedDepartment = res.departments.matchedDepartment.map(d => {
           return {
             id: d.id,
@@ -124,6 +126,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
+            gsuite_id : o.gsuite_id,
             selected: true
           }
         });
@@ -135,6 +138,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
+            gsuite_id : o.gsuite_id,
             selected: true
           }
         });
@@ -251,7 +255,7 @@ export class AppHeaderComponent {
       departments: this.listSynchonize.departments
     }
     console.log(JSON.stringify(syncList));
-    if(this.isFirstSync != null ){
+    if (this.isFirstSync != null) {
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
           this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
@@ -269,7 +273,7 @@ export class AppHeaderComponent {
             }
         }
       );
-    }else{
+    } else {
       this.toast.error('Service is not supported!');
     }
   }
@@ -288,7 +292,7 @@ export class AppHeaderComponent {
 
   // select dep match
   selectAllDepMatch(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedDepMatchAll = true;
     }
     if (this.selectedDepMatchAll) {
@@ -320,8 +324,8 @@ export class AppHeaderComponent {
     }
   }
   // select dep new
-  selectAllDepNew(selectAll=null) {
-    if(selectAll != null){
+  selectAllDepNew(selectAll = null) {
+    if (selectAll != null) {
       this.selectedDepNewAll = true;
     }
     if (this.selectedDepNewAll) {
@@ -358,7 +362,7 @@ export class AppHeaderComponent {
   }
   // select dep out
   selectAllDepOut(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedDepOutAll = true;
     }
     if (this.selectedDepOutAll) {
@@ -394,7 +398,7 @@ export class AppHeaderComponent {
 
   // select emp match
   selectAllEmpMatch(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedEmpMatchAll = true;
     }
     if (this.selectedEmpMatchAll) {
@@ -427,7 +431,7 @@ export class AppHeaderComponent {
   }
   // select Emp new
   selectAllEmpNew(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedEmpNewAll = true;
     }
     if (this.selectedEmpNewAll) {
@@ -465,7 +469,7 @@ export class AppHeaderComponent {
   }
   // select Emp out
   selectAllEmpOut(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedEmpOutAll = true;
     }
     if (this.selectedEmpOutAll) {
@@ -475,7 +479,7 @@ export class AppHeaderComponent {
       });
     }
     else {
-      this.listSynchonize.employees.outOfHRMS= [];
+      this.listSynchonize.employees.outOfHRMS = [];
       this.listSyncFinal.employee.outOfHRMS.forEach((e, index) => {
         e.selected = false;
       });
@@ -500,7 +504,7 @@ export class AppHeaderComponent {
 
   // select team match
   selectAllTeamMatch(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedTeamMatchAll = true;
     }
     if (this.selectedTeamMatchAll) {
@@ -510,7 +514,7 @@ export class AppHeaderComponent {
       });
     }
     else {
-      this.listSynchonize.teams.matchedTeam=[];
+      this.listSynchonize.teams.matchedTeam = [];
       this.listSyncFinal.team.matchedTeam.forEach((e, index) => {
         e.selected = false;
       });
@@ -520,7 +524,7 @@ export class AppHeaderComponent {
     var index = this.listSyncFinal.team.matchedTeam.findIndex(x => x.id == id);
     this.listSyncFinal.team.matchedTeam[index].selected = !this.listSyncFinal.team.matchedTeam[index].selected;
     if (this.listSyncFinal.team.matchedTeam[index].selected == false) {
-      this.listSynchonize.teams.matchedTeam.splice(index,1);
+      this.listSynchonize.teams.matchedTeam.splice(index, 1);
       this.selectedTeamMatchAll = false;
     } else {
       this.listSynchonize.teams.matchedTeam.push(this.listItemSynch.teams.matchedTeam[index]);
@@ -534,7 +538,7 @@ export class AppHeaderComponent {
 
   // select team new
   selectAllTeamNew(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedTeamNewAll = true;
     }
     if (this.selectedTeamNewAll) {
@@ -544,7 +548,7 @@ export class AppHeaderComponent {
       });
     }
     else {
-      this.listSynchonize.teams.newTeam=[];
+      this.listSynchonize.teams.newTeam = [];
       this.listSyncFinal.team.newTeam.forEach((e, index) => {
         e.selected = false;
       });
@@ -555,7 +559,7 @@ export class AppHeaderComponent {
     var index = this.listSyncFinal.team.newTeam.findIndex(x => x.id == id);
     this.listSyncFinal.team.newTeam[index].selected = !this.listSyncFinal.team.newTeam[index].selected;
     if (this.listSyncFinal.team.newTeam[index].selected == false) {
-      this.listSynchonize.teams.newTeam.splice(index,1);
+      this.listSynchonize.teams.newTeam.splice(index, 1);
       this.selectedTeamNewAll = false;
     } else {
       this.listSynchonize.teams.newTeam.push(this.listItemSynch.teams.newTeam[index]);
@@ -567,7 +571,7 @@ export class AppHeaderComponent {
   }
   // select Team out
   selectAllTeamOut(selectAll = null) {
-    if(selectAll != null){
+    if (selectAll != null) {
       this.selectedTeamOutAll = true;
     }
     if (this.selectedTeamOutAll) {
@@ -588,7 +592,7 @@ export class AppHeaderComponent {
     var index = this.listSyncFinal.team.outOfHRMS.findIndex(x => x.id == id);
     this.listSyncFinal.team.outOfHRMS[index].selected = !this.listSyncFinal.team.outOfHRMS[index].selected;
     if (this.listSyncFinal.team.outOfHRMS[index].selected == false) {
-      this.listSynchonize.teams.outOfHRMS.splice(index,1);
+      this.listSynchonize.teams.outOfHRMS.splice(index, 1);
       this.selectedTeamOutAll = false;
     } else {
       this.listSynchonize.teams.outOfHRMS.push(this.listItemSynch.teams.outOfHRMS[index]);

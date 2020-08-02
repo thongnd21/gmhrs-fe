@@ -10,7 +10,10 @@
     align-items: center;
     justify-content: center;
   }
-  
+  button, input[type="button"], input[type="submit"]{
+    border: none;
+    outline: none;
+  }
   .button-container {
     display: inline-block;
     position: relative;

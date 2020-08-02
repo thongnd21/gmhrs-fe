@@ -4,10 +4,16 @@
     align-items: center;
     text-align: center;
   }
-
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
   .qr-code-img{
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
   }
 
   .red-text {
@@ -19,4 +25,9 @@
     justify-content: center;
     align-items: center;
     background-color: white;
+  }
+
+  button, input[type="button"], input[type="submit"]{
+    border: none;
+    outline: none;
   }

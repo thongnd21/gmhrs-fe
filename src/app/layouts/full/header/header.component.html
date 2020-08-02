@@ -71,15 +71,15 @@
                     <p>Mathched Employee :</p>
                     <table class="table" [mfData]="listSyncFinal.employee.matchedEmployee" #mf="mfDataTable" [mfRowsOnPage]="5">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First name</th>
-                            <th scope="col">Last name</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Primary email</th>
-                            <th scope="col">Personal email</th>
-                            <th scope="col">Created Date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First name</th>
+                                <th scope="col">Last name</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Primary email</th>
+                                <th scope="col">Personal email</th>
+                                <th scope="col">Created Date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
@@ -101,15 +101,15 @@
                     <p>New Employee :</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First name</th>
-                            <th scope="col">Last name</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Primary email</th>
-                            <th scope="col">Personal email</th>
-                            <th scope="col">Created Date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First name</th>
+                                <th scope="col">Last name</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Primary email</th>
+                                <th scope="col">Personal email</th>
+                                <th scope="col">Created Date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.employee.newEmployee.length == 0">
@@ -166,14 +166,14 @@
                     <p>Mathched Team :</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.team.matchedTeam.length == 0">
@@ -193,14 +193,14 @@
                     <p>New Team :</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.team.newTeam.length == 0">
@@ -220,18 +220,18 @@
                     <p>Team out of your HR system:</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Description</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Description</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.team.outOfHRMS.length == 0">
                                 <td class="col-12">No data</td>
                             </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index"> 
+                            <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index">
                                 <td>{{ i+1 }}</td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.email}}</td>
@@ -254,13 +254,13 @@
                     <p>Mathched Department :</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.department.matchedDepartment.length == 0">
@@ -279,13 +279,13 @@
                     <p>New Department :</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.department.newDepartment.length == 0">
@@ -304,17 +304,17 @@
                     <p>Department out of your HR system:</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.department.outOfHRMS.length == 0">
                                 <td class="col-12">No data</td>
                             </tr>
-                            <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index"> 
+                            <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index">
                                 <td>{{ i+1 }}</td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.description}}</td>
@@ -357,23 +357,25 @@
                     <p>Mathched Employee :</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedEmpMatchAll" (change)="selectAllEmpMatch();">
-                            </th>
-                            <th scope="col">First name</th>
-                            <th scope="col">Last name</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Primary email</th>
-                            <th scope="col">Personal email</th>
-                            <th scope="col">Created Date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0" class="btn"
+                                        type="checkbox" value="" [(ngModel)]="selectedEmpMatchAll"
+                                        (change)="selectAllEmpMatch();">
+                                </th>
+                                <th scope="col">First name</th>
+                                <th scope="col">Last name</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Primary email</th>
+                                <th scope="col">Personal email</th>
+                                <th scope="col">Created Date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
                                 <td>No data</td>
                             </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index" >
+                            <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
                                 <td>
                                     <label>
                                         <input type="checkbox" value="" [checked]="item.selected" class="btn"
@@ -390,27 +392,32 @@
                         </tbody>
                     </table>
                     <!-- table new -->
-                    <button (click)="matchNewAndOut()" mat-raised-button [disabled] = "listNewEmp.length == 0 || listOutEmp.length == 0">Match employee </button>
+                    <button (click)="matchNewAndOut()" mat-raised-button
+                        [disabled]="listNewEmp.length == 0 || listOutEmp.length == 0">Match employee </button>
                     <p>New Employee :</p>
                     <table class="table">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.employee.newEmployee.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedEmpNewAll" (change)="selectAllEmpNew();">
-                            </th>
-                            <th scope="col">First name</th>
-                            <th scope="col">Last name</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Primary email</th>
-                            <th scope="col">Personal email</th>
-                            <th scope="col">Created Date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.employee.newEmployee.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedEmpNewAll"
+                                        (change)="selectAllEmpNew();">
+                                </th>
+                                <th scope="col">First name</th>
+                                <th scope="col">Last name</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Primary email</th>
+                                <th scope="col">Personal email</th>
+                                <th scope="col">Created Date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.employee.newEmployee.length == 0">
                                 <td class="col-12">No data</td>
                             </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.newEmployee; let i=index"  [ngClass]="(listNewEmp.length > 0 && listNewEmp[0].id == item.id) ? 'select-row': 'non-select-row'" (click)="rowNewSelected(item);">
+                            <tr *ngFor="let item of listSyncFinal.employee.newEmployee; let i=index"
+                                [ngClass]="(listNewEmp.length > 0 && listNewEmp[0].id == item.id) ? 'select-row': 'non-select-row'"
+                                (click)="rowNewSelected(item);">
                                 <td>
                                     <label>
                                         <input type="checkbox" value="" [checked]="item.selected" class="btn"
@@ -428,23 +435,27 @@
                     </table>
                     <!-- table out -->
                     <p>Employee out of your HR system:</p>
-                    <table class="table "  >
+                    <table class="table ">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.employee.outOfHRMS.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedEmpOutAll" (change)="selectAllEmpOut();">
-                            </th>
-                            <th scope="col">Fist name</th>
-                            <th scope="col">last name</th>
-                            <th scope="col">Primary email</th>
-                            <th scope="col">Personal name</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.employee.outOfHRMS.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedEmpOutAll"
+                                        (change)="selectAllEmpOut();">
+                                </th>
+                                <th scope="col">Fist name</th>
+                                <th scope="col">last name</th>
+                                <th scope="col">Primary email</th>
+                                <th scope="col">Personal name</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.employee.outOfHRMS.length == 0">
                                 No data
                             </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.outOfHRMS; let i=index" [ngClass]="(listOutEmp.length > 0 && listOutEmp[0].id === item.id) ? 'select-row': 'non-select-row'" (click)="rowOutSelected(item);">
+                            <tr *ngFor="let item of listSyncFinal.employee.outOfHRMS; let i=index"
+                                [ngClass]="(listOutEmp.length > 0 && listOutEmp[0].id === item.id) ? 'select-row': 'non-select-row'"
+                                (click)="rowOutSelected(item);">
                                 <td>
                                     <label>
                                         <input type="checkbox" value="" [checked]="item.selected" class="btn"
@@ -473,16 +484,18 @@
                     <p>Mathched Team :</p>
                     <table class="table table-striped">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.team.matchedTeam.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedTeamMatchAll" (change)="selectAllTeamMatch();">
-                            </th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.team.matchedTeam.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedTeamMatchAll"
+                                        (change)="selectAllTeamMatch();">
+                                </th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.team.matchedTeam.length == 0">
@@ -507,16 +520,18 @@
                     <p>New Team :</p>
                     <table class="table table-striped">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.team.newTeam.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedTeamNewAll" (change)="selectAllTeamNew();">
-                            </th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.team.newTeam.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedTeamNewAll"
+                                        (change)="selectAllTeamNew();">
+                                </th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.team.newTeam.length == 0">
@@ -541,20 +556,22 @@
                     <p>Team out of your HR system:</p>
                     <table class="table table-striped">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.team.outOfHRMS.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedTeamOutAll" (change)="selectAllTeamOut();">
-                            </th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Description</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.team.outOfHRMS.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedTeamOutAll"
+                                        (change)="selectAllTeamOut();">
+                                </th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Description</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.team.outOfHRMS.length == 0">
                                 <td class="col-12">No data</td>
                             </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index"> 
+                            <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index">
                                 <td>
                                     <label>
                                         <input type="checkbox" value="" [checked]="item.selected" class="btn"
@@ -582,15 +599,17 @@
                     <p>Mathched Department :</p>
                     <table class="table table-striped">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepMatchAll" (change)="selectAllDepMatch();">
-                            </th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedDepMatchAll"
+                                        (change)="selectAllDepMatch();">
+                                </th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
@@ -614,15 +633,17 @@
                     <p>New Department :</p>
                     <table class="table table-striped">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.department.newDepartment.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepNewAll" (change)="selectAllDepNew();">
-                            </th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Modified date</th>
-                            <th scope="col">Created date</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.department.newDepartment.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedDepNewAll"
+                                        (change)="selectAllDepNew();">
+                                </th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Modified date</th>
+                                <th scope="col">Created date</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.department.newDepartment.length == 0">
@@ -646,19 +667,21 @@
                     <p>Department out of your HR system:</p>
                     <table class="table table-striped">
                         <thead class="thead-dark">
-                          <tr>
-                            <th scope="col">
-                                <input [disabled]="listSyncFinal.department.outOfHRMS.length == 0" class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepOutAll" (change)="selectAllDepOut();">
-                            </th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">
+                                    <input [disabled]="listSyncFinal.department.outOfHRMS.length == 0" class="btn"
+                                        type="checkbox" svalue="" [(ngModel)]="selectedDepOutAll"
+                                        (change)="selectAllDepOut();">
+                                </th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr class="col-12" *ngIf="listSyncFinal.department.outOfHRMS.length == 0">
                                 <td class="col-12">No data</td>
                             </tr>
-                            <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index"> 
+                            <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index">
                                 <td>
                                     <label>
                                         <input type="checkbox" value="" [checked]="item.selected" class="btn"

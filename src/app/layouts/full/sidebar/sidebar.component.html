@@ -8,7 +8,10 @@
     <!-- ============================================================== -->
     <!-- Profile - style you can find in header.scss -->
     <!-- ============================================================== -->
-    <div class="profile-text"> Markarn Doe <i class="ti-angle-down font-12 m-l-5"></i></div>
+    <div class="profile-text">
+        <nz-tag style="width: 100%; font-size: large; text-align: center;" [nzColor]="'cyan'">{{username}}
+        </nz-tag> <i class="ti-angle-down font-12 m-l-5"></i>
+    </div>
     <!-- <mat-menu #sdprofile="matMenu" class="mymegamenu" >
         <button mat-menu-item>
             <mat-icon>settings</mat-icon> Setting Connection
@@ -26,6 +29,13 @@
 
 </div>
 <mat-nav-list appAccordion>
+    <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/']" *ngIf="role === 2">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dasdboard</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
     <mat-list-item appAccordionLink routerLinkActive="selected">
         <a class="" appAccordionToggle [routerLink]="['/employee']" *ngIf="role === 2">
             <mat-icon>account_circle</mat-icon>
@@ -57,7 +67,14 @@
     <mat-list-item appAccordionLink routerLinkActive="selected">
         <a class="" appAccordionToggle [routerLink]="['/twofaauth']">
             <mat-icon>verified_user</mat-icon>
-            <span>2FA Authentication</span>
+            <span>2FA</span>
+            <span fxFlex></span>
+        </a>
+    </mat-list-item>
+    <mat-list-item appAccordionLink routerLinkActive="selected">
+        <a class="" appAccordionToggle [routerLink]="['/signaturetemplate']" *ngIf="role === 2">
+            <mat-icon>spellcheck</mat-icon>
+            <span>Signature Template</span>
             <span fxFlex></span>
         </a>
     </mat-list-item>

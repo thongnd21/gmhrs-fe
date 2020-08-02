@@ -12,6 +12,8 @@ import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
   styleUrls: ['./activated2fa.component.css']
 })
 export class Activated2faComponent implements OnInit {
+  otp = '';
+  isDisableOTPLoading = false;
 
   constructor(
     private router: Router,
@@ -22,19 +24,38 @@ export class Activated2faComponent implements OnInit {
 
   ) { }
 
-  disable2FA() {
-    let username = localStorage.getItem('username');
-    this.twoFaAuthService.deactivated2FA(username).subscribe(
-      (res) => {
-        if (res) {
-          this.toast.success('Deactivated 2FA successful!');
-          this.router.navigate(['/dashboard'])
-        } else {
-          this.toast.error('Some error occur!')
-        }
-      }
-    )
+  onOtpChange($event) {
+    this.otp = $event;
   }
+
+  keyDownFunction(event) {
+    if (event.keyCode === 13) {
+      this.onSubmitOtp();
+    }
+  }
+
+  onSubmitOtp() {
+    if (this.otp !== '') {
+      this.isDisableOTPLoading = true;
+      let username = localStorage.getItem('username');
+      this.twoFaAuthService.deactivated2FA(this.otp, username).subscribe(
+        (res) => {
+          if (res) {
+            this.toast.success('Disable 2FA successful!');
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.toast.error('Invalid OTP!');
+          }
+          setTimeout(() => {
+            this.isDisableOTPLoading = false;
+          }, 1000);
+        }
+      );
+    } else {
+      this.toast.warning('Input OTP!')
+    }
+  }
+
   ngOnInit(): void {
   }
 
