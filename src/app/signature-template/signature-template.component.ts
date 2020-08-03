@@ -152,13 +152,12 @@ export class SignatureTemplateComponent implements OnInit {
 
   editorConfig: AngularEditorConfig = {
     editable: true,
-    sanitize: true,
+    sanitize: false,
     spellcheck: false,
     height: '15rem',
     minHeight: '5rem',
     placeholder: 'Enter text here...',
     translate: 'no',
-    defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
     toolbarHiddenButtons: [
       ['bold'],
