@@ -48,4 +48,14 @@ export class AssignEmailTemplateComponent implements OnInit {
     this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
+  openDetailModal(modal, value) {
+    console.log(value);
+    
+    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  closeModal() {
+    this.modalService.dismissAll();
+  }
+
 }
