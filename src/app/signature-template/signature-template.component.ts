@@ -62,7 +62,7 @@ export class SignatureTemplateComponent implements OnInit {
   listSignatureTemplate = new Array();
   listSignatureTemplateRule = new Array();
   topCenterPosition: NzPlacementType = 'topCenter';
-  imgWidth = 300;
+  imgWidth = 100;
   imgHeigh = 100;
   imageLink = '';
   signatureName = '';
@@ -319,7 +319,7 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         // console.log(res);
         if (res.status) {
-          this.toast.success('There is not employees wrong signature!', 'Wrong signature status', { disableTimeOut: true });
+          this.toast.success('There is not employees wrong signature!', 'Wrong signature status');
         } else {
           if (res.data !== undefined) {
             this.listWrongSignature = res.data;
@@ -541,7 +541,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.listRulesCheckErr = [];
         } else {
           for (let mes of res.message) {
-            this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
+            this.toast.warning(mes, 'Signature template rules check');
             this.listRulesCheckErr = res.message;
           }
         }
@@ -572,7 +572,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.listRulesCheckErr = [];
         } else {
           for (let mes of res.message) {
-            this.toast.warning(mes, 'Signature template rules check', { disableTimeOut: true });
+            this.toast.warning(mes, 'Signature template rules check');
           }
           this.listRulesCheckErr = res.message;
         }
