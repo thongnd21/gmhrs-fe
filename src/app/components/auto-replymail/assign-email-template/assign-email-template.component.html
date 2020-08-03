@@ -1,59 +1,64 @@
 <div>
-    <div>
-        <div class="row">
-            <div class="col-auto mr-auto">
+    <div class="card-body">
+        <mat-card class="p-0">
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-auto mr-auto">
 
-            </div>
-            <div class="col-auto">
-                <button color="primary" mat-button (click)="openAssignTemplateMailModal(assignTemplateMail)">
-                    <mat-icon>
-                        create
-                    </mat-icon>
-                    Assign Email Template
-                </button>
-            </div>
-        </div>
-        <mat-table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="department">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Department
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    {{ row.department }}
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="template_default">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Template Default
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    {{ row.template_default }}
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="template_assign_role">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Template Assign For role
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    {{ row.template_assign_role }}
-                </mat-cell>
-            </ng-container>
+                    </div>
+                    <div class="col-auto">
+                        <button color="primary" mat-button (click)="openAssignTemplateMailModal(assignTemplateMail)">
+                            <mat-icon>
+                                create
+                            </mat-icon>
+                            Assign Email Template
+                        </button>
+                    </div>
+                </div>
+                <mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="department">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Department
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                            {{ row.department }}
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="template_default">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Template Default
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                            {{ row.template_default }}
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="template_assign_role">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Template Assign For role
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                            {{ row.template_assign_role }}
+                        </mat-cell>
+                    </ng-container>
 
-            <ng-container matColumnDef="action">
-                <mat-header-cell *matHeaderCellDef>
-                    Action
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    <!-- view detail  button -->
-                    <button mat-raised-button color="primary" (click)="openDetailModal(asignTemplateMailDetail,row)">
-                        Detail
-                    </button>
-                </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
-        </mat-table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef>
+                            Action
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                            <!-- view detail  button -->
+                            <button mat-raised-button color="primary"
+                                (click)="openDetailModal(asignTemplateMailDetail,row)">
+                                Detail
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+                </mat-table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>
 

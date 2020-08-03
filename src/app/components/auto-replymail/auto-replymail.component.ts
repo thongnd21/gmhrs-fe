@@ -51,8 +51,34 @@ export class AutoReplymailComponent implements OnInit {
     }
   ];
 
+
+
+
+  displayedColumns1: string[] = [];
+
+  dataSource1: any = [
+    { department: 'Yogurt', template_default: 159 },
+    { department: 'Yogurt123', template_default: 1591 },
+  ]
+
+  column1 = [
+    {
+      prop: 'department',
+      name: 'Department'
+    },
+    {
+      prop: 'template_default',
+      name: 'Template Default'
+    },
+    {
+      prop: 'action',
+      name: 'Action'
+    },
+  ];
+
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop);
+    this.displayedColumns1 = this.column1.map((c) => c.prop);
     this.getAllTemplate();
   }
 

@@ -94,9 +94,59 @@
     </mat-tab>
     <mat-tab label="Assign Auto-reply mail template">
       <div class="card-body">
-        <app-assign-email-template></app-assign-email-template>
-      </div>
+        <div class="card-body">
+          <mat-card class="p-0">
+            <mat-card-content>
+              <!-- <div class="row">
+                <div class="col-auto mr-auto">
 
+                </div>
+                <div class="col-auto">
+                  <button color="primary" mat-button (click)="openAssignTemplateMailModal(assignTemplateMail)">
+                    <mat-icon>
+                      create
+                    </mat-icon>
+                    Assign Email Template
+                  </button>
+                </div>
+              </div> -->
+              <mat-table [dataSource]="dataSource1" matSort>
+                <ng-container matColumnDef="department">
+                  <mat-header-cell *matHeaderCellDef>
+                    Department
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                    {{ row.department }}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="template_default">
+                  <mat-header-cell *matHeaderCellDef >
+                    Template Default
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                    123
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                  <mat-header-cell *matHeaderCellDef>
+                      Action
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                      <!-- view detail  button -->
+                      <button mat-raised-button color="primary"
+                      [routerLink]="['/auto-reply-mail/asign']">
+                          Setting
+                      </button>
+                  </mat-cell>
+              </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns1"> </mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
 
