@@ -390,41 +390,40 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   sendFile(modal, data) {
-    this.http.post('http://localhost:3000/api/file/upload', data)
-      // this.http.post('https://gmhrs-api.herokuapp.com/api/file/upload', formData)
-      .subscribe(
-        (res) => {
-          const testInfor: any = res;
-          this.accessGsuiteAuthen.employee.message = testInfor.checkingAuthGsuiteEmployee.message;
-          this.accessGsuiteAuthen.team.message = testInfor.checkingAuthGsuiteTeam.message;
-          this.accessGsuiteAuthen.department.message = testInfor.checkingAuthGsuiteDepartment.message;
-          this.accessGsuiteAuthen.member.message = testInfor.checkingAuthGsuiteMember.message;
-          this.accessGsuiteAuthen.gmail.message = testInfor.checkingAuthGsuiteMail.message;
-          this.accessGsuiteAuthen.employee.status = testInfor.checkingAuthGsuiteEmployee.status;
-          this.accessGsuiteAuthen.team.status = testInfor.checkingAuthGsuiteTeam.status;
-          this.accessGsuiteAuthen.department.status = testInfor.checkingAuthGsuiteDepartment.status;
-          this.accessGsuiteAuthen.member.status = testInfor.checkingAuthGsuiteMember.status;
-          this.accessGsuiteAuthen.gmail.status = testInfor.checkingAuthGsuiteMail.status;
-          console.log(testInfor);
-          console.log(this.accessGsuiteAuthen);
 
-          if (testInfor.checkingAuthGsuiteEmployee.status == 200
-            && testInfor.checkingAuthGsuiteTeam.status == 200
-            && testInfor.checkingAuthGsuiteDepartment.status === 200
-            && testInfor.checkingAuthGsuiteMember.status === 200
-            && testInfor.checkingAuthGsuiteMail.status === 200) {
-            this.gsuiteAuthenStatus = false;
-          } else {
-            this.gsuiteAuthenStatus = true;
-          }
-          // console.log(this.gsuiteAuthenStatus);
-          // this.toast.success("Upload file success!");
-          //open modal
-          this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-        },
-        (error) => {
-          this.toast.error("Server is not available!");
-        })
+    this.companyConnectionService.gsuiteCredentialTest(data).subscribe(
+      (res) => {
+        const testInfor: any = res;
+        this.accessGsuiteAuthen.employee.message = testInfor.checkingAuthGsuiteEmployee.message;
+        this.accessGsuiteAuthen.team.message = testInfor.checkingAuthGsuiteTeam.message;
+        this.accessGsuiteAuthen.department.message = testInfor.checkingAuthGsuiteDepartment.message;
+        this.accessGsuiteAuthen.member.message = testInfor.checkingAuthGsuiteMember.message;
+        this.accessGsuiteAuthen.gmail.message = testInfor.checkingAuthGsuiteMail.message;
+        this.accessGsuiteAuthen.employee.status = testInfor.checkingAuthGsuiteEmployee.status;
+        this.accessGsuiteAuthen.team.status = testInfor.checkingAuthGsuiteTeam.status;
+        this.accessGsuiteAuthen.department.status = testInfor.checkingAuthGsuiteDepartment.status;
+        this.accessGsuiteAuthen.member.status = testInfor.checkingAuthGsuiteMember.status;
+        this.accessGsuiteAuthen.gmail.status = testInfor.checkingAuthGsuiteMail.status;
+        console.log(testInfor);
+        console.log(this.accessGsuiteAuthen);
+
+        if (testInfor.checkingAuthGsuiteEmployee.status == 200
+          && testInfor.checkingAuthGsuiteTeam.status == 200
+          && testInfor.checkingAuthGsuiteDepartment.status === 200
+          && testInfor.checkingAuthGsuiteMember.status === 200
+          && testInfor.checkingAuthGsuiteMail.status === 200) {
+          this.gsuiteAuthenStatus = false;
+        } else {
+          this.gsuiteAuthenStatus = true;
+        }
+        // console.log(this.gsuiteAuthenStatus);
+        // this.toast.success("Upload file success!");
+        //open modal
+        this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+      },
+      (error) => {
+        this.toast.error("Server is not available!");
+      })
   }
 
   //upload file authen gsuite
@@ -432,7 +431,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.account = new AccountCompanyModel;
     this.account.primary_email = value.company_email;
     this.account.id = localStorage.getItem('id');
-    this.http.post('http://localhost:3000/api/file/save', this.account)
+    this.companyConnectionService.gsuiteCredentialSave(this.account)
       .subscribe(
         (res) => {
           const result: any = res;

@@ -26,13 +26,23 @@ export class CompanyConnectionService {
     return this.httpClient.post(this.URL + AppSettings.SCHEDULE + path, account)
   }
 
-  synchonize(){
-    return this.httpClient.get(this.URL+'gsuite/sync-all/firstSync?emailAdmin=z@capstonesummer2020-fu.page&apiEndpoint=https://hrms123.herokuapp.com/api/data-hrms&fileKeyName=gmhrs-auth-gsuite.json&accountId=1');
+  synchonize() {
+    return this.httpClient.get(this.URL + 'gsuite/sync-all/firstSync?emailAdmin=z@capstonesummer2020-fu.page&apiEndpoint=https://hrms123.herokuapp.com/api/data-hrms&fileKeyName=gmhrs-auth-gsuite.json&accountId=1');
   }
 
   getSchedule(accountId) {
     const path = 'getSchedule/';
-    let  id = new HttpParams().set('id',accountId);
-    return this.httpClient.get(this.URL + AppSettings.SCHEDULE + path, {params : id})
+    let id = new HttpParams().set('id', accountId);
+    return this.httpClient.get(this.URL + AppSettings.SCHEDULE + path, { params: id })
+  }
+
+  gsuiteCredentialTest(data) {
+    const path = 'upload/';
+    return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
+  }
+
+  gsuiteCredentialSave(data){
+    const path = 'save/';
+    return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
   }
 }
