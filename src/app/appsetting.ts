@@ -31,4 +31,7 @@ export class AppSettings {
     public static GETSIGNATURERULEBYID = 'signature/getSignatureRuleByID/'
     public static DELETETEMPLATERULEBYID = 'signature/deleteTemplateRuleByID/'
     public static GETDYNAMICRULE = 'signature/getDynamicRule/'
+    public static ACCOUNT = 'accounts/';
+    public static SIGNATURE = 'signature/';
+    public static FILE = 'file/';
 }
