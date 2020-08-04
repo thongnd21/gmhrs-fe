@@ -22,6 +22,7 @@ export class AutoReplymailComponent implements OnInit {
   tempate = {};
   name = "";
   checkAdd = true;
+  listTemplate = [];
   constructor(
     private emailServices: EmailApiService,
     private toast: ToastrService,
@@ -29,6 +30,15 @@ export class AutoReplymailComponent implements OnInit {
   ) { }
   accountId = localStorage.getItem('id');
 
+  teams: any[] = [
+    { name: 'Liverpool' },
+    { name: 'Manchester City' },
+    { name: 'Manchester United' },
+    { name: 'Arsenal' },
+    { name: 'Leicester City' },
+    { name: 'Chelsea' },
+    { name: 'Tottenham Hotspur' },
+];
   column = [
     {
       prop: 'count',
@@ -56,30 +66,30 @@ export class AutoReplymailComponent implements OnInit {
 
   displayedColumns1: string[] = [];
 
-  dataSource1: any = [
-    { department: 'Yogurt', template_default: 159 },
-    { department: 'Yogurt123', template_default: 1591 },
-  ]
+  dataSource1: any 
 
   column1 = [
+    
     {
-      prop: 'department',
-      name: 'Department'
+      prop: 'name',
+      name: 'Name'
     },
     {
-      prop: 'template_default',
-      name: 'Template Default'
+      prop: 'mail_template_name',
+      name: 'Mail Template Name'
     },
     {
       prop: 'action',
       name: 'Action'
-    },
+    }
+    
   ];
 
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop);
     this.displayedColumns1 = this.column1.map((c) => c.prop);
     this.getAllTemplate();
+    this.getAllDepartmentByAccountId();
   }
 
   editorLoaded() {
@@ -131,6 +141,9 @@ export class AutoReplymailComponent implements OnInit {
     let listTemplate=[];
     this.emailServices.getAllTemplate(this.accountId).subscribe(
       (res)=>{
+        console.log(res);
+        console.log(this.accountId);
+        
         const templateList: any = res;
         templateList.forEach(element => {
           let item = {};
@@ -139,6 +152,7 @@ export class AutoReplymailComponent implements OnInit {
           item['status'] = element.status;
           item['create_at'] = moment.utc(element.modified_date).local().format('LLLL');
           listTemplate.push(item);
+          this.listTemplate.push(item);
         });
         console.log(templateList);
         this.dataSource = new MatTableDataSource(listTemplate);
@@ -146,7 +160,8 @@ export class AutoReplymailComponent implements OnInit {
         this.dataSource.sort = this.sort;
       },
       (err)=>{
-
+        console.log(err);
+        
       }
     )
   }
@@ -190,6 +205,66 @@ export class AutoReplymailComponent implements OnInit {
       },
       (err)=>{
         this.toast.error("Services í not available!");
+      }
+    )
+  }
+
+  getAllDepartmentByAccountId(){
+    let listDepartment = [];
+    this.emailServices.getAllDepartmentByAccountID(this.accountId).subscribe(
+      (res)=>{
+        
+        const templateList: any = res;
+        templateList.forEach(element => {
+          let item = {};
+          item['id'] = element.id;
+          item['name'] = element.name;
+          item['mail_template_id'] = element.mail_template_id;
+          item['mail_template_name'] = element.mail_template_name;
+          listDepartment.push(item);
+        });
+        console.log(templateList);
+        console.log(this.listTemplate);
+        
+        this.dataSource1 = new MatTableDataSource(listDepartment);
+        this.dataSource1.paginator = this.paginator;
+        this.dataSource1.sort = this.sort;
+        this.getAllTemplateToAsing()
+      },
+      (err)=>{
+        console.log(err);
+        
+      }
+    )
+  }
+
+  direcAsignForPosition(departmentId){
+
+  }
+  getAllTemplateToAsing(){
+    let listTemplate=[];
+    this.emailServices.getAllTemplate(this.accountId).subscribe(
+      (res)=>{
+        console.log(res);
+        console.log(this.accountId);
+        
+        const templateList: any = res;
+        templateList.forEach(element => {
+          let item = {};
+          item['templateId'] = element.templateId;
+          item['templateName'] = element.templateName;
+          item['status'] = element.status;
+          item['create_at'] = moment.utc(element.modified_date).local().format('LLLL');
+          this.listTemplate.push(item);
+        });
+        console.log(templateList);
+        this.dataSource = new MatTableDataSource(listTemplate);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      (err)=>{
+        console.log(err);
+        
       }
     )
   }

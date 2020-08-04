@@ -4,9 +4,8 @@ import { RouterModule } from '@angular/router';
 import { AutoReplymailRoutes } from './auto-replymail.routing';
 import { AutoReplymailComponent } from './auto-replymail.component';
 import { EmailEditorModule } from 'angular-email-editor';
-import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule, MatSelectModule, MatFormFieldModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AssignEmailTemplateComponent } from './assign-email-template/assign-email-template.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -69,6 +68,8 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     NzCollapseModule,
     NzSpinModule,
     NzMenuModule,
+    MatSelectModule,
+    MatFormFieldModule,
     RouterModule.forChild(AutoReplymailRoutes)
   ],
   declarations: [AutoReplymailComponent]

@@ -28,4 +28,8 @@ export class EmailApiService {
         let param = new HttpParams().set('id',templateId); 
         return this.httpClient.get(this.URL + AppSettings.EMAIL+'getReplyMail',{params: param});
     }
+    getAllDepartmentByAccountID(accountId) {
+        let param = new HttpParams().set('id',accountId); 
+        return this.httpClient.get(this.URL + AppSettings.EMAIL+'getDepartment',{params: param});
+    }
 }
