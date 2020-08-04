@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AssignEmailTemplateRoutes } from './assign-email-template.component.routing';
+import { CreateReplyMailTemplateRoutes } from './create-reply-mail-template.component.routing';
+import { CreateReplyMailTemplateComponent } from './create-reply-mail-template.component';
 import { EmailEditorModule } from 'angular-email-editor';
-import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule, MatSelectModule, MatFormFieldModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AssignEmailTemplateComponent } from './assign-email-template.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -68,8 +68,10 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     NzCollapseModule,
     NzSpinModule,
     NzMenuModule,
-    RouterModule.forChild(AssignEmailTemplateRoutes)
+    MatSelectModule,
+    MatFormFieldModule,
+    RouterModule.forChild(CreateReplyMailTemplateRoutes)
   ],
-  declarations: [AssignEmailTemplateComponent]
+  declarations: [CreateReplyMailTemplateComponent]
 })
-export class AssignEmailTemplateModule { }
+export class CreateReplyMailTemplateModule { }

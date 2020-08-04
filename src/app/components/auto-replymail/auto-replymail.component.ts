@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-auto-replymail',
   templateUrl: './auto-replymail.component.html',
@@ -24,6 +25,7 @@ export class AutoReplymailComponent implements OnInit {
   checkAdd = true;
   listTemplate = [];
   constructor(
+    private router : Router,
     private emailServices: EmailApiService,
     private toast: ToastrService,
     private modalService: NgbModal,
@@ -229,7 +231,7 @@ export class AutoReplymailComponent implements OnInit {
         this.dataSource1 = new MatTableDataSource(listDepartment);
         this.dataSource1.paginator = this.paginator;
         this.dataSource1.sort = this.sort;
-        this.getAllTemplateToAsing()
+        // this.getAllTemplateToAsing()
       },
       (err)=>{
         console.log(err);
@@ -241,31 +243,40 @@ export class AutoReplymailComponent implements OnInit {
   direcAsignForPosition(departmentId){
 
   }
-  getAllTemplateToAsing(){
-    let listTemplate=[];
-    this.emailServices.getAllTemplate(this.accountId).subscribe(
-      (res)=>{
-        console.log(res);
-        console.log(this.accountId);
+  // getAllTemplateToAsing(){
+  //   let listTemplate=[];
+  //   this.emailServices.getAllTemplate(this.accountId).subscribe(
+  //     (res)=>{
+  //       console.log(res);
+  //       console.log(this.accountId);
         
-        const templateList: any = res;
-        templateList.forEach(element => {
-          let item = {};
-          item['templateId'] = element.templateId;
-          item['templateName'] = element.templateName;
-          item['status'] = element.status;
-          item['create_at'] = moment.utc(element.modified_date).local().format('LLLL');
-          this.listTemplate.push(item);
-        });
-        console.log(templateList);
-        this.dataSource = new MatTableDataSource(listTemplate);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      },
-      (err)=>{
-        console.log(err);
+  //       const templateList: any = res;
+  //       templateList.forEach(element => {
+  //         let item = {};
+  //         item['templateId'] = element.templateId;
+  //         item['templateName'] = element.templateName;
+  //         item['status'] = element.status;
+  //         item['create_at'] = moment.utc(element.modified_date).local().format('LLLL');
+  //         this.listTemplate.push(item);
+  //       });
+  //       console.log(templateList);
+  //       this.dataSource = new MatTableDataSource(listTemplate);
+  //       this.dataSource.paginator = this.paginator;
+  //       this.dataSource.sort = this.sort;
+  //     },
+  //     (err)=>{
+  //       console.log(err);
         
-      }
-    )
+  //     }
+  //   )
+  // }
+
+  changSelectTemplate(templateId){
+    console.log(templateId);
+    
+  }
+
+  routToDetail(departmentId){
+    this.router.navigate(['auto-reply-mail/asign'],departmentId);
   }
 }

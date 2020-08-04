@@ -78,9 +78,9 @@ export const AppRoutes: Routes = [
           () => import('./components/auto-replymail/auto-replymail.module').then(m => m.AutoReplymailModule), canActivate: [CompanyManagerGuard]
       },
       {
-        path: 'auto-reply-mail/asign',
+        path: 'create-auto-reply-mail',
         loadChildren:
-          () => import('./components/auto-replymail/assign-email-template/assign-email-template.component.module').then(m => m.AssignEmailTemplateModule), canActivate: [CompanyManagerGuard]
+          () => import('./components/create-reply-mail-template/create-reply-mail-template.component.module').then(m => m.CreateReplyMailTemplateModule), canActivate: [CompanyManagerGuard]
       },
       {
         path: '',
