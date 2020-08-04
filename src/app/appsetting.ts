@@ -1,5 +1,8 @@
 export class AppSettings {
+<<<<<<< HEAD
     // public static BASEURL = 'https://gmhrs-api.herokuapp.com/api/';
+=======
+>>>>>>> ea096926a0fba50499e8d2f16506e904b701a271
     public static BASEURL = 'http://103.143.209.237:3000/api/';
     // public static BASEURL = 'http://localhost:3000/api/';
     public static SCHEDULE = 'schedules/'
@@ -32,4 +35,9 @@ export class AppSettings {
     public static GETSIGNATURERULEBYID = 'signature/getSignatureRuleByID/'
     public static DELETETEMPLATERULEBYID = 'signature/deleteTemplateRuleByID/'
     public static GETDYNAMICRULE = 'signature/getDynamicRule/'
+    public static ACCOUNT = 'accounts/';
+    public static SIGNATURE = 'signature/';
+    public static FILE = 'file/';
+    public static GETSPECIFICRULE = 'signature/getSpecificRule/'
+    public static SAVESPECSIGNATURE = 'signature/saveSpecSignature/'
 }

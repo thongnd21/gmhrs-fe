@@ -1,28 +1,32 @@
 <nz-spin [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
     <div style="margin: auto;">
         <mat-tab-group mat-align-tabs="start">
-            <mat-tab label="Default Signature Template" style="display: list-item;">
+            <mat-tab label="Signature Template" style="display: list-item;">
                 <!-- Signature menu -->
                 <ul nz-menu nzMode="horizontal" style="border-radius: 10px;">
-                    <li nz-menu-item (click)="getAllSignature()" style="width: 25%; text-align: center;">
+                    <li nz-menu-item (click)="loadSpecificRuleCheck()" style="width: 20%; text-align: center;">
+                        <i nz-icon nzType="flag" nzTheme="outline"></i>
+                        Specific Apply
+                    </li>
+                    <li nz-menu-item (click)="getAllSignature()" style="width: 20%; text-align: center;">
                         <i nz-icon nzType="database" nzTheme="outline"></i>
                         Show all template
                     </li>
                     <li nz-submenu nzTitle="Add dynamic content" nzIcon="appstore-add"
-                        style="width: 25%; text-align: center;">
+                        style="width: 20%; text-align: center;">
                         <ul>
                             <li *ngFor="let data of dynamicRule" (click)="addContent(data.name)" nz-menu-item>
                                 {{data.content}}</li>
                         </ul>
                     </li>
-                    <li nz-menu-item (click)="showInsertImgModal()" style="width: 25%; text-align: center;">
+                    <li nz-menu-item (click)="showInsertImgModal()" style="width: 20%; text-align: center;">
                         <i nz-icon nzType="file-image"></i>
                         Insert Image
                     </li>
-                    <li nz-menu-item (click)="showRulesCheckModel()" style="width: 25%; text-align: center;">
+                    <li nz-menu-item (click)="showRulesCheckModel()" style="width: 20%; text-align: center;">
                         <nz-badge [nzCount]="listRulesCheckErr.length">
                             <a class="head-example">
-                                <i nz-icon style="font-size: x-large; margin-left: 5mm;" nzType="notification"></i>
+                                <i nz-icon style="font-size: x-large; " nzType="notification"></i>
                             </a>
                         </nz-badge>
                     </li>
@@ -53,24 +57,45 @@
                     </nz-alert>
                 </nz-modal>
                 <!-- All signature template -->
-                <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showListSignatureTemplate"
+                <nz-modal style="display: inline-block;" nzWidth="90%" [(nzVisible)]="showListSignatureTemplate"
                     [nzAutofocus]="null" [nzFooter]="null" nzTitle="Signature templates" nzCancelText="Close"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="handleCloseModel()">
                     <nz-table #columnTable [nzData]="listSignatureTemplate" [nzScroll]="{ x: '200px' }">
                         <thead>
                             <tr>
-                                <th style="width: 30%;">Name</th>
-                                <th style="width: 30%;">Default</th>
-                                <th style="width: 20%;">Load</th>
-                                <th style="width: 20%;">Delete</th>
+                                <th style="width: 30%; text-align: center;">Name</th>
+                                <th style="width: 10%; text-align: center;">Default</th>
+                                <th style="width: 40%; text-align: center;">Specific apply</th>
+                                <th style="width: 10%; text-align: center;">Load</th>
+                                <th style="width: 10%; text-align: center;">Delete</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="text-align: center;">
                             <tr *ngFor="let data of listSignatureTemplate">
                                 <td style="font-size: large;">{{ data.name }}</td>
                                 <td><i *ngIf="data.is_primary === 1" nz-icon style="font-size: x-large;"
                                         [nzType]="'check-circle'" [nzTheme]="'twotone'"
                                         [nzTwotoneColor]="'#52c41a'"></i></td>
+                                <td>
+                                    <nz-collapse nzAccordion>
+                                        <nz-collapse-panel [nzHeader]="'Department'">
+                                            <p>
+                                                <nz-alert *ngFor="let de of data.departments" nzType="info"
+                                                    nzMessage="{{de.name}}" style="font-size: medium;" nzShowIcon>
+                                                </nz-alert>
+                                            </p>
+                                        </nz-collapse-panel>
+                                    </nz-collapse>
+                                    <nz-collapse nzAccordion>
+                                        <nz-collapse-panel [nzHeader]="'Position'">
+                                            <p>
+                                                <nz-alert *ngFor="let po of data.position_in_companies" nzType="info"
+                                                    nzMessage="{{po.name}}" style="font-size: medium;" nzShowIcon>
+                                                </nz-alert>
+                                            </p>
+                                        </nz-collapse-panel>
+                                    </nz-collapse>
+                                </td>
                                 <td>
                                     <button nz-button style="float: right;"
                                         (click)="getSignatureTemplateByName(data.name)"
@@ -85,8 +110,47 @@
                         </tbody>
                     </nz-table>
                 </nz-modal>
+                <!-- Model all specific template -->
+                <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showSpecificModel"
+                    [nzAutofocus]="null" nzTitle="Apply template for specific" nzCancelText="Close"
+                    (nzOnCancel)="handleCloseModel()" (nzOnOk)="showConfirmSaveSpecTem()">
+                    <div>
+                        <nz-input-group nzAddOnBefore="Signature name">
+                            <input readonly type="text" style="text-align: center; color: darkblue; font-weight: bold;"
+                                placeholder="Signature name" nz-input [value]="signatureName" spellcheck="false" />
+                        </nz-input-group>
+                    </div>
+                    <nz-table #columnTable [nzData]="specRuleCheck.department" [nzScroll]="{ x: '200px' }">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%;">Department</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of specRuleCheck.department">
+                                <td>
+                                    <label nz-checkbox [(ngModel)]="data.status">{{data.name}}</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                    <nz-table #columnTable [nzData]="specRuleCheck.position" [nzScroll]="{ x: '200px' }">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%;">Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of specRuleCheck.position">
+                                <td>
+                                    <label nz-checkbox [(ngModel)]="data.status">{{data.name}}</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-modal>
                 <!-- Siganture name -->
-                <div style="margin-top: 5mm;">
+                <div>
                     <nz-input-group nzAddOnBefore="Signature name">
                         <input type="text" style="text-align: center; color: darkblue; font-weight: bold;"
                             placeholder="Signature name" nz-input [(ngModel)]="signatureName" spellcheck="false" />
@@ -94,8 +158,8 @@
                 </div>
                 <!-- Editor -->
                 <div style="margin-top: 1mm;">
-                    <angular-editor style="outline-color: white;" id="editor1" [(ngModel)]="htmlContent"
-                        [config]="editorConfig">
+                    <angular-editor style="outline-color: white;" (click)="select($event)" id="editor1"
+                        [(ngModel)]="htmlContent" [config]="editorConfig">
                     </angular-editor>
                 </div>
                 <ul nz-menu nzMode="horizontal">
@@ -128,37 +192,31 @@
             <mat-tab label="Signature Template Rules">
                 <!-- Signature rule menu -->
                 <ul nz-menu nzMode="horizontal" style="border-radius: 10px;">
-                    <li nz-menu-item (click)="addRow()" style="width: 20%; text-align: center;">
-                        <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
-                        Add row
-                    </li>
-                    <li nz-menu-item (click)="getAllSignatureRule()" style="width: 20%; text-align: center;">
+                    <li nz-menu-item (click)="getAllSignatureRule()" style="width: 25%; text-align: center;">
                         <i nz-icon nzType="database"></i>
                         Show all rule
                     </li>
                     <li nz-submenu nzTitle="Dynamic content rule" nzIcon="appstore-add"
-                        style="width: 20%; text-align: center;">
+                        style="width: 25%; text-align: center;">
                         <ul>
-                            <li *ngFor="let data of rules.dynamicRule" (click)="checklog()" nz-menu-item>
-                                <label [(ngModel)]="data.action" nz-checkbox>
-                                    {{data.content}}
-                                </label>
-                            </li>
+                            <li (click)="addDynamicContentRule(data.name)" *ngFor="let data of dynamicRule"
+                                nz-menu-item>
+                                {{data.content}}</li>
                         </ul>
                     </li>
                     <li nz-menu-item (click)="showConfirmNotifySignatureRules()"
-                        style="width: 20%; text-align: center;">
+                        style="width: 25%; text-align: center;">
                         <i nz-icon nzType="mail"></i>
                         Notify to all emloyees
                     </li>
-                    <li nz-menu-item (click)="getListWrongSignature()" style="width: 20%; text-align: center;">
-                        <i nz-icon nzType="close-circle"></i>
-                        Break rule employees
+                    <li nz-menu-item (click)="getListWrongSignature()" style="width: 25%; text-align: center;">
+                        <i nz-icon nzType="check"></i>
+                        Check employees
                     </li>
                 </ul>
                 <!-- Rule name -->
                 <div>
-                    <nz-input-group style="margin-top: 1cm;" nzAddOnBefore="Signature rule name">
+                    <nz-input-group style="margin-top: 5mm;" nzAddOnBefore="Signature rule name">
                         <input type="text" style="text-align: center; width: 100%; color: darkblue; font-weight: bold;"
                             spellcheck="false" placeholder="Signature rule name" nz-input
                             [(ngModel)]="signatureRuleName" />
@@ -197,7 +255,7 @@
                             </td>
                             <td>
                                 <textarea (select)="select($event)" nzAutosize placeholder="Input content" type="text"
-                                    nz-input (click)="startEdit(data.id); select($event)" [(ngModel)]="data.content"
+                                    nz-input (click)="startEdit(data.id, $event);" [(ngModel)]="data.content"
                                     (blur)="stopEdit()" spellcheck="false"></textarea>
                             </td>
                             <td>
@@ -206,7 +264,13 @@
                         </tr>
                     </tbody>
                 </nz-table>
-                <!-- List wrong signature -->
+                <ul nz-menu nzMode="horizontal" style="border-radius: 20px;">
+                    <li nz-menu-item (click)="addRow()" style="text-align: center; width: 100%;">
+                        <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
+                        Add row
+                    </li>
+                </ul>
+                <!-- Model wrong signature -->
                 <nz-modal style="display: inline-block;" [(nzVisible)]="showListWrongSignature" [nzAutofocus]="null"
                     nzTitle="List wrong signature employee" nzCancelText="Close" nzOkText="Send mail remind employees"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="sendMailRemind()">
@@ -220,7 +284,7 @@
                         </nz-collapse-panel>
                     </nz-collapse>
                 </nz-modal>
-                <!-- List all template rule -->
+                <!-- Model all template rule -->
                 <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showListSignatureTemplateRule"
                     [nzAutofocus]="null" [nzFooter]="null" nzTitle="Signature templates Rule" nzCancelText="Close"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="handleCloseModel()">
@@ -253,6 +317,7 @@
                         </tbody>
                     </nz-table>
                 </nz-modal>
+
                 <div>
                     <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"

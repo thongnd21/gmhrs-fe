@@ -41,6 +41,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @NgModule({
     imports: [
@@ -83,6 +85,8 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
         NzCollapseModule,
         NzSpinModule,
         NzMenuModule,
+        NzTypographyModule,
+        NzRadioModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]
