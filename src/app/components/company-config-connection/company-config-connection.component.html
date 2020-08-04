@@ -199,7 +199,7 @@
                             <div class="col-md-8 pt-4" *ngIf="typeSync == 1">
                                 <h3>Monthly synchronize</h3>
                                 <mat-form-field>
-                                    <mat-select [(ngModel)]="monthDayChoose" placeholder="Choose days" multiple>
+                                    <mat-select panelClass="days-month-panel" [(ngModel)]="monthDayChoose" placeholder="Choose days" multiple>
                                         <mat-option *ngFor="let date of dayInMonth" [value]="date">{{ date }}
                                         </mat-option>
                                     </mat-select>

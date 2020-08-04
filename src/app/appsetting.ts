@@ -1,8 +1,5 @@
 export class AppSettings {
-<<<<<<< HEAD
     // public static BASEURL = 'https://gmhrs-api.herokuapp.com/api/';
-=======
->>>>>>> ea096926a0fba50499e8d2f16506e904b701a271
     public static BASEURL = 'http://103.143.209.237:3000/api/';
     // public static BASEURL = 'http://localhost:3000/api/';
     public static SCHEDULE = 'schedules/'

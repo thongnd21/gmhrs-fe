@@ -2,3 +2,10 @@ button, input[type="button"], input[type="submit"] {
     border: none;
     outline: none;
 } 
+.days-month-panel.mat-select-panel {
+    column-count: 5;
+    column-width: 50px;
+    width: 250px;
+    max-width: 250px;
+    max-height: 260px;
+  }
