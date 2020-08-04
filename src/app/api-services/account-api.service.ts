@@ -31,11 +31,11 @@ export class AccountApiService {
     };
 
     sendMailToChangPassword(account) {
-        return this.httpClient.put("https://gmhrs-api.herokuapp.com/api/accounts/sendMail", account);
+        return this.httpClient.put(this.URL + AppSettings + "accounts/sendMail", account);
     };
 
     changePassword(account) {
-        return this.httpClient.put("https://gmhrs-api.herokuapp.com/api/accounts/changePassword", account);
+        return this.httpClient.put(this.URL + AppSettings + "accounts/changePassword", account);
     };
 
     testAPIEndpoint(url){
@@ -43,7 +43,7 @@ export class AccountApiService {
     };
 
     getInvalidSignature(){
-        return this.httpClient.get("https://gmhrs-api.herokuapp.com/api/signature/getListEmployeesEmailBreakRule/" + localStorage.getItem("id"));
+        return this.httpClient.get(this.URL + AppSettings + "asignature/getListEmployeesEmailBreakRule/" + localStorage.getItem("id"));
     };
 
 
