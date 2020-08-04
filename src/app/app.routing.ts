@@ -85,7 +85,12 @@ export const AppRoutes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
-      }
+      },
+      {
+        path: 'create-auto-reply-mail',
+        loadChildren:
+          () => import('./components/create-auto-reply-mail-template/create-auto-reply-mail-template.component.module').then(m => m.CreateAutoReplyMailTemplateModule), canActivate: [CompanyManagerGuard]
+      },
     ],
     canActivate: [AuthGuard]
   }

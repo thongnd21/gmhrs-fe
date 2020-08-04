@@ -2,31 +2,20 @@
   <mat-tab-group>
     <mat-tab label="Mail Template">
       <div class="card-body">
-        <div>
-          <div class="editor card ">
-            <div class="card-header" style="background-color: #777777">
-              <h4>Create template</h4>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-auto mr-auto">
-                  TemplateName: <input matInput type="text" [(ngModel)]="name" placeholder="name" name="name" />
-                  <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries </small>
-                </div>
-                <div class="col-auto">
-                  <button color="primary" mat-button (click)="editorExport()">
-                    <mat-icon>
-                      create
-                    </mat-icon>
-                    Create Template
-                  </button>
-                </div>
-              </div>
-              <email-editor id="email-editor"></email-editor>
-            </div>
+        
+        <div class="row">
+          <div class="col-auto mr-auto">
+              
           </div>
-        </div>
-
+          <div class="col-auto">
+              <button color="primary" mat-button [routerLink]="['/create-auto-reply-mail']">
+                  <mat-icon>
+                      create
+                  </mat-icon>
+                  Create Template
+              </button>
+          </div>
+      </div>
         <!-- template detail -->
         <div class=" ml-05 mr-05 mt-10 pb-1 pt-08" style="margin-top: 30px;">
           <mat-table [dataSource]="dataSource" matSort>
