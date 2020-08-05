@@ -79,18 +79,18 @@
                                 <td>
                                     <nz-collapse nzAccordion>
                                         <nz-collapse-panel [nzHeader]="'Department'">
-                                            <p>
-                                                <nz-alert *ngFor="let de of data.departments" nzType="info"
-                                                    nzMessage="{{de.name}}" style="font-size: medium;" nzShowIcon>
+                                            <p *ngFor="let de of data.department">
+                                                <nz-alert *ngIf="de.status" nzType="info" nzMessage="{{de.name}}"
+                                                    style="font-size: medium;" nzShowIcon>
                                                 </nz-alert>
                                             </p>
                                         </nz-collapse-panel>
                                     </nz-collapse>
                                     <nz-collapse nzAccordion>
                                         <nz-collapse-panel [nzHeader]="'Position'">
-                                            <p>
-                                                <nz-alert *ngFor="let po of data.position_in_companies" nzType="info"
-                                                    nzMessage="{{po.name}}" style="font-size: medium;" nzShowIcon>
+                                            <p *ngFor="let po of data.position">
+                                                <nz-alert *ngIf="po.status" nzType="info" nzMessage="{{po.name}}"
+                                                    style="font-size: medium;" nzShowIcon>
                                                 </nz-alert>
                                             </p>
                                         </nz-collapse-panel>
@@ -111,16 +111,69 @@
                     </nz-table>
                 </nz-modal>
                 <!-- Model all specific template -->
-                <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showSpecificModel"
+                <nz-modal style="display: inline-block;" nzWidth="70%" [(nzVisible)]="showSpecificModel"
                     [nzAutofocus]="null" nzTitle="Apply template for specific" nzCancelText="Close"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="showConfirmSaveSpecTem()">
-                    <div>
-                        <nz-input-group nzAddOnBefore="Signature name">
-                            <input readonly type="text" style="text-align: center; color: darkblue; font-weight: bold;"
-                                placeholder="Signature name" nz-input [value]="signatureName" spellcheck="false" />
-                        </nz-input-group>
-                    </div>
-                    <nz-table #columnTable [nzData]="specRuleCheck.department" [nzScroll]="{ x: '200px' }">
+
+                    <nz-table nzBordered [nzData]="listOfSpecTemplate.specRuleCheck">
+                        <thead>
+                            <tr>
+                                <th nzWidth="30%">Specific by</th>
+                                <th nzWidth="30%">Signature</th>
+                                <th nzWidth="30%">Data</th>
+                                <th nzWidth="10%">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let specRuleCheck of listOfSpecTemplate.specRuleCheck">
+                                <td>
+                                    <nz-radio-group [(ngModel)]="specRuleCheck.specificBy">
+                                        <label (click)="loadSpecificBy(1, specRuleCheck.idSpec)" style="display: block;"
+                                            nz-radio [nzValue]="1">Department</label>
+                                        <label (click)="loadSpecificBy(2, specRuleCheck.idSpec)" style="display: block;"
+                                            nz-radio [nzValue]="2">Position</label>
+                                    </nz-radio-group>
+                                </td>
+                                <td>
+                                    <nz-radio-group [(ngModel)]="specRuleCheck.signature_id">
+                                        <label style="display: block;"
+                                            *ngFor="let signature of specRuleCheck.allSignature" nz-radio
+                                            [nzValue]="signature.id">{{signature.name}}</label>
+                                    </nz-radio-group>
+                                </td>
+                                <td>
+                                    <div *ngIf="specRuleCheck.specificBy === 1">
+                                        <div *ngFor="let department of specRuleCheck.department">
+                                            <label nz-checkbox
+                                                [(ngModel)]="department.status">{{department.name}}</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="specRuleCheck.specificBy === 2">
+                                        <div *ngFor="let position of specRuleCheck.position">
+                                            <label nz-checkbox [(ngModel)]="position.status">{{position.name}}</label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- <td>
+                                    <div *ngFor="let position of specRuleCheck.position">
+                                        <label nz-checkbox [(ngModel)]="position.status">{{position.name}}</label>
+                                    </div>
+                                </td> -->
+                                <td>
+                                    <a style="color: red;" (click)="deleteRowSpec(specRuleCheck.idSpec)">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                    <ul nz-menu nzMode="horizontal" style="border-radius: 20px;">
+                        <li nz-menu-item (click)="addRowSpec()" style="text-align: center; width: 100%;">
+                            <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
+                            Add row
+                        </li>
+                    </ul>
+
+                    <!-- De table -->
+                    <!-- <nz-table #columnTable [nzData]="specRuleCheck.department" [nzScroll]="{ x: '200px' }">
                         <thead>
                             <tr>
                                 <th style="width: 50%;">Department</th>
@@ -133,8 +186,9 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </nz-table>
-                    <nz-table #columnTable [nzData]="specRuleCheck.position" [nzScroll]="{ x: '200px' }">
+                    </nz-table> -->
+                    <!-- position table -->
+                    <!-- <nz-table #columnTable [nzData]="specRuleCheck.position" [nzScroll]="{ x: '200px' }">
                         <thead>
                             <tr>
                                 <th style="width: 50%;">Position</th>
@@ -147,7 +201,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </nz-table>
+                    </nz-table> -->
                 </nz-modal>
                 <!-- Siganture name -->
                 <div>
@@ -285,7 +339,7 @@
                     </nz-collapse>
                 </nz-modal>
                 <!-- Model all template rule -->
-                <nz-modal style="display: inline-block; width: 70%;" [(nzVisible)]="showListSignatureTemplateRule"
+                <nz-modal style="display: inline-block;" [(nzVisible)]="showListSignatureTemplateRule"
                     [nzAutofocus]="null" [nzFooter]="null" nzTitle="Signature templates Rule" nzCancelText="Close"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="handleCloseModel()">
                     <nz-table #columnTable [nzData]="listSignatureTemplateRule" [nzScroll]="{ x: '200px' }">
@@ -317,7 +371,6 @@
                         </tbody>
                     </nz-table>
                 </nz-modal>
-
                 <div>
                     <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"

@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthenService } from './../api-services/authen.services';
 import { ToastrService } from 'ngx-toastr';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { CustomValidators } from 'ngx-custom-validators';
 import { SignatureService } from '../api-services/signature.services';
-import { DomSanitizer } from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -14,16 +9,18 @@ import { Signature } from '../model/signature';;
 class DepartmentSpec {
   id: number;
   name: string;
-  signature_id: number;
   status: boolean;
 }
 class PositionSpec {
   id: number;
   name: string;
-  signature_id: number;
   status: boolean;
 }
 class SpecRuleCheck {
+  idSpec: number;
+  signature_id: number;
+  specificBy: number;
+  allSignature: Signature[]
   department: DepartmentSpec[];
   position: PositionSpec[];
 }
@@ -39,11 +36,6 @@ class ItemData {
   content: string;
   action: boolean;
 }
-
-class Template {
-  html: string;
-};
-
 @Component({
   selector: 'app-signature-template',
   templateUrl: './signature-template.component.html',
@@ -76,10 +68,7 @@ export class SignatureTemplateComponent implements OnInit {
   showListSignatureTemplateRule = false;
   showListWrongSignature = false;
   infoToReview: any;
-  specRuleCheck: SpecRuleCheck = {
-    department: [],
-    position: []
-  };
+
   rules: Rules = {
     lengthRule: {
       minLength: null,
@@ -103,7 +92,15 @@ export class SignatureTemplateComponent implements OnInit {
   indexPoniterRule = null;
   currentEditID = null;
   i = 0;
+  idSpec = 0;
   editId: string | null = null;
+  listOfSpecTemplate = {
+    allDepartment: new Array(),
+    allPosition: new Array(),
+    allSignature: new Array(),
+    specRuleCheck: new Array<SpecRuleCheck>()
+  }
+
   listOfRules: ItemData[] = [];
   mustContentOrNot = 'Contain this text';
 
@@ -184,38 +181,40 @@ export class SignatureTemplateComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
-    private authenticationService: AuthenService,
     private signatureService: SignatureService,
-    private _sanitizer: DomSanitizer,
     private modal: NzModalService,
   ) { }
-
+  loadSpecificBy(specNum, idSpec): void {
+    if (specNum === 1) {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === idSpec) {
+          for (let po of spec.position) {
+            po.status = false;
+          }
+        }
+      }
+    } else {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === idSpec) {
+          for (let de of spec.department) {
+            de.status = false;
+          }
+        }
+      }
+    }
+  }
   loadSpecificRuleCheck(): void {
+    if (this.signatureID === '') {
+      this.toast.info('Please select a template!');
+      return;
+    }
     this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.getSpecificRule(id).subscribe(
       (res: any) => {
         if (res.status) {
-          this.specRuleCheck = new SpecRuleCheck();
-          this.specRuleCheck.department = res.data.depertment;
-          for (let de of this.specRuleCheck.department) {
-            if (de.signature_id === parseInt(this.signatureID)) {
-              de.status = true;
-            } else {
-              de.status = false;
-            }
-          }
-          this.specRuleCheck.position = res.data.position;
-          for (let po of this.specRuleCheck.position) {
-            if (po.signature_id === parseInt(this.signatureID)) {
-              po.status = true;
-            } else {
-              po.status = false;
-            }
-          }
+          this.listOfSpecTemplate = res.data;
           this.showSpecificModel = true;
           this.isSpinning = false;
 
@@ -338,9 +337,7 @@ export class SignatureTemplateComponent implements OnInit {
     let id = localStorage.getItem('id');
     let data = {
       id: id,
-      departmentSpec: this.specRuleCheck.department,
-      positionSpec: this.specRuleCheck.position,
-      signatureID: this.signatureID
+      template_spec: this.listOfSpecTemplate.specRuleCheck
     }
     this.signatureService.saveSpecSignature(data).subscribe(
       (res: any) => {
@@ -471,15 +468,20 @@ export class SignatureTemplateComponent implements OnInit {
     this.toast.success('Load review success!');
   }
   addDynamicContentRule(addContent): void {
-    addContent = '{' + addContent + '}';
-    for (let rule of this.rules.listRule) {
-      if (rule.id === this.currentEditID) {
-        let currentContent = rule.content;
-        let pre = currentContent.substring(0, this.indexPoniterRule);
-        let sub = currentContent.substring(this.indexPoniterRule, currentContent.length);
-        rule.content = pre + ' ' + addContent + ' ' + sub;
+    if (this.rules.listRule !== null) {
+      addContent = '{' + addContent + '}';
+      for (let rule of this.rules.listRule) {
+        if (rule.id === this.currentEditID) {
+          let currentContent = rule.content;
+          let pre = currentContent.substring(0, this.indexPoniterRule);
+          let sub = currentContent.substring(this.indexPoniterRule, currentContent.length);
+          rule.content = pre + ' ' + addContent + ' ' + sub;
+        }
       }
+    } else {
+      this.toast.info('Please select a rule!');
     }
+
   }
   startEdit(id: string, event): void {
     this.editId = id;
@@ -530,12 +532,9 @@ export class SignatureTemplateComponent implements OnInit {
     this.isUpdatedTemplateLoading = true;
     this.isSpinning = true;
     let id = localStorage.getItem('id');
-    let template = new Template;
-    template.html = this.htmlContent;
     this.signatureService.updateSignatureForAllEmployees(id).subscribe(
       (res: any) => {
         // console.log(res);
-
         if (res.status) {
           this.toast.success(res.message);
           this.listRulesCheckErr = [];
@@ -567,6 +566,7 @@ export class SignatureTemplateComponent implements OnInit {
         if (res.status === true) {
           this.toast.success(res.message);
           if (res.action === 'create') {
+            this.signatureID = res.id;
             this.isSetPrimaryDisable = false;
           }
           this.listRulesCheckErr = [];
@@ -614,6 +614,7 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.toast.success(res.message);
+          this.loadTemplate();
         } else {
           this.toast.warning(res.message);
         }
@@ -670,6 +671,19 @@ export class SignatureTemplateComponent implements OnInit {
     this.i++;
     console.log(this.listOfRules);
   }
+  addRowSpec(): void {
+    let newRow = new SpecRuleCheck();
+    this.idSpec = this.listOfSpecTemplate.specRuleCheck[this.listOfSpecTemplate.specRuleCheck.length - 1].idSpec;
+    this.idSpec++;
+    newRow.idSpec = this.idSpec;
+    newRow.specificBy = 1;
+    newRow.signature_id = this.listOfSpecTemplate.allSignature[0].id;
+    newRow.department = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allDepartment));
+    newRow.position = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allPosition));
+    newRow.allSignature = this.listOfSpecTemplate.allSignature;
+    this.listOfSpecTemplate.specRuleCheck.push(newRow);
+    console.log(this.listOfSpecTemplate.specRuleCheck);
+  }
   addContent(content): void {
     let closeTag = this.htmlContent.substring(this.htmlContent.lastIndexOf('</'), this.htmlContent.lastIndexOf('>') + 1);
     if (this.htmlContent.lastIndexOf('>') + 1 === this.htmlContent.length) {
@@ -681,6 +695,9 @@ export class SignatureTemplateComponent implements OnInit {
   }
   deleteRow(id: string): void {
     this.listOfRules = this.listOfRules.filter(d => d.id !== id);
+  }
+  deleteRowSpec(id: string): void {
+    this.listOfSpecTemplate.specRuleCheck = this.listOfSpecTemplate.specRuleCheck.filter(d => d.idSpec !== parseInt(id));
   }
   loadTemplate(): void {
     this.isSpinning = true;
@@ -709,6 +726,10 @@ export class SignatureTemplateComponent implements OnInit {
                 this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
                 this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
               } else {
+                this.signatureID = '';
+                this.signatureName = '';
+                this.htmlContent = '';
+                this.htmlContentReview = '';
                 this.toast.warning(res.message);
               }
               this.isSpinning = false;
@@ -772,6 +793,7 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.toast.success(res.message);
+          this.loadRules();
         } else {
           this.toast.error(res.message);
         }
@@ -814,6 +836,16 @@ export class SignatureTemplateComponent implements OnInit {
                   this.rules.listRule = this.listOfRules;
                   // console.log('this.rule: ' + this.rules);
                 } else {
+                  this.signatureRuleName = '';
+                  this.signatureRuleID = '';
+                  this.rules = {
+                    lengthRule: {
+                      minLength: null,
+                      maxLength: null
+                    },
+                    listRule: null
+                  };
+                  this.listOfRules = [];
                   this.toast.warning(res.message)
                 }
               }
@@ -841,6 +873,15 @@ export class SignatureTemplateComponent implements OnInit {
         this.isSpinning = false;
       }
     )
+  }
+  clearContent(): void {
+    this.htmlContent = '';
+    this.htmlContentReview = '';
+    this.signatureName = '';
+    this.signatureID = '';
+    this.signatureRuleName = '';
+    this.signatureRuleID = '';
+    this.rules = null;
   }
   ngOnInit(): void {
     this.loadTemplate();
