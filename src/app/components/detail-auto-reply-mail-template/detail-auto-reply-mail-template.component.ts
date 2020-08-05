@@ -51,7 +51,6 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
 
         // update.result.then((res)=>{
         //   console.log('aaaaaaaaa');
-        console.log(this.tempate['template']);
         
         this.emailEditor.loadDesign(JSON.parse(this.tempate['template']));
         // })
