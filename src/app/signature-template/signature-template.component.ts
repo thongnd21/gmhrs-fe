@@ -4,7 +4,8 @@ import { SignatureService } from '../api-services/signature.services';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Signature } from '../model/signature';;
+import { Signature } from '../model/signature';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 class DepartmentSpec {
   id: number;
@@ -179,12 +180,34 @@ export class SignatureTemplateComponent implements OnInit {
       },
     ]
   };
-
+  listOfData = [
+    {
+      key: '1',
+      name: 'John Brown',
+      age: 32,
+      address: 'New York No. 1 Lake Park'
+    },
+    {
+      key: '2',
+      name: 'Jim Green',
+      age: 42,
+      address: 'London No. 1 Lake Park'
+    },
+    {
+      key: '3',
+      name: 'Joe Black',
+      age: 32,
+      address: 'Sidney No. 1 Lake Park'
+    }
+  ];
   constructor(
     private toast: ToastrService,
     private signatureService: SignatureService,
     private modal: NzModalService,
   ) { }
+  drop(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this.listOfSpecTemplate.specRuleCheck, event.previousIndex, event.currentIndex);
+  }
   loadSpecificBy(specNum, idSpec): void {
     if (specNum === 1) {
       for (let spec of this.listOfSpecTemplate.specRuleCheck) {
@@ -215,6 +238,9 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.listOfSpecTemplate = res.data;
+          if (this.listOfSpecTemplate.specRuleCheck[this.listOfSpecTemplate.specRuleCheck.length - 1] !== undefined) {
+            this.idSpec = this.listOfSpecTemplate.specRuleCheck[this.listOfSpecTemplate.specRuleCheck.length - 1].idSpec;
+          }
           this.showSpecificModel = true;
           this.isSpinning = false;
 
@@ -673,7 +699,6 @@ export class SignatureTemplateComponent implements OnInit {
   }
   addRowSpec(): void {
     let newRow = new SpecRuleCheck();
-    this.idSpec = this.listOfSpecTemplate.specRuleCheck[this.listOfSpecTemplate.specRuleCheck.length - 1].idSpec;
     this.idSpec++;
     newRow.idSpec = this.idSpec;
     newRow.specificBy = 1;

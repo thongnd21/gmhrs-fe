@@ -114,31 +114,37 @@
                 <nz-modal style="display: inline-block;" nzWidth="70%" [(nzVisible)]="showSpecificModel"
                     [nzAutofocus]="null" nzTitle="Apply template for specific" nzCancelText="Close"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="showConfirmSaveSpecTem()">
-
-                    <nz-table nzBordered [nzData]="listOfSpecTemplate.specRuleCheck">
+                    <nz-alert nzType="info"
+                        nzMessage="Note: The table is arranged in descending priority from top to bottom. You can you can pull up/down row if you want!"
+                        style="font-size: medium;" nzShowIcon>
+                    </nz-alert>
+                    <nz-table nzBordered [nzData]="listOfSpecTemplate.specRuleCheck" [nzFrontPagination]="false"
+                        [nzShowPagination]="false">
                         <thead>
                             <tr>
-                                <th nzWidth="30%">Specific by</th>
                                 <th nzWidth="30%">Signature</th>
-                                <th nzWidth="30%">Data</th>
+                                <th nzWidth="30%">Specific by</th>
+                                <th nzWidth="30%">Department / Position</th>
                                 <th nzWidth="10%">Delete</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr *ngFor="let specRuleCheck of listOfSpecTemplate.specRuleCheck">
+                        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+                            <tr class="dropDragTr" *ngFor="let specRuleCheck of listOfSpecTemplate.specRuleCheck"
+                                cdkDrag>
+                                <td>
+                                    <!-- <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'"></i> -->
+                                    <nz-radio-group [(ngModel)]="specRuleCheck.signature_id">
+                                        <label style="display: block;"
+                                            *ngFor="let signature of specRuleCheck.allSignature" nz-radio
+                                            [nzValue]="signature.id">{{signature.name}}</label>
+                                    </nz-radio-group>
+                                </td>
                                 <td>
                                     <nz-radio-group [(ngModel)]="specRuleCheck.specificBy">
                                         <label (click)="loadSpecificBy(1, specRuleCheck.idSpec)" style="display: block;"
                                             nz-radio [nzValue]="1">Department</label>
                                         <label (click)="loadSpecificBy(2, specRuleCheck.idSpec)" style="display: block;"
                                             nz-radio [nzValue]="2">Position</label>
-                                    </nz-radio-group>
-                                </td>
-                                <td>
-                                    <nz-radio-group [(ngModel)]="specRuleCheck.signature_id">
-                                        <label style="display: block;"
-                                            *ngFor="let signature of specRuleCheck.allSignature" nz-radio
-                                            [nzValue]="signature.id">{{signature.name}}</label>
                                     </nz-radio-group>
                                 </td>
                                 <td>
@@ -154,11 +160,6 @@
                                         </div>
                                     </div>
                                 </td>
-                                <!-- <td>
-                                    <div *ngFor="let position of specRuleCheck.position">
-                                        <label nz-checkbox [(ngModel)]="position.status">{{position.name}}</label>
-                                    </div>
-                                </td> -->
                                 <td>
                                     <a style="color: red;" (click)="deleteRowSpec(specRuleCheck.idSpec)">Delete</a>
                                 </td>
@@ -171,37 +172,6 @@
                             Add row
                         </li>
                     </ul>
-
-                    <!-- De table -->
-                    <!-- <nz-table #columnTable [nzData]="specRuleCheck.department" [nzScroll]="{ x: '200px' }">
-                        <thead>
-                            <tr>
-                                <th style="width: 50%;">Department</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let data of specRuleCheck.department">
-                                <td>
-                                    <label nz-checkbox [(ngModel)]="data.status">{{data.name}}</label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table> -->
-                    <!-- position table -->
-                    <!-- <nz-table #columnTable [nzData]="specRuleCheck.position" [nzScroll]="{ x: '200px' }">
-                        <thead>
-                            <tr>
-                                <th style="width: 50%;">Position</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let data of specRuleCheck.position">
-                                <td>
-                                    <label nz-checkbox [(ngModel)]="data.status">{{data.name}}</label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table> -->
                 </nz-modal>
                 <!-- Siganture name -->
                 <div>
