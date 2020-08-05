@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-auto-replymail',
   templateUrl: './auto-replymail.component.html',
@@ -26,6 +27,7 @@ export class AutoReplymailComponent implements OnInit {
     private emailServices: EmailApiService,
     private toast: ToastrService,
     private modalService: NgbModal,
+    private router: Router,
   ) { }
   accountId = localStorage.getItem('id');
 
@@ -125,31 +127,10 @@ export class AutoReplymailComponent implements OnInit {
     )
   }
 
-  openTemplateDetail(detail,id){
-    this.emailServices.getTemplate(id).subscribe(
-      (res)=>{
-        const templateEmail: any = res;
-        console.log(res);
-        this.tempate['id'] = id;
-        this.tempate['templateName'] = templateEmail.templateName;
-        this.tempate['template'] = templateEmail.template;
-        this.tempate['status'] = templateEmail.status;
-        const update = this.modalService.open(detail, { windowClass: 'my-class', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-        setTimeout(() =>{
-          update.componentInstance.emailEditor = EmailEditorComponent;
-          this.emailEditor = update.componentInstance.emailEditor;
-        } , 4000);
-        
-        // update.result.then((res)=>{
-        //   console.log('aaaaaaaaa');
-        //   let emailEditor: EmailEditorComponent;
-        //   emailEditor.loadDesign(JSON.parse(this.tempate['template']));
-        // })
-      },
-      (err)=>{
-        this.toast.error("Services í not available!");
-      }
-    )
+  openTemplateDetail(id){
+    console.log(id);
+    
+    this.router.navigate(['/detail-auto-reply-mail', {'id': id}]);
   }
   closeModal() {
     this.modalService.dismissAll();

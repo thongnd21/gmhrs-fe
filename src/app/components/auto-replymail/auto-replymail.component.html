@@ -2,20 +2,20 @@
   <mat-tab-group>
     <mat-tab label="Mail Template">
       <div class="card-body">
-        
+
         <div class="row">
           <div class="col-auto mr-auto">
-              
+
           </div>
           <div class="col-auto">
-              <button color="primary" mat-button [routerLink]="['/create-auto-reply-mail']">
-                  <mat-icon>
-                      create
-                  </mat-icon>
-                  Create Template
-              </button>
+            <button color="primary" mat-button [routerLink]="['/create-auto-reply-mail']">
+              <mat-icon>
+                create
+              </mat-icon>
+              Create Template
+            </button>
           </div>
-      </div>
+        </div>
         <!-- template detail -->
         <div class=" ml-05 mr-05 mt-10 pb-1 pt-08" style="margin-top: 30px;">
           <mat-table [dataSource]="dataSource" matSort>
@@ -61,7 +61,7 @@
               </mat-header-cell>
               <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
                 <!-- view detail account company icon button -->
-                <button mat-icon-button (click)="openTemplateDetail(detail, row.templateId)">
+                <button mat-icon-button (click)="openTemplateDetail(row.templateId)">
                   <mat-icon>
                     remove_red_eye
                   </mat-icon>
