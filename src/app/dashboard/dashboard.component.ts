@@ -198,10 +198,13 @@ export class DashboardComponent implements OnInit {
 				var DepartmentObject= new Object();
 				let newEmployeeList = [];
 				let updateEmployeeList = [];
+				let deleteEmployeeList = [];
 				let newTeamList = [];
 				let updateTeamList = [];
+				let deleteTeamList = [];
 				let newDepartmentList = [];
 				let updateDepartmentList = [];
+				let deleteDepartmentList = [];
 				var item= new Object();
 				item['name'] = element.name;
 				item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
@@ -235,6 +238,18 @@ export class DashboardComponent implements OnInit {
 					updateEmp['last_name'] = updateEmpItem.employee.last_name;
 					updateEmployeeList.push(updateEmp);
 				});
+				element.employee.deleteEmp.forEach(deleteEmpItem => {
+					let deleteEmp= new Object();
+					deleteEmp['type'] = deleteEmpItem.type;
+					deleteEmp['modified_date'] = moment.utc(deleteEmpItem.modified_date).local().format('LLLL');
+					deleteEmp['primary_email'] = deleteEmpItem.employee.primary_email;
+					deleteEmp['personal_email'] = deleteEmpItem.employee.personal_email;
+					deleteEmp['phone'] = deleteEmpItem.employee.phone;
+					deleteEmp['address'] = deleteEmpItem.employee.address;
+					deleteEmp['first_name'] = deleteEmpItem.employee.first_name;
+					deleteEmp['last_name'] = deleteEmpItem.employee.last_name;
+					deleteEmployeeList.push(deleteEmp);
+				});
 				//end
 				/* mapping model team
 				*  author: son
@@ -256,6 +271,15 @@ export class DashboardComponent implements OnInit {
 					updateTeam['description'] = updateTeamItem.team.description;
 					updateTeam['name'] = updateTeamItem.team.name;
 					updateTeamList.push(updateTeam);
+				});
+				element.team.deleteTeam.forEach(deleteTeamItem => {
+					let deleteTeam= new Object();
+					deleteTeam['type'] = deleteTeamItem.type;
+					deleteTeam['modified_date'] = moment.utc(deleteTeamItem.modified_date).local().format('LLLL');
+					deleteTeam['email'] = deleteTeamItem.team.email;
+					deleteTeam['description'] = deleteTeamItem.team.description;
+					deleteTeam['name'] = deleteTeamItem.team.name;
+					deleteTeamList.push(deleteTeam);
 				});
 				//end
 				/* mapping model department
@@ -279,21 +303,31 @@ export class DashboardComponent implements OnInit {
 					updateDepartment['name'] = updateDepItem.department.name;
 					updateDepartmentList.push(updateDepartment);
 				});
+				element.department.deleteDepartment.forEach(deleteDepItem => {
+					let deleteDepartment= new Object();
+					deleteDepartment['type'] = deleteDepItem.type;
+					deleteDepartment['modified_date'] = moment.utc(deleteDepItem.modified_date).local().format('LLLL');
+					deleteDepartment['email'] = deleteDepItem.department.email;
+					deleteDepartment['description'] = deleteDepItem.department.description;
+					deleteDepartment['name'] = deleteDepItem.department.name;
+					deleteDepartmentList.push(deleteDepartment);
+				});
 				EmpObject['newEmployeeList'] = newEmployeeList;
 				EmpObject['updateEmployeeList'] = updateEmployeeList;
+				EmpObject['deleteEmployeeList'] = deleteEmployeeList;
 				TeamObject['newTeamList'] = newTeamList;
 				TeamObject['updateTeamList'] = updateTeamList;
+				TeamObject['deleteTeamList'] = deleteTeamList;
 				DepartmentObject['newDepartmentList'] = newDepartmentList;
 				DepartmentObject['updateDepartmentList'] = updateDepartmentList;
+				DepartmentObject['deleteDepartmentList'] = deleteDepartmentList;
 
 				item['employee'] = EmpObject;
 				item['team'] = TeamObject;
 				item['department'] = DepartmentObject;
 				//end
-				console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 				console.log(this.list);
 				this.list.push(item);
-				
 				// item['team'] = moment.utc(element.created_date).local().format('LLLL');
 				// listAccount.push(item);
 			}))
