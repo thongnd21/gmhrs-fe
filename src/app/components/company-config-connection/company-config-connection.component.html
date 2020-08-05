@@ -1,6 +1,9 @@
 <div>
-    <mat-tab-group mat-align-tabs="start">
-        <mat-tab label="Setting Connection">
+
+    <mat-horizontal-stepper linear #stepper>
+        <!-- #docregion editable -->
+        <mat-step [stepControl]="accessDBForm">
+            <!-- #enddocregion editable -->
             <mat-radio-group [(ngModel)]="connection" aria-label="Select an option">
                 <mat-radio-button [value]="true">Database Connection</mat-radio-button>
                 <mat-radio-button [value]="false">API Endpoint</mat-radio-button>
@@ -9,37 +12,36 @@
                 <mat-card class="p-0">
                     <mat-card-content>
                         <form [formGroup]="accessDBForm">
+                            <ng-template matStepLabel>Data Connect</ng-template>
                             <div fxLayout="row wrap">
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="dbName" formControlName="dbName"
-                                                placeholder="Connection Name" value="" />
+                                                placeholder="Connection Name" />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="host" formControlName="host" placeholder="Hostname"
-                                                value="" />
+                                            <input matInput name="host" formControlName="host" placeholder="Hostname" />
                                         </mat-form-field>
                                     </div>
 
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="port" formControlName="port" placeholder="Port"
-                                                value="" />
+                                            <input matInput name="port" formControlName="port" placeholder="Port" />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput name="username" formControlName="username"
-                                                placeholder="Username" value="" />
+                                                placeholder="Username" />
                                         </mat-form-field>
                                     </div>
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
                                             <input matInput type="password" name="password" formControlName="password"
-                                                placeholder="Password" value="" />
+                                                placeholder="Password" />
                                         </mat-form-field>
                                     </div>
                                     <div>
@@ -53,13 +55,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <button mat-raised-button (click)="onSubmitConection(accessDBForm.value)" color="primary">
-                                Save
-                            </button>
-                            <button style="margin: 40px;" mat-raised-button
-                                (click)="onTestConection(accessDBForm.value)" color="primary">
-                                Test Connection
-                            </button>
+                            <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                (click)="nextClicked(1)">Next</button>
+                            <div class="button-container mr-6">
+                                <div class="spinner-container" *ngIf="loadingTestConnection">
+                                    <mat-spinner diameter="24"></mat-spinner>
+                                </div>
+                                <button mat-raised-button
+                                    (click)="onTestConection(responseConnectionString,accessDBForm.value)"
+                                    color="primary" [disabled]="loadingTestConnection">
+                                    Test Connection
+                                </button>
+                            </div>
                         </form>
                     </mat-card-content>
                 </mat-card>
@@ -68,60 +75,89 @@
                 <mat-card class="p-0">
                     <mat-card-content>
                         <form [formGroup]="APIEndpointForm">
+                            <ng-template matStepLabel>Data Connect</ng-template>
                             <div fxLayout="row wrap">
                                 <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                                     <div class="pb-1">
                                         <mat-form-field class="full-width">
-                                            <input matInput name="url" formControlName="url" placeholder="URL"
-                                                value="" />
+                                            <input matInput name="url" formControlName="url" placeholder="URL" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                             </div>
-                            <button [disabled]="!anableButtonSaveAPIEndpoint"
-                                (click)="onSubmitURLConection(APIEndpointForm.value)" mat-raised-button color="primary">
-                                Save
-                            </button>
-                            <button style="margin-left: 40px;" mat-raised-button
-                                (click)="onTestURLConection(APIEndpointForm.value)" color="primary">
-                                Test
-                            </button>
+                            <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                (click)="nextClicked(1)">Next</button>
+                            <div class="button-container  mr-6">
+                                <div class="spinner-container" *ngIf="loadingTestAPI">
+                                    <mat-spinner diameter="24"></mat-spinner>
+                                </div>
+                                <button mat-raised-button
+                                    (click)="onTestURLConection(responseApiEndpoint,APIEndpointForm.value)"
+                                    color="primary" [disabled]="loadingTestAPI">
+                                    Test
+                                </button>
+                            </div>
+
 
                         </form>
-                        <br/>
-                        <div *ngIf="enableDataAPIResult">
-                            <h1>Employee</h1>
-                            <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
-                            <h1>Department</h1>
-                            <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
-                            <h1>Team</h1>
-                            <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
+                        <br />
+                        <!-- <div *ngIf="apiEndpointFail">
+                            <h2 style="color: red;">Connection Fail. Please input information Again</h2>
                         </div>
+                        <div *ngIf="enableDataAPIResult">
+                            <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
+                            <h2 style="color: red;" *ngIf="employeeValidate==false">Employee Not Passed</h2>
+                            <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
+                            <h2 style="color: red;" *ngIf="departmentValidate==false">Department Not Passed</h2>
+                            <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
+                            <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
+                            <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
+                        </div> -->
                     </mat-card-content>
                 </mat-card>
             </div>
-        </mat-tab>
-        <mat-tab label="Config G-suite Authentication">
+        </mat-step>
+        <mat-step [stepControl]="gsuiteCredentialForm">
+            <ng-template matStepLabel>G-Suite Credential</ng-template>
             <div class="card-body">
                 <mat-card class="p-0">
                     <mat-card-content>
-                        <form class="col-md-4" [formGroup]="gsuiteCredentialForm">
+                        <form [formGroup]="gsuiteCredentialForm">
                             <mat-form-field class="full-width">
                                 <input matInput name="company_email" formControlName="company_email"
-                                    placeholder="Company Email" value="" />
+                                    placeholder="Company Email" />
                             </mat-form-field>
-                            <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
-                                type="file" name="file" style="margin: 40px;" />
-                            <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton" (click)="onTest(responseTestFile,gsuiteCredentialForm.value)"
-                                color="primary">
-                                Test Connection
-                            </button>
+                            <mat-form-field class="full-width">
+                                <ngx-mat-file-input matInput (change)="fileChange($event)" matInput name="company_email"
+                                    formControlName="file" enctype="multipart/form-data" name="file"
+                                    placeholder="File JSON" valuePlaceholder="{{file_name_auth_gsuite_company}}">
+                                </ngx-mat-file-input>
+                                <mat-icon matSuffix>folder</mat-icon>
+                            </mat-form-field>
+
+                            <!-- <input (change)="fileChange($event)" formControlName="file" enctype="multipart/form-data"
+                                type="file" name="file" style="margin: 40px;" /> -->
+                            <br />
+                            <div style="width: 400px; height: 50px;">
+                                <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                    matStepperPrevious>Back</button>
+                                <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                    (click)="nextClicked(3)">Next</button>
+                                <button mat-raised-button [disabled]="disableTestAuthenGsuiteButton"
+                                    (click)="onTest(responseTestFile,gsuiteCredentialForm.value)" color="primary">
+                                    Test
+                                </button>
+                            </div>
+
                         </form>
                     </mat-card-content>
                 </mat-card>
             </div>
-        </mat-tab>
-        <mat-tab label="Shedule Synchronize">
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Schedule Synchronize</ng-template>
             <div class="spinner-container" *ngIf="loading">
                 <mat-spinner diameter="24"></mat-spinner>
             </div>
@@ -203,6 +239,8 @@
                                 <div class="spinner-container" *ngIf="loadingSubmit">
                                     <mat-spinner diameter="24"></mat-spinner>
                                 </div>
+                                <button mat-raised-button style="margin-right: 40px;" color="primary"
+                                    matStepperPrevious>Back</button>
                                 <button style="margin-left: 10px;" mat-raised-button color="primary"
                                     (click)="saveScheduleTime()" [disabled]="loadingSubmit">
                                     Submit
@@ -212,121 +250,730 @@
                     </mat-card>
                 </div>
             </div>
-        </mat-tab>
-    </mat-tab-group>
-</div>
-<ng-template id="dialog" #dialog>
-    <mat-dialog-content>
-        <div *ngIf="checkSync == false">
-            Are you sure want to start schedule
-        </div>
-        <div *ngIf="checkSync == true">
-            Are you sure want to off schedule
-        </div>
-        <!-- {{timeSchedule}} -->
-    </mat-dialog-content>
-    <mat-dialog-actions align="center">
-        <div class="button-container  mr-4">
-            <div class="spinner-container" *ngIf="loadingConfirm">
-                <mat-spinner diameter="24"></mat-spinner>
+        </mat-step>
+    </mat-horizontal-stepper>
+    <ng-template id="dialog" #dialog>
+        <mat-dialog-content>
+            <div *ngIf="checkSync == false">
+                Are you sure want to start schedule
             </div>
-            <button mat-raised-button color="primary" (click)="changeCheckSync()" [disabled]="loadingConfirm">
-                Change
+            <div *ngIf="checkSync == true">
+                Are you sure want to off schedule
+            </div>
+            <!-- {{timeSchedule}} -->
+        </mat-dialog-content>
+        <mat-dialog-actions align="center">
+            <div class="button-container  mr-4">
+                <div class="spinner-container" *ngIf="loadingConfirm">
+                    <mat-spinner diameter="24"></mat-spinner>
+                </div>
+                <button mat-raised-button color="primary" (click)="changeCheckSync()" [disabled]="loadingConfirm">
+                    Change
+                </button>
+            </div>
+            <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+        </mat-dialog-actions>
+    </ng-template>
+
+    <ng-template #responseTestFile let-modal>
+        <div class="modal-header">
+            <h4>Access Information</h4>
+        </div>
+        <div class="modal-body">
+            <div class="card-body">
+                <table class="table">
+                    <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.employee.status==200 ,
+                 'response-status-fail' : accessGsuiteAuthen.employee.status!=200}">
+                        <td>
+                            Employee
+                        </td>
+                        <td>
+                            {{accessGsuiteAuthen.employee.message}}
+                        </td>
+                        <td>
+                            <mat-icon *ngIf="accessGsuiteAuthen.employee.status==200" style="color: green;">done
+                            </mat-icon>
+                            <mat-icon *ngIf="accessGsuiteAuthen.employee.status!=200" style="color: red;">close
+                            </mat-icon>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.team.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.team.status!=200}">
+                        <td>
+                            Team
+                        </td>
+                        <td>
+                            {{accessGsuiteAuthen.team.message}}
+                        </td>
+                        <td>
+                            <mat-icon *ngIf="accessGsuiteAuthen.team.status==200" style="color: green;">done
+                            </mat-icon>
+                            <mat-icon *ngIf="accessGsuiteAuthen.team.status!=200" style="color: red;">close
+                            </mat-icon>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.department.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.department.status!=200}">
+                        <td>
+                            Department
+                        </td>
+                        <td>
+                            {{accessGsuiteAuthen.department.message}}
+                        </td>
+                        <td>
+                            <mat-icon *ngIf="accessGsuiteAuthen.department.status==200" style="color: green;">done
+                            </mat-icon>
+                            <mat-icon *ngIf="accessGsuiteAuthen.department.status!=200" style="color: red;">close
+                            </mat-icon>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.member.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.member.status!=200}">
+                        <td>
+                            Member
+                        </td>
+                        <td>
+                            {{accessGsuiteAuthen.member.message}}
+                        </td>
+                        <td>
+                            <mat-icon *ngIf="accessGsuiteAuthen.member.status==200" style="color: green;">done
+                            </mat-icon>
+                            <mat-icon *ngIf="accessGsuiteAuthen.member.status!=200" style="color: red;">close
+                            </mat-icon>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.member.status==200 ,
+                'response-status-fail' : accessGsuiteAuthen.member.status!=200}">
+                        <td>
+                            Gmail
+                        </td>
+                        <td>
+                            {{accessGsuiteAuthen.gmail.message}}
+                        </td>
+                        <td>
+                            <mat-icon *ngIf="accessGsuiteAuthen.gmail.status==200" style="color: green;">done
+                            </mat-icon>
+                            <mat-icon *ngIf="accessGsuiteAuthen.gmail.status!=200" style="color: red;">close
+                            </mat-icon>
+                            <br />
+                        </td>
+                    </tr>
+                </table>
+                <button mat-flat-button class="col-md-2 ml-2" color="primary" (click)="closeModal()">
+                    Close
+                </button>
+                <button mat-flat-button class="col-md-2 ml-2" style="margin-left: 40px;"
+                    (click)="upload(gsuiteCredentialForm.value)" color="primary" [disabled]="gsuiteAuthenStatus">
+                    Upload
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #responseConnectionString let-modal>
+        <div class="modal-header">
+            <h4>Connection Table Information</h4>
+        </div>
+        <div class="modal-body">
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>CONNECTION TYPE</th>
+                            <th>STATUS</th>
+                            <th>MESSAGE</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tr [ngClass]="{'response-status-success' : connectionStatus.connection.status=='Success' ,
+                    'response-status-fail' : connectionStatus.connection.status!='Success'}">
+                        <td>Database Connection String</td>
+                        <td>{{connectionStatus.connection.status}}</td>
+                        <td>{{connectionStatus.connection.message}}</td>
+                        <td>
+                            <mat-icon *ngIf="connectionStatus.connection.status=='Success'" style="color: green;">done
+                            </mat-icon>
+                            <mat-icon *ngIf="connectionStatus.connection.status!='Success'" style="color: red;">
+                                close</mat-icon>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <mat-tab-group mat-align-tabs="center">
+                <mat-tab label="Table view">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>OBJECT</th>
+                                    <th>FIELD NAME</th>
+                                    <th>STATUS</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.id=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.id!='Pass'}">
+                                <td>employee</td>
+                                <td>id</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.primary_email=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.primary_email!='Pass'}">
+                                <td></td>
+                                <td>primary_email</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.primary_email}}</td>
+                                <td>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.primary_email=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.primary_email!='Pass'"
+                                        style="color: red;">close</mat-icon>
+
+                                </td>
+                            </tr>
+                            <tr
+                                [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.personal_email=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.personal_email!='Pass'}">
+                                <td></td>
+                                <td>personal_email</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.personal_email}}</td>
+                                <td>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.personal_email=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.personal_email!='Pass'"
+                                        style="color: red;">close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.first_name=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.first_name!='Pass'}">
+                                <td></td>
+                                <td>first_name</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.first_name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.first_name=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.first_name!='Pass'"
+                                        style="color: red;">close</mat-icon>
+
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.last_name=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.last_name!='Pass'}">
+                                <td></td>
+                                <td>last_name</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.last_name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.last_name=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.last_name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.phone=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.phone!='Pass'}">
+                                <td></td>
+                                <td>phone</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.phone}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.phone=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.phone!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.address=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.address!='Pass'}">
+                                <td></td>
+                                <td>address</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.address}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.address=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.address!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.department.id=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.department.id!='Pass'}">
+                                <td></td>
+                                <td>department_id</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.department.id}}</td>
+                                <td>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.department.id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.department.id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <!-- <tr
+                                [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.department.name=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseEmployee.employee.department.name!='Pass'}">
+                                <td></td>
+                                <td>department_id</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.department.name}}</td>
+                                <td>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.department.name=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseEmployee.employee.department.name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr> -->
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.id=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseDepartment.department.id!='Pass'}">
+                                <td>department</td>
+                                <td>id</td>
+                                <td>{{connectionStringDataResponseDepartment.department.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseDepartment.department.id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseDepartment.department.id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.name=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseDepartment.department.name!='Pass'}">
+                                <td></td>
+                                <td>name</td>
+                                <td>{{connectionStringDataResponseDepartment.department.name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseDepartment.department.name=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseDepartment.department.name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.id=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseTeam.team.id!='Pass'}">
+                                <td>team</td>
+                                <td>id</td>
+                                <td>{{connectionStringDataResponseTeam.team.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.id=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.name=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseTeam.team.name!='Pass'}">
+                                <td></td>
+                                <td>name</td>
+                                <td>{{connectionStringDataResponseTeam.team.name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.name=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.email=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseTeam.team.email!='Pass'}">
+                                <td></td>
+                                <td>email</td>
+                                <td>{{connectionStringDataResponseTeam.team.email}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.email=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.email!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.member[0].id=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseTeam.team.member[0].id!='Pass'}">
+                                <td>team_employee</td>
+                                <td>employee_id</td>
+                                <td>{{connectionStringDataResponseTeam.team.member[0].id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.member[0].id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponseTeam.team.member[0].id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr
+                                [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.member[0].primary_email=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseTeam.team.member[0].primary_email!='Pass'}">
+                                <td></td>
+                                <td>team_id</td>
+                                <td>{{connectionStringDataResponseTeam.team.id}}</td>
+                                <td>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseTeam.team.member[0].primary_email=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon
+                                        *ngIf="connectionStringDataResponseTeam.team.member[0].primary_email!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </mat-tab>
+                <mat-tab label="JSON format view">
+                    <div class="card-body">
+                        <div *ngIf="enableDataConnectionResult">
+                            <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
+                            <h2 style="color: red;" *ngIf="employeeValidate==false">Employee Not Passed</h2>
+                            <ngx-json-viewer [json]="connectionStringDataResponseEmployee"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
+                            <h2 style="color: red;" *ngIf="departmentValidate==false">Department Not Passed</h2>
+                            <ngx-json-viewer [json]="connectionStringDataResponseDepartment"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
+                            <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
+                            <ngx-json-viewer [json]="connectionStringDataResponseTeam"></ngx-json-viewer>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+            <button mat-flat-button style="margin-right: 40px;" col-md-2 ml-2 color="primary" (click)="closeModal()">
+                Close
+            </button>
+            <button style="margin-right: 40px;" mat-raised-button (click)="onSubmitConection(accessDBForm.value)"
+                color="primary" [disabled]="!disableSaveConnectionStringButton">
+                Save
             </button>
         </div>
-        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
-    </mat-dialog-actions>
-</ng-template>
+    </ng-template>
 
-<ng-template #responseTestFile let-modal>
-    <div class="modal-header">
-        <h4>Access Information</h4>
-    </div>
-    <div class="modal-body">
+    <ng-template #responseApiEndpoint let-modal>
+        <div class="modal-header">
+            <h4>Connection Table Information</h4>
+        </div>
         <div class="card-body">
             <table class="table">
-                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.employee.status==200 ,
-                 'response-status-fail' : accessGsuiteAuthen.employee.status!=200}">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>CONNECTION TYPE</th>
+                        <th>STATUS</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+                <tr [ngClass]="{'response-status-success' : connectionStatus.connection.status=='Success' ,
+                'response-status-fail' : connectionStatus.connection.status!='Success'}">
+                    <td>API EndPoint</td>
+                    <td>{{connectionStatus.connection.status}}</td>
                     <td>
-                        Employee
-                    </td>
-                    <td>
-                        {{accessGsuiteAuthen.employee.message}}
-                    </td>
-                    <td>
-                        <mat-icon *ngIf="accessGsuiteAuthen.employee.status==200" style="color: green;">done</mat-icon>
-                        <mat-icon *ngIf="accessGsuiteAuthen.employee.status!=200" style="color: red;">close</mat-icon>
-                        <br />
-                    </td>
-                </tr>
-                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.team.status==200 ,
-                'response-status-fail' : accessGsuiteAuthen.team.status!=200}">
-                    <td>
-                        Team
-                    </td>
-                    <td>
-                        {{accessGsuiteAuthen.team.message}}
-                    </td>
-                    <td>
-                        <mat-icon *ngIf="accessGsuiteAuthen.team.status==200" style="color: green;">done</mat-icon>
-                        <mat-icon *ngIf="accessGsuiteAuthen.team.status!=200" style="color: red;">close</mat-icon>
-                        <br />
-                    </td>
-                </tr>
-                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.department.status==200 ,
-                'response-status-fail' : accessGsuiteAuthen.department.status!=200}">
-                    <td>
-                        Department
-                    </td>
-                    <td>
-                        {{accessGsuiteAuthen.department.message}}
-                    </td>
-                    <td>
-                        <mat-icon *ngIf="accessGsuiteAuthen.department.status==200" style="color: green;">done
+                        <mat-icon *ngIf="connectionStatus.connection.status=='Success'" style="color: green;">done
                         </mat-icon>
-                        <mat-icon *ngIf="accessGsuiteAuthen.department.status!=200" style="color: red;">close</mat-icon>
-                        <br />
-                    </td>
-                </tr>
-                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.member.status==200 ,
-                'response-status-fail' : accessGsuiteAuthen.member.status!=200}">
-                    <td>
-                        Member
-                    </td>
-                    <td>
-                        {{accessGsuiteAuthen.member.message}}
-                    </td>
-                    <td>
-                        <mat-icon *ngIf="accessGsuiteAuthen.member.status==200" style="color: green;">done
-                        </mat-icon>
-                        <mat-icon *ngIf="accessGsuiteAuthen.member.status!=200" style="color: red;">close</mat-icon>
-                        <br />
-                    </td>
-                </tr>
-                <tr [ngClass]="{'response-status-success' : accessGsuiteAuthen.member.status==200 ,
-                'response-status-fail' : accessGsuiteAuthen.member.status!=200}">
-                    <td>
-                        Gmail
-                    </td>
-                    <td>
-                        {{accessGsuiteAuthen.gmail.message}}
-                    </td>
-                    <td>
-                        <mat-icon *ngIf="accessGsuiteAuthen.gmail.status==200" style="color: green;">done
-                        </mat-icon>
-                        <mat-icon *ngIf="accessGsuiteAuthen.gmail.status!=200" style="color: red;">close</mat-icon>
-                        <br />
+                        <mat-icon *ngIf="connectionStatus.connection.status!='Success'" style="color: red;">
+                            close</mat-icon>
                     </td>
                 </tr>
             </table>
-            <button mat-flat-button class="col-md-2 ml-2" color="primary" (click)="closeModal()">
+        </div>
+        <div class="modal-body">
+            <mat-tab-group mat-align-tabs="center">
+                <mat-tab label="Table view">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>OBJECT</th>
+                                    <th>FIELD NAME</th>
+                                    <th>STATUS</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.id!='Pass'}">
+                                <td>employee</td>
+                                <td>id</td>
+                                <td>{{connectionStringDataResponseEmployee.employee.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.id=='Pass'" style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.id!='Pass'" style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.primary_email=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.primary_email!='Pass'}">
+                                <td></td>
+                                <td>primary_email</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.primary_email}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.primary_email=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.primary_email!='Pass'"
+                                        style="color: red;">close</mat-icon>
+
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.personal_email=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.personal_email!='Pass'}">
+                                <td></td>
+                                <td>personal_email</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.personal_email}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.personal_email=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.personal_email!='Pass'"
+                                        style="color: red;">close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.first_name=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.first_name!='Pass'}">
+                                <td></td>
+                                <td>first_name</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.first_name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.first_name=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.first_name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.last_name=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.last_name!='Pass'}">
+                                <td></td>
+                                <td>last_name</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.last_name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.last_name=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.last_name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.phone=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.phone!='Pass'}">
+                                <td></td>
+                                <td>phone</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.phone}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.phone=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.phone!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.address=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.address!='Pass'}">
+                                <td></td>
+                                <td>address</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.address}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.address=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.address!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.department.id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.department.id!='Pass'}">
+                                <td></td>
+                                <td>department_id</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.department.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <!-- <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.department.name=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.department.name!='Pass'}">
+                            <td></td>
+                            <td>department_id</td>
+                            <td>{{dataAPIEndpoindEmployee.employee.department.name}}</td>
+                            <td>
+                                <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.name=='Pass'"
+                                    style="color: green;">done
+                                </mat-icon>
+                                <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.name!='Pass'"
+                                    style="color: red;">
+                                    close</mat-icon>
+                            </td>
+                        </tr> -->
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindDepartment.department.id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindDepartment.department.id!='Pass'}">
+                                <td>department</td>
+                                <td>id</td>
+                                <td>{{dataAPIEndpoindDepartment.department.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindDepartment.department.id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindDepartment.department.id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindDepartment.department.name=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindDepartment.department.name!='Pass'}">
+                                <td></td>
+                                <td>name</td>
+                                <td>{{dataAPIEndpoindDepartment.department.name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindDepartment.department.name=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindDepartment.department.name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindTeam.team.id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindTeam.team.id!='Pass'}">
+                                <td>team</td>
+                                <td>id</td>
+                                <td>{{dataAPIEndpoindTeam.team.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.id=='Pass'" style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.id!='Pass'" style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindTeam.team.name=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindTeam.team.name!='Pass'}">
+                                <td></td>
+                                <td>name</td>
+                                <td>{{dataAPIEndpoindTeam.team.name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.name=='Pass'" style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.name!='Pass'" style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindTeam.team.email=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindTeam.team.email!='Pass'}">
+                                <td></td>
+                                <td>email</td>
+                                <td>{{dataAPIEndpoindTeam.team.email}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.email=='Pass'" style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.email!='Pass'" style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindTeam.team.member[0].id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindTeam.team.member[0].id!='Pass'}">
+                                <td>team_employee</td>
+                                <td>employee_id</td>
+                                <td>{{dataAPIEndpoindTeam.team.member[0].id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.member[0].id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.member[0].id!='Pass'" style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindTeam.team.member[0].primary_email=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindTeam.team.member[0].primary_email!='Pass'}">
+                                <td></td>
+                                <td>team_id</td>
+                                <td>{{dataAPIEndpoindTeam.team.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.member[0].primary_email=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindTeam.team.member[0].primary_email!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </mat-tab>
+                <mat-tab label="JSON format view">
+                    <!-- <div *ngIf="apiEndpointFail"> -->
+                    <!-- <h2 style="color: red;">Connection Fail. Please input information Again</h2> -->
+                    <!-- </div> -->
+                    <div class="card-body">
+                        <div *ngIf="enableDataAPIResult">
+                            <h2 style="color: green;" *ngIf="employeeValidate==true">Employee Passed</h2>
+                            <h2 style="color: red;" *ngIf="employeeValidate==false">Employee Not Passed</h2>
+                            <ngx-json-viewer [json]="dataAPIEndpoindEmployee"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="departmentValidate==true">Department Passed</h2>
+                            <h2 style="color: red;" *ngIf="departmentValidate==false">Department Not Passed</h2>
+                            <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
+                            <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
+                            <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+            <button mat-flat-button style="margin-right: 40px;" col-md-2 ml-2 color="primary" (click)="closeModal()">
                 Close
             </button>
-            <button mat-flat-button class="col-md-2 ml-2" style="margin-left: 40px;"
-                (click)="upload(gsuiteCredentialForm.value)" color="primary"
-                [disabled] = "gsuiteAuthenStatus">
-                Upload
+            <button [disabled]="!anableButtonSaveAPIEndpoint" style="margin-right: 40px;"
+                (click)="onSubmitURLConection(APIEndpointForm.value)" mat-raised-button color="primary">
+                Save
             </button>
+
         </div>
-    </div>
-</ng-template>
+    </ng-template>

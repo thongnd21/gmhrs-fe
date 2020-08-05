@@ -2,13 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenService } from './../api-services/authen.services';
 import { ToastrService } from 'ngx-toastr';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { CustomValidators } from 'ngx-custom-validators';
 import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppComponent } from '../app.component';
-import { NgOtpInputModule } from 'ng-otp-input';
 import { Observable, Subscription } from 'rxjs';
 import 'rxjs/add/observable/interval';
 
@@ -26,9 +20,7 @@ export class CheckOtpComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
-    private authenticationService: AuthenService,
     private twoFaAuthService: TwoFaAuthService
   ) { }
 

@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthenService } from './../api-services/authen.services';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { CustomValidators } from 'ngx-custom-validators';
 import { TwoFaAuthService } from '../api-services/two-fa-auth.service';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-two-fa-auth',
@@ -20,11 +16,8 @@ export class TwoFaAuthComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
-    private authenticationService: AuthenService,
     private twoFaAuthService: TwoFaAuthService,
-    private _sanitizer: DomSanitizer,
   ) {
 
   }
@@ -61,7 +54,6 @@ export class TwoFaAuthComponent implements OnInit {
   }
   ngOnInit(): void {
     let username = localStorage.getItem('username');
-
     this.twoFaAuthService.check2faStatus(username).subscribe(
       (res) => {
         localStorage.setItem('two_fa_status', res.toString());
@@ -72,13 +64,6 @@ export class TwoFaAuthComponent implements OnInit {
           let username = localStorage.getItem('username');
           this.twoFaAuthService.getQrCode(username).subscribe(
             (res) => {
-              // console.log('qr content: ' + res);
-              // if (res === null) {
-              //   console.log('reload bs server err!');
-
-              //   this.ngOnInit();
-              //   return;
-              // }
               this.showOrNot = true;
               this.QrCodeLink = res;
             }
@@ -88,9 +73,5 @@ export class TwoFaAuthComponent implements OnInit {
         }
       }
     )
-
-
-
   }
-
 }
