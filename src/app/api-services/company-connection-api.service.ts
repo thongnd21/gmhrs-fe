@@ -11,7 +11,7 @@ export class CompanyConnectionService {
 
   testDBCompanyConnection(DBInfor) {
     return this.httpClient.post('https://gmcompany-api.herokuapp.com/api/connection', DBInfor);
-    // return this.httpClient.get('http://localhost:3000/api/accounts');
+    // return this.httpClient.post('http://localhost:3000/api/connection', DBInfor);
   }
 
 

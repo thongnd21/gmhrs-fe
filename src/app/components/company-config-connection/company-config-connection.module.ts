@@ -3,19 +3,23 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CompanyConfigConnectionComponent } from './company-config-connection.component';
 import { CompanyConfigConnectionRoutes } from './company-config-connection.routing';
-import {  MatButtonModule,
-     MatButtonToggleModule, MatDialogModule, 
-     MatIconModule, MatCardModule, MatInputModule, 
-      MatMenuModule, 
-      MatTabsModule,
-      MatStepperModule,
-      MatSelectModule,
-      MatOptionModule,
-      MatRadioModule,
-      MatSlideToggleModule,
-      MatProgressSpinnerModule} from '@angular/material';
+import {
+    MatButtonModule,
+    MatButtonToggleModule, MatDialogModule,
+    MatIconModule, MatCardModule, MatInputModule,
+    MatMenuModule,
+    MatTabsModule,
+    MatStepperModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatRadioModule,
+    MatSlideToggleModule,
+
+    MatProgressSpinnerModule
+} from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 @NgModule({
     imports: [
@@ -41,6 +45,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
         MatTabsModule,
         MatDialogModule,
         NgxJsonViewerModule,
+        MaterialFileInputModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

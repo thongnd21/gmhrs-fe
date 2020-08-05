@@ -13,6 +13,7 @@ import { Team } from '../../../model/team';
 import { Employee } from '../../../model/employee';
 import { MatMenuTrigger } from '@angular/material';
 import { CheckOtpModule } from '../../../check-otp/check-otp.module';
+import * as moment from 'moment';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -23,6 +24,7 @@ import { CheckOtpModule } from '../../../check-otp/check-otp.module';
 export class AppHeaderComponent {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   username;
+  lastSyncTime = localStorage.getItem('last_sync_at');
   selectedAll = true;
   selectedDepMatchAll = true;
   selectedDepNewAll = true;
@@ -124,6 +126,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
+            gsuite_id : o.gsuite_id,
             selected: true
           }
         });
@@ -135,6 +138,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
+            gsuite_id : o.gsuite_id,
             selected: true
           }
         });
@@ -175,18 +179,32 @@ export class AppHeaderComponent {
           }
         });
         listSync.employee.outOfHRMS = res.employees.outOfHRMS.map(o => {
-          return {
-            id: o.id,
-            address: o.address,
-            department_id: o.department_id,
-            first_name: o.first_name,
-            primary_email: o.primaryEmail,
-            gsuite_id: o.gsuite_id,
-            last_name: o.last_name,
-            personal_email: o.personal_email,
-            phone: o.phone,
-            hrms_id: o.hrms_id,
-            selected: true
+          if(this.isFirstSync == true){
+            return {
+              id: o.id,
+              address: o.addresses[0].formatted,
+              fullName: o.name.fullName,
+              primary_email: o.primaryEmail,
+              gsuite_id: o.gsuite_id,
+              last_name: o.last_name,
+              personal_email: o.emails[0].address,
+              phone: o.phones[0].value,
+              selected: true
+            }
+          }else{
+            return {
+              id: o.id,
+              address: o.address,
+              department_id: o.department_id,
+              first_name: o.first_name,
+              primary_email: o.primary_email,
+              gsuite_id: o.gsuite_id,
+              last_name: o.last_name,
+              personal_email: o.personal_email,
+              phone: o.phone,
+              hrms_id: o.hrms_id,
+              selected: true
+            }
           }
         });
         this.listSyncFinal = listSync;
@@ -240,6 +258,7 @@ export class AppHeaderComponent {
     if (this.isFirstSync != null) {
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
+          this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
           this.toast.success('Synchronize success!');
           this.closeModal();
         },
@@ -456,11 +475,10 @@ export class AppHeaderComponent {
     if (this.selectedEmpOutAll) {
       this.listSyncFinal.employee.outOfHRMS.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.employees.outOfHRMS.push(this.listSyncFinal.employee.outOfHRMS[index]);
+        this.listSynchonize.employees.outOfHRMS.push(this.listItemSynch.employees.outOfHRMS[index]);
       });
     }
     else {
-
       this.listSynchonize.employees.outOfHRMS = [];
       this.listSyncFinal.employee.outOfHRMS.forEach((e, index) => {
         e.selected = false;
@@ -475,7 +493,7 @@ export class AppHeaderComponent {
       this.listSynchonize.employees.outOfHRMS.splice(index, 1);
       this.selectedEmpOutAll = false;
     } else {
-      this.listSynchonize.employees.outOfHRMS.push(this.listSyncFinal.employee.outOfHRMS[index]);
+      this.listSynchonize.employees.outOfHRMS.push(this.listItemSynch.employee.outOfHRMS[index]);
       const check = this.listSyncFinal.employee.outOfHRMS.find(x => x.selected == false);
       console.log(check);
       if (!check) {
@@ -492,7 +510,7 @@ export class AppHeaderComponent {
     if (this.selectedTeamMatchAll) {
       this.listSyncFinal.team.matchedTeam.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.teams.matchedTeam.push(this.listSyncFinal.team.matchedTeam[index]);
+        this.listSynchonize.teams.matchedTeam.push(this.listItemSynch.teams.matchedTeam[index]);
       });
     }
     else {
@@ -509,7 +527,7 @@ export class AppHeaderComponent {
       this.listSynchonize.teams.matchedTeam.splice(index, 1);
       this.selectedTeamMatchAll = false;
     } else {
-      this.listSynchonize.teams.matchedTeam.push(this.listSyncFinal.team.matchedTeam[index]);
+      this.listSynchonize.teams.matchedTeam.push(this.listItemSynch.teams.matchedTeam[index]);
       const check = this.listSyncFinal.team.matchedTeam.find(x => x.selected == false);
       console.log(check);
       if (!check) {
@@ -526,7 +544,7 @@ export class AppHeaderComponent {
     if (this.selectedTeamNewAll) {
       this.listSyncFinal.team.newTeam.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.teams.newTeam.push(this.listSyncFinal.team.newTeam[index]);
+        this.listSynchonize.teams.newTeam.push(this.listItemSynch.teams.newTeam[index]);
       });
     }
     else {
@@ -544,7 +562,7 @@ export class AppHeaderComponent {
       this.listSynchonize.teams.newTeam.splice(index, 1);
       this.selectedTeamNewAll = false;
     } else {
-      this.listSynchonize.teams.newTeam.push(this.listSyncFinal.team.newTeam[index]);
+      this.listSynchonize.teams.newTeam.push(this.listItemSynch.teams.newTeam[index]);
       const check = this.listSyncFinal.team.newTeam.find(x => x.selected == false);
       if (!check) {
         this.selectedTeamNewAll = true;
@@ -559,7 +577,7 @@ export class AppHeaderComponent {
     if (this.selectedTeamOutAll) {
       this.listSyncFinal.team.outOfHRMS.forEach((e, index) => {
         e.selected = true;
-        this.listSynchonize.teams.outOfHRMS.push(this.listSyncFinal.team.outOfHRMS[index]);
+        this.listSynchonize.teams.outOfHRMS.push(this.listItemSynch.teams.outOfHRMS[index]);
       });
     }
     else {
@@ -577,7 +595,7 @@ export class AppHeaderComponent {
       this.listSynchonize.teams.outOfHRMS.splice(index, 1);
       this.selectedTeamOutAll = false;
     } else {
-      this.listSynchonize.teams.outOfHRMS.push(this.listSyncFinal.team.outOfHRMS[index]);
+      this.listSynchonize.teams.outOfHRMS.push(this.listItemSynch.teams.outOfHRMS[index]);
       const check = this.listSyncFinal.team.outOfHRMS.find(x => x.selected == false);
       console.log(check);
       if (!check) {
@@ -586,16 +604,68 @@ export class AppHeaderComponent {
     }
   }
 
+  rowFirstNewSelected(item) {
+    if (this.listNewEmp.length > 0) {
+      if (this.listNewEmp[0].id === item.id) {
+        this.listNewEmp = [];
+      } else {
+        let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
+        this.listNewEmp[0] = emp;
+      }
+    } else {
+      let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
+      this.listNewEmp[0]=emp;
+    }
+    console.log(item.id);
+    console.log(this.listNewEmp[0].id);
+  }
+
+  rowFirstOutSelected(item) {
+    if (this.listOutEmp.length > 0) {
+      if (this.listOutEmp[0].id === item.id) {
+        this.listOutEmp = [];
+      } else {
+        let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
+        this.listOutEmp[0] = emp;
+      }
+    } else {
+      let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
+      this.listOutEmp[0]=emp;
+    }
+    console.log(item.id);
+    console.log(this.listOutEmp[0].id);
+  }
+
+  matchFirstNewAndOut() {
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
+    const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x=> x.id = this.listNewEmp[0].id);
+    if (index_new !== -1) {
+      this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
+      this.listSynchonize.employees.newEmployee.splice(index_new, 1);
+    }
+    const index_out: number = this.listSyncFinal.employee.outOfHRMS.findIndex(x=> x.id = this.listOutEmp[0].id);
+    if (index_out !== -1) {
+      this.listSyncFinal.employee.outOfHRMS.splice(index_out, 1);
+      this.listSynchonize.employees.outOfHRMS.splice(index_out, 1);
+    }
+    this.listSyncFinal.employee.matchedEmployee.push(this.listNewEmp[0]);
+    this.listSynchonize.employees.matchedEmployee.push(this.listNewEmp[0]);
+    console.log(this.listSynchonize);
+    this.listNewEmp = [];
+    this.listOutEmp = [];
+  }
 
   rowNewSelected(item) {
     if (this.listNewEmp.length > 0) {
       if (this.listNewEmp[0].id === item.id) {
         this.listNewEmp = [];
       } else {
-        this.listNewEmp[0] = item;
+        let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
+        this.listNewEmp[0] = emp;
       }
     } else {
-      this.listNewEmp.push(item);
+      let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
+      this.listNewEmp.push(emp);
     }
     console.log(this.listNewEmp);
   }
@@ -605,26 +675,30 @@ export class AppHeaderComponent {
       if (this.listOutEmp[0].id === item.id) {
         this.listOutEmp = [];
       } else {
-        this.listOutEmp[0] = item;
+        let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
+        this.listOutEmp[0] = emp;
       }
     } else {
-      console.log(item);
-      this.listOutEmp.push(item);
+      let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
+      this.listOutEmp.push(emp);
     }
     console.log(this.listOutEmp);
   }
 
   matchNewAndOut() {
-    this.listNewEmp[0]['gsuiteId'] = this.listOutEmp[0].id;
-    const index_new: number = this.listSyncFinal.employee.newEmployee.indexOf(this.listNewEmp[0]);
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
+    const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x=> x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
+      this.listSynchonize.employees.newEmployee.splice(index_new, 1);
     }
-    const index_out: number = this.listSyncFinal.employee.outOfHRMS.indexOf(this.listOutEmp[0]);
+    const index_out: number = this.listSyncFinal.employee.outOfHRMS.findIndex(x=> x.id = this.listOutEmp[0].id);
     if (index_out !== -1) {
       this.listSyncFinal.employee.outOfHRMS.splice(index_out, 1);
+      this.listSynchonize.employees.outOfHRMS.splice(index_out, 1);
     }
     this.listSyncFinal.employee.matchedEmployee.push(this.listNewEmp[0]);
+    this.listSynchonize.employees.matchedEmployee.push(this.listNewEmp[0]);
     this.listNewEmp = [];
     this.listOutEmp = [];
   }
