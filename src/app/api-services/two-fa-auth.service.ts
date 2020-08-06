@@ -11,9 +11,9 @@ export class TwoFaAuthService {
     constructor(private httpClient: HttpClient) { }
 
     checkBypassOtp(username) {
-        console.log('https://gmhrs-api.herokuapp.com/api/' + AppSettings.CHECKBYPASSOTP);
+        console.log(this.URL+ AppSettings.CHECKBYPASSOTP);
         // return this.httpClient.get(this.URL + AppSettings.CHECKBYPASSOTP + username);
-        return this.httpClient.get('https://gmhrs-api.herokuapp.com/api/' + AppSettings.CHECKBYPASSOTP + username);
+        return this.httpClient.get(this.URL + AppSettings.CHECKBYPASSOTP + username);
     }
 
     getQrCode(username) {
