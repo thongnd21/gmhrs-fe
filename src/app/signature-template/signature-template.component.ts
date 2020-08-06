@@ -33,7 +33,7 @@ class Rules {
   listRule: ItemData[]
 }
 class ItemData {
-  id: string;
+  id: number;
   content: string;
   action: string;
 }
@@ -62,6 +62,7 @@ export class SignatureTemplateComponent implements OnInit {
   signatureID = '';
   signatureRuleName = '';
   signatureRuleID = '';
+  is_primary_rule = 0;
   insertImgModel = false;
   showSpecificModel = false;
   showCheckErrModel = false;
@@ -273,6 +274,7 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.isSetPrimaryRuleDisable = true;
+          this.is_primary_rule = 1;
           this.toast.success(res.message);
         } else {
           this.toast.error(res.message);
@@ -520,6 +522,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.rules.listRule = this.listOfRules;
     let id = localStorage.getItem('id');
     let signature = new Signature();
+    signature.is_primary = this.is_primary_rule;
     signature.account_id = id;
     signature.content = JSON.stringify(this.rules);
     signature.name = this.signatureRuleName;
@@ -676,7 +679,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.listOfRules = [
       ...this.listOfRules,
       {
-        id: `${this.i}`,
+        id: this.i,
         content: '',
         action: 'true'
       }
@@ -706,12 +709,12 @@ export class SignatureTemplateComponent implements OnInit {
       this.htmlContent += '{' + content + '}';
     }
   }
-  deleteRow(id: string): void {
+  deleteRow(id): void {
     this.listOfRules = this.listOfRules.filter(d => d.id !== id);
     this.rules.listRule = this.listOfRules;
   }
-  deleteRowSpec(id: string): void {
-    this.listOfSpecTemplate.specRuleCheck = this.listOfSpecTemplate.specRuleCheck.filter(d => d.idSpec !== parseInt(id));
+  deleteRowSpec(id): void {
+    this.listOfSpecTemplate.specRuleCheck = this.listOfSpecTemplate.specRuleCheck.filter(d => d.idSpec !== id);
   }
   loadTemplate(): void {
     this.isSpinning = true;
@@ -764,25 +767,36 @@ export class SignatureTemplateComponent implements OnInit {
             this.signatureService.getSignatureRuleByID(id).subscribe(
               (res: any) => {
                 if (res.status) {
-                  this.isSetPrimaryRuleDisable = res.data.is_primary === 1
-                  let rulesJson = JSON.parse(res.data.content);
-                  this.signatureRuleName = res.data.name;
-                  this.signatureRuleID = res.data.id;
-                  this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
-                  this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
+                  let signatureRule = {
+                    lengthRule: {
+                      maxLength: null,
+                      minLength: null
+                    },
+                    name: null,
+                    id: null,
+                    listRule: [],
+                    is_primary: null
+                  }
+                  signatureRule = res.data;
+                  this.isSetPrimaryRuleDisable = signatureRule.is_primary === 1
+                  this.is_primary_rule = signatureRule.is_primary;
+                  this.signatureRuleName = signatureRule.name;
+                  this.signatureRuleID = signatureRule.id;
+                  this.rules.lengthRule.minLength = signatureRule.lengthRule.minLength;
+                  this.rules.lengthRule.maxLength = signatureRule.lengthRule.maxLength;
                   this.listOfRules = [];
-                  rulesJson.listRule.forEach(element => {
+                  signatureRule.listRule.forEach(element => {
                     this.listOfRules = [
                       ...this.listOfRules,
                       {
-                        id: element.id,
+                        id: this.i,
                         content: element.content,
                         action: element.action
                       }
                     ];
-                    this.i = element.id;
+                    this.i++;
                   });
-                  this.i++;
+
                   this.rules.listRule = this.listOfRules;
                   this.toast.success('Load rule: ' + this.signatureRuleName + ' success!');
                   // console.log('this.rule: ' + this.rules);
@@ -830,23 +844,34 @@ export class SignatureTemplateComponent implements OnInit {
             this.signatureService.getSignatureTemplateRules(id).subscribe(
               (res: any) => {
                 if (res.status) {
-                  let rulesJson = JSON.parse(res.data.content);
-                  this.signatureRuleName = res.data.name;
-                  this.signatureRuleID = res.data.id;
-                  this.rules.lengthRule.minLength = rulesJson.lengthRule.minLength;
-                  this.rules.lengthRule.maxLength = rulesJson.lengthRule.maxLength;
-                  rulesJson.listRule.forEach(element => {
+                  let signatureRule = {
+                    lengthRule: {
+                      maxLength: null,
+                      minLength: null
+                    },
+                    name: null,
+                    id: null,
+                    listRule: [],
+                    is_primary: null
+                  }
+                  signatureRule = res.data;
+                  this.signatureRuleName = signatureRule.name;
+                  this.signatureRuleID = signatureRule.id;
+                  this.is_primary_rule = signatureRule.is_primary;
+                  this.rules.lengthRule.minLength = signatureRule.lengthRule.minLength;
+                  this.rules.lengthRule.maxLength = signatureRule.lengthRule.maxLength;
+                  this.listOfRules = [];
+                  signatureRule.listRule.forEach(element => {
                     this.listOfRules = [
                       ...this.listOfRules,
                       {
-                        id: element.id,
+                        id: this.i,
                         content: element.content,
                         action: element.action
                       }
                     ];
-                    this.i = element.id;
+                    this.i++;
                   });
-                  this.i++;
                   this.rules.listRule = this.listOfRules;
                   // console.log('this.rule: ' + this.rules);
                 } else {
