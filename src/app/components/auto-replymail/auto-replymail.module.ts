@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AutoReplymailRoutes } from './auto-replymail.routing';
 import { AutoReplymailComponent } from './auto-replymail.component';
 import { EmailEditorModule } from 'angular-email-editor';
-import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule, MatFormFieldModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule, MatFormFieldModule, MatSelectModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AssignEmailTemplateComponent } from './assign-email-template/assign-email-template.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -70,6 +70,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     NzMenuModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     RouterModule.forChild(AutoReplymailRoutes)
   ],
   declarations: [AutoReplymailComponent, AssignEmailTemplateComponent]

@@ -19,20 +19,21 @@
                     Field
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    <!-- <mat-form-field style="width: fit-content;">
+                    <mat-form-field style="width: fit-content;">
                         <mat-select >
-                            <mat-option  [value]="department">Department
+                            <mat-option value="department" (onSelectionChange)="fieldChang($event)">Department
                             </mat-option>
-                            <mat-option (onSelectionChange)="fieldChang($event)" [value]="team">Team</mat-option>
-                            <mat-option (onSelectionChange)="fieldChang($event)" [value]="position">Position
+                            <mat-option value="team" (onSelectionChange)="fieldChang($event)">Team
+                            </mat-option>
+                            <mat-option value="position" (onSelectionChange)="fieldChang($event)">Position
                             </mat-option>
                         </mat-select>
-                    </mat-form-field> -->
+                    </mat-form-field>
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="template_default">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Template Default
+                    Value
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
                     {{ row.template_default }}
@@ -40,7 +41,7 @@
             </ng-container>
             <ng-container matColumnDef="template_assign_role">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Template Assign For role
+                    Template
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
                     {{ row.template_assign_role }}

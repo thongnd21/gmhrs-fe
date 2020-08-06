@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ContentChild, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { MatFormFieldControl, MatFormField } from '@angular/material';
 
 @Component({
   selector: 'app-assign-email-template',
@@ -8,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./assign-email-template.component.css']
 })
 export class AssignEmailTemplateComponent implements OnInit {
+  // @ContentChild(MatFormFieldControl) _control: MatFormFieldControl<any>;
+  // @ViewChild(MatFormField) _matFormField: MatFormField;
 
   displayedColumns: string[] = [];
 
@@ -48,9 +51,8 @@ export class AssignEmailTemplateComponent implements OnInit {
     this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
-  fieldChang(event)
-  {
-    if(event.isUserInput) {
+  fieldChang(event) {
+    if (event.isUserInput) {
       console.log(event.source.value, event.source.selected);
     }
   }
