@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AppSettings } from '../appsetting';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyServices {
+  URL = AppSettings.BASEURL;
   constructor(private httpClient: HttpClient) { }
 
   getAllCompany() {
@@ -24,8 +26,9 @@ export class CompanyServices {
 
   getAccountCompanyById(id) {
     // const idAccount = new HttpParams().set('id', id);
-    const test = "https://gmhrs-api.herokuapp.com/api/accounts/" + id;
-    return this.httpClient.get(test);
+    // const test = "https://gmhrs-api.herokuapp.com/api/accounts/" + id;
+    
+    return this.httpClient.get(this.URL + AppSettings.ACCOUNT + id);
     // 'https://gmhrs-api.herokuapp.com/api/accounts', { params: idAccount }
   }
 
