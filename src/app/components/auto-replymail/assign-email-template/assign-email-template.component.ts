@@ -48,4 +48,11 @@ export class AssignEmailTemplateComponent implements OnInit {
     this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
+  fieldChang(event)
+  {
+    if(event.isUserInput) {
+      console.log(event.source.value, event.source.selected);
+    }
+  }
+
 }

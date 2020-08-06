@@ -16,10 +16,18 @@
         <mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="department">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Department
+                    Field
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    {{ row.department }}
+                    <!-- <mat-form-field style="width: fit-content;">
+                        <mat-select >
+                            <mat-option  [value]="department">Department
+                            </mat-option>
+                            <mat-option (onSelectionChange)="fieldChang($event)" [value]="team">Team</mat-option>
+                            <mat-option (onSelectionChange)="fieldChang($event)" [value]="position">Position
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="template_default">
@@ -142,7 +150,7 @@
             </div>
             <div class="col-auto">
                 <button mat-raised-button color="primary">
-                    
+
                     Save
                 </button>
             </div>
