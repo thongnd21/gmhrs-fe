@@ -85,6 +85,10 @@ export const AppRoutes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+      },
+      {
+        path: 'guidles',
+        loadChildren: () => import('./components/guides/guidles.module').then(m => m.GuidlesModule)
       }
     ],
     canActivate: [AuthGuard]
