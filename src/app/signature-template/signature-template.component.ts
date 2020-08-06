@@ -20,7 +20,7 @@ class PositionSpec {
 class SpecRuleCheck {
   idSpec: number;
   signature_id: number;
-  specificBy: number;
+  specificBy: string;
   allSignature: Signature[]
   department: DepartmentSpec[];
   position: PositionSpec[];
@@ -35,7 +35,7 @@ class Rules {
 class ItemData {
   id: string;
   content: string;
-  action: boolean;
+  action: string;
 }
 @Component({
   selector: 'app-signature-template',
@@ -180,26 +180,7 @@ export class SignatureTemplateComponent implements OnInit {
       },
     ]
   };
-  listOfData = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park'
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park'
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park'
-    }
-  ];
+
   constructor(
     private toast: ToastrService,
     private signatureService: SignatureService,
@@ -209,7 +190,7 @@ export class SignatureTemplateComponent implements OnInit {
     moveItemInArray(this.listOfSpecTemplate.specRuleCheck, event.previousIndex, event.currentIndex);
   }
   loadSpecificBy(specNum, idSpec): void {
-    if (specNum === 1) {
+    if (specNum === 'department') {
       for (let spec of this.listOfSpecTemplate.specRuleCheck) {
         if (spec.idSpec === idSpec) {
           for (let po of spec.position) {
@@ -228,18 +209,15 @@ export class SignatureTemplateComponent implements OnInit {
     }
   }
   loadSpecificRuleCheck(): void {
-    if (this.signatureID === '') {
-      this.toast.info('Please select a template!');
-      return;
-    }
     this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.getSpecificRule(id).subscribe(
       (res: any) => {
         if (res.status) {
           this.listOfSpecTemplate = res.data;
-          if (this.listOfSpecTemplate.specRuleCheck[this.listOfSpecTemplate.specRuleCheck.length - 1] !== undefined) {
-            this.idSpec = this.listOfSpecTemplate.specRuleCheck[this.listOfSpecTemplate.specRuleCheck.length - 1].idSpec;
+          for (let specRow of this.listOfSpecTemplate.specRuleCheck) {
+            specRow.idSpec = this.idSpec;
+            this.idSpec++;
           }
           this.showSpecificModel = true;
           this.isSpinning = false;
@@ -379,7 +357,7 @@ export class SignatureTemplateComponent implements OnInit {
   showConfirmSaveSpecTem(): void {
     this.modal.confirm({
       nzTitle: '<i>Are you sure?</i>',
-      nzContent: '<b>It will update this signature template to who pass conditional abow!</b>',
+      nzContent: '<b>Do you want to save this rules!</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.saveSpecTemplate()
     });
@@ -419,7 +397,7 @@ export class SignatureTemplateComponent implements OnInit {
   showConfirmUpdateAllSignature(): void {
     this.modal.confirm({
       nzTitle: '<i>Do you Want to Update signature for all employees NOW?</i>',
-      nzContent: '<b>It will update signature for all employees base on signature template <b>default</b> immediately.</b>',
+      nzContent: '<b>It will update signature for all employees base on specific rules first. If employees are not in specific rule, their signature will update base on template <b>default</b> .</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.syncSignatureAll()
     });
@@ -530,6 +508,12 @@ export class SignatureTemplateComponent implements OnInit {
     if (this.signatureRuleName === '' || this.rules.listRule === null) {
       this.toast.error('Please input rule name and rule content!');
       return;
+    } else if (this.rules.listRule.length === 0) {
+      this.toast.error('Please input rule content!');
+      return;
+    } else if (this.rules.lengthRule.maxLength <= this.rules.lengthRule.minLength) {
+      this.toast.error('Please check maximun and minimum length!');
+      return;
     }
     this.isSaveRulesLoading = true;
     this.isSpinning = true;
@@ -578,6 +562,9 @@ export class SignatureTemplateComponent implements OnInit {
   submitSignature(): void {
     if (this.signatureName === '') {
       this.toast.error('Input signature name!');
+      return;
+    } else if (this.htmlContent === '') {
+      this.toast.error('Input signature template content!');
       return;
     }
     this.isSaveTemplateLoading = true;
@@ -691,22 +678,23 @@ export class SignatureTemplateComponent implements OnInit {
       {
         id: `${this.i}`,
         content: '',
-        action: true
+        action: 'true'
       }
     ];
     this.i++;
+    this.rules.listRule = this.listOfRules;
     console.log(this.listOfRules);
   }
   addRowSpec(): void {
     let newRow = new SpecRuleCheck();
-    this.idSpec++;
     newRow.idSpec = this.idSpec;
-    newRow.specificBy = 1;
+    newRow.specificBy = 'department';
     newRow.signature_id = this.listOfSpecTemplate.allSignature[0].id;
     newRow.department = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allDepartment));
     newRow.position = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allPosition));
     newRow.allSignature = this.listOfSpecTemplate.allSignature;
     this.listOfSpecTemplate.specRuleCheck.push(newRow);
+    this.idSpec++;
     console.log(this.listOfSpecTemplate.specRuleCheck);
   }
   addContent(content): void {
@@ -720,6 +708,7 @@ export class SignatureTemplateComponent implements OnInit {
   }
   deleteRow(id: string): void {
     this.listOfRules = this.listOfRules.filter(d => d.id !== id);
+    this.rules.listRule = this.listOfRules;
   }
   deleteRowSpec(id: string): void {
     this.listOfSpecTemplate.specRuleCheck = this.listOfSpecTemplate.specRuleCheck.filter(d => d.idSpec !== parseInt(id));
