@@ -56,8 +56,7 @@
                 <!-- <button nz-button nzType="primary" [nzSize]="size" nzShape="round" [disabled]="disableBtnRevert">Revert all to default signature template</button> -->
                 <!-- <h6 class="card-subtitle text-white m-0 op-5">5 minutes ago</h6> -->
             </div>
-            <div class="message-box contact-box p-20">
-   
+            <div class="message-box contact-box p-20" *ngIf="disableBtnRevert == false">
                 <div class="message-widget contact-widget" *ngFor="let employee of signatureInvalid">
                     <!-- Message -->
                     <a href="javascript:void(0)"  nz-popover nzPopoverTitle="{{employee.firstName}} {{employee.lastName}}" (click)="setDefault(employee)"   [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click">
@@ -84,10 +83,15 @@
                     </a>
                 </div>
             </div>
+            <div class="message-box contact-box p-20" *ngIf="disableBtnRevert == true">
+                <div class="mail-contnet">
+                    <h5>Have no employees are missing rules</h5> 
+                </div>
+            </div>
         </mat-card>
         <mat-card>
             <div class="p-20 bg-info position-relative">
-                <h4 class="card-title text-white m-0">New Employees</h4>
+                <h4 class="card-title text-white m-0">New employees in this month</h4>
                 <!-- <h6 class="card-subtitle text-white m-0 op-5">5 minutes ago</h6> -->
             </div>
             <div class="message-box contact-box p-20">
@@ -97,9 +101,16 @@
                         <!-- <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user"
                                 class="img-circle"> <span class="profile-status online pull-right"></span> </div> -->
                         <div class="mail-contnet">
-                            <h5>{{employee.first_name}} {{employee.last_name}}</h5> <span class="mail-desc">{{employee.primary_email}}</span>
+                            <h5>{{employee.first_name}} {{employee.last_name}} <nz-tag nzColor="default">{{employee.created_date}}</nz-tag></h5> <span class="mail-desc">{{employee.primary_email}} </span>
+                            
                         </div>
                     </a>
+                </div>
+            </div>
+            <div class="message-box contact-box p-20" *ngIf="isNewEmp == false">
+                <div class="mail-contnet">
+                    <h5>Have no new employees at this month</h5>
+                    
                 </div>
             </div>
         </mat-card>
@@ -110,65 +121,91 @@
         <mat-card>
             <mat-tab-group>
                 <!-- Tab 1 -->
-                <mat-tab label="Activity">
+                <mat-tab label="Synchronization log">
                     <mat-card-content>
-                        <div class="d-flex no-blcok">
-                            <div class="m-r-20">
-                                <!-- <img class="img-circle" width="50" src="assets/images/users/1.jpg" alt="Image"> -->
-                             </div>
-                            <div class="p-b-20 b-b m-b-30">
-                                <h4 class="m-0">20-07-2020
-                                    <small class="text-muted">(5 minute ago)</small>
-                                </h4>
-                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</p>
-                                <div fxLayout="row wrap">
-                                    <!-- <div fxFlex.gt-sm="20" fxFlex="100">
-                                        <img class="img-responsive rounded" src="assets/images/big/img2.jpg" alt="Image">
-                                    </div> -->
-                                </div>
+                        <div class="message-box contact-box p-20" *ngIf="isLogged == true">
+                            <div class="mail-contnet">
+                                <h5>Have no synchronize log</h5>
+                                
                             </div>
                         </div>
-                        <div class="d-flex no-blcok">
-                            <div class="m-r-20">
-                                <!-- <img class="img-circle" width="50" src="assets/images/users/2.jpg" alt="Image"> -->
-                             </div>
-                            <div class="p-b-20 b-b m-b-30">
-                                <h4 class="m-0">19-07-2020
-                                    <small class="text-muted">(23 hours ago)</small>
-                                </h4>
-                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</p>
-                                <!-- <button mat-raised-button color="primary">Check Now</button> -->
-                            </div>
-                        </div>
-                        <div class="d-flex no-blcok">
-                            <div class="m-r-20">
-                                <!-- <img class="img-circle" width="50" src="assets/images/users/3.jpg" alt="Image"> -->
-                             </div>
-                            <div class="p-b-20 b-b m-b-30">
-                                <h4 class="m-0">10-07-2020
-                                    <small class="text-muted">(10 days ago)</small>
-                                </h4>
-                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</p>
-                                <div fxLayout="row wrap">
-                                    <div fxFlex.gt-sm="20" fxFlex="100">
-                                        <!-- <img class="img-responsive rounded" src="assets/images/big/img1.jpg" alt="Image"> -->
+                        <nz-collapse>
+                            <nz-collapse-panel *ngFor="let panel of list" [nzHeader]="panel.modified_date" [nzActive]="panel.status == 1 ? 'success' : 'failed'">
+                                <div class="d-flex no-blcok">
+                                    <div class="m-r-20">
+                                     </div>
+                                    <div class="p-b-20 b-b m-b-30">
+                                        <small class="text-muted">{{panel.name}} </small>
+                                        <h4 class="m-0">sonnguyen97
+                                            <nz-tag nzColor="success">success</nz-tag>
+                                        </h4>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="d-flex no-blcok">
-                            <div class="m-r-20">
-                                <!-- <img class="img-circle" width="50" src="assets/images/users/4.jpg" alt="Image"> -->
-                             </div>
-                            <div class="p-b-20 b-b m-b-30">
-                                <h4 class="m-0">01-07-2020
-                                    <small class="text-muted">(19 days ago)</small>
-                                </h4>
-                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</p>
-                                <!-- <button mat-raised-button color="warn">Check Now</button> -->
-                            </div>
-                        </div>
+                                <!-- <div *ngIf="panel.childPanel && panel.childPanel.length > 0"> -->
+                                    <p>Employee</p>
+                                    <ng-template #New>
+                                        <!-- You can use stopPropagation if you don't want the panel to toggle -->
+                                        <nz-tag nzColor="success">New</nz-tag>
+                                      </ng-template>
+                                    <ng-template #Update>
+                                        <!-- You can use stopPropagation if you don't want the panel to toggle -->
+                                        <nz-tag nzColor="processing">Update</nz-tag>
+                                      </ng-template>
+                                    <nz-collapse>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.employee.newEmployeeList" [nzHeader]="childPanel.primary_email" 
+                                    [nzExtra]="New">
+                                        <b> Email:</b><p>  {{childPanel.primary_email}}</p>
+                                        <b> First name:</b><p>{{childPanel.first_name}}</p>
+                                        <b> Last name:</b><p>{{childPanel.last_name}}</p>
+                                        <b> Phone:</b><p>{{childPanel.phone}}</p>
+                                        <b> Address:</b><p>{{childPanel.address}}</p>
+                                        <b> Personal email:</b> <p>{{childPanel.personal_email}}</p>
+                                        <b>Last sync date:</b> <p>{{childPanel.modified_date}}</p>
+                                    </nz-collapse-panel>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.employee.updateEmployeeList"  [nzHeader]="childPanel.primary_email"
+                                     [nzExtra]="Update">
+                                        <b> Email:</b><p>  {{childPanel.primary_email}}</p>
+                                        <b> First name:</b><p>{{childPanel.first_name}}</p>
+                                        <b> Last name:</b><p>{{childPanel.last_name}}</p>
+                                        <b> Phone:</b><p>{{childPanel.phone}}</p>
+                                        <b> Address:</b><p>{{childPanel.address}}</p>
+                                        <b> Personal email:</b> <p>{{childPanel.personal_email}}</p>
+                                        <b>Last sync date:</b> <p>{{childPanel.modified_date}}</p>
+                                    </nz-collapse-panel>
+                                </nz-collapse>
+
+                                <p>Team</p>
+                                <nz-collapse>
+                                    
+                                    <!-- <p> New Team</p> -->
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.team.newTeamList"  [nzHeader]="childPanel.email"  [nzExtra]="New">
+                                        <b> Team name:</b><p>  {{childPanel.name}}</p>
+                                        <b> Team email:</b><p>  {{childPanel.email}}</p>
+                                        <b> Team description:</b><p>  {{childPanel.description}}</p>
+                                    </nz-collapse-panel>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.team.updateTeamList"  [nzHeader]="childPanel.email" [nzExtra]="Update">
+                                        <b> Team name:</b><p>  {{childPanel.name}}</p>
+                                        <b> Team email:</b><p>  {{childPanel.email}}</p>
+                                        <b> Team description:</b><p>  {{childPanel.description}}</p>
+                                    </nz-collapse-panel>
+                                </nz-collapse>
+
+                                <p>Department</p>
+                                <nz-collapse>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.department.newDepartmentList"  [nzHeader]="childPanel.name" [nzExtra]="New">
+                                        <b> Department name:</b><p>  {{childPanel.name}}</p>
+                                        <b> Description:</b><p>{{childPanel.description}}</p>
+                                    </nz-collapse-panel>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.department.updateDepartmentList"  [nzHeader]="childPanel.name"  [nzExtra]="Update">
+                                        <b> Department name:</b><p>  {{childPanel.name}}</p>
+                                        <b> Description:</b><p>{{childPanel.description}}</p>
+                                    </nz-collapse-panel>
+                                </nz-collapse>
+                              <!-- </div> -->
+                            </nz-collapse-panel>
+                          </nz-collapse>
                     </mat-card-content>
+                    
                 </mat-tab>
                 <!-- End Tab 1 -->
                 <!-- Tab 2 -->
