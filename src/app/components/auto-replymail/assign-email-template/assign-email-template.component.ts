@@ -1,9 +1,14 @@
 import { Component, OnInit, ContentChild, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { MatFormFieldControl, MatFormField, MatTableDataSource } from '@angular/material';
+import { MatFormFieldControl, MatFormField, MatTableDataSource, MatTable } from '@angular/material';
 import { DepartmentApiService } from './../../../api-services/department-api.service';
 import { AccountApiService } from './../../../api-services/account-api.service';
+import { PositionApiService } from './../../../api-services/position-api.service';
+import { TeamApiService } from './../../../api-services/team-api.service';
+import { EmailApiService } from './../../../api-services/email-api.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import clonedeep from 'lodash.clonedeep';
 
 @Component({
   selector: 'app-assign-email-template',
@@ -16,11 +21,12 @@ export class AssignEmailTemplateComponent implements OnInit {
 
   displayedColumns = ['type', 'listId', 'templateId', 'action'];
   depList = [];
-  empList = [];
+  positionList = [];
+  teamList = [];
+  templateList = [];
+  asignRuleListBegin = [];
   dataSource: MatTableDataSource<any>;
-  data = [{ type: 'department', listId: [154, 155], priority: 1, templateId: 6, },
-  { type: 'employee', listId: [197], priority: 2, templateId: 6, },
-  ]
+  data = [];
 
   accountId = localStorage.getItem('id');
 
@@ -31,11 +37,15 @@ export class AssignEmailTemplateComponent implements OnInit {
     private toast: ToastrService,
     private departmentService: DepartmentApiService,
     private accountService: AccountApiService,
+    private positionService: PositionApiService,
+    private teamService: TeamApiService,
+    private emailService: EmailApiService,
   ) {
-    this.dataSource = new MatTableDataSource(this.data);
   }
 
   ngOnInit(): void {
+    this.getAllTemplate();
+    this.getAllTemplateRuleByAccountId();
 
   }
 
@@ -46,11 +56,10 @@ export class AssignEmailTemplateComponent implements OnInit {
   fieldChang(event) {
     if (event.isUserInput) {
       console.log(event.source.value, event.source.selected);
-      if (event.source.value == "department" && event.source.selected == true) {
+      if (event.source.value == "D" && event.source.selected == true) {
         this.departmentService.getAllDepartmentByAccountId(this.accountId).subscribe(
           (res: any) => {
             this.depList = res;
-            console.log(this.depList);
           },
           (err: any) => {
             console.log(err);
@@ -59,8 +68,27 @@ export class AssignEmailTemplateComponent implements OnInit {
           }
         )
       };
-      if (event.source.value == "employee" && event.source.selected == true) {
-        this.accountService.getAllEmployeeByAccountId(this.accountId).subscribe(
+      if (event.source.value == "P" && event.source.selected == true) {
+        this.positionService.getAllPositionByAccountId(this.accountId).subscribe(
+          (res: any) => {
+            console.log(res);
+
+            if (res.length < 1) {
+              this.toast.error("null")
+            } else {
+              this.positionList = res;
+
+            }
+          },
+          (err: any) => {
+            console.log(err);
+            this.toast.error(err);
+
+          }
+        )
+      };
+      if (event.source.value == "T" && event.source.selected == true) {
+        this.teamService.getAllTeamByAccountId(this.accountId).subscribe(
           (res: any) => {
             // for(let i =0; i<res.length ; i++){
             //   var dep = {} ;
@@ -68,8 +96,7 @@ export class AssignEmailTemplateComponent implements OnInit {
             //   dep["name"]=res[i].name;
             // this.depList.push(dep);
             // }
-            this.empList = res;
-            console.log(this.empList);
+            this.teamList = res;
           },
           (err: any) => {
             console.log(err);
@@ -77,16 +104,17 @@ export class AssignEmailTemplateComponent implements OnInit {
 
           }
         )
-      };
-      if (event.source.value == "team" && event.source.selected == true) {
       }
     }
   }
 
   addRow() {
-    this.dataSource.data.push({ department: '1', template_default: '1', template_assign_role: '1', });
+    const priority = this.dataSource.data.length;
+
+    this.dataSource.data.push({ type: '', listId: [], templateId: '', priority: priority + 1 });
     this.dataSource.filter = "";
-    console.log(this.dataSource.data);
+    console.log(priority);
+
 
   }
 
@@ -94,9 +122,60 @@ export class AssignEmailTemplateComponent implements OnInit {
     console.log("index" + index);
 
     const data = this.dataSource.data.filter((_, ins) => ins !== index);
-    console.log(data);
 
     this.dataSource.data = data;
   }
 
+
+  getAllTemplate() {
+    this.emailService.getAllTemplate(this.accountId).subscribe(
+      (res: any) => {
+        this.templateList = res;
+      },
+      (err) => {
+        console.log(err);
+
+      }
+    )
+  }
+
+  getAllTemplateRuleByAccountId() {
+    this.emailService.getAllTemplateRuleByAccountId(this.accountId).subscribe(
+      (res: any) => {
+
+        this.data = res
+        this.dataSource = new MatTableDataSource(this.data);
+        this.asignRuleListBegin = res;
+        console.log(this.asignRuleListBegin);
+
+        console.log(this.data);
+      },
+      (err) => {
+        console.log(err);
+        this.toast.error("Server is unavailable!");
+      }
+    )
+  }
+
+  compareListAsignRule(oldList, newList) {
+    var listUpdate=[];
+    var listDelete=[];
+    var listCreate=[];
+    for (let i = 0; i < oldList.length; i++) {
+      for (let j = 0; j < newList.length; j++) {
+        if(true){
+          
+        }
+      }
+    }
+  }
+
+  dropTable(event) {
+    moveItemInArray(this.dataSource.data, event.previousIndex, event.currentIndex);
+    this.dataSource.data = clonedeep(this.dataSource.data);
+    console.log(this.dataSource.data);
+    
+    // console.log(event);
+
+  }
 }

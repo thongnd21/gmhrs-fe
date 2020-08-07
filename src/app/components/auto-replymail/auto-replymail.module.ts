@@ -27,6 +27,9 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -71,6 +74,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    DragDropModule,
     RouterModule.forChild(AutoReplymailRoutes)
   ],
   declarations: [AutoReplymailComponent, AssignEmailTemplateComponent]

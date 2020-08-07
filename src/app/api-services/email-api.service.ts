@@ -6,8 +6,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
   })
 export class EmailApiService {
-    URL = 'http://localhost:3000/api/';
-    // URL = AppSettings.BASEURL;
+    // URL = 'http://localhost:3000/api/';
+    URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
     createEmailTemplate(emailObj) {
@@ -27,5 +27,10 @@ export class EmailApiService {
     getTemplate(templateId) {
         let param = new HttpParams().set('id',templateId); 
         return this.httpClient.get(this.URL + AppSettings.EMAIL+'getReplyMail',{params: param});
+    }
+
+    getAllTemplateRuleByAccountId(accountId){
+        let param = new HttpParams().set('id',accountId); 
+        return this.httpClient.get(this.URL + AppSettings.EMAIL+'getTemplateRule',{params: param});
     }
 }

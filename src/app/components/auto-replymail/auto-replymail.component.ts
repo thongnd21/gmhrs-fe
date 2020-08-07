@@ -116,15 +116,18 @@ export class AutoReplymailComponent implements OnInit {
           item['create_at'] = moment.utc(element.modified_date).local().format('LLLL');
           listTemplate.push(item);
         });
-        console.log(templateList);
         this.dataSource = new MatTableDataSource(listTemplate);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
       (err)=>{
-
+        console.log(err);
+        this.toast.error("Server unavailable!");
+        
       }
     )
+    console.log(listTemplate);
+
   }
 
   openTemplateDetail(id){
