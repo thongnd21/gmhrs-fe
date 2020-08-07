@@ -338,6 +338,23 @@ export class SignatureTemplateComponent implements OnInit {
       })
   }
   saveSpecTemplate(): void {
+    for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+      let check = false;
+      for (let de of spec.department) {
+        if (de.status) {
+          check = true;
+        }
+      }
+      for (let po of spec.position) {
+        if (po.status) {
+          check = true;
+        }
+      }
+      if (!check) {
+        this.toast.error('Please select department or position to save!');
+        return;
+      }
+    }
     this.isSpinning = true;
     this.showSpecificModel = false;
     let id = localStorage.getItem('id');
@@ -511,11 +528,17 @@ export class SignatureTemplateComponent implements OnInit {
       this.toast.error('Please input rule name and rule content!');
       return;
     } else if (this.rules.listRule.length === 0) {
-      this.toast.error('Please input rule content!');
+      this.toast.error('Please input rule data table!');
       return;
     } else if (this.rules.lengthRule.maxLength <= this.rules.lengthRule.minLength) {
       this.toast.error('Please check maximun and minimum length!');
       return;
+    }
+    for (let rule of this.rules.listRule) {
+      if (rule.content === '') {
+        this.toast.error('Content of rule can not blank!');
+        return;
+      }
     }
     this.isSaveRulesLoading = true;
     this.isSpinning = true;
