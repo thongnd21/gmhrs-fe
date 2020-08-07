@@ -7,16 +7,19 @@
     outline: none;
 }  */
 
-/* .dropDragTr {
-    background-color: yellowgreen;
-}    
+ /* .dropDragTr {
+     z-index: 1000000000000000000000;
+}     */
+/* .cdk-overlay-container {
+    z-index: 1000 !important;
+} */
 ::ng-deep .cdk-drag-preview  {
     display: table;
-    background-color: yellowgreen;
-}
-::ng-deep .cdk-drag-placeholder  {
+    border-radius: 5px;
+    background-color: rgb(221, 255, 126);
+    z-index: 100000 !important;
+} 
+/* ::ng-deep .cdk-drag-placeholder  {
     opacity: 1;
     background-color: red;
-    background-color: yellowgreen;
-    z-index: 200;
-}; */
+};  */
