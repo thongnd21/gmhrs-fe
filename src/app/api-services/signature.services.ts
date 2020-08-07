@@ -6,9 +6,12 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class SignatureService {
-    // URL = 'http://localhost:3000/api/';
+    // URL = 'http://localhost:3000/api/';checkFileGsuiteKey
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
+    checkFileGsuiteKey(id) {
+        return this.httpClient.get(this.URL + AppSettings.CHECKFILEGSUITEKEY + id);
+    }
     saveSpecSignature(data) {
         return this.httpClient.put(this.URL + AppSettings.SAVESPECSIGNATURE, data);
     }

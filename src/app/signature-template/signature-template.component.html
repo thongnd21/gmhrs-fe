@@ -1,4 +1,10 @@
-<nz-spin [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
+<nz-result *ngIf="!isUploadGsuiteKeyFile" nzStatus="warning"
+    nzTitle="You must upload G-Suite Credential file before use this feature!">
+    <div nz-result-extra>
+        <button nz-button (click)="goToSettingPage()" nzType="primary">Go to setting</button>
+    </div>
+</nz-result>
+<nz-spin *ngIf="isUploadGsuiteKeyFile" [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
     <div style="margin: auto;">
         <mat-tab-group mat-align-tabs="start">
             <mat-tab label="Signature Template" style="display: list-item;">

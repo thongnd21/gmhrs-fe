@@ -33,4 +33,5 @@ export class AppSettings {
     public static GETDYNAMICRULE = 'signature/getDynamicRule/'
     public static GETSPECIFICRULE = 'signature/getSpecificRule/'
     public static SAVESPECSIGNATURE = 'signature/saveSpecSignature/'
+    public static CHECKFILEGSUITEKEY = 'signature/checkFileGsuiteKey/'
 }
