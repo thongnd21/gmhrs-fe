@@ -216,13 +216,16 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.listOfSpecTemplate = res.data;
-          for (let specRow of this.listOfSpecTemplate.specRuleCheck) {
-            specRow.idSpec = this.idSpec;
-            this.idSpec++;
+          if (this.listOfSpecTemplate.allSignature.length === 0) {
+            this.toast.warning('You do not have any signature!');
+          } else {
+            for (let specRow of this.listOfSpecTemplate.specRuleCheck) {
+              specRow.idSpec = this.idSpec;
+              this.idSpec++;
+            }
+            this.showSpecificModel = true;
           }
-          this.showSpecificModel = true;
           this.isSpinning = false;
-
         } else {
           this.toast.error(res.message);
         }
