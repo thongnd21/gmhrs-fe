@@ -5,6 +5,9 @@
 
             </div>
             <div class="col-auto">
+                <button mat-button color="primary">
+                    <mat-icon>sync_alt</mat-icon>Synchronize
+                </button>
                 <button color="primary" mat-button (click)="saveTemplateRule()" >
                     <mat-icon>
                         save
@@ -34,8 +37,8 @@
                             </mat-option>
                             <mat-option value="T" (onSelectionChange)="fieldChang($event)">Team
                             </mat-option>
-                            <mat-option value="P" (onSelectionChange)="fieldChang($event)">Position
-                            </mat-option>
+                            <!-- <mat-option value="P" (onSelectionChange)="fieldChang($event)">Position
+                            </mat-option> -->
                         </mat-select>
                     </mat-form-field>
                 </mat-cell>

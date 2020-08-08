@@ -257,20 +257,39 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   saveTemplateRule() {
-    var send= {
+    var send = {
     }
     var result = this.formatListTemplateRuleByPriority(this.dataSource.data);
     send["accountId"] = this.accountId;
     send["listCreate"] = result;
     this.emailService.saveAssignTemplate(send).subscribe(
-      (res)=>{
+      (res: any) => {
+        if(res.code ===200){
+          this.toast.success("Save successfully");
+        }else{
+          this.toast.error("Save fail");
+        }
 
       },
-      (err)=>{
-        
+      (err) => {
+        console.log(err);
+        this.toast.error("Server unavailable!")
       }
     )
 
 
+  }
+
+  synch(){
+    this.emailService.syncDateForTemplate(this.accountId).subscribe(
+      (res)=>{
+        console.log(res);
+        
+      },
+      (err)=>{
+        console.log(err);
+        
+      }
+    )
   }
 }

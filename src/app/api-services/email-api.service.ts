@@ -34,6 +34,13 @@ export class EmailApiService {
         return this.httpClient.get(this.URL + AppSettings.EMAIL+'getTemplateRule',{params: param});
     }
     saveAssignTemplate(data){
+        // return this.httpClient.post(this.URL + AppSettings.EMAIL+'saveTemplateRule',data);
         return this.httpClient.post('http://localhost:3000/api/email/saveTemplateRule',data);
+    }
+
+    syncDateForTemplate(accountId){
+        let param = new HttpParams().set('id',accountId); 
+        return this.httpClient.post('http://localhost:3000/api/email/syncDateForTemplate',{params: param});
+        // return this.httpClient.get(this.URL + AppSettings.EMAIL+'syncDateForTemplate',{params: param});
     }
 }
