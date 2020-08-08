@@ -153,7 +153,7 @@ export class AssignEmailTemplateComponent implements OnInit {
     )
   }
 
-  compareListAsignRule(oldList, newList) {
+  formatListTemplateRuleByPriority(newList) {
 
     var listResult = {
       listUpdate: [],
@@ -167,7 +167,6 @@ export class AssignEmailTemplateComponent implements OnInit {
     for (let i = 0; i < newList.length; i++) {
       if (newList[i].type != "" && newList[i].templateId != "" && newList[i].listId.length != 0) {
         newList[i].priority = i + 1;
-        console.log("hihi");
         listPriority.push(newList[i])
       } else {
         console.log(newList[i]);
@@ -175,51 +174,51 @@ export class AssignEmailTemplateComponent implements OnInit {
       }
 
     }
-    console.log(listPriority);
+    return listPriority;
     //checking update row and add to a new list if id in old list and new list ==
-    for (let i = 0; i < listPriority.length; i++) {
-      for (let j = 0; j < oldList.length; j++) {
-        if (listPriority[i].id == oldList[j].id) {
-          listCheckUpdate.push(listPriority[i]);
-        }
-      }
-    }
-    //update if != priority
-    for (let i = 0; i < listCheckUpdate.length; i++) {
-      for (let j = 0; j < oldList.length; j++) {
-        if (listCheckUpdate[i].priotiry == oldList[j].priotity && listCheckUpdate[i].id != oldList[j].id) {
-          listResult.listUpdate.push(listCheckUpdate[i]);
-        }
-      }
-    }
-    // checking field update in listCheckUpdate if any field change > add to listResult.listUpdate
-    for (let i = 0; i < listCheckUpdate.length; i++) {
-      if (oldList[i].type != listCheckUpdate[i].type || oldList[i].templateId != listCheckUpdate[i].templateId) {
-        listResult.listUpdate.push(listCheckUpdate[i]);
-      } else {
-        if (oldList[i].listId.length != listCheckUpdate[i].listId.length) {
-          listResult.listUpdate.push(listCheckUpdate[i]);
-        }
-        for (let j = 0; j < listCheckUpdate[i].listId.length; j++) {
-          if (oldList[i].listId[j] != listCheckUpdate[i].listId[j]) {
-            listResult.listUpdate.push(listCheckUpdate[i]);
-          }
-        }
-      }
-    }
-    console.log(newList);
+    // for (let i = 0; i < listPriority.length; i++) {
+    //   for (let j = 0; j < oldList.length; j++) {
+    //     if (listPriority[i].id == oldList[j].id) {
+    //       listCheckUpdate.push(listPriority[i]);
+    //     }
+    //   }
+    // }
+    // //update if != priority
+    // for (let i = 0; i < listCheckUpdate.length; i++) {
+    //   for (let j = 0; j < oldList.length; j++) {
+    //     if (listCheckUpdate[i].priotiry == oldList[j].priotity && listCheckUpdate[i].id != oldList[j].id) {
+    //       listResult.listUpdate.push(listCheckUpdate[i]);
+    //     }
+    //   }
+    // }
+    // // checking field update in listCheckUpdate if any field change > add to listResult.listUpdate
+    // for (let i = 0; i < listCheckUpdate.length; i++) {
+    //   if (oldList[i].type != listCheckUpdate[i].type || oldList[i].templateId != listCheckUpdate[i].templateId) {
+    //     listResult.listUpdate.push(listCheckUpdate[i]);
+    //   } else {
+    //     if (oldList[i].listId.length != listCheckUpdate[i].listId.length) {
+    //       listResult.listUpdate.push(listCheckUpdate[i]);
+    //     }
+    //     for (let j = 0; j < listCheckUpdate[i].listId.length; j++) {
+    //       if (oldList[i].listId[j] != listCheckUpdate[i].listId[j]) {
+    //         listResult.listUpdate.push(listCheckUpdate[i]);
+    //       }
+    //     }
+    //   }
+    // }
+    // console.log(newList);
 
-    var newListExceptupdate = newList;// newList excep update element
-    for (let i = 0; i < listResult.listUpdate.length; i++) {
-      for (let j = 0; j < newList.length; j++) {
-        if (listResult.listUpdate[i].priotiry == newList[j].priotity) {
-          newListExceptupdate.splice(j, 1);
-        }
-      }
-    }
-    console.log(listCheckUpdate);
-    console.log(listResult.listUpdate);
-    console.log(newListExceptupdate);
+    // var newListExceptupdate = newList;// newList excep update element
+    // for (let i = 0; i < listResult.listUpdate.length; i++) {
+    //   for (let j = 0; j < newList.length; j++) {
+    //     if (listResult.listUpdate[i].priotiry == newList[j].priotity) {
+    //       newListExceptupdate.splice(j, 1);
+    //     }
+    //   }
+    // }
+    // console.log(listCheckUpdate);
+    // console.log(listResult.listUpdate);
+    // console.log(newListExceptupdate);
 
 
 
@@ -262,24 +261,9 @@ export class AssignEmailTemplateComponent implements OnInit {
       (res: any) => {
         let asignRuleListBegin = res;
         console.log(asignRuleListBegin);
-        this.compareListAsignRule(asignRuleListBegin, this.dataSource.data);
-        // for (let i = 0; i < this.dataSource.data.length; i++) {
-        //   if (this.dataSource.data[i].type != "" && this.dataSource.data[i].templateId != "" && this.dataSource.data[i].listId.length != 0) {
-        //     this.dataSource.data[i].priority = i + 1;
-        //     console.log("hihi");
-        //   } else {
-        //     console.log(this.dataSource.data[i]);
-
-        //   }
-        // }
-        // console.log(this.dataSource.data);
-
-      },
-      (err) => {
-        console.log(err);
-        this.toast.error("Server is unavailable!");
-      }
-    );
-
+        var result = this.formatListTemplateRuleByPriority(this.dataSource.data); 
+        console.log(result);
+        
+      });
   }
 }
