@@ -1,4 +1,10 @@
-<nz-spin [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
+<nz-result *ngIf="!isUploadGsuiteKeyFile" nzStatus="warning"
+    nzTitle="You must upload G-Suite Credential file before use this feature!">
+    <div nz-result-extra>
+        <button nz-button (click)="goToSettingPage()" nzType="primary">Go to setting</button>
+    </div>
+</nz-result>
+<nz-spin *ngIf="isUploadGsuiteKeyFile" [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
     <div style="margin: auto;">
         <mat-tab-group mat-align-tabs="start">
             <mat-tab label="Signature Template" style="display: list-item;">
@@ -32,16 +38,16 @@
                     </li>
                 </ul>
                 <!-- Insert image -->
-                <nz-modal [(nzVisible)]="insertImgModel" [nzAutofocus]="null" nzTitle="Insert Image"
+                <nz-modal [(nzVisible)]="insertImgModel" nzWidth="auto" [nzAutofocus]="null" nzTitle="Insert Image"
                     (nzOnCancel)="handleCancelModel()" (nzOnOk)="insertImghandleOkModel()">
                     <input nz-input placeholder="Paste your image link" [(ngModel)]="imageLink" />
                     <nz-input-group nzAddOnBefore="Width">
-                        <nz-input-number style="width: 100%;" [(ngModel)]="imgWidth" [nzMin]="1" [nzMax]="400"
+                        <nz-input-number style="width: 100%;" [(ngModel)]="imgWidth" [nzMin]="1" [nzMax]="1000"
                             [nzStep]="1">
                         </nz-input-number>
                     </nz-input-group>
                     <nz-input-group nzAddOnBefore="Height">
-                        <nz-input-number style="width: 100%;" [(ngModel)]="imgHeigh" [nzMin]="1" [nzMax]="400"
+                        <nz-input-number style="width: 100%;" [(ngModel)]="imgHeigh" [nzMin]="1" [nzMax]="1000"
                             [nzStep]="1">
                         </nz-input-number>
                     </nz-input-group>

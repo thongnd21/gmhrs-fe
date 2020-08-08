@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 import { SignatureService } from '../api-services/signature.services';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
@@ -44,6 +45,7 @@ class ItemData {
 })
 export class SignatureTemplateComponent implements OnInit {
 
+  isUploadGsuiteKeyFile = true;
   isSpinning = false;
   isSetPrimaryDisable = false;
   isSaveRuleDisable = false;
@@ -186,6 +188,7 @@ export class SignatureTemplateComponent implements OnInit {
     private toast: ToastrService,
     private signatureService: SignatureService,
     private modal: NzModalService,
+    private router: Router
   ) { }
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.listOfSpecTemplate.specRuleCheck, event.previousIndex, event.currentIndex);
@@ -948,9 +951,26 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureRuleID = '';
     this.rules = null;
   }
+  goToSettingPage(): void {
+    this.router.navigate(['/company-config-connection']);
+  }
+  checkGsuiteKey(): void {
+    this.isSpinning = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.checkFileGsuiteKey(id).subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.isUploadGsuiteKeyFile = false;
+        } else {
+          this.loadTemplate();
+          this.loadRules();
+          this.loadDynamicRule();
+        }
+        this.isSpinning = false;
+      }
+    )
+  }
   ngOnInit(): void {
-    this.loadTemplate();
-    this.loadRules();
-    this.loadDynamicRule();
+    this.checkGsuiteKey();
   }
 }

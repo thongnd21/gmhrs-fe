@@ -37,4 +37,5 @@ export class AppSettings {
     public static FILE = 'file/';
     public static GETSPECIFICRULE = 'signature/getSpecificRule/'
     public static SAVESPECSIGNATURE = 'signature/saveSpecSignature/'
+    public static CHECKFILEGSUITEKEY = 'signature/checkFileGsuiteKey/'
 }
