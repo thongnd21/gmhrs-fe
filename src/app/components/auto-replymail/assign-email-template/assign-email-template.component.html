@@ -5,7 +5,7 @@
 
             </div>
             <div class="col-auto">
-                <button color="primary" mat-button >
+                <button color="primary" mat-button (click)="saveTemplateRule()" >
                     <mat-icon>
                         save
                     </mat-icon>
@@ -85,7 +85,7 @@
                     <mat-form-field style="width: 80%;">
                         <mat-label>Choose Template</mat-label>
                         <mat-select [(ngModel)]="row.templateId">
-                            <mat-option *ngFor="let template of templateList" [value]="template.templateId">
+                            <mat-option *ngFor="let template of templateList" [value]="template.templateId" (onSelectionChange)="fieldChang($event)">
                                 {{template.templateName}}
                             </mat-option>
                         </mat-select>

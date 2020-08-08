@@ -8,7 +8,6 @@ import { PositionApiService } from './../../../api-services/position-api.service
 import { TeamApiService } from './../../../api-services/team-api.service';
 import { EmailApiService } from './../../../api-services/email-api.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import clonedeep from 'lodash.clonedeep';
 
 @Component({
   selector: 'app-assign-email-template',
@@ -111,9 +110,8 @@ export class AssignEmailTemplateComponent implements OnInit {
   addRow() {
     const priority = this.dataSource.data.length;
 
-    this.dataSource.data.push({ type: '', listId: [], templateId: '', priority: priority + 1 });
+    this.dataSource.data.push({ id: '', type: '', listId: [], templateId: '', priority: 0 });
     this.dataSource.filter = "";
-    console.log(priority);
 
 
   }
@@ -142,13 +140,11 @@ export class AssignEmailTemplateComponent implements OnInit {
   getAllTemplateRuleByAccountId() {
     this.emailService.getAllTemplateRuleByAccountId(this.accountId).subscribe(
       (res: any) => {
+        this.asignRuleListBegin = res;
 
         this.data = res
         this.dataSource = new MatTableDataSource(this.data);
-        this.asignRuleListBegin = res;
-        console.log(this.asignRuleListBegin);
 
-        console.log(this.data);
       },
       (err) => {
         console.log(err);
@@ -158,24 +154,132 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   compareListAsignRule(oldList, newList) {
-    var listUpdate=[];
-    var listDelete=[];
-    var listCreate=[];
-    for (let i = 0; i < oldList.length; i++) {
-      for (let j = 0; j < newList.length; j++) {
-        if(true){
-          
+
+    var listResult = {
+      listUpdate: [],
+      listDelete: [],
+      listCreate: []
+    }
+    var listPriority = []
+    var listCheckUpdate = []
+
+    // except row that not full information
+    for (let i = 0; i < newList.length; i++) {
+      if (newList[i].type != "" && newList[i].templateId != "" && newList[i].listId.length != 0) {
+        newList[i].priority = i + 1;
+        console.log("hihi");
+        listPriority.push(newList[i])
+      } else {
+        console.log(newList[i]);
+
+      }
+
+    }
+    console.log(listPriority);
+    //checking update row and add to a new list if id in old list and new list ==
+    for (let i = 0; i < listPriority.length; i++) {
+      for (let j = 0; j < oldList.length; j++) {
+        if (listPriority[i].id == oldList[j].id) {
+          listCheckUpdate.push(listPriority[i]);
         }
       }
     }
+    //update if != priority
+    for (let i = 0; i < listCheckUpdate.length; i++) {
+      for (let j = 0; j < oldList.length; j++) {
+        if (listCheckUpdate[i].priotiry == oldList[j].priotity && listCheckUpdate[i].id != oldList[j].id) {
+          listResult.listUpdate.push(listCheckUpdate[i]);
+        }
+      }
+    }
+    // checking field update in listCheckUpdate if any field change > add to listResult.listUpdate
+    for (let i = 0; i < listCheckUpdate.length; i++) {
+      if (oldList[i].type != listCheckUpdate[i].type || oldList[i].templateId != listCheckUpdate[i].templateId) {
+        listResult.listUpdate.push(listCheckUpdate[i]);
+      } else {
+        if (oldList[i].listId.length != listCheckUpdate[i].listId.length) {
+          listResult.listUpdate.push(listCheckUpdate[i]);
+        }
+        for (let j = 0; j < listCheckUpdate[i].listId.length; j++) {
+          if (oldList[i].listId[j] != listCheckUpdate[i].listId[j]) {
+            listResult.listUpdate.push(listCheckUpdate[i]);
+          }
+        }
+      }
+    }
+    console.log(newList);
+
+    var newListExceptupdate = newList;// newList excep update element
+    for (let i = 0; i < listResult.listUpdate.length; i++) {
+      for (let j = 0; j < newList.length; j++) {
+        if (listResult.listUpdate[i].priotiry == newList[j].priotity) {
+          newListExceptupdate.splice(j, 1);
+        }
+      }
+    }
+    console.log(listCheckUpdate);
+    console.log(listResult.listUpdate);
+    console.log(newListExceptupdate);
+
+
+
+    // for (let i = 0; i < newList.length; i++) {
+    //   if (newList[i].id == "" && newList[i].type != "" && newList[i].templateId != "" && newList[i].listId.length != 0) {
+    //     listResult.listCreate.push(newList[i]);
+    //   }
+    // }
+    // console.log(listResult);
+
+    // for (let i = 0; i < oldList.length; i++) {
+    //   for (let j = 0; j < newList.length; j++) {
+    //     if (oldList[i].id == newList[j].id) {
+    //       if (oldList[i].type == newList[j].type) {
+    //         if (oldList[i].templateId == newList[j].templateId) {
+
+    //         } else {
+    //           listResult.listUpdate.push(newList[j]);
+    //         }
+    //       } else {
+    //         listResult.listUpdate.push(newList[j]);
+    //       }
+    //     } else {
+    //       listResult.listUpdate.push(newList[j]);
+    //     }
+    //   }
+    // }
   }
 
   dropTable(event) {
     moveItemInArray(this.dataSource.data, event.previousIndex, event.currentIndex);
-    this.dataSource.data = clonedeep(this.dataSource.data);
-    console.log(this.dataSource.data);
-    
+    this.dataSource.data = JSON.parse(JSON.stringify(this.dataSource.data))
+
     // console.log(event);
+
+  }
+
+  saveTemplateRule() {
+    this.emailService.getAllTemplateRuleByAccountId(this.accountId).subscribe(
+      (res: any) => {
+        let asignRuleListBegin = res;
+        console.log(asignRuleListBegin);
+        this.compareListAsignRule(asignRuleListBegin, this.dataSource.data);
+        // for (let i = 0; i < this.dataSource.data.length; i++) {
+        //   if (this.dataSource.data[i].type != "" && this.dataSource.data[i].templateId != "" && this.dataSource.data[i].listId.length != 0) {
+        //     this.dataSource.data[i].priority = i + 1;
+        //     console.log("hihi");
+        //   } else {
+        //     console.log(this.dataSource.data[i]);
+
+        //   }
+        // }
+        // console.log(this.dataSource.data);
+
+      },
+      (err) => {
+        console.log(err);
+        this.toast.error("Server is unavailable!");
+      }
+    );
 
   }
 }
