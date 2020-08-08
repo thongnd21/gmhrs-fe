@@ -257,13 +257,20 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   saveTemplateRule() {
-    this.emailService.getAllTemplateRuleByAccountId(this.accountId).subscribe(
-      (res: any) => {
-        let asignRuleListBegin = res;
-        console.log(asignRuleListBegin);
-        var result = this.formatListTemplateRuleByPriority(this.dataSource.data); 
-        console.log(result);
+    var send= {
+    }
+    var result = this.formatListTemplateRuleByPriority(this.dataSource.data);
+    send["accountId"] = this.accountId;
+    send["listCreate"] = result;
+    this.emailService.saveAssignTemplate(send).subscribe(
+      (res)=>{
+
+      },
+      (err)=>{
         
-      });
+      }
+    )
+
+
   }
 }

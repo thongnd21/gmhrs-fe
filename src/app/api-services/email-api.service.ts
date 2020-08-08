@@ -33,4 +33,7 @@ export class EmailApiService {
         let param = new HttpParams().set('id',accountId); 
         return this.httpClient.get(this.URL + AppSettings.EMAIL+'getTemplateRule',{params: param});
     }
+    saveAssignTemplate(data){
+        return this.httpClient.post('http://localhost:3000/api/email/saveTemplateRule',data);
+    }
 }
