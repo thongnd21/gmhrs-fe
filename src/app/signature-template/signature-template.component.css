@@ -6,3 +6,17 @@
     border: none;
     outline: none;
 }  */
+
+/* .dropDragTr {
+    background-color: yellowgreen;
+}    
+::ng-deep .cdk-drag-preview  {
+    display: table;
+    background-color: yellowgreen;
+}
+::ng-deep .cdk-drag-placeholder  {
+    opacity: 1;
+    background-color: red;
+    background-color: yellowgreen;
+    z-index: 200;
+}; */

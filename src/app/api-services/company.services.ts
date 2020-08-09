@@ -6,6 +6,7 @@ import { AppSettings } from '../appsetting';
   providedIn: 'root'
 })
 export class CompanyServices {
+  URL = AppSettings.BASEURL;
   constructor(private httpClient: HttpClient) { }
 
   getAllCompany() {
@@ -25,9 +26,10 @@ export class CompanyServices {
 
   getAccountCompanyById(id) {
     // const idAccount = new HttpParams().set('id', id);
-    const test = AppSettings.BASEURL + "accounts/" + id;
-    return this.httpClient.get(test);
-    // 'accounts', { params: idAccount }
+    // const test = "https://gmhrs-api.herokuapp.com/api/accounts/" + id;
+    
+    return this.httpClient.get(this.URL + AppSettings.ACCOUNT + id);
+    // 'https://gmhrs-api.herokuapp.com/api/accounts', { params: idAccount }
   }
 
 

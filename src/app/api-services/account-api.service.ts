@@ -49,5 +49,9 @@ export class AccountApiService {
         return this.httpClient.get(this.URL + AppSettings.SIGNATURE + path + localStorage.getItem("id"));
     };
 
+    getActivityLog(){
+        return this.httpClient.get(this.URL + 'logs?accountId=' + localStorage.getItem("id"));
+    };
+
 
 }
