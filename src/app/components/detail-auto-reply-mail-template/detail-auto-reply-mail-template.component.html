@@ -1,6 +1,11 @@
 <div class="card-body">
     <div class="col-auto mr-auto">
-        TemplateName: <input matInput type="text" [(ngModel)]="name" placeholder="name" name="name" />
+        TemplateName: <input matInput type="text" [(ngModel)]="tempate['templateName']" placeholder="name" name="name" />
+        <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
+        </small>
+    </div>
+    <div class="col-md-3 ml-md-auto">
+        Subject: <input matInput type="text" [(ngModel)]="tempate['subject']" placeholder="Subject" name="subject" />
         <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
         </small>
     </div>

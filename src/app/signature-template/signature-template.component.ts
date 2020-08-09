@@ -758,6 +758,9 @@ export class SignatureTemplateComponent implements OnInit {
             (res: any) => {
               if (res.status) {
                 // console.log('siganture: ' + res);
+                let template = {
+
+                }
                 this.htmlContent = res.data.content;
                 this.signatureName = res.data.name;
                 this.signatureID = res.data.id;

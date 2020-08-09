@@ -5,59 +5,113 @@
 
             </div>
             <div class="col-auto">
-                <button color="primary" mat-button (click)="openAssignTemplateMailModal(assignTemplateMail)">
+                <button mat-button color="primary" (click)="synch()">
+                    <mat-icon>sync_alt</mat-icon>Synchronize
+                </button>
+                <button color="primary" mat-button (click)="saveTemplateRule()" >
                     <mat-icon>
-                        create
+                        save
                     </mat-icon>
-                    Assign Email Template
+                    Save
                 </button>
             </div>
         </div>
-        <mat-table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="department">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Department
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    {{ row.department }}
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="template_default">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Template Default
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    {{ row.template_default }}
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="template_assign_role">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Template Assign For role
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    {{ row.template_assign_role }}
-                </mat-cell>
-            </ng-container>
+        <mat-table #table cdkDropList [dataSource]="dataSource"  [cdkDropListData]="dataSource"
+            (cdkDropListDropped)="dropTable($event)" >
 
+
+
+
+
+            <ng-container matColumnDef="type">
+                <mat-header-cell *matHeaderCellDef>
+                    Field
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>Choose Field</mat-label>
+                        <mat-select [(ngModel)]="row.type">
+                            <!-- <mat-option value="0" (onSelectionChange)="fieldChang($event)">choose
+                            </mat-option> -->
+                            <mat-option value="D" (onSelectionChange)="fieldChang($event)">Department
+                            </mat-option>
+                            <mat-option value="T" (onSelectionChange)="fieldChang($event)">Team
+                            </mat-option>
+                            <!-- <mat-option value="P" (onSelectionChange)="fieldChang($event)">Position
+                            </mat-option> -->
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="listId">
+                <mat-header-cell *matHeaderCellDef>
+                    Value
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                    <mat-form-field *ngIf="row.type != 'D' && row.type != 'P' && row.type != 'T'" style="width: 80%;">
+                        <mat-label>Choose Value</mat-label>
+                        <mat-select>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="row.type === 'D'" style="width: 80%;">
+                        <mat-label>Choose Value</mat-label>
+                        <mat-select [(ngModel)]="row.listId" multiple>
+                            <mat-option *ngFor="let department of depList" [value]="department.id"
+                                (onSelectionChange)="fieldChang($event)">{{department.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="row.type === 'T'" style="width: 80%;">
+                        <mat-label>Choose Value</mat-label>
+                        <mat-select [(ngModel)]="row.listId" multiple>
+                            <mat-option *ngFor="let team of teamList" [value]="team.id"
+                                (onSelectionChange)="fieldChang($event)">{{team.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="row.type === 'P'" style="width: 80%;">
+                        <mat-label>Choose Value</mat-label>
+                        <mat-select [(ngModel)]="row.listId" multiple>
+                            <mat-option *ngFor="let position of positionList" [value]="position.id"
+                                (onSelectionChange)="fieldChang($event)">{{position.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="templateId">
+                <mat-header-cell *matHeaderCellDef>
+                    Template
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>Choose Template</mat-label>
+                        <mat-select [(ngModel)]="row.templateId">
+                            <mat-option *ngFor="let template of templateList" [value]="template.templateId" (onSelectionChange)="fieldChang($event)">
+                                {{template.templateName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
             <ng-container matColumnDef="action">
                 <mat-header-cell *matHeaderCellDef>
                     Action
                 </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    <!-- view detail account company icon button -->
-                    <button mat-raised-button color="primary" style="margin-right: 20px;">
-                        Update
-                    </button>
+                <mat-cell *matCellDef="let row; let i = index" [style.color]="row.color" data-label="color">
                     <!-- update account company icon button -->
-                    <button mat-raised-button color="">
+                    <button mat-raised-button color="" (click)="removeAt(i)">
                         Delete
                     </button>
                 </mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+            <mat-row  *matRowDef="let row; columns: displayedColumns" cdkDrag  > </mat-row>
         </mat-table>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        <button mat-raised-button style="width: 100%; text-align: center;" color="primary" (click)="addRow()">Add
+            row</button>
     </div>
 </div>
 
@@ -142,7 +196,7 @@
             </div>
             <div class="col-auto">
                 <button mat-raised-button color="primary">
-                    
+
                     Save
                 </button>
             </div>
