@@ -53,6 +53,10 @@ export class AccountApiService {
         const path = 'getAll/'
         return this.httpClient.get(this.URL + AppSettings.EMP + path + accountId);
     }
+  
+    getActivityLog(){
+        return this.httpClient.get(this.URL + 'logs?accountId=' + localStorage.getItem("id"));
+    };
 
 
 }

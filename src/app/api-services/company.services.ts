@@ -10,17 +10,17 @@ export class CompanyServices {
   constructor(private httpClient: HttpClient) { }
 
   getAllCompany() {
-    return this.httpClient.get('https://gmhrs-api.herokuapp.com/api/accounts');
+    return this.httpClient.get(AppSettings.BASEURL +'accounts');
     // return this.httpClient.get('http://localhost:3000/api/accounts');
   }
 
   updateAccountCompany(updateAccount) {
-    return this.httpClient.put('https://gmhrs-api.herokuapp.com/api/accounts', updateAccount);
+    return this.httpClient.put(AppSettings.BASEURL +'accounts', updateAccount);
     // return this.httpClient.put('http://localhost:3000/api/accounts', updateAccount);
   }
 
   createAccountCompany(newAccount) {
-    return this.httpClient.post('https://gmhrs-api.herokuapp.com/api/accounts', newAccount);
+    return this.httpClient.post(AppSettings.BASEURL +'accounts', newAccount);
     // return this.httpClient.post('http://localhost:3000/api/accounts', newAccount);
   }
 

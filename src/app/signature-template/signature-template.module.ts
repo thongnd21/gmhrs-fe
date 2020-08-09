@@ -43,6 +43,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NzResultModule } from 'ng-zorro-antd/result';
 
 @NgModule({
     imports: [
@@ -87,6 +89,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
         NzMenuModule,
         NzTypographyModule,
         NzRadioModule,
+        DragDropModule,
+        NzResultModule,
         RouterModule.forChild(SignatureTemplateRoutes)
     ],
     declarations: [SignatureTemplateComponent]
