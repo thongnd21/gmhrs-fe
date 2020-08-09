@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AutoReplymailRoutes } from './auto-replymail.routing';
-import { AutoReplymailComponent } from './auto-replymail.component';
+import { DetailAutoReplyMailTemplateRoutes } from './detail-auto-reply-mail-template.component.routing';
+import { DetailAutoReplyMailTemplateComponent } from './detail-auto-reply-mail-template.component';
 import { EmailEditorModule } from 'angular-email-editor';
-import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule, MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AssignEmailTemplateComponent } from './assign-email-template/assign-email-template.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -27,9 +26,6 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -46,6 +42,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatRadioModule,
     MatChipsModule,
     MatSortModule,
+    MatInputModule,
     MatTabsModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
@@ -71,12 +68,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     NzCollapseModule,
     NzSpinModule,
     NzMenuModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    DragDropModule,
-    RouterModule.forChild(AutoReplymailRoutes)
+    RouterModule.forChild(DetailAutoReplyMailTemplateRoutes)
   ],
-  declarations: [AutoReplymailComponent, AssignEmailTemplateComponent]
+  declarations: [DetailAutoReplyMailTemplateComponent]
 })
-export class AutoReplymailModule { }
+export class DetailAutoReplyMailTemplateModule { }
