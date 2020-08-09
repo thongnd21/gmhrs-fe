@@ -20,6 +20,7 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
   checkAdd = true;
   accountId = localStorage.getItem('id');
   tempate = {};
+  subject = "";
   constructor(
     private router: Router,
     private emailServices: EmailApiService,
@@ -38,6 +39,8 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
     let html = null;
     if (this.name.length < 6 || this.name.length > 50) {
       this.checkAdd = false;
+    } else if (this.subject.length < 6 || this.subject.length > 50) {
+      this.checkAdd = false;
     } else {
       console.log(this.emailEditor);
       this.emailEditor.saveDesign((data) => {
@@ -47,6 +50,7 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
           emailObj = {
             accountId: this.accountId,
             name: this.name,
+            subject : this.subject,
             dataTemplate: JSON.stringify(jsonData),
             html: html
           };

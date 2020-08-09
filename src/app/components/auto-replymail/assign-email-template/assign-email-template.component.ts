@@ -264,9 +264,11 @@ export class AssignEmailTemplateComponent implements OnInit {
     send["listCreate"] = result;
     this.emailService.saveAssignTemplate(send).subscribe(
       (res: any) => {
-        if(res.code ===200){
+
+
+        if (res.code === 200) {
           this.toast.success("Save successfully");
-        }else{
+        } else if (res.code === 400) {
           this.toast.error("Save fail");
         }
 
@@ -280,15 +282,15 @@ export class AssignEmailTemplateComponent implements OnInit {
 
   }
 
-  synch(){
+  synch() {
     this.emailService.syncDateForTemplate(this.accountId).subscribe(
-      (res)=>{
+      (res) => {
         console.log(res);
-        
+
       },
-      (err)=>{
+      (err) => {
         console.log(err);
-        
+
       }
     )
   }
