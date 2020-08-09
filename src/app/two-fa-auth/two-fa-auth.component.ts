@@ -55,12 +55,12 @@ export class TwoFaAuthComponent implements OnInit {
   ngOnInit(): void {
     let username = localStorage.getItem('username');
     this.twoFaAuthService.check2faStatus(username).subscribe(
-      (res) => {
-        localStorage.setItem('two_fa_status', res.toString());
+      (res: any) => {
+        localStorage.setItem('two_fa_status', res);
         let two_fa_status = localStorage.getItem('two_fa_status');
         console.log(two_fa_status);
 
-        if (two_fa_status.toString() === '0') {
+        if (two_fa_status === "null" || two_fa_status === '0') {
           let username = localStorage.getItem('username');
           this.twoFaAuthService.getQrCode(username).subscribe(
             (res) => {
