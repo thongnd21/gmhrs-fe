@@ -71,7 +71,12 @@ export class SignatureTemplateComponent implements OnInit {
   showListSignatureTemplate = false;
   showListSignatureTemplateRule = false;
   showListWrongSignature = false;
-  infoToReview: any;
+  infoToReview: {
+    personal_email: null,
+    first_name: null,
+    last_name: null,
+    phone: null
+  };
 
   rules: Rules = {
     lengthRule: {
@@ -750,21 +755,19 @@ export class SignatureTemplateComponent implements OnInit {
     let username = localStorage.getItem('username');
     let id = localStorage.getItem('id');
     this.signatureService.getInfoToReview(username).subscribe(
-      async (res) => {
+      async (res: any) => {
         this.infoToReview = res;
-        // console.log('Info to review: ' + res);
-        if (this.infoToReview != null) {
+        if (this.infoToReview !== null) {
           this.signatureService.getSignatureTemplate(id).subscribe(
             (res: any) => {
               if (res.status) {
                 // console.log('siganture: ' + res);
-                let template = {
-
-                }
-                this.htmlContent = res.data.content;
-                this.signatureName = res.data.name;
-                this.signatureID = res.data.id;
-                this.isSetPrimaryDisable = res.data.is_primary > 0;
+                let signature = new Signature();
+                signature = res.data;
+                this.htmlContent = signature.content;
+                this.signatureName = signature.name;
+                this.signatureID = signature.id;
+                this.isSetPrimaryDisable = signature.is_primary > 0;
                 this.htmlContentReview = this.htmlContent;
                 // console.log('htmlContentReview: ' + this.htmlContentReview);
                 let firstname = this.infoToReview.first_name;
@@ -784,10 +787,14 @@ export class SignatureTemplateComponent implements OnInit {
               this.isSpinning = false;
             }
           );
+
+        } else {
+          this.toast.error('You have not synchronized data!');
+          this.router.navigate(['/dashboard'])
         }
+        // console.log('Info to review: ' + res);
       }
     )
-
   }
   getSignatureTemplateRuleByID(id): void {
     this.isSpinning = true;

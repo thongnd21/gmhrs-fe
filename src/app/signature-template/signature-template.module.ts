@@ -18,7 +18,8 @@ import {
     MatInputModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSelectModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -66,6 +67,7 @@ import { NzResultModule } from 'ng-zorro-antd/result';
         MatSlideToggleModule,
         MatProgressSpinnerModule,
         MatToolbarModule,
+        MatSelectModule,
         ReactiveFormsModule,
         HttpClientModule,
         AngularEditorModule,
