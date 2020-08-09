@@ -1,130 +1,124 @@
-<div class="editor card ">
-    <div class="card-header" style="background-color: #777777">
-        <h4>Create template</h4>
-    </div>
-    <div class="card-body">
+<div>
+  <mat-tab-group>
+    <mat-tab label="Mail Template">
+      <div class="card-body">
+
         <div class="row">
-            <div class="col-auto mr-auto">
-                TemplateName: <input matInput type="text" [(ngModel)]= "name" placeholder="name" name="name"/>
-                <small *ngIf="checkAdd ==false "class="form-error-msg">Name must have 6-50 characteries </small>
-            </div>
-            <div class="col-auto">
-                <button color="primary" mat-button (click)="editorExport()">
-                    <mat-icon>
-                    create
-                    </mat-icon>
-                    Create Template
-                </button>
-            </div>
+          <div class="col-auto mr-auto">
+
+          </div>
+          <div class="col-auto">
+            <button color="primary" mat-button [routerLink]="['/create-auto-reply-mail']">
+              <mat-icon>
+                create
+              </mat-icon>
+              Create Template
+            </button>
+          </div>
         </div>
-        <email-editor  id="email-editor"></email-editor>
-    </div>
+        <!-- template detail -->
+        <div class=" ml-05 mr-05 mt-10 pb-1 pt-08" style="margin-top: 30px;">
+          <mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="count">
+              <mat-header-cell *matHeaderCellDef>
+                No.
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row; let i = index" data-label="No.">
+                {{ i + 1 }}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="templateName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Template Name
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                {{ row.templateName }}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Status
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                <mat-chip-list aria-label="Fish selection">
+                  <mat-chip color="accent" selected *ngIf="row.status==true">Applied</mat-chip>
+                  <mat-chip *ngIf="row.status==false">Cease</mat-chip>
+                </mat-chip-list>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="create_at">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Created At
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                {{ row.create_at }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <mat-header-cell *matHeaderCellDef>
+                Action
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                <!-- view detail account company icon button -->
+                <button mat-icon-button (click)="openTemplateDetail(row.templateId)">
+                  <mat-icon>
+                    remove_red_eye
+                  </mat-icon>
+                </button>
+                <!-- update account company icon button -->
+                <button mat-icon-button (click)="syncTemplate(row.templateId)">
+                  <mat-icon class="mat-18 mat-color-primary">
+                    autorenew
+                  </mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Assign Auto-reply mail template">
+      <div class="card-body">
+        <app-assign-email-template></app-assign-email-template>
+      </div>
+
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- editor -->
+
+
 </div>
-
-
-<div class=" ml-05 mr-05 mt-10 pb-1 pt-08" style="margin-top: 30px;">
-  <mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="count">
-      <mat-header-cell *matHeaderCellDef>
-        No.
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row; let i = index" data-label="No.">
-        {{ i + 1 }}
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="templateName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Template Name
-      </mat-header-cell>
-      <mat-cell
-        *matCellDef="let row"
-        [style.color]="row.color"
-        data-label="color"
-      >
-        {{ row.templateName }}
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          Status
-        </mat-header-cell>
-        <mat-cell
-          *matCellDef="let row"
-          [style.color]="row.color"
-          data-label="color"
-        >
-        <mat-chip-list aria-label="Fish selection">
-            <mat-chip color="accent" selected *ngIf="row.status==true">Applied</mat-chip>
-            <mat-chip *ngIf="row.status==false">Cease</mat-chip>
-        </mat-chip-list>
-        </mat-cell>
-      </ng-container>
-    <ng-container matColumnDef="create_at">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Created At
-      </mat-header-cell>
-      <mat-cell
-        *matCellDef="let row"
-        [style.color]="row.color"
-        data-label="color"
-      >
-        {{ row.create_at }}
-      </mat-cell>
-    </ng-container>
-    
-    <ng-container matColumnDef="action">
-      <mat-header-cell *matHeaderCellDef>
-        Action
-      </mat-header-cell>
-      <mat-cell
-        *matCellDef="let row"
-        [style.color]="row.color"
-        data-label="color"
-      >
-        <!-- view detail account company icon button -->
-        <button mat-icon-button (click)="openTemplateDetail(detail, row.templateId)">
-          <mat-icon>
-            remove_red_eye
-          </mat-icon>
-        </button>
-        <!-- update account company icon button -->
-        <button mat-icon-button (click)="syncTemplate(row.templateId)">
-          <mat-icon class="mat-18 mat-color-primary">
-            autorenew
-          </mat-icon>
-        </button>
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
-  </mat-table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+<div>
+  <!-- <app-assign-email-template></app-assign-email-template> -->
 </div>
-
-
 
 <ng-template #detail let-modal>
-    <div class="modal-body">
+  <div class="modal-body">
 
-        <div class="card-body">
-            <div class="editor">
-                <email-editor (loaded)="editorLoaded($event)" ></email-editor>
-            </div>
-        </div>
+    <div class="card-body">
+      <div class="editor">
+        <email-editor (loaded)="editorLoaded($event)"></email-editor>
+      </div>
     </div>
-    <div class="card-footer">
-        <div class="button-container  mr-4">
-            <!-- <div class="spinner-container" *ngIf="loading">
+  </div>
+  <div class="card-footer">
+    <div class="button-container  mr-4">
+      <!-- <div class="spinner-container" *ngIf="loading">
                 <mat-spinner diameter="24"></mat-spinner>
             </div> -->
-            <button (click)="editorExport()" mat-raised-button [disabled]="loading">
-                 Save
-            </button> 
-        </div>
-        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+      <button (click)="editorExport()" mat-raised-button [disabled]="loading">
+        Save
+      </button>
     </div>
+    <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+  </div>
 </ng-template>
-<p>auto-replymail works!</p>
+
 <!-- <div class="editor"> -->
 <!-- <button (click)="editorExport()">Export</button>
     <script src="https://editor.unlayer.com/embed.js"></script>

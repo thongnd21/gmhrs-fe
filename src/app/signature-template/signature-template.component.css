@@ -19,7 +19,6 @@
     background-color: rgb(221, 255, 126);
     z-index: 100000 !important;
 } 
-/* ::ng-deep .cdk-drag-placeholder  {
-    opacity: 1;
-    background-color: red;
-};  */
+::ng-deep .cdk-drag-placeholder  {
+    opacity: 0;
+}; 

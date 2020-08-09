@@ -31,22 +31,25 @@ export class AccountApiService {
     };
 
     sendMailToChangPassword(account) {
-        return this.httpClient.put(this.URL + "accounts/sendMail", account);
+        const path = 'sendMail/';
+        return this.httpClient.put(this.URL + AppSettings.ACCOUNT + path, account);
     };
 
     changePassword(account) {
-        return this.httpClient.put(this.URL + "accounts/changePassword", account);
+        const path = 'changePassword/';
+        return this.httpClient.put(this.URL + AppSettings.ACCOUNT + path, account);
     };
 
-    testAPIEndpoint(url){
+    testAPIEndpoint(url) {
         return this.httpClient.get(url);
     };
 
-    getInvalidSignature(){
-        return this.httpClient.get(this.URL + "signature/getListEmployeesEmailBreakRule/" + localStorage.getItem("id"));
+    getInvalidSignature() {
+        const path = 'getListEmployeesEmailBreakRule/'
+        return this.httpClient.get(this.URL + AppSettings.SIGNATURE + path + localStorage.getItem("id"));
     };
 
-    getActivityLog(){
+    getActivityLog() {
         return this.httpClient.get(this.URL + 'logs?accountId=' + localStorage.getItem("id"));
     };
 
