@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 import { SignatureService } from '../api-services/signature.services';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
@@ -44,6 +45,7 @@ class ItemData {
 })
 export class SignatureTemplateComponent implements OnInit {
 
+  isUploadGsuiteKeyFile = true;
   isSpinning = false;
   isSetPrimaryDisable = false;
   isSaveRuleDisable = false;
@@ -186,6 +188,7 @@ export class SignatureTemplateComponent implements OnInit {
     private toast: ToastrService,
     private signatureService: SignatureService,
     private modal: NzModalService,
+    private router: Router
   ) { }
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.listOfSpecTemplate.specRuleCheck, event.previousIndex, event.currentIndex);
@@ -216,13 +219,16 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.listOfSpecTemplate = res.data;
-          for (let specRow of this.listOfSpecTemplate.specRuleCheck) {
-            specRow.idSpec = this.idSpec;
-            this.idSpec++;
+          if (this.listOfSpecTemplate.allSignature.length === 0) {
+            this.toast.warning('You do not have any signature!');
+          } else {
+            for (let specRow of this.listOfSpecTemplate.specRuleCheck) {
+              specRow.idSpec = this.idSpec;
+              this.idSpec++;
+            }
+            this.showSpecificModel = true;
           }
-          this.showSpecificModel = true;
           this.isSpinning = false;
-
         } else {
           this.toast.error(res.message);
         }
@@ -752,6 +758,9 @@ export class SignatureTemplateComponent implements OnInit {
             (res: any) => {
               if (res.status) {
                 // console.log('siganture: ' + res);
+                let template = {
+
+                }
                 this.htmlContent = res.data.content;
                 this.signatureName = res.data.name;
                 this.signatureID = res.data.id;
@@ -945,9 +954,26 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureRuleID = '';
     this.rules = null;
   }
+  goToSettingPage(): void {
+    this.router.navigate(['/company-config-connection']);
+  }
+  checkGsuiteKey(): void {
+    this.isSpinning = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.checkFileGsuiteKey(id).subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.isUploadGsuiteKeyFile = false;
+        } else {
+          this.loadTemplate();
+          this.loadRules();
+          this.loadDynamicRule();
+        }
+        this.isSpinning = false;
+      }
+    )
+  }
   ngOnInit(): void {
-    this.loadTemplate();
-    this.loadRules();
-    this.loadDynamicRule();
+    this.checkGsuiteKey();
   }
 }
