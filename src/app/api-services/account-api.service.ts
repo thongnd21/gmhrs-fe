@@ -49,6 +49,11 @@ export class AccountApiService {
         return this.httpClient.get(this.URL + AppSettings.SIGNATURE + path + localStorage.getItem("id"));
     };
 
+    getAllEmployeeByAccountId(accountId) {
+        const path = 'getAll/'
+        return this.httpClient.get(this.URL + AppSettings.EMP + path + accountId);
+    }
+  
     getActivityLog() {
         return this.httpClient.get(this.URL + 'logs?accountId=' + localStorage.getItem("id"));
     };

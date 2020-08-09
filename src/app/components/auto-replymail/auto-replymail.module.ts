@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AutoReplymailRoutes } from './auto-replymail.routing';
 import { AutoReplymailComponent } from './auto-replymail.component';
 import { EmailEditorModule } from 'angular-email-editor';
-import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule, MatFormFieldModule, MatSelectModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AssignEmailTemplateComponent } from './assign-email-template/assign-email-template.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -27,6 +27,9 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -43,7 +46,6 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     MatRadioModule,
     MatChipsModule,
     MatSortModule,
-    MatInputModule,
     MatTabsModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
@@ -69,6 +71,10 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     NzCollapseModule,
     NzSpinModule,
     NzMenuModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    DragDropModule,
     RouterModule.forChild(AutoReplymailRoutes)
   ],
   declarations: [AutoReplymailComponent, AssignEmailTemplateComponent]
