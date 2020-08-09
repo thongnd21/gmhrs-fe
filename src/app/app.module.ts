@@ -55,8 +55,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NgbModule,
     NzTagModule,
     ToastrModule.forRoot(),
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes, { useHash: true })
   ],
+  exports: [RouterModule],
   providers: [
     AuthGuard,
     SystemAdminGuard,

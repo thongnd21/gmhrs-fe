@@ -42,7 +42,7 @@
 <!-- ============================================================== -->
 <div fxLayout="row wrap">
     <!-- Card column -->
-    <div fxFlex.gt-lg="25" fxFlex.gt-md="40" fxFlex.gt-xs="100" fxFlex="100">
+    <div fxFlex.gt-lg="35" fxFlex.gt-md="40" fxFlex.gt-xs="100" fxFlex="100">
 
         <mat-card>
             <div class="p-20 bg-warning position-relative">
@@ -117,7 +117,7 @@
     </div>
     <!-- Card column -->
     <!-- Card column -->
-    <div fxFlex.gt-lg="75" fxFlex.gt-md="60" fxFlex.gt-xs="100" fxFlex="100">
+    <div fxFlex.gt-lg="65" fxFlex.gt-md="60" fxFlex.gt-xs="100" fxFlex="100">
         <mat-card>
             <mat-tab-group>
                 <!-- Tab 1 -->
@@ -150,7 +150,11 @@
                                     <ng-template #Update>
                                         <!-- You can use stopPropagation if you don't want the panel to toggle -->
                                         <nz-tag nzColor="processing">Update</nz-tag>
-                                      </ng-template>
+                                    </ng-template>
+                                    <ng-template #Delete>
+                                        <!-- You can use stopPropagation if you don't want the panel to toggle -->
+                                        <nz-tag nzColor="error">Delete</nz-tag>
+                                    </ng-template>
                                     <nz-collapse>
                                     <nz-collapse-panel *ngFor="let childPanel of panel.employee.newEmployeeList" [nzHeader]="childPanel.primary_email" 
                                     [nzExtra]="New">
@@ -164,6 +168,16 @@
                                     </nz-collapse-panel>
                                     <nz-collapse-panel *ngFor="let childPanel of panel.employee.updateEmployeeList"  [nzHeader]="childPanel.primary_email"
                                      [nzExtra]="Update">
+                                        <b> Email:</b><p>  {{childPanel.primary_email}}</p>
+                                        <b> First name:</b><p>{{childPanel.first_name}}</p>
+                                        <b> Last name:</b><p>{{childPanel.last_name}}</p>
+                                        <b> Phone:</b><p>{{childPanel.phone}}</p>
+                                        <b> Address:</b><p>{{childPanel.address}}</p>
+                                        <b> Personal email:</b> <p>{{childPanel.personal_email}}</p>
+                                        <b>Last sync date:</b> <p>{{childPanel.modified_date}}</p>
+                                    </nz-collapse-panel>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.employee.deleteEmployeeList"  [nzHeader]="childPanel.primary_email"
+                                     [nzExtra]="Delete">
                                         <b> Email:</b><p>  {{childPanel.primary_email}}</p>
                                         <b> First name:</b><p>{{childPanel.first_name}}</p>
                                         <b> Last name:</b><p>{{childPanel.last_name}}</p>
@@ -188,6 +202,11 @@
                                         <b> Team email:</b><p>  {{childPanel.email}}</p>
                                         <b> Team description:</b><p>  {{childPanel.description}}</p>
                                     </nz-collapse-panel>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.team.deleteTeamList"  [nzHeader]="childPanel.email" [nzExtra]="Delete">
+                                        <b> Team name:</b><p>  {{childPanel.name}}</p>
+                                        <b> Team email:</b><p>  {{childPanel.email}}</p>
+                                        <b> Team description:</b><p>  {{childPanel.description}}</p>
+                                    </nz-collapse-panel>
                                 </nz-collapse>
 
                                 <p>Department</p>
@@ -197,6 +216,10 @@
                                         <b> Description:</b><p>{{childPanel.description}}</p>
                                     </nz-collapse-panel>
                                     <nz-collapse-panel *ngFor="let childPanel of panel.department.updateDepartmentList"  [nzHeader]="childPanel.name"  [nzExtra]="Update">
+                                        <b> Department name:</b><p>  {{childPanel.name}}</p>
+                                        <b> Description:</b><p>{{childPanel.description}}</p>
+                                    </nz-collapse-panel>
+                                    <nz-collapse-panel *ngFor="let childPanel of panel.department.deleteDepartmentList"  [nzHeader]="childPanel.name"  [nzExtra]="Delete">
                                         <b> Department name:</b><p>  {{childPanel.name}}</p>
                                         <b> Description:</b><p>{{childPanel.description}}</p>
                                     </nz-collapse-panel>

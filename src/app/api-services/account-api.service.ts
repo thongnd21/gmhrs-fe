@@ -54,7 +54,7 @@ export class AccountApiService {
         return this.httpClient.get(this.URL + AppSettings.EMP + path + accountId);
     }
   
-    getActivityLog(){
+    getActivityLog() {
         return this.httpClient.get(this.URL + 'logs?accountId=' + localStorage.getItem("id"));
     };
 
