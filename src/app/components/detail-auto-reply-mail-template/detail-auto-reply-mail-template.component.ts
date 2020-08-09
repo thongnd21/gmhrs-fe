@@ -17,6 +17,7 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
   templateId;
   tempate = {};
   name = "";
+  subject = "" ;
   checkAdd = true;
   accountId = localStorage.getItem('id');
 
@@ -47,6 +48,7 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
         this.tempate['templateName'] = templateEmail.templateName;
         this.tempate['template'] = templateEmail.template;
         this.tempate['status'] = templateEmail.status;
+        this.tempate['subject'] = templateEmail.subject;
 
 
         // update.result.then((res)=>{
