@@ -89,7 +89,16 @@ export const AppRoutes: Routes = [
       {
         path: 'guidles',
         loadChildren: () => import('./components/guides/guidles.module').then(m => m.GuidlesModule)
-      }
+      }, {
+        path: 'create-auto-reply-mail',
+        loadChildren:
+          () => import('./components/create-auto-reply-mail-template/create-auto-reply-mail-template.component.module').then(m => m.CreateAutoReplyMailTemplateModule), canActivate: [CompanyManagerGuard]
+      },
+      {
+        path: 'detail-auto-reply-mail',
+        loadChildren:
+          () => import('./components/detail-auto-reply-mail-template/detail-auto-reply-mail-template.component.module').then(m => m.DetailAutoReplyMailTemplateModule), canActivate: [CompanyManagerGuard]
+      },
     ],
     canActivate: [AuthGuard]
   }
