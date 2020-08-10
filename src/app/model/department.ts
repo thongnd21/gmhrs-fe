@@ -6,5 +6,6 @@ export class Department{
     modified_date : string
     orgunits_path: string
     status_id : Number
+    gsuite_id : Number
     selected : boolean
 }

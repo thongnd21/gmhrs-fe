@@ -328,8 +328,6 @@ export class DashboardComponent implements OnInit {
 				//end
 				console.log(this.list);
 				this.list.push(item);
-				// item['team'] = moment.utc(element.created_date).local().format('LLLL');
-				// listAccount.push(item);
 			}))
 			if(this.list.length == 0){
 				this.isLogged = true;
