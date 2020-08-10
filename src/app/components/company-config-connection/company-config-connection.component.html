@@ -654,6 +654,34 @@
                                         close</mat-icon>
                                 </td>
                             </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponsePositon.position.id=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponsePositon.position.id!='Pass'}">
+                                <td>Positon</td>
+                                <td>id</td>
+                                <td>{{connectionStringDataResponsePositon.position.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponsePositon.position.id=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponsePositon.position.id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : connectionStringDataResponsePositon.position.name=='Pass' ,
+                    'response-status-fail' : connectionStringDataResponsePositon.position.name!='Pass'}">
+                                <td></td>
+                                <td>name</td>
+                                <td>{{connectionStringDataResponsePositon.position.name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="connectionStringDataResponsePositon.position.name=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="connectionStringDataResponsePositon.position.name!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </mat-tab>
@@ -669,6 +697,10 @@
                             <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
                             <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
                             <ngx-json-viewer [json]="connectionStringDataResponseTeam"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="positionValidate==true">Position Passed</h2>
+                            <h2 style="color: red;" *ngIf="positionValidate==false">Position Not Passed</h2>
+                            <ngx-json-viewer [json]="connectionStringDataResponsePositon"></ngx-json-viewer>
+
                         </div>
                     </div>
                 </mat-tab>
@@ -822,6 +854,21 @@
                                         close</mat-icon>
                                 </td>
                             </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.position_id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.position_id!='Pass'}">
+                                <td></td>
+                                <td>position_id</td>
+                                <td>{{dataAPIEndpoindEmployee.employee.position_id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.position_id=='Pass'"
+                                        style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.position_id!='Pass'"
+                                        style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
                             <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.department.id=='Pass' ,
                     'response-status-fail' : dataAPIEndpoindEmployee.employee.department.id!='Pass'}">
                                 <td></td>
@@ -836,20 +883,6 @@
                                         close</mat-icon>
                                 </td>
                             </tr>
-                            <!-- <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.department.name=='Pass' ,
-                    'response-status-fail' : dataAPIEndpoindEmployee.employee.department.name!='Pass'}">
-                            <td></td>
-                            <td>department_id</td>
-                            <td>{{dataAPIEndpoindEmployee.employee.department.name}}</td>
-                            <td>
-                                <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.name=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.name!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr> -->
                             <tr [ngClass]="{'response-status-success' : dataAPIEndpoindDepartment.department.id=='Pass' ,
                     'response-status-fail' : dataAPIEndpoindDepartment.department.id!='Pass'}">
                                 <td>department</td>
@@ -945,6 +978,32 @@
                                         close</mat-icon>
                                 </td>
                             </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindPosition.position.id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindPosition.position.id!='Pass'}">
+                                <td>position</td>
+                                <td>id</td>
+                                <td>{{dataAPIEndpoindPosition.position.id}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindPosition.position.id=='Pass'" style="color: green;">
+                                        done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindPosition.position.id!='Pass'" style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
+                            <tr [ngClass]="{'response-status-success' : dataAPIEndpoindPosition.position.name=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindPosition.position.name!='Pass'}">
+                                <td></td>
+                                <td>name</td>
+                                <td>{{dataAPIEndpoindPosition.position.name}}</td>
+                                <td>
+                                    <mat-icon *ngIf="dataAPIEndpoindPosition.position.name=='Pass'"
+                                        style="color: green;">done
+                                    </mat-icon>
+                                    <mat-icon *ngIf="dataAPIEndpoindPosition.position.name!='Pass'" style="color: red;">
+                                        close</mat-icon>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </mat-tab>
@@ -962,7 +1021,10 @@
                             <ngx-json-viewer [json]="dataAPIEndpoindDepartment"></ngx-json-viewer>
                             <h2 style="color: green;" *ngIf="teamValidate==true">Team Passed</h2>
                             <h2 style="color: red;" *ngIf="teamValidate==false">Team Not Passed</h2>
-                            <ngx-json-viewer [json]="dataAPIEndpoindTeam"></ngx-json-viewer>
+                            <ngx-json-viewer [json]="dataAPIEndpoindPosition"></ngx-json-viewer>
+                            <h2 style="color: green;" *ngIf="positionValidate==true">Position Passed</h2>
+                            <h2 style="color: red;" *ngIf="positionValidate==false">Position Not Passed</h2>
+                            <ngx-json-viewer [json]="dataAPIEndpoindPosition"></ngx-json-viewer>
                         </div>
                     </div>
                 </mat-tab>
