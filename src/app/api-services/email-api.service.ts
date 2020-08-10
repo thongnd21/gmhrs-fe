@@ -43,4 +43,10 @@ export class EmailApiService {
         // return this.httpClient.get('http://localhost:3000/api/email/syncReplyMail',{params: param});
         return this.httpClient.get(this.URL + AppSettings.EMAIL + 'syncReplyMail', { params: param });
     }
+
+    getEmailTemplateRuleDetailBySpecificTemplateId(data) {
+        // let param = new HttpParams().set('id', id);
+        // return this.httpClient.get('http://localhost:3000/api/email/getTemplateRuleDetail',{params: param});
+        return this.httpClient.post(this.URL + AppSettings.EMAIL + 'getTemplateRuleDetail', data);
+    }
 }

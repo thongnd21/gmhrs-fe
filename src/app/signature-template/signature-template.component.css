@@ -13,10 +13,16 @@
 /* .cdk-overlay-container {
     z-index: 1000 !important;
 } */
+/* .cdk-global-overlay-wrapper, .cdk-overlay-container {
+    z-index: 0 !important;
+ } */
+/* .dropDownInModel {
+    z-index: 100000 !important;
+} */
 ::ng-deep .cdk-drag-preview  {
     display: table;
     border-radius: 5px;
-    background-color: rgb(221, 255, 126);
+    background-color: white;
     z-index: 100000 !important;
 } 
 ::ng-deep .cdk-drag-placeholder  {
