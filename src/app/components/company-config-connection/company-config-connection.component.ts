@@ -369,23 +369,41 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
 
   //test file authen guite
+  data;
   onTest(modal, value) {
     let formData = new FormData();
     let company_email = value.company_email;
+    var data = {
+      file: [],
+      company_email
+    }
+    data.company_email = company_email;
+
+
     if (this.uploadedFiles != undefined) {
-      for (var i = 0; i < this.uploadedFiles.length; i++) {
-        formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
-        formData.set("company_email", company_email);
-        this.sendFile(modal, formData);
-      }
+      var reader = new FileReader();
+
+      reader.onload = (function (f) {
+        return (e) => {
+
+          data.file.push(JSON.parse(e.target.result));
+
+        };
+      })(this.uploadedFiles[0]);
+      reader.readAsText(this.uploadedFiles[0]);
+      this.data = data;
+      console.log(this.data);
+      this.sendFile(modal, this.data);
+
+      // }
     }
-    if (this.uploadedFiles == undefined) {
-      var authenGsuite = {
-        company_email: value.company_email,
-        fileName: this.file_name_auth_gsuite_company
-      }
-      this.sendFile(modal, authenGsuite);
-    }
+    // if (this.uploadedFiles == undefined) {
+    //   var authenGsuite = {
+    //     company_email: value.company_email,
+    //     fileName: this.file_name_auth_gsuite_company
+    //   }
+    //   this.sendFile(modal, authenGsuite);
+    // }
 
   }
 
