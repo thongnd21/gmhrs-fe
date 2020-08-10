@@ -144,6 +144,7 @@ export class AssignEmailTemplateComponent implements OnInit {
 
         this.data = res
         this.dataSource = new MatTableDataSource(this.data);
+        console.log(res);
 
       },
       (err) => {
@@ -175,77 +176,6 @@ export class AssignEmailTemplateComponent implements OnInit {
 
     }
     return listPriority;
-    //checking update row and add to a new list if id in old list and new list ==
-    // for (let i = 0; i < listPriority.length; i++) {
-    //   for (let j = 0; j < oldList.length; j++) {
-    //     if (listPriority[i].id == oldList[j].id) {
-    //       listCheckUpdate.push(listPriority[i]);
-    //     }
-    //   }
-    // }
-    // //update if != priority
-    // for (let i = 0; i < listCheckUpdate.length; i++) {
-    //   for (let j = 0; j < oldList.length; j++) {
-    //     if (listCheckUpdate[i].priotiry == oldList[j].priotity && listCheckUpdate[i].id != oldList[j].id) {
-    //       listResult.listUpdate.push(listCheckUpdate[i]);
-    //     }
-    //   }
-    // }
-    // // checking field update in listCheckUpdate if any field change > add to listResult.listUpdate
-    // for (let i = 0; i < listCheckUpdate.length; i++) {
-    //   if (oldList[i].type != listCheckUpdate[i].type || oldList[i].templateId != listCheckUpdate[i].templateId) {
-    //     listResult.listUpdate.push(listCheckUpdate[i]);
-    //   } else {
-    //     if (oldList[i].listId.length != listCheckUpdate[i].listId.length) {
-    //       listResult.listUpdate.push(listCheckUpdate[i]);
-    //     }
-    //     for (let j = 0; j < listCheckUpdate[i].listId.length; j++) {
-    //       if (oldList[i].listId[j] != listCheckUpdate[i].listId[j]) {
-    //         listResult.listUpdate.push(listCheckUpdate[i]);
-    //       }
-    //     }
-    //   }
-    // }
-    // console.log(newList);
-
-    // var newListExceptupdate = newList;// newList excep update element
-    // for (let i = 0; i < listResult.listUpdate.length; i++) {
-    //   for (let j = 0; j < newList.length; j++) {
-    //     if (listResult.listUpdate[i].priotiry == newList[j].priotity) {
-    //       newListExceptupdate.splice(j, 1);
-    //     }
-    //   }
-    // }
-    // console.log(listCheckUpdate);
-    // console.log(listResult.listUpdate);
-    // console.log(newListExceptupdate);
-
-
-
-    // for (let i = 0; i < newList.length; i++) {
-    //   if (newList[i].id == "" && newList[i].type != "" && newList[i].templateId != "" && newList[i].listId.length != 0) {
-    //     listResult.listCreate.push(newList[i]);
-    //   }
-    // }
-    // console.log(listResult);
-
-    // for (let i = 0; i < oldList.length; i++) {
-    //   for (let j = 0; j < newList.length; j++) {
-    //     if (oldList[i].id == newList[j].id) {
-    //       if (oldList[i].type == newList[j].type) {
-    //         if (oldList[i].templateId == newList[j].templateId) {
-
-    //         } else {
-    //           listResult.listUpdate.push(newList[j]);
-    //         }
-    //       } else {
-    //         listResult.listUpdate.push(newList[j]);
-    //       }
-    //     } else {
-    //       listResult.listUpdate.push(newList[j]);
-    //     }
-    //   }
-    // }
   }
 
   dropTable(event) {
@@ -284,8 +214,12 @@ export class AssignEmailTemplateComponent implements OnInit {
 
   synch() {
     this.emailService.syncDateForTemplate(this.accountId).subscribe(
-      (res) => {
-        console.log(res);
+      (res: any) => {
+        if(res.status ===200){
+          this.toast.success(res.message);
+        }else{
+          this.toast.error("Synchronize assign auto_reply mail fail!");
+        }
 
       },
       (err) => {
@@ -293,5 +227,30 @@ export class AssignEmailTemplateComponent implements OnInit {
 
       }
     )
+  }
+
+  detailResponse = [];
+  detail(modal, data) {
+    console.log(data);
+    this.detailResponse = [];
+    this.emailService.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
+      (res: any) => {
+        for (let i = 0; i < res.length; i++) {
+          var element = {};
+          element["fullName"] = res[i].first_name + " " + res[i].last_name;
+          element["primary_email"] = res[i].primary_email;
+          this.detailResponse.push(element);
+        }        
+      },
+      (err) => {
+        console.log(err);
+        // this.
+      }
+    )
+    this.modalService.open(modal, {  backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  closeModal() {
+    this.modalService.dismissAll();
   }
 }
