@@ -199,7 +199,7 @@ export class SignatureTemplateComponent implements OnInit {
     moveItemInArray(this.listOfSpecTemplate.specRuleCheck, event.previousIndex, event.currentIndex);
   }
   loadSpecificBy(specNum, idSpec): void {
-    if (specNum === 'department') {
+    if (specNum !== 'department') {
       for (let spec of this.listOfSpecTemplate.specRuleCheck) {
         if (spec.idSpec === idSpec) {
           for (let po of spec.position) {
@@ -362,7 +362,7 @@ export class SignatureTemplateComponent implements OnInit {
         }
       }
       if (!check) {
-        this.toast.error('Please select department or position to save!');
+        this.toast.error('Please select value to save!');
         return;
       }
     }

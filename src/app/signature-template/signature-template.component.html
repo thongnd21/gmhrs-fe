@@ -129,7 +129,7 @@
                         <thead>
                             <tr>
                                 <th nzWidth="30%">Specific by</th>
-                                <th nzWidth="30%">Department / Position</th>
+                                <th nzWidth="30%">Value</th>
                                 <th nzWidth="30%">Name of Signature</th>
                                 <th nzWidth="10%">Delete</th>
                             </tr>
@@ -138,11 +138,11 @@
                             <tr class="dropDragTr" *ngFor="let specRuleCheck of listOfSpecTemplate.specRuleCheck"
                                 cdkDrag>
                                 <td>
-                                    <nz-select style="width: 100%;" [(ngModel)]="specRuleCheck.specificBy">
-                                        <nz-option (click)="loadSpecificBy(department, specRuleCheck.idSpec)"
-                                            [nzValue]="'department'" nzLabel="Department"></nz-option>
-                                        <nz-option (click)="loadSpecificBy(position, specRuleCheck.idSpec)"
-                                            [nzValue]="'position'" nzLabel="Position"></nz-option>
+                                    <nz-select
+                                        (ngModelChange)="loadSpecificBy(specRuleCheck.specificBy, specRuleCheck.idSpec)"
+                                        style="width: 100%;" [(ngModel)]="specRuleCheck.specificBy">
+                                        <nz-option [nzValue]="'department'" nzLabel="Department"></nz-option>
+                                        <nz-option [nzValue]="'position'" nzLabel="Position"></nz-option>
                                     </nz-select>
 
                                     <!-- <nz-radio-group [(ngModel)]="specRuleCheck.specificBy">
