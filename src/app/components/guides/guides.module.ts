@@ -12,9 +12,10 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatRadioModule } from "@angular/material/radio";
-import { GuidlesRoutes } from './guidles.routing';
+import { GuidesRoutes } from './guides.routing';
 import { GuidesComponent } from './guides.component';
 import { MatSelectModule } from '@angular/material/select';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
 
 @NgModule({
   imports: [
@@ -32,8 +33,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatIconModule,
     MatChipsModule,
-    RouterModule.forChild(GuidlesRoutes) 
+    NzLayoutModule,
+    RouterModule.forChild(GuidesRoutes) 
   ],
   declarations: [GuidesComponent]
 })
-export class GuidlesModule { }
+export class GuidesModule { }

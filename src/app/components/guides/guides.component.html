@@ -1,11 +1,515 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    sdfsdfsdfsdf
-</body>
-</html>  
+<nz-layout class="layout">
+  <nz-content>
+    <h1
+      class="devsite-page-title"
+      style="
+        box-sizing: inherit;
+        outline-style: initial;
+        outline-width: 0px;
+        color: rgb(32, 33, 36);
+        font-variant-numeric: normal;
+        font-variant-east-asian: normal;
+        font-stretch: normal;
+        font-size: 32px;
+        font-family: 'Google Sans', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR',
+          'Noto Naskh Arabic', 'Noto Sans Thai', 'Noto Sans Hebrew',
+          'Noto Sans Bengali', sans-serif;
+        margin-right: 0px;
+        margin-bottom: 24px;
+        margin-left: 0px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+        top: -4px;
+        background-color: rgb(255, 255, 255);
+      "
+    >
+      Perform G Suite Domain-Wide Delegation of Authority
+    </h1>
+    <div
+      class="devsite-article-body clearfix"
+      style="
+        box-sizing: inherit;
+        margin: 0px;
+        padding: 0px;
+        color: rgb(32, 33, 36);
+        font-family: Roboto, 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR',
+          'Noto Naskh Arabic', 'Noto Sans Thai', 'Noto Sans Hebrew',
+          'Noto Sans Bengali', sans-serif;
+        font-size: 16px;
+        background-color: rgb(255, 255, 255);
+      "
+    >
+      <p style="box-sizing: inherit; margin: 16px 0px; padding: 0px;">
+        In enterprise applications you may want to programmatically access a
+        user's data without any manual authorization on their part. In G Suite
+        domains, the domain administrator can grant third-party applications
+        with domain-wide access to its users' data — this is known as
+        domain-wide delegation of authority. To delegate authority this way,
+        domain administrators can use service accounts with OAuth 2.0.
+      </p>
+      <h2
+        id="create_the_service_account_and_credentials"
+        data-text="Create the service account and credentials"
+        tabindex="0"
+        style="
+          box-sizing: inherit;
+          outline-style: initial;
+          outline-width: 0px;
+          font-variant-numeric: normal;
+          font-variant-east-asian: normal;
+          font-stretch: normal;
+          font-size: 24px;
+          line-height: 32px;
+          font-family: 'Google Sans', 'Noto Sans', 'Noto Sans JP',
+            'Noto Sans KR', 'Noto Naskh Arabic', 'Noto Sans Thai',
+            'Noto Sans Hebrew', 'Noto Sans Bengali', sans-serif;
+          margin: 48px -40px 24px 0px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding-right: 40px;
+        "
+      >
+        Create the service account and credentials
+      </h2>
+      <p style="box-sizing: inherit; margin: 16px 0px; padding: 0px;">
+        The following steps create a service account and its credentials, which
+        are required for G Suite domain-wide delegation of authority. Your code
+        uses the credentials created here to authorize the actions the service
+        account takes.
+      </p>
+      <ol
+        style="
+          box-sizing: inherit;
+          margin-right: 0px;
+          margin-bottom: 0px;
+          margin-left: 0px;
+          padding-left: 40px;
+          list-style-position: outside;
+          list-style-image: initial;
+        "
+      >
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          Open the&nbsp;<a
+            href="https://console.developers.google.com/iam-admin/serviceaccounts"
+            style="box-sizing: inherit; color: rgb(26, 115, 232);"
+            ><b style="box-sizing: inherit;">Service accounts</b>&nbsp;page</a
+          >. If prompted, select a project.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          Click&nbsp;<span
+            class="material-icons"
+            aria-hidden="true"
+            translate="no"
+            style="
+              box-sizing: inherit;
+              vertical-align: bottom;
+              cursor: default;
+            "
+            >add</span
+          >&nbsp;<b style="box-sizing: inherit;">Create Service Account</b>,
+          enter a name and description for the service account. You can use the
+          default service account ID, or choose a different, unique one. When
+          done click&nbsp;<b style="box-sizing: inherit;">Create</b>.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          The&nbsp;<b style="box-sizing: inherit;"
+            >Service account permissions (optional)</b
+          >&nbsp;section that follows is not required. Click&nbsp;<b
+            style="box-sizing: inherit;"
+            >Continue</b
+          >.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          On the&nbsp;<b style="box-sizing: inherit;"
+            >Grant users access to this service account</b
+          >&nbsp;screen, scroll down to the&nbsp;<b style="box-sizing: inherit;"
+            >Create key</b
+          >&nbsp;section. Click&nbsp;<span
+            class="material-icons"
+            aria-hidden="true"
+            translate="no"
+            style="
+              box-sizing: inherit;
+              vertical-align: bottom;
+              cursor: default;
+            "
+            >add</span
+          >&nbsp;<b style="box-sizing: inherit;">Create key</b>.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          In the side panel that appears, select the format for your
+          key:&nbsp;<b style="box-sizing: inherit;">JSON</b>&nbsp;is
+          recommended.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          Click&nbsp;<b style="box-sizing: inherit;">Create</b>. Your new
+          public/private key pair is generated and downloaded to your machine;
+          it serves as the only copy of this key. For information on how to
+          store it securely, see&nbsp;<a
+            href="https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys"
+            style="box-sizing: inherit; color: rgb(26, 115, 232);"
+            >Managing service account keys</a
+          >.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          Click&nbsp;<b style="box-sizing: inherit;">Close</b>&nbsp;on
+          the&nbsp;<b style="box-sizing: inherit;"
+            >Private key saved to your computer</b
+          >&nbsp;dialog, then click&nbsp;<b style="box-sizing: inherit;">Done</b
+          >&nbsp;to return to the table of your service accounts.
+        </li>
+      </ol>
+      <p style="box-sizing: inherit; margin: 16px 0px; padding: 0px;">
+        To enable G Suite domain-wide delegation, follow these steps:
+      </p>
+      <ol
+        style="
+          box-sizing: inherit;
+          margin-right: 0px;
+          margin-bottom: 0px;
+          margin-left: 0px;
+          padding-left: 40px;
+          list-style-position: outside;
+          list-style-image: initial;
+        "
+      >
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          Locate the newly-created service account in the table. Under&nbsp;<b
+            style="box-sizing: inherit;"
+            >Actions</b
+          >, click&nbsp;<span
+            class="material-icons"
+            aria-hidden="true"
+            translate="no"
+            style="
+              box-sizing: inherit;
+              vertical-align: bottom;
+              cursor: default;
+            "
+            >more_vert</span
+          >&nbsp;then&nbsp;<b style="box-sizing: inherit;">Edit</b>.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          In the service account details, click&nbsp;<span
+            class="material-icons"
+            aria-hidden="true"
+            translate="no"
+            style="
+              box-sizing: inherit;
+              vertical-align: bottom;
+              cursor: default;
+            "
+            >expand_more</span
+          >&nbsp;<b style="box-sizing: inherit;">Show domain-wide delegation</b
+          >, then ensure the&nbsp;<b style="box-sizing: inherit;"
+            >Enable G Suite Domain-wide Delegation</b
+          >&nbsp;checkbox is checked.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          If you haven't yet configured your app's OAuth consent screen, you
+          must do so before you can enable domain-wide delegation. Follow the
+          on-screen instructions to configure the OAuth consent screen, then
+          repeat the above steps and re-check the checkbox.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          Click&nbsp;<b style="box-sizing: inherit;">Save</b>&nbsp;to update the
+          service account, and return to the table of service accounts. A new
+          column,&nbsp;<b style="box-sizing: inherit;">Domain-wide delegation</b
+          >, can be seen. Click&nbsp;<b style="box-sizing: inherit;"
+            >View Client ID</b
+          >, to obtain and make a note of the client ID.
+        </li>
+      </ol>
+      <h2
+        id="delegate_domain-wide_authority_to_your_service_account"
+        data-text="Delegate domain-wide authority to your service account"
+        tabindex="0"
+        style="
+          box-sizing: inherit;
+          outline-style: initial;
+          outline-width: 0px;
+          font-variant-numeric: normal;
+          font-variant-east-asian: normal;
+          font-stretch: normal;
+          font-size: 24px;
+          line-height: 32px;
+          font-family: 'Google Sans', 'Noto Sans', 'Noto Sans JP',
+            'Noto Sans KR', 'Noto Naskh Arabic', 'Noto Sans Thai',
+            'Noto Sans Hebrew', 'Noto Sans Bengali', sans-serif;
+          margin: 48px -40px 24px 0px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding-right: 40px;
+        "
+      >
+        Delegate domain-wide authority to your service account
+      </h2>
+      <p style="box-sizing: inherit; margin: 16px 0px; padding: 0px;">
+        To access user data on a G Suite domain, the service account that you
+        created needs to be granted access by a super administrator for the
+        domain. For more information about domain-wide delegation, see&nbsp;<a
+          href="https://support.google.com/a/answer/162106"
+          style="box-sizing: inherit; color: rgb(26, 115, 232);"
+          >Control G Suite API access with domain-wide delegation</a
+        >.
+      </p>
+      <p style="box-sizing: inherit; margin: 16px 0px; padding: 0px;">
+        To delegate domain-wide authority to a service account:
+      </p>
+      <ol
+        style="
+          box-sizing: inherit;
+          margin-right: 0px;
+          margin-bottom: 0px;
+          margin-left: 0px;
+          padding-left: 40px;
+          list-style-position: outside;
+          list-style-image: initial;
+        "
+      >
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          From your G Suite domain’s&nbsp;<a
+            href="http://admin.google.com/"
+            style="box-sizing: inherit; color: rgb(26, 115, 232);"
+            >Admin console</a
+          >, go to&nbsp;<span style="box-sizing: inherit; font-weight: 700;"
+            >Main menu</span
+          >&nbsp;<span
+            class="material-icons"
+            aria-hidden="true"
+            translate="no"
+            style="
+              box-sizing: inherit;
+              vertical-align: bottom;
+              cursor: default;
+            "
+            >menu</span
+          ><span style="box-sizing: inherit; font-weight: 700;"
+            >&gt; Security &gt; API controls</span
+          >.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          In the&nbsp;<span style="box-sizing: inherit; font-weight: 700;"
+            >Domain wide delegation</span
+          >&nbsp;pane, select&nbsp;<span
+            style="box-sizing: inherit; font-weight: 700;"
+            >Manage Domain Wide Delegation</span
+          >.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          Click&nbsp;<span style="box-sizing: inherit; font-weight: 700;"
+            >Add new</span
+          >.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          In the&nbsp;<span style="box-sizing: inherit; font-weight: 700;"
+            >Client ID</span
+          >&nbsp;field, enter the client ID obtained from the service account
+          creation steps above.
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          <p
+            style="
+              box-sizing: inherit;
+              margin-right: 0px;
+              margin-bottom: 12px;
+              margin-left: 0px;
+              padding: 0px;
+            "
+          >
+            In the&nbsp;<span style="box-sizing: inherit; font-weight: 700;"
+              >OAuth Scopes</span
+            >&nbsp;field, enter a comma-delimited list of the scopes required
+            for your application (for a list of possible scopes, see&nbsp;<a
+              href="https://developers.google.com/admin-sdk/directory/v1/guides/authorizing"
+              style="box-sizing: inherit; color: rgb(26, 115, 232);"
+              >Authorize requests</a
+            >).
+          </p>
+          <p
+            style="
+              box-sizing: inherit;
+              margin-top: 12px;
+              margin-right: 0px;
+              margin-left: 0px;
+              padding: 0px;
+            "
+          >
+            For example, if you require domain-wide access to Users and Groups
+            enter:&nbsp;
+            <code
+              translate="no"
+              dir="ltr"
+              style="
+                box-sizing: inherit;
+                background: rgb(241, 243, 244);
+                color: rgb(55, 71, 79);
+                font-variant-numeric: normal;
+                font-variant-east-asian: normal;
+                font-stretch: normal;
+                font-size: 14.4px;
+                line-height: 1;
+                font-family: 'Roboto Mono', monospace;
+                padding: 1px 4px;
+                word-break: break-word;
+                direction: ltr !important;
+              "
+              >
+              <ul>
+                  <li>  https://www.googleapis.com/auth/admin.directory.user</li>
+                  <li>  https://www.googleapis.com/auth/admin.directory.group.member    </li>
+                  <li>  https://www.googleapis.com/auth/admin.directory.group</li>
+                  <li>  https://www.googleapis.com/auth/admin.directory.orgunit</li>
+                  <li>  https://www.googleapis.com/auth/gmail.settings.basic</li>
+                  
+              </ul></code
+            >
+            
+          </p>
+        </li>
+        <li
+          style="
+            box-sizing: inherit;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 0px;
+          "
+        >
+          <p
+            style="
+              box-sizing: inherit;
+              margin-right: 0px;
+              margin-left: 0px;
+              padding: 0px;
+            "
+          >
+            Click&nbsp;<span style="box-sizing: inherit; font-weight: 700;"
+              >Authorize</span
+            >.
+          </p>
+        </li>
+      </ol>
+      <p style="box-sizing: inherit; margin: 16px 0px; padding: 0px;">
+        Your service account now has domain-wide access to the Google Admin SDK
+        Directory API for all the users of your domain. You are ready to
+        instantiate an authorized Admin SDK Directory service object on behalf
+        of your G Suite domain's users.
+      </p>
+    </div>
+  </nz-content>
+  <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
+</nz-layout>
+<!-- <div>ádasasdasdasd</div> -->

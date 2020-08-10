@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { GuidesComponent } from './guides.component';
-export const GuidlesRoutes: Routes = [
+export const GuidesRoutes: Routes = [
   {
     path: "",
     component: GuidesComponent,
