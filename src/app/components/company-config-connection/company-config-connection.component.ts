@@ -329,7 +329,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.nextButonConditonGSuiteCredential = false;
     this.gsuiteCredentialForm = this.fb.group({
       company_email: new FormControl('', [Validators.required, Validators.email]),
-      file: new FormControl('')
+      file: new FormControl('', Validators.required)
     });
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
@@ -388,19 +388,24 @@ export class CompanyConfigConnectionComponent implements OnInit {
   onTest(modal, value) {
     let formData = new FormData();
     let company_email = value.company_email;
-    if (this.uploadedFiles != undefined) {
-      for (var i = 0; i < this.uploadedFiles.length; i++) {
-        formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
-        formData.set("company_email", company_email);
-        this.sendFile(modal, formData);
+    if (company_email == "" || company_email == null || company_email == undefined) {
+      this.toast.error("Please input company email");
+    } else {
+      if (this.uploadedFiles != undefined) {
+        for (var i = 0; i < this.uploadedFiles.length; i++) {
+          formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
+          formData.set("company_email", company_email);
+          this.sendFile(modal, formData);
+        }
       }
-    }
-    if (this.uploadedFiles == undefined) {
-      var authenGsuite = {
-        company_email: value.company_email,
-        fileName: this.file_name_auth_gsuite_company
+      if (this.uploadedFiles == undefined) {
+        var authenGsuite = {
+          company_email: value.company_email,
+          fileName: this.file_name_auth_gsuite_company
+        }
+        this.sendFile(modal, authenGsuite);
       }
-      this.sendFile(modal, authenGsuite);
+
     }
 
   }
@@ -487,7 +492,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
           // this.disableTestConnectionStringButton = false;
         }
         else {
-          console.log("else");
           this.nextButonConditonApiEnpoint = false;
           // this.disableTestConnectionStringButton = true;
         }
@@ -531,7 +535,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.accountServices.testAPIEndpoint(endpoint).subscribe(
       (res: any) => {
         console.log(res);
-        
+
         // if(res.employees.length>0 && res.departments.length>0 &&)
         this.connectionStatus.connection.status = "Success";
         this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
