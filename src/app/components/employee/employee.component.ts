@@ -30,9 +30,7 @@ export class EmployeeComponent implements OnInit {
   departmentList = [];
   listEmployee = [];
   column = [
-    {
-      prop: 'select'
-    },
+   
     {
       prop: 'primary_email',
       name: 'primary_email'

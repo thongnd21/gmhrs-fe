@@ -138,9 +138,19 @@ export class LoginComponent implements OnInit {
             address: this.registerForm.controls['address'].value
         };
         this.companyServices.createAccountCompany(account).subscribe(
-            (res) => {
-                this.registerForm.reset();
-                this.toast.success("Create Account success!");
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    this.login = 0;
+                    this.registerForm.reset();
+                    this.toast.success("Create Account success!");
+                } else if (res.status == "fail") {
+                    this.toast.error(res.message);
+                } else {
+                    this.toast.error("Server error");
+                }
+
             },
             (error) => {
                 this.toast.error("Server is not available!");
