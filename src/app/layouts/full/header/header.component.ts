@@ -96,6 +96,7 @@ export class AppHeaderComponent {
             description: d.description,
             modified_date: d.modified_date,
             created_date: d.created_date,
+            gsuite_id: d.gsuite_id,
             selected: true
           }
         });
@@ -162,6 +163,8 @@ export class AppHeaderComponent {
             personal_email: o.personal_email,
             phone: o.phone,
             primary_email: o.primary_email,
+            vacation_start_date: o.vacation_start_date,
+            vacation_end_date: o.vacation_end_date,
             selected: true
           }
         });
@@ -175,6 +178,8 @@ export class AppHeaderComponent {
             personal_email: o.personal_email,
             phone: o.phone,
             primary_email: o.primary_email,
+            vacation_start_date: o.vacation_start_date,
+            vacation_end_date: o.vacation_end_date,
             selected: true
           }
         });
