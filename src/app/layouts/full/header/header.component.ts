@@ -13,6 +13,7 @@ import { Team } from '../../../model/team';
 import { Employee } from '../../../model/employee';
 import { MatMenuTrigger } from '@angular/material';
 import { CheckOtpModule } from '../../../check-otp/check-otp.module';
+import { PositionSync } from '../../../model/listSyncPosition';
 import * as moment from 'moment';
 @Component({
   selector: 'app-header',
@@ -35,6 +36,7 @@ export class AppHeaderComponent {
   selectedEmpMatchAll = true;
   selectedEmpNewAll = true;
   selectedEmpOutAll = true;
+  selectedAllPosition = true;
   employee_new_match = {};
   employee_out_match = {};
   loading = false;
@@ -65,6 +67,11 @@ export class AppHeaderComponent {
       matchedTeam: [],
       newTeam: [],
       outOfHRMS: [],
+    },
+    positions: {
+      matchedPosition: [],
+      newPosition: [],
+      outOfHRMS: [],
     }
   };
   open = (modal) =>
@@ -85,7 +92,8 @@ export class AppHeaderComponent {
         const listSync = {
           department: new DepartmentSync,
           team: new TeamSync,
-          employee: new EmployeeSync
+          employee: new EmployeeSync,
+          position: new PositionSync
         }
         console.log(res);
         // department
@@ -163,6 +171,7 @@ export class AppHeaderComponent {
             personal_email: o.personal_email,
             phone: o.phone,
             primary_email: o.primary_email,
+            position_id: o.position_id,
             vacation_start_date: o.vacation_start_date,
             vacation_end_date: o.vacation_end_date,
             selected: true
@@ -178,6 +187,7 @@ export class AppHeaderComponent {
             personal_email: o.personal_email,
             phone: o.phone,
             primary_email: o.primary_email,
+            position_id: o.position_id,
             vacation_start_date: o.vacation_start_date,
             vacation_end_date: o.vacation_end_date,
             selected: true
@@ -212,6 +222,28 @@ export class AppHeaderComponent {
             }
           }
         });
+
+        listSync.position.newPosition = res.positions.newPosition.map(o => {
+          return {
+            id: o.id,
+            name: o.name,
+            selected: true
+          }
+        });
+        listSync.position.matchedPosition = res.positions.matchedPosition.map(o => {
+          return {
+            id: o.id,
+            name: o.name,
+            selected: true
+          }
+        });
+        listSync.position.outOfHRMS = res.positions.outOfHRMSPosition.map(o => {
+          return {
+            id: o.id,
+            name: o.name,
+            selected: true
+          }
+        });
         this.listSyncFinal = listSync;
         this.listItemSynch = res;
         this.selectAllDepMatch(true);
@@ -223,6 +255,7 @@ export class AppHeaderComponent {
         this.selectAllEmpMatch(true);
         this.selectAllEmpNew(true);
         this.selectAllEmpOut(true);
+        this.selectAllPosition(true);
         event.stopPropagation();
         this.loading = false;
         if (this.isFirstSync == true) {
@@ -257,7 +290,8 @@ export class AppHeaderComponent {
       is_first_sync: this.isFirstSync,
       employees: this.listSynchonize.employees,
       teams: this.listSynchonize.teams,
-      departments: this.listSynchonize.departments
+      departments: this.listSynchonize.departments,
+      positions: this.listSynchonize.positions
     }
     console.log(JSON.stringify(syncList));
     if (this.isFirstSync != null) {
@@ -331,9 +365,9 @@ export class AppHeaderComponent {
   // select dep new
   selectAllDepNew(selectAll = null) {
     if (selectAll != null) {
-      this.selectedDepNewAll = true;
+      this.selectedAllPosition = true;
     }
-    if (this.selectedDepNewAll) {
+    if (this.selectedAllPosition) {
       this.listSyncFinal.department.newDepartment.forEach((e, index) => {
         e.selected = true;
         this.listSynchonize.departments.newDepartment.push(this.listItemSynch.departments.newDepartment[index]);
@@ -342,6 +376,25 @@ export class AppHeaderComponent {
     else {
       this.listSynchonize.departments.newDepartment = [];
       this.listSyncFinal.department.newDepartment.forEach((e, index) => {
+        e.selected = false;
+
+      });
+    }
+  }
+
+  selectAllPosition(selectAll = null) {
+    if (selectAll != null) {
+      this.selectedDepNewAll = true;
+    }
+    if (this.selectedDepNewAll) {
+      this.listSyncFinal.position.newPosition.forEach((e, index) => {
+        e.selected = true;
+        this.listSynchonize.positions.newPosition.push(this.listItemSynch.positions.newPosition[index]);
+      });
+    }
+    else {
+      this.listSynchonize.positions.newPosition = [];
+      this.listSyncFinal.position.newPosition.forEach((e, index) => {
         e.selected = false;
 
       });

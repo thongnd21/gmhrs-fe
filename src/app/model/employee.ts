@@ -9,5 +9,6 @@ export class Employee{
     primary_email: string
     status_id: Number
     created_date: string
+    position_id: Number
     selected : boolean
 }
