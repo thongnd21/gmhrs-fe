@@ -63,7 +63,7 @@
                                 </div>
                                 <button mat-raised-button
                                     (click)="onTestConection(responseConnectionString,accessDBForm.value)"
-                                    color="primary" [disabled]="loadingTestConnection">
+                                    color="primary" [disabled]="accessDBForm.invalid">
                                     Test Connection
                                 </button>
                             </div>
