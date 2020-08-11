@@ -39,9 +39,10 @@ export class CompanyConnectionService {
   gsuiteCredentialTest(data) {
     const path = 'upload/';
     return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
+    // return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
   }
 
-  gsuiteCredentialSave(data){
+  gsuiteCredentialSave(data) {
     const path = 'save/';
     return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
   }

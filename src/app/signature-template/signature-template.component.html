@@ -141,16 +141,10 @@
                                     <nz-select
                                         (ngModelChange)="loadSpecificBy(specRuleCheck.specificBy, specRuleCheck.idSpec)"
                                         style="width: 100%;" [(ngModel)]="specRuleCheck.specificBy">
-                                        <nz-option [nzValue]="'department'" nzLabel="Department"></nz-option>
-                                        <nz-option [nzValue]="'position'" nzLabel="Position"></nz-option>
+                                        <nz-option *ngFor="let specSupport of listOfSpecTemplate.allSupportSpecific"
+                                            [nzValue]="specSupport.name" [nzLabel]="specSupport.description">
+                                        </nz-option>
                                     </nz-select>
-
-                                    <!-- <nz-radio-group [(ngModel)]="specRuleCheck.specificBy">
-                                        <label (click)="loadSpecificBy(department, specRuleCheck.idSpec)"
-                                            style="display: block;" nz-radio [nzValue]="'department'">Department</label>
-                                        <label (click)="loadSpecificBy(position, specRuleCheck.idSpec)"
-                                            style="display: block;" nz-radio [nzValue]="'position'">Position</label>
-                                    </nz-radio-group> -->
                                 </td>
                                 <td>
                                     <div *ngIf="specRuleCheck.specificBy === 'department'">
@@ -166,14 +160,8 @@
                                                         [(ngModel)]="department.status">{{department.name}}
                                                     </label>
                                                 </li>
-                                                <!-- <label *ngFor="let position of specRuleCheck.position" nz-menu-item
-                                                    nz-checkbox [(ngModel)]="position.status">{{position.name}}</label> -->
                                             </ul>
                                         </nz-dropdown-menu>
-                                        <!-- <div *ngFor="let department of specRuleCheck.department">
-                                            <label nz-checkbox
-                                                [(ngModel)]="department.status">{{department.name}}</label>
-                                        </div> -->
                                     </div>
 
                                     <div *ngIf="specRuleCheck.specificBy === 'position'">
@@ -189,13 +177,8 @@
                                                         [(ngModel)]="position.status">{{position.name}}
                                                     </label>
                                                 </li>
-                                                <!-- <label *ngFor="let position of specRuleCheck.position" nz-menu-item
-                                                    nz-checkbox [(ngModel)]="position.status">{{position.name}}</label> -->
                                             </ul>
                                         </nz-dropdown-menu>
-                                        <!-- <div *ngFor="let position of specRuleCheck.position">
-                                            <label nz-checkbox [(ngModel)]="position.status">{{position.name}}</label>
-                                        </div> -->
                                     </div>
                                 </td>
                                 <td>
@@ -203,11 +186,6 @@
                                         <nz-option *ngFor="let signature of listOfSpecTemplate.allSignature"
                                             [nzValue]="signature.id" [nzLabel]="signature.name"></nz-option>
                                     </nz-select>
-                                    <!-- <nz-radio-group [(ngModel)]="specRuleCheck.signature_id">
-                                        <label style="display: block;"
-                                            *ngFor="let signature of listOfSpecTemplate.allSignature" nz-radio
-                                            [nzValue]="signature.id">{{signature.name}}</label>
-                                    </nz-radio-group> -->
                                 </td>
                                 <td>
                                     <a style="color: red;" (click)="deleteRowSpec(specRuleCheck.idSpec)">Delete</a>
