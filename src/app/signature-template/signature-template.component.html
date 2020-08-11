@@ -71,7 +71,6 @@
                             <tr>
                                 <th style="width: 30%; text-align: center;">Name</th>
                                 <th style="width: 10%; text-align: center;">Default</th>
-                                <th style="width: 40%; text-align: center;">Specific apply</th>
                                 <th style="width: 10%; text-align: center;">Load</th>
                                 <th style="width: 10%; text-align: center;">Delete</th>
                             </tr>
@@ -82,26 +81,6 @@
                                 <td><i *ngIf="data.is_primary === 1" nz-icon style="font-size: x-large;"
                                         [nzType]="'check-circle'" [nzTheme]="'twotone'"
                                         [nzTwotoneColor]="'#52c41a'"></i></td>
-                                <td>
-                                    <nz-collapse nzAccordion>
-                                        <nz-collapse-panel [nzHeader]="'Department'">
-                                            <p *ngFor="let de of data.department">
-                                                <nz-alert *ngIf="de.status" nzType="info" nzMessage="{{de.name}}"
-                                                    style="font-size: medium;" nzShowIcon>
-                                                </nz-alert>
-                                            </p>
-                                        </nz-collapse-panel>
-                                    </nz-collapse>
-                                    <nz-collapse nzAccordion>
-                                        <nz-collapse-panel [nzHeader]="'Position'">
-                                            <p *ngFor="let po of data.position">
-                                                <nz-alert *ngIf="po.status" nzType="info" nzMessage="{{po.name}}"
-                                                    style="font-size: medium;" nzShowIcon>
-                                                </nz-alert>
-                                            </p>
-                                        </nz-collapse-panel>
-                                    </nz-collapse>
-                                </td>
                                 <td>
                                     <button nz-button style="float: right;"
                                         (click)="getSignatureTemplateByName(data.name)"
