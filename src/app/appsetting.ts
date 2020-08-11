@@ -40,6 +40,6 @@ export class AppSettings {
     public static POSITION = 'position/';
     public static CHECKFILEGSUITEKEY = 'signature/checkFileGsuiteKey/'
     public static CONNECTION = 'connection/';
-    
+
 
 }

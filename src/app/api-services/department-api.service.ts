@@ -10,8 +10,8 @@ export class DepartmentApiService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
-    getAllDepartment() {
-        return this.httpClient.get(this.URL + AppSettings.DEPARTMENT);
+    getAllDepartment(id) {
+        return this.httpClient.get(this.URL + AppSettings.DEPARTMENT + 'accountId/' + id);
     }
 
     createDepartment(department) {

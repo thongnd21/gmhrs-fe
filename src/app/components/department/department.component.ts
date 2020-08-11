@@ -9,6 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DepartmentApiService } from '../../api-services/department-api.service';
 import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
+import { AccountApiService } from '../../api-services/account-api.service';
 
 @Component({
   selector: 'app-department',
@@ -33,6 +34,9 @@ export class DepartmentComponent implements OnInit {
     {
       prop: 'description',
       name: 'Description'
+    },
+    {
+      prop: 'action',
     }
   ];
 
@@ -40,6 +44,8 @@ export class DepartmentComponent implements OnInit {
     private modalService: NgbModal,
     private depServices: DepartmentApiService,
     private toast: ToastrService,
+    private accountService: AccountApiService,
+
   ) { }
 
   ngOnInit() {
@@ -47,9 +53,10 @@ export class DepartmentComponent implements OnInit {
     this.getAll();
   }
 
+  accountId = localStorage.getItem('id')
   getAll() {
     const listDepartment = [];
-    this.depServices.getAllDepartment().subscribe(
+    this.depServices.getAllDepartment(this.accountId).subscribe(
       (res) => {
         const department: any = res;
         department.forEach(element => {
@@ -74,6 +81,37 @@ export class DepartmentComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
+  detailResponse = [];
+  departmentName;
+  detail(modal, row) {
+    console.log(row);
+    this.detailResponse = []
+    this.departmentName = row.name;
+    this.accountService.getAllEmployeeByDepartmentId(row.id).subscribe(
+      (res: any) => {
+        if (res.length != undefined || res.length > 0 || res != null) {
+          for (let i = 0; i < res.length; i++) {
+            var element = {};
+            element["fullName"] = res[i].first_name + " " + res[i].last_name;
+            element["primary_email"] = res[i].primary_email;
+            this.detailResponse.push(element);
+          }
+        }
+        this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+
+      },
+      (err) => {
+        console.log(err);
+
+      }
+    )
+  }
+
+  closeModal() {
+    this.modalService.dismissAll();
   }
 
 }

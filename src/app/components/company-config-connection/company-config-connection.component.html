@@ -1,4 +1,4 @@
-<div>
+<div >
 
     <mat-horizontal-stepper linear #stepper>
         <!-- #docregion editable -->
@@ -93,7 +93,7 @@
                                 </div>
                                 <button mat-raised-button
                                     (click)="onTestURLConection(responseApiEndpoint,APIEndpointForm.value)"
-                                    color="primary" [disabled]="loadingTestAPI">
+                                    color="primary" [disabled]="APIEndpointForm.invalid">
                                     Test
                                 </button>
                             </div>

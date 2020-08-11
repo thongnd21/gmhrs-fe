@@ -10,7 +10,7 @@ export class CompanyConnectionService {
   constructor(private httpClient: HttpClient) { }
 
   testDBCompanyConnection(DBInfor) {
-    return this.httpClient.post('https://gmcompany-api.herokuapp.com/api/connection', DBInfor);
+    return this.httpClient.post('https://cap100919.herokuapp.com/api/connection', DBInfor);
     // return this.httpClient.post('http://localhost:3000/api/connection', DBInfor);
   }
 
@@ -39,9 +39,10 @@ export class CompanyConnectionService {
   gsuiteCredentialTest(data) {
     const path = 'upload/';
     return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
+    // return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
   }
 
-  gsuiteCredentialSave(data){
+  gsuiteCredentialSave(data) {
     const path = 'save/';
     return this.httpClient.post(this.URL + AppSettings.FILE + path, data);
   }

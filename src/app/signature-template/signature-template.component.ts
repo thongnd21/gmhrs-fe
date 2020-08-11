@@ -107,6 +107,7 @@ export class SignatureTemplateComponent implements OnInit {
     allDepartment: new Array(),
     allPosition: new Array(),
     allSignature: new Array(),
+    allSupportSpecific: new Array(),
     specRuleCheck: new Array<SpecRuleCheck>()
   }
 
@@ -725,7 +726,7 @@ export class SignatureTemplateComponent implements OnInit {
   addRowSpec(): void {
     let newRow = new SpecRuleCheck();
     newRow.idSpec = this.idSpec;
-    newRow.specificBy = 'department';
+    newRow.specificBy = this.listOfSpecTemplate.allSupportSpecific[0].name;
     newRow.signature_id = this.listOfSpecTemplate.allSignature[0].id;
     newRow.department = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allDepartment));
     newRow.position = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allPosition));
