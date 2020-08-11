@@ -18,6 +18,16 @@ class PositionSpec {
   name: string;
   status: boolean;
 }
+class TeamSpec {
+  id: number;
+  name: string;
+  status: boolean;
+}
+class EmployeeSpec {
+  id: number;
+  name: string;
+  status: boolean;
+}
 class SpecRuleCheck {
   idSpec: number;
   signature_id: number;
@@ -25,6 +35,8 @@ class SpecRuleCheck {
   allSignature: Signature[]
   department: DepartmentSpec[];
   position: PositionSpec[];
+  team: TeamSpec[];
+  employee: EmployeeSpec[];
 }
 class Rules {
   lengthRule: {
@@ -106,6 +118,8 @@ export class SignatureTemplateComponent implements OnInit {
   listOfSpecTemplate = {
     allDepartment: new Array(),
     allPosition: new Array(),
+    allEmployee: new Array(),
+    allTeam: new Array(),
     allSignature: new Array(),
     allSupportSpecific: new Array(),
     specRuleCheck: new Array<SpecRuleCheck>()
@@ -359,6 +373,16 @@ export class SignatureTemplateComponent implements OnInit {
       }
       for (let po of spec.position) {
         if (po.status) {
+          check = true;
+        }
+      }
+      for (let team of spec.team) {
+        if (team.status) {
+          check = true;
+        }
+      }
+      for (let em of spec.employee) {
+        if (em.status) {
           check = true;
         }
       }
@@ -730,6 +754,8 @@ export class SignatureTemplateComponent implements OnInit {
     newRow.signature_id = this.listOfSpecTemplate.allSignature[0].id;
     newRow.department = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allDepartment));
     newRow.position = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allPosition));
+    newRow.employee = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allEmployee));
+    newRow.team = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allTeam));
     newRow.allSignature = this.listOfSpecTemplate.allSignature;
     this.listOfSpecTemplate.specRuleCheck.push(newRow);
     this.idSpec++;

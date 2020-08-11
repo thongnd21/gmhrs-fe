@@ -126,6 +126,37 @@
                                     </nz-select>
                                 </td>
                                 <td>
+                                    <div *ngIf="specRuleCheck.specificBy === 'team'">
+                                        <button style="width: 100%;" nz-button nz-dropdown [nzDropdownMenu]="teamMenu">
+                                            List team
+                                            <i nz-icon nzType="down"></i>
+                                        </button>
+                                        <nz-dropdown-menu #teamMenu="nzDropdownMenu">
+                                            <ul nz-menu>
+                                                <li *ngFor="let team of specRuleCheck.team" nz-menu-item>
+                                                    <label nz-menu-item nz-checkbox
+                                                        [(ngModel)]="team.status">{{team.name}}
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </nz-dropdown-menu>
+                                    </div>
+                                    <div *ngIf="specRuleCheck.specificBy === 'employee'">
+                                        <button style="width: 100%;" nz-button nz-dropdown
+                                            [nzDropdownMenu]="employeeMenu">
+                                            List employee
+                                            <i nz-icon nzType="down"></i>
+                                        </button>
+                                        <nz-dropdown-menu #employeeMenu="nzDropdownMenu">
+                                            <ul nz-menu>
+                                                <li *ngFor="let employee of specRuleCheck.employee" nz-menu-item>
+                                                    <label nz-menu-item nz-checkbox
+                                                        [(ngModel)]="employee.status">{{employee.first_name + ' ' + employee.last_name}}
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </nz-dropdown-menu>
+                                    </div>
                                     <div *ngIf="specRuleCheck.specificBy === 'department'">
                                         <button style="width: 100%;" nz-button nz-dropdown
                                             [nzDropdownMenu]="departmentMenu">
@@ -142,7 +173,6 @@
                                             </ul>
                                         </nz-dropdown-menu>
                                     </div>
-
                                     <div *ngIf="specRuleCheck.specificBy === 'position'">
                                         <button style="width: 100%;" nz-button nz-dropdown
                                             [nzDropdownMenu]="positionMenu">
