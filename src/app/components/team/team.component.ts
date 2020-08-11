@@ -5,11 +5,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from "ngx-custom-validators";
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { TeamApiService} from '../../api-services/team-api.service';
+import { TeamApiService } from '../../api-services/team-api.service';
 import * as moment from 'moment';
+import { AccountApiService } from '../../api-services/account-api.service';
 
 @Component({
   selector: 'app-team',
@@ -19,7 +20,7 @@ import * as moment from 'moment';
 export class TeamComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   displayedColumns: string[] = [];
   dataSource: any;
   grpForm: FormGroup;
@@ -39,28 +40,33 @@ export class TeamComponent implements OnInit {
     {
       prop: 'description',
       name: 'Description'
+    },
+    {
+      prop: 'action',
+
     }
   ];
 
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private toast : ToastrService,
-    private teamService :TeamApiService
-    ) { }
+    private toast: ToastrService,
+    private teamService: TeamApiService,
+    private accountService: AccountApiService,
+  ) { }
 
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop);
     this.getAll();
   }
-
+  accountId = localStorage.getItem('id');
   getAll() {
     const listTeam = [];
-    this.teamService.getAllTeam().subscribe(
-      (res)=>{
-        const data:any = res;
+    this.teamService.getAllTeamByAccountId(this.accountId).subscribe(
+      (res) => {
+        const data: any = res;
         data.forEach(element => {
-          let item ={};
+          let item = {};
           item['id'] = element.id;
           item['name'] = element.name;
           item['email'] = element.email;
@@ -73,7 +79,7 @@ export class TeamComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      (error)=>{
+      (error) => {
         this.toast.error("Server is not avaiable!");
       }
     );
@@ -85,5 +91,34 @@ export class TeamComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  detailResponse = [];
+  teamName;
+  detail(modal, row) {
+    this.detailResponse = [];
+    this.teamName = row.name;
+    this.accountService.getAllEmployeeByTeamId(row.id).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (res.length != undefined || res.length > 0 || res != null) {
+          for (let i = 0; i < res.length; i++) {
+            var element = {};
+            element["fullName"] = res[i].first_name + " " + res[i].last_name;
+            element["primary_email"] = res[i].primary_email;
+            this.detailResponse.push(element);
+          }
+        }
+        this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+
+      },
+      (err) => {
+        console.log(err);
+
+      }
+    )
+  }
+
+  closeModal(){
+    this.modalService.dismissAll();
+  }
 
 }

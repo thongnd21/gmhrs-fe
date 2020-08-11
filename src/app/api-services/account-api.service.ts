@@ -53,10 +53,21 @@ export class AccountApiService {
         const path = 'getAll/'
         return this.httpClient.get(this.URL + AppSettings.EMP + path + accountId);
     }
-  
+
     getActivityLog() {
         return this.httpClient.get(this.URL + 'logs?accountId=' + localStorage.getItem("id"));
     };
 
+    getAllEmployeeByDepartmentId(id) {
+        // return this.httpClient.get(this.URL + +AppSettings.EMP + id);
+        const path = 'department/'
+        return this.httpClient.get(this.URL + AppSettings.EMP + path + id);
+    }
+
+    getAllEmployeeByTeamId(id) {
+        // return this.httpClient.get(this.URL + +AppSettings.EMP + id);
+        const path = 'team/'
+        return this.httpClient.get(this.URL + AppSettings.EMP + path + id);
+    }
 
 }

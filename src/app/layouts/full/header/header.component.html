@@ -325,6 +325,36 @@
                         </tbody>
                     </table>
                 </mat-expansion-panel>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            View Position
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            View all positions
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                  
+                    <!-- table new -->
+                    <p>New Position :</p>
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>\
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="col-12" *ngIf="listSyncFinal.position.newPosition.length == 0">
+                                <td class="col-12">No data</td>
+                            </tr>
+                            <tr *ngFor="let item of listSyncFinal.position.newPosition; let i=index">
+                                <td>{{ i+1 }}</td>
+                                <td>{{item.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-expansion-panel>
             </mat-accordion>
         </div>
         <div class="card-footer">
