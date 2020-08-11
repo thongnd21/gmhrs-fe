@@ -514,17 +514,22 @@ export class SignatureTemplateComponent implements OnInit {
     }
   }
   loadReview(): void {
-    this.htmlContentReview = this.htmlContent;
-    // console.log('htmlContentReview: ' + this.htmlContentReview);
-    // console.log('htmlContent: ' + this.htmlContent);
-    let firstname = this.infoToReview.first_name;
-    let lastname = this.infoToReview.last_name;
-    let phone = this.infoToReview.phone;
-    let personalEmail = this.infoToReview.personal_email;
-    this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
-    this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
-    this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
-    this.toast.success('Load review success!');
+    if (this.infoToReview !== null) {
+      this.htmlContentReview = this.htmlContent;
+      // console.log('htmlContentReview: ' + this.htmlContentReview);
+      // console.log('htmlContent: ' + this.htmlContent);
+      let firstname = this.infoToReview.first_name;
+      let lastname = this.infoToReview.last_name;
+      let phone = this.infoToReview.phone;
+      let personalEmail = this.infoToReview.personal_email;
+      this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
+      this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
+      this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
+      this.toast.success('Load review success!');
+    } else {
+      this.toast.error('You have not synchronized data!')
+    }
+
   }
   addDynamicContentRule(addContent): void {
     if (this.rules.listRule !== null) {
@@ -817,7 +822,7 @@ export class SignatureTemplateComponent implements OnInit {
 
         } else {
           this.toast.error('You have not synchronized data!');
-          this.router.navigate(['/dashboard'])
+          // this.router.navigate(['/dashboard'])
         }
         // console.log('Info to review: ' + res);
       }
