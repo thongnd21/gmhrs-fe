@@ -44,7 +44,7 @@ export class AppHeaderComponent {
     private companyConnectionService: CompanyConnectionService,
     private toast: ToastrService,
     private modalService: NgbModal,
-    private syncService: SynchronizeService,
+    private syncService: SynchronizeService
   ) { }
   panelOpenState = false;
   listItemSynch: any;
@@ -299,6 +299,7 @@ export class AppHeaderComponent {
         (res: any) => {
           this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
           this.toast.success('Synchronize success!');
+          // this.dashBoard.getActivityLog();
           this.closeModal();
         },
         (err) => {

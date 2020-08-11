@@ -130,7 +130,7 @@
                             </div>
                         </div>
                         <nz-collapse>
-                            <nz-collapse-panel *ngFor="let panel of list" [nzHeader]="panel.modified_date" [nzActive]="panel.status == 1 ? 'success' : 'failed'">
+                            <nz-collapse-panel *ngFor="let panel of list" [nzHeader]="panel.modified_date" [nzActive]="panel.status == 1 ? 'true' : 'false'">
                                 <div class="d-flex no-blcok">
                                     <div class="m-r-20">
                                      </div>

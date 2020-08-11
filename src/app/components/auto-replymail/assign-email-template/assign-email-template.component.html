@@ -6,7 +6,7 @@
             </div>
             <div class="col-auto">
                 <button mat-button color="primary" (click)="synch()">
-                    <mat-icon>sync_alt</mat-icon>Synchronize
+                    <mat-icon>assignment_turned_in</mat-icon> Apply
                 </button>
                 <button color="primary" mat-button (click)="saveTemplateRule()">
                     <mat-icon>
@@ -25,11 +25,11 @@
 
             <ng-container matColumnDef="type">
                 <mat-header-cell *matHeaderCellDef>
-                    Field
+                    Specific by
                 </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    <mat-form-field style="width: 80%;">
-                        <mat-label>Choose Field</mat-label>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color"  style="margin-top: 10px;">
+                    <mat-form-field style="width: 80%;" appearance="outline">
+                        <mat-label>Choose type</mat-label>
                         <mat-select [(ngModel)]="row.type">
                             <!-- <mat-option value="0" (onSelectionChange)="fieldChang($event)">choose
                             </mat-option> -->
@@ -43,17 +43,17 @@
                     </mat-form-field>
                 </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="listId">
+            <ng-container matColumnDef="listId" style="margin-top: 10px;">
                 <mat-header-cell *matHeaderCellDef>
                     Value
                 </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    <mat-form-field *ngIf="row.type != 'D' && row.type != 'P' && row.type != 'T'" style="width: 80%;">
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color" style="margin-top: 10px;">
+                    <mat-form-field *ngIf="row.type != 'D' && row.type != 'P' && row.type != 'T'" style="width: 80%;" appearance="outline">
                         <mat-label>Choose Value</mat-label>
                         <mat-select>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field *ngIf="row.type === 'D'" style="width: 80%;">
+                    <mat-form-field *ngIf="row.type === 'D'" style="width: 80%;" appearance="outline">
                         <mat-label>Choose Value</mat-label>
                         <mat-select [(ngModel)]="row.listId" multiple>
                             <mat-option *ngFor="let department of depList" [value]="department.id"
@@ -61,7 +61,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field *ngIf="row.type === 'T'" style="width: 80%;">
+                    <mat-form-field *ngIf="row.type === 'T'" style="width: 80%;" appearance="outline">
                         <mat-label>Choose Value</mat-label>
                         <mat-select [(ngModel)]="row.listId" multiple>
                             <mat-option *ngFor="let team of teamList" [value]="team.id"
@@ -69,7 +69,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field *ngIf="row.type === 'P'" style="width: 80%;">
+                    <mat-form-field *ngIf="row.type === 'P'" style="width: 80%;" appearance="outline">
                         <mat-label>Choose Value</mat-label>
                         <mat-select [(ngModel)]="row.listId" multiple>
                             <mat-option *ngFor="let position of positionList" [value]="position.id"
@@ -84,8 +84,8 @@
                 <mat-header-cell *matHeaderCellDef>
                     Template
                 </mat-header-cell>
-                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                    <mat-form-field style="width: 80%;">
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color"  style="margin-top: 10px;">
+                    <mat-form-field style="width: 80%;" appearance="outline">
                         <mat-label>Choose Template</mat-label>
                         <mat-select [(ngModel)]="row.templateId">
                             <mat-option *ngFor="let template of templateList" [value]="template.templateId"
@@ -115,7 +115,7 @@
             <mat-row *matRowDef="let row; columns: displayedColumns" cdkDrag> </mat-row>
         </mat-table>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-        <button mat-raised-button style="width: 100%; text-align: center;" color="primary" (click)="addRow()">Add
+        <button mat-raised-button style="width: 100%; text-align: center;"  (click)="addRow()">Add
             row</button>
     </div>
 </div>
