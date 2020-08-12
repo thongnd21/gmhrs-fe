@@ -7,6 +7,7 @@ import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Signature } from '../model/signature';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { FormControl } from '@angular/forms';
 
 class DepartmentSpec {
   id: number;
@@ -238,6 +239,22 @@ export class SignatureTemplateComponent implements OnInit {
               if (po.status) {
                 if (em.position_id === po.id) {
                   listEm.push(em);
+                }
+              }
+            }
+          }
+        }
+      }
+    } else if (specificBy === 'team') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let team of spec.team) {
+            for (let em of this.listOfSpecTemplate.allEmployee) {
+              if (team.status) {
+                for (let teamOfEm of em.team_employees) {
+                  if (teamOfEm.team_id === team.id) {
+                    listEm.push(em);
+                  }
                 }
               }
             }
@@ -1004,7 +1021,7 @@ export class SignatureTemplateComponent implements OnInit {
                     listRule: null
                   };
                   this.listOfRules = [];
-                  this.toast.warning(res.message)
+                  // this.toast.warning(res.message)
                 }
               }
             );

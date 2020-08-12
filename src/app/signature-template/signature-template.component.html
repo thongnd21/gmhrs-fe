@@ -198,27 +198,15 @@
                                     </nz-select>
                                 </td>
                                 <td>
-                                    <nz-modal style="display: inline-block;" nzWidth="70%"
-                                        [(nzVisible)]="showSpecificEmployeeModel" [nzFooter]="null" [nzAutofocus]="null"
-                                        nzTitle="List employee apply" (nzOnCancel)="closeEmployeeSpecific()">
-                                        <nz-table [nzData]="listEmployeeSpecificApply">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 30%; text-align: center;">Employee fullname</th>
-                                                    <th style="width: 30%; text-align: center;">Primary email</th>
-                                                </tr>
-                                            </thead>
-
-                                        </nz-table>
-
-                                    </nz-modal>
                                     <button nz-button
                                         (click)="showEmployeeSpecific(specRuleCheck.specificBy, specRuleCheck.idSpec)"
                                         nzType="primary">
                                         View employee</button>
                                 </td>
                                 <td>
-                                    <a style="color: red;" (click)="deleteRowSpec(specRuleCheck.idSpec)">Delete</a>
+                                    <button nz-button nzDanger (click)="deleteRowSpec(specRuleCheck.idSpec)"
+                                        nzType="primary">
+                                        Delete</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -229,6 +217,26 @@
                             Add row
                         </li>
                     </ul>
+                </nz-modal>
+                <!-- Model specific employee -->
+                <nz-modal style="display: inline-block;" nzWidth="70%" [(nzVisible)]="showSpecificEmployeeModel"
+                    [nzFooter]="null" [nzAutofocus]="null" nzTitle="List employee apply"
+                    (nzOnCancel)="closeEmployeeSpecific()">
+
+                    <nz-table [nzData]="listEmployeeSpecificApply">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%; text-align: center;">Employee fullname</th>
+                                <th style="width: 30%; text-align: center;">Primary email</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: center;">
+                            <tr *ngFor="let data of listEmployeeSpecificApply">
+                                <td style="font-size: large;">{{data.first_name + ' ' + data.last_name}}</td>
+                                <td style="font-size: large;">{{data.primary_email}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
                 </nz-modal>
                 <!-- Siganture name -->
                 <div>
