@@ -103,13 +103,14 @@
                         nzMessage="Note: The table is arranged in descending priority from top to bottom. You can you can pull up/down row if you want!"
                         style="font-size: medium;" nzShowIcon>
                     </nz-alert>
-                    <nz-table nzBordered [nzData]="listOfSpecTemplate" [nzFrontPagination]="false"
-                        [nzShowPagination]="false">
+                    <nz-table [nzLoading]="isTableSpecificLoading" nzBordered [nzData]="listOfSpecTemplate"
+                        [nzFrontPagination]="false" [nzShowPagination]="false">
                         <thead>
                             <tr>
-                                <th nzWidth="30%">Specific by</th>
-                                <th nzWidth="30%">Value</th>
-                                <th nzWidth="30%">Name of Signature</th>
+                                <th nzWidth="27%">Specific by</th>
+                                <th nzWidth="27%">Value</th>
+                                <th nzWidth="27%">Name of Signature</th>
+                                <th nzWidth="11%">View employee</th>
                                 <th nzWidth="10%">Delete</th>
                             </tr>
                         </thead>
@@ -195,6 +196,26 @@
                                         <nz-option *ngFor="let signature of listOfSpecTemplate.allSignature"
                                             [nzValue]="signature.id" [nzLabel]="signature.name"></nz-option>
                                     </nz-select>
+                                </td>
+                                <td>
+                                    <nz-modal style="display: inline-block;" nzWidth="70%"
+                                        [(nzVisible)]="showSpecificEmployeeModel" [nzFooter]="null" [nzAutofocus]="null"
+                                        nzTitle="List employee apply" (nzOnCancel)="closeEmployeeSpecific()">
+                                        <nz-table [nzData]="listEmployeeSpecificApply">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 30%; text-align: center;">Employee fullname</th>
+                                                    <th style="width: 30%; text-align: center;">Primary email</th>
+                                                </tr>
+                                            </thead>
+
+                                        </nz-table>
+
+                                    </nz-modal>
+                                    <button nz-button
+                                        (click)="showEmployeeSpecific(specRuleCheck.specificBy, specRuleCheck.idSpec)"
+                                        nzType="primary">
+                                        View employee</button>
                                 </td>
                                 <td>
                                     <a style="color: red;" (click)="deleteRowSpec(specRuleCheck.idSpec)">Delete</a>
@@ -377,7 +398,7 @@
                     </nz-table>
                 </nz-modal>
                 <div>
-                    <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
+                    <button [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
                         nzType="primary">Save</button>
                     <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplateRule()"

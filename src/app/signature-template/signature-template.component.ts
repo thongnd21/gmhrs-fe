@@ -64,6 +64,7 @@ export class SignatureTemplateComponent implements OnInit {
   isSaveTemplateDisable = false;
   isSetPrimaryRuleDisable = false;
   dynamicRule = new Array();
+  listEmployeeSpecificApply = new Array();
   listRulesCheckErr = new Array();
   listWrongSignature = new Array();
   listSignatureTemplate = new Array();
@@ -78,6 +79,7 @@ export class SignatureTemplateComponent implements OnInit {
   signatureRuleID = '';
   is_primary_rule = 0;
   insertImgModel = false;
+  showSpecificEmployeeModel = false;
   showSpecificModel = false;
   showCheckErrModel = false;
   showListSignatureTemplate = false;
@@ -97,6 +99,7 @@ export class SignatureTemplateComponent implements OnInit {
     },
     listRule: null
   };
+  isTableSpecificLoading = false;
   isSetPrimaryTemplateRuleLoading = false;
   isGetAllSignatureRuleLoading = false;
   isDeleteTemplateRuleLoading = false;
@@ -210,6 +213,56 @@ export class SignatureTemplateComponent implements OnInit {
     private modal: NzModalService,
     private router: Router
   ) { }
+  showEmployeeSpecific(specificBy, specID): void {
+    this.isTableSpecificLoading = true;
+    let listEm = new Array();
+    if (specificBy === 'department') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let de of spec.department) {
+            for (let em of this.listOfSpecTemplate.allEmployee) {
+              if (de.status) {
+                if (em.department_id === de.id) {
+                  listEm.push(em);
+                }
+              }
+            }
+          }
+        }
+      }
+    } else if (specificBy === 'position') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let po of spec.position) {
+            for (let em of this.listOfSpecTemplate.allEmployee) {
+              if (po.status) {
+                if (em.position_id === po.id) {
+                  listEm.push(em);
+                }
+              }
+            }
+          }
+        }
+      }
+    } else if (specificBy === 'employee') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let em of spec.employee) {
+            if (em.status) {
+              listEm.push(em);
+            }
+          }
+        }
+      }
+    }
+    this.listEmployeeSpecificApply = listEm;
+    this.showSpecificEmployeeModel = true;
+    this.isTableSpecificLoading = false;
+  }
+  closeEmployeeSpecific(): void {
+    this.showSpecificEmployeeModel = false;
+    this.listEmployeeSpecificApply = [];
+  }
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.listOfSpecTemplate.specRuleCheck, event.previousIndex, event.currentIndex);
   }
@@ -616,10 +669,8 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.success(res.message);
           this.listRulesCheckErr = [];
         } else {
-          for (let mes of res.message) {
-            this.toast.warning(mes, 'Signature template rules check');
-            this.listRulesCheckErr = res.message;
-          }
+          this.toast.warning('Some signature template not follow the rules, please check notification', 'Signature template rules check');
+          this.listRulesCheckErr = res.message;
         }
         this.isUpdatedTemplateLoading = false;
         this.isSpinning = false;
@@ -651,9 +702,7 @@ export class SignatureTemplateComponent implements OnInit {
           }
           this.listRulesCheckErr = [];
         } else {
-          for (let mes of res.message) {
-            this.toast.warning(mes, 'Signature template rules check');
-          }
+          this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
           this.listRulesCheckErr = res.message;
         }
         this.isSaveTemplateLoading = false;
