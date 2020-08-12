@@ -71,7 +71,6 @@
                             <tr>
                                 <th style="width: 30%; text-align: center;">Name</th>
                                 <th style="width: 10%; text-align: center;">Default</th>
-                                <th style="width: 40%; text-align: center;">Specific apply</th>
                                 <th style="width: 10%; text-align: center;">Load</th>
                                 <th style="width: 10%; text-align: center;">Delete</th>
                             </tr>
@@ -82,26 +81,6 @@
                                 <td><i *ngIf="data.is_primary === 1" nz-icon style="font-size: x-large;"
                                         [nzType]="'check-circle'" [nzTheme]="'twotone'"
                                         [nzTwotoneColor]="'#52c41a'"></i></td>
-                                <td>
-                                    <nz-collapse nzAccordion>
-                                        <nz-collapse-panel [nzHeader]="'Department'">
-                                            <p *ngFor="let de of data.department">
-                                                <nz-alert *ngIf="de.status" nzType="info" nzMessage="{{de.name}}"
-                                                    style="font-size: medium;" nzShowIcon>
-                                                </nz-alert>
-                                            </p>
-                                        </nz-collapse-panel>
-                                    </nz-collapse>
-                                    <nz-collapse nzAccordion>
-                                        <nz-collapse-panel [nzHeader]="'Position'">
-                                            <p *ngFor="let po of data.position">
-                                                <nz-alert *ngIf="po.status" nzType="info" nzMessage="{{po.name}}"
-                                                    style="font-size: medium;" nzShowIcon>
-                                                </nz-alert>
-                                            </p>
-                                        </nz-collapse-panel>
-                                    </nz-collapse>
-                                </td>
                                 <td>
                                     <button nz-button style="float: right;"
                                         (click)="getSignatureTemplateByName(data.name)"
@@ -124,13 +103,14 @@
                         nzMessage="Note: The table is arranged in descending priority from top to bottom. You can you can pull up/down row if you want!"
                         style="font-size: medium;" nzShowIcon>
                     </nz-alert>
-                    <nz-table nzBordered [nzData]="listOfSpecTemplate" [nzFrontPagination]="false"
-                        [nzShowPagination]="false">
+                    <nz-table [nzLoading]="isTableSpecificLoading" nzBordered [nzData]="listOfSpecTemplate"
+                        [nzFrontPagination]="false" [nzShowPagination]="false">
                         <thead>
                             <tr>
-                                <th nzWidth="30%">Specific by</th>
-                                <th nzWidth="30%">Value</th>
-                                <th nzWidth="30%">Name of Signature</th>
+                                <th nzWidth="27%">Specific by</th>
+                                <th nzWidth="27%">Value</th>
+                                <th nzWidth="27%">Name of Signature</th>
+                                <th nzWidth="11%">View employee</th>
                                 <th nzWidth="10%">Delete</th>
                             </tr>
                         </thead>
@@ -147,6 +127,37 @@
                                     </nz-select>
                                 </td>
                                 <td>
+                                    <div *ngIf="specRuleCheck.specificBy === 'team'">
+                                        <button style="width: 100%;" nz-button nz-dropdown [nzDropdownMenu]="teamMenu">
+                                            List team
+                                            <i nz-icon nzType="down"></i>
+                                        </button>
+                                        <nz-dropdown-menu #teamMenu="nzDropdownMenu">
+                                            <ul nz-menu>
+                                                <li *ngFor="let team of specRuleCheck.team" nz-menu-item>
+                                                    <label nz-menu-item nz-checkbox
+                                                        [(ngModel)]="team.status">{{team.name}}
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </nz-dropdown-menu>
+                                    </div>
+                                    <div *ngIf="specRuleCheck.specificBy === 'employee'">
+                                        <button style="width: 100%;" nz-button nz-dropdown
+                                            [nzDropdownMenu]="employeeMenu">
+                                            List employee
+                                            <i nz-icon nzType="down"></i>
+                                        </button>
+                                        <nz-dropdown-menu #employeeMenu="nzDropdownMenu">
+                                            <ul nz-menu>
+                                                <li *ngFor="let employee of specRuleCheck.employee" nz-menu-item>
+                                                    <label nz-menu-item nz-checkbox
+                                                        [(ngModel)]="employee.status">{{employee.first_name + ' ' + employee.last_name}}
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </nz-dropdown-menu>
+                                    </div>
                                     <div *ngIf="specRuleCheck.specificBy === 'department'">
                                         <button style="width: 100%;" nz-button nz-dropdown
                                             [nzDropdownMenu]="departmentMenu">
@@ -163,7 +174,6 @@
                                             </ul>
                                         </nz-dropdown-menu>
                                     </div>
-
                                     <div *ngIf="specRuleCheck.specificBy === 'position'">
                                         <button style="width: 100%;" nz-button nz-dropdown
                                             [nzDropdownMenu]="positionMenu">
@@ -186,6 +196,26 @@
                                         <nz-option *ngFor="let signature of listOfSpecTemplate.allSignature"
                                             [nzValue]="signature.id" [nzLabel]="signature.name"></nz-option>
                                     </nz-select>
+                                </td>
+                                <td>
+                                    <nz-modal style="display: inline-block;" nzWidth="70%"
+                                        [(nzVisible)]="showSpecificEmployeeModel" [nzFooter]="null" [nzAutofocus]="null"
+                                        nzTitle="List employee apply" (nzOnCancel)="closeEmployeeSpecific()">
+                                        <nz-table [nzData]="listEmployeeSpecificApply">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 30%; text-align: center;">Employee fullname</th>
+                                                    <th style="width: 30%; text-align: center;">Primary email</th>
+                                                </tr>
+                                            </thead>
+
+                                        </nz-table>
+
+                                    </nz-modal>
+                                    <button nz-button
+                                        (click)="showEmployeeSpecific(specRuleCheck.specificBy, specRuleCheck.idSpec)"
+                                        nzType="primary">
+                                        View employee</button>
                                 </td>
                                 <td>
                                     <a style="color: red;" (click)="deleteRowSpec(specRuleCheck.idSpec)">Delete</a>
@@ -368,7 +398,7 @@
                     </nz-table>
                 </nz-modal>
                 <div>
-                    <button nz-tooltip [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
+                    <button [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
                         nzType="primary">Save</button>
                     <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplateRule()"

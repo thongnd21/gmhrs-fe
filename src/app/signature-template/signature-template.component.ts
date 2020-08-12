@@ -18,6 +18,16 @@ class PositionSpec {
   name: string;
   status: boolean;
 }
+class TeamSpec {
+  id: number;
+  name: string;
+  status: boolean;
+}
+class EmployeeSpec {
+  id: number;
+  name: string;
+  status: boolean;
+}
 class SpecRuleCheck {
   idSpec: number;
   signature_id: number;
@@ -25,6 +35,8 @@ class SpecRuleCheck {
   allSignature: Signature[]
   department: DepartmentSpec[];
   position: PositionSpec[];
+  team: TeamSpec[];
+  employee: EmployeeSpec[];
 }
 class Rules {
   lengthRule: {
@@ -52,6 +64,7 @@ export class SignatureTemplateComponent implements OnInit {
   isSaveTemplateDisable = false;
   isSetPrimaryRuleDisable = false;
   dynamicRule = new Array();
+  listEmployeeSpecificApply = new Array();
   listRulesCheckErr = new Array();
   listWrongSignature = new Array();
   listSignatureTemplate = new Array();
@@ -66,6 +79,7 @@ export class SignatureTemplateComponent implements OnInit {
   signatureRuleID = '';
   is_primary_rule = 0;
   insertImgModel = false;
+  showSpecificEmployeeModel = false;
   showSpecificModel = false;
   showCheckErrModel = false;
   showListSignatureTemplate = false;
@@ -85,6 +99,7 @@ export class SignatureTemplateComponent implements OnInit {
     },
     listRule: null
   };
+  isTableSpecificLoading = false;
   isSetPrimaryTemplateRuleLoading = false;
   isGetAllSignatureRuleLoading = false;
   isDeleteTemplateRuleLoading = false;
@@ -106,6 +121,8 @@ export class SignatureTemplateComponent implements OnInit {
   listOfSpecTemplate = {
     allDepartment: new Array(),
     allPosition: new Array(),
+    allEmployee: new Array(),
+    allTeam: new Array(),
     allSignature: new Array(),
     allSupportSpecific: new Array(),
     specRuleCheck: new Array<SpecRuleCheck>()
@@ -196,6 +213,56 @@ export class SignatureTemplateComponent implements OnInit {
     private modal: NzModalService,
     private router: Router
   ) { }
+  showEmployeeSpecific(specificBy, specID): void {
+    this.isTableSpecificLoading = true;
+    let listEm = new Array();
+    if (specificBy === 'department') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let de of spec.department) {
+            for (let em of this.listOfSpecTemplate.allEmployee) {
+              if (de.status) {
+                if (em.department_id === de.id) {
+                  listEm.push(em);
+                }
+              }
+            }
+          }
+        }
+      }
+    } else if (specificBy === 'position') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let po of spec.position) {
+            for (let em of this.listOfSpecTemplate.allEmployee) {
+              if (po.status) {
+                if (em.position_id === po.id) {
+                  listEm.push(em);
+                }
+              }
+            }
+          }
+        }
+      }
+    } else if (specificBy === 'employee') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let em of spec.employee) {
+            if (em.status) {
+              listEm.push(em);
+            }
+          }
+        }
+      }
+    }
+    this.listEmployeeSpecificApply = listEm;
+    this.showSpecificEmployeeModel = true;
+    this.isTableSpecificLoading = false;
+  }
+  closeEmployeeSpecific(): void {
+    this.showSpecificEmployeeModel = false;
+    this.listEmployeeSpecificApply = [];
+  }
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.listOfSpecTemplate.specRuleCheck, event.previousIndex, event.currentIndex);
   }
@@ -362,6 +429,16 @@ export class SignatureTemplateComponent implements OnInit {
           check = true;
         }
       }
+      for (let team of spec.team) {
+        if (team.status) {
+          check = true;
+        }
+      }
+      for (let em of spec.employee) {
+        if (em.status) {
+          check = true;
+        }
+      }
       if (!check) {
         this.toast.error('Please select value to save!');
         return;
@@ -490,17 +567,22 @@ export class SignatureTemplateComponent implements OnInit {
     }
   }
   loadReview(): void {
-    this.htmlContentReview = this.htmlContent;
-    // console.log('htmlContentReview: ' + this.htmlContentReview);
-    // console.log('htmlContent: ' + this.htmlContent);
-    let firstname = this.infoToReview.first_name;
-    let lastname = this.infoToReview.last_name;
-    let phone = this.infoToReview.phone;
-    let personalEmail = this.infoToReview.personal_email;
-    this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
-    this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
-    this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
-    this.toast.success('Load review success!');
+    if (this.infoToReview !== null) {
+      this.htmlContentReview = this.htmlContent;
+      // console.log('htmlContentReview: ' + this.htmlContentReview);
+      // console.log('htmlContent: ' + this.htmlContent);
+      let firstname = this.infoToReview.first_name;
+      let lastname = this.infoToReview.last_name;
+      let phone = this.infoToReview.phone;
+      let personalEmail = this.infoToReview.personal_email;
+      this.htmlContentReview = this.htmlContentReview.split('{email}').join(personalEmail);
+      this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
+      this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
+      this.toast.success('Load review success!');
+    } else {
+      this.toast.error('You have not synchronized data!')
+    }
+
   }
   addDynamicContentRule(addContent): void {
     if (this.rules.listRule !== null) {
@@ -587,10 +669,8 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.success(res.message);
           this.listRulesCheckErr = [];
         } else {
-          for (let mes of res.message) {
-            this.toast.warning(mes, 'Signature template rules check');
-            this.listRulesCheckErr = res.message;
-          }
+          this.toast.warning('Some signature template not follow the rules, please check notification', 'Signature template rules check');
+          this.listRulesCheckErr = res.message;
         }
         this.isUpdatedTemplateLoading = false;
         this.isSpinning = false;
@@ -622,9 +702,7 @@ export class SignatureTemplateComponent implements OnInit {
           }
           this.listRulesCheckErr = [];
         } else {
-          for (let mes of res.message) {
-            this.toast.warning(mes, 'Signature template rules check');
-          }
+          this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
           this.listRulesCheckErr = res.message;
         }
         this.isSaveTemplateLoading = false;
@@ -730,6 +808,8 @@ export class SignatureTemplateComponent implements OnInit {
     newRow.signature_id = this.listOfSpecTemplate.allSignature[0].id;
     newRow.department = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allDepartment));
     newRow.position = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allPosition));
+    newRow.employee = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allEmployee));
+    newRow.team = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allTeam));
     newRow.allSignature = this.listOfSpecTemplate.allSignature;
     this.listOfSpecTemplate.specRuleCheck.push(newRow);
     this.idSpec++;
@@ -791,7 +871,7 @@ export class SignatureTemplateComponent implements OnInit {
 
         } else {
           this.toast.error('You have not synchronized data!');
-          this.router.navigate(['/dashboard'])
+          // this.router.navigate(['/dashboard'])
         }
         // console.log('Info to review: ' + res);
       }
