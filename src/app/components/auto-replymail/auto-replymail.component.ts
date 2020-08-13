@@ -69,44 +69,42 @@ export class AutoReplymailComponent implements OnInit {
   editorExport() {
     let emailObj;
     let jsonData = null;
-    let html =null;
-    if(this.name.length < 6 || this.name.length > 50){
+    let html = null;
+    if (this.name.length < 6 || this.name.length > 50) {
       this.checkAdd = false;
-    }else{
+    } else {
       console.log(this.emailEditor);
-      this.emailEditor.saveDesign((data) =>
-        {
-          jsonData = data;
-          this.emailEditor.exportHtml((data : any) =>
-            {
-              html = data.html;
-              emailObj = {
-                accountId:this.accountId,
-                name : this.name,
-                dataTemplate: JSON.stringify(jsonData),
-                html : html
-              };
-              console.log(emailObj);
-              this.emailServices.createEmailTemplate(emailObj).subscribe(
-                (res:any)=>{
-                  location.reload();
-                  this.toast.success(res.message);
-                },
-                (err)=>{
-                  this.toast.error("Services í not available!");
-                }
-              )
+      this.emailEditor.saveDesign((data) => {
+        jsonData = data;
+        this.emailEditor.exportHtml((data: any) => {
+          html = data.html;
+          emailObj = {
+            accountId: this.accountId,
+            name: this.name,
+            dataTemplate: JSON.stringify(jsonData),
+            html: html
+          };
+          console.log(emailObj);
+          this.emailServices.createEmailTemplate(emailObj).subscribe(
+            (res: any) => {
+              location.reload();
+              this.toast.success(res.message);
+            },
+            (err) => {
+              this.toast.error("Services í not available!");
             }
-          );
+          )
         }
+        );
+      }
       );
     }
   }
 
-  getAllTemplate(){
-    let listTemplate=[];
+  getAllTemplate() {
+    let listTemplate = [];
     this.emailServices.getAllTemplate(this.accountId).subscribe(
-      (res)=>{
+      (res) => {
         const templateList: any = res;
         templateList.forEach(element => {
           let item = {};
@@ -120,34 +118,53 @@ export class AutoReplymailComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      (err)=>{
+      (err) => {
         console.log(err);
         this.toast.error("Server unavailable!");
-        
+
       }
     )
     console.log(listTemplate);
 
   }
 
-  openTemplateDetail(id){
+  openTemplateDetail(id) {
     console.log(id);
-    
-    this.router.navigate(['/detail-auto-reply-mail', {'id': id}]);
+
+    this.router.navigate(['/detail-auto-reply-mail', { 'id': id }]);
   }
   closeModal() {
     this.modalService.dismissAll();
   }
 
 
-  syncTemplate(id){
+  syncTemplate(id) {
     this.emailServices.syncEmailTemplate(id).subscribe(
-      (res:any)=>{
+      (res: any) => {
         this.getAllTemplate();
         this.toast.success(res.message);
       },
-      (err)=>{
-        this.toast.error("Services í not available!");
+      (err) => {
+        this.toast.error("Services is not available!");
+      }
+    )
+  }
+
+  setDefault(templateId) {
+    var data = {};
+    console.log(templateId);
+
+    data["id"] = templateId;
+    data["accountId"] = localStorage.getItem('id');
+    this.emailServices.setTemplateDefault(data).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.getAllTemplate();
+        this.toast.success("Set Default Successfully!")
+      },
+      (err) => {
+        console.log(err);
+        this.toast.success("Set Default Fail!")
       }
     )
   }

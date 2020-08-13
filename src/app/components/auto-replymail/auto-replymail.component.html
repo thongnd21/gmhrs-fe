@@ -41,10 +41,10 @@
               </mat-header-cell>
               <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
                 <!-- <mat-chip-list aria-label="Fish selection"> -->
-                  <!-- <mat-chip selected > -->
-                    <i class="material-icons" style="color:green" *ngIf="row.status==true">check_circle_outline</i>
-                  <!-- </mat-chip> -->
-                  <!-- <mat-chip *ngIf="row.status==false">Cease</mat-chip> -->
+                <!-- <mat-chip selected > -->
+                <i class="material-icons" style="color:green" *ngIf="row.status==true">check_circle_outline</i>
+                <!-- </mat-chip> -->
+                <!-- <mat-chip *ngIf="row.status==false">Cease</mat-chip> -->
                 <!-- </mat-chip-list> -->
               </mat-cell>
             </ng-container>
@@ -64,13 +64,17 @@
               <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
                 <!-- view detail account company icon button -->
                 <!-- <button mat-icon-button (click)="openTemplateDetail(row.templateId)"> -->
-                  <!-- <mat-icon>
+                <!-- <mat-icon>
                     remove_red_eye
                   </mat-icon> -->
-                  <button mat-raised-button color="primary" style="margin-right: 20px;"
-                        (click)="openTemplateDetail(row.templateId)">
-                        View
-                    </button>
+                <button mat-raised-button color="primary" style="margin-right: 20px;"
+                  (click)="openTemplateDetail(row.templateId)">
+                  View
+                </button>
+                <button mat-raised-button color="primary" style="margin-right: 20px;"
+                  (click)="setDefault(row.templateId)">
+                  Set Default
+                </button>
                 <!-- </button> -->
                 <!-- update account company icon button -->
                 <!-- <button mat-icon-button (click)="syncTemplate(row.templateId)">

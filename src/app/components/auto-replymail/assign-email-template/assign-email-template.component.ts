@@ -73,7 +73,7 @@ export class AssignEmailTemplateComponent implements OnInit {
         this.positionService.getAllPositionByAccountId(this.accountId).subscribe(
           (res: any) => {
             console.log(res);
-
+            
             if (res.length < 1) {
               this.toast.error("There are no any position")
             } else {
@@ -109,7 +109,7 @@ export class AssignEmailTemplateComponent implements OnInit {
         this.accountService.getAllEmployeeByAccountId(this.accountId).subscribe(
           (res: any) => {
             console.log(res);
-            
+
             this.employeeList = res;
           },
           (err: any) => {
