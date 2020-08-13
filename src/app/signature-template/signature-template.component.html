@@ -57,10 +57,19 @@
                 </nz-modal>
                 <!-- List error -->
                 <nz-modal style="display: inline-block;" [(nzVisible)]="showCheckErrModel" [nzFooter]="null"
-                    [nzAutofocus]="null" nzTitle="Signature template rules check" nzCancelText="Close"
+                    [nzAutofocus]="null" nzTitle="Signature template rules check" nzCancelText="Close" nzWidth="60%"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="handleCloseModel()">
-                    <nz-alert nzType="warning" *ngFor="let err of listRulesCheckErr;" nzMessage="{{err}}" nzShowIcon>
-                    </nz-alert>
+                    <nz-collapse nzAccordion>
+                        <nz-collapse-panel *ngFor="let signatureErr of listRulesCheckErr"
+                            [nzHeader]="signatureErr.signatureName">
+                            <p>
+                                <nz-alert style="font-size: medium;" nzType="warning"
+                                    *ngFor="let err of signatureErr.message" nzMessage="{{err}}" nzShowIcon>
+                                </nz-alert>
+                            </p>
+                        </nz-collapse-panel>
+                    </nz-collapse>
+
                 </nz-modal>
                 <!-- All signature template -->
                 <nz-modal style="display: inline-block;" nzWidth="90%" [(nzVisible)]="showListSignatureTemplate"
@@ -95,7 +104,7 @@
                 </nz-modal>
                 <!-- Model all specific template -->
                 <nz-modal style="display: inline-block;" nzWidth="90%" [(nzVisible)]="showSpecificModel"
-                    [nzAutofocus]="null" nzTitle="Apply template for specific" nzCancelText="Close"
+                    [nzAutofocus]="null" nzTitle="Apply template for specific" nzCancelText="Close" nzOkText="Save"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="showConfirmSaveSpecTem()">
                     <nz-alert nzType="info"
                         nzMessage="Note: The table is arranged in descending priority from top to bottom. You can you can pull up/down row if you want!"
@@ -273,6 +282,8 @@
                         <button nz-button style="margin-right: 1cm;" [disabled]="isSaveTemplateDisable"
                             [nzLoading]="isSaveTemplateLoading" (click)="showConfirmSaveSignature()"
                             nzType="primary">Save</button>
+                        <button nz-button style="margin-right: 1cm;" (click)="newSignature()"
+                            nzType="primary">New</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmUpdateAllSignature()"
                             [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Synchronize now</button>
                         <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplate()"
@@ -332,9 +343,9 @@
                 <nz-table nzBordered [nzData]="listOfRules">
                     <thead>
                         <tr>
-                            <th nzWidth="15%">Rule</th>
-                            <th nzWidth="65%">Content</th>
-                            <th nzWidth="10%">Delete</th>
+                            <th class="textCenter" nzWidth="15%">Rule</th>
+                            <th class="textCenter" nzWidth="65%">Content</th>
+                            <th class="textCenter" nzWidth="10%">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -350,8 +361,8 @@
                                     (click)="startEdit(data.id, $event);" [(ngModel)]="data.content" (blur)="stopEdit()"
                                     spellcheck="false"></textarea>
                             </td>
-                            <td>
-                                <a style="color: red;" (click)="deleteRow(data.id)">Delete</a>
+                            <td class="textCenter">
+                                <button nzDanger nz-button nzType="primary" (click)="deleteRow(data.id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -412,6 +423,8 @@
                     <button [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
                         nzType="primary">Save</button>
+                    <button nz-button style="margin-right: 1cm;" (click)="newSignatureRule()"
+                        nzType="primary">New</button>
                     <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplateRule()"
                         [disabled]="isSetPrimaryRuleDisable" [nzLoading]="isSetPrimaryTemplateRuleLoading"
                         nzType="primary">Set default</button>
