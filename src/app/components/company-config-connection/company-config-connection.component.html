@@ -1,4 +1,4 @@
-<div >
+<div>
 
     <mat-horizontal-stepper linear #stepper>
         <!-- #docregion editable -->
@@ -127,12 +127,13 @@
                         <form [formGroup]="gsuiteCredentialForm">
                             <mat-form-field class="full-width">
                                 <input matInput name="company_email" formControlName="company_email"
-                                    placeholder="Company Email" />
+                                    placeholder="Admin company email" />
                             </mat-form-field>
                             <mat-form-field class="full-width">
                                 <ngx-mat-file-input matInput (change)="fileChange($event)" matInput name="company_email"
                                     formControlName="file" enctype="multipart/form-data" name="file"
-                                    placeholder="File JSON" valuePlaceholder="{{file_name_auth_gsuite_company}}">
+                                    placeholder="File JSON of key authenticated G-Suite"
+                                    valuePlaceholder="{{file_name_auth_gsuite_company}}">
                                 </ngx-mat-file-input>
                                 <mat-icon matSuffix>folder</mat-icon>
                             </mat-form-field>

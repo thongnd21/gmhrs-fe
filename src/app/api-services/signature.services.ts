@@ -39,8 +39,8 @@ export class SignatureService {
     updateSignatureForAllEmployees(id) {
         return this.httpClient.get(this.URL + AppSettings.UPDATESIGNATUREALL + id);
     }
-    getInfoToReview(username) {
-        return this.httpClient.get(this.URL + AppSettings.GETINFOTOREVIEW + username);
+    getInfoToReview(id) {
+        return this.httpClient.get(this.URL + AppSettings.GETINFOTOREVIEW + id);
     }
     getAllsigantureTemplate(id) {
         return this.httpClient.get(this.URL + AppSettings.GETALLSIGNATURETEMPLATE + id);
@@ -58,16 +58,16 @@ export class SignatureService {
         return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATE + id, template);
     }
 
-    getSignatureTemplate(username) {
-        return this.httpClient.get(this.URL + AppSettings.GETSIGNATURE + username);
+    getSignatureTemplate(id) {
+        return this.httpClient.get(this.URL + AppSettings.GETSIGNATURE + id);
     }
 
     saveSignatureTemplateRules(signature) {
         return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATERULES, signature);
     }
 
-    getSignatureTemplateRules(username) {
-        return this.httpClient.get(this.URL + AppSettings.GETSIGNATURERULES + username);
+    getSignatureTemplateRules(id) {
+        return this.httpClient.get(this.URL + AppSettings.GETSIGNATURERULES + id);
     }
     getSignatureRuleByID(id) {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURERULEBYID + id);

@@ -44,9 +44,9 @@
     <button mat-menu-item>
         <mat-icon>account_box</mat-icon> Profile
     </button>
-    <button mat-menu-item>
+    <!-- <button mat-menu-item>
         <mat-icon>notifications_off</mat-icon> Disable notifications
-    </button>
+    </button> -->
     <button mat-menu-item (click)="signOut()" [routerLink]="['/']">
         <mat-icon>exit_to_app</mat-icon> Sign Out
     </button>
@@ -334,7 +334,7 @@
                             View all positions
                         </mat-panel-description>
                     </mat-expansion-panel-header>
-                  
+
                     <!-- table new -->
                     <p>New Position :</p>
                     <table class="table">
