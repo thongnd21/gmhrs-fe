@@ -413,7 +413,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.sendMailRemindEmployees(id).subscribe(
       (res) => {
         if (res) {
-          this.toast.success('Send mails success!');
+          this.toast.success('Send mails successfully!');
         } else {
           this.toast.error('Some Error!')
         }
@@ -552,7 +552,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.sendMailRulesChanges(id).subscribe(
       (res: any) => {
         if (res.status) {
-          this.toast.success('Send mail notify to all employees success!')
+          this.toast.success('Send mail notify to all employees successfully!')
         } else {
           this.toast.error(res.message)
         }
@@ -605,7 +605,7 @@ export class SignatureTemplateComponent implements OnInit {
       this.htmlContentReview = this.htmlContentReview.split('{email}').join(primary_email);
       this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
       this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
-      this.toast.success('Load review success!');
+      this.toast.success('Load review successfully!');
     } else {
       this.toast.error('You have not synchronized data!')
     }
