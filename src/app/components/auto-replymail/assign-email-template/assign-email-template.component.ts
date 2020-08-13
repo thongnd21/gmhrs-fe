@@ -22,11 +22,12 @@ export class AssignEmailTemplateComponent implements OnInit {
   depList = [];
   positionList = [];
   teamList = [];
+  employeeList = []
   templateList = [];
   asignRuleListBegin = [];
   dataSource: MatTableDataSource<any>;
   data = [];
-
+  loading = false;
   accountId = localStorage.getItem('id');
 
 
@@ -39,6 +40,7 @@ export class AssignEmailTemplateComponent implements OnInit {
     private positionService: PositionApiService,
     private teamService: TeamApiService,
     private emailService: EmailApiService,
+
   ) {
   }
 
@@ -71,9 +73,9 @@ export class AssignEmailTemplateComponent implements OnInit {
         this.positionService.getAllPositionByAccountId(this.accountId).subscribe(
           (res: any) => {
             console.log(res);
-
+            
             if (res.length < 1) {
-              this.toast.error("null")
+              this.toast.error("There are no any position")
             } else {
               this.positionList = res;
 
@@ -96,6 +98,19 @@ export class AssignEmailTemplateComponent implements OnInit {
             // this.depList.push(dep);
             // }
             this.teamList = res;
+          },
+          (err: any) => {
+            console.log(err);
+            this.toast.error(err);
+
+          }
+        )
+      } if (event.source.value == "E" && event.source.selected == true) {
+        this.accountService.getAllEmployeeByAccountId(this.accountId).subscribe(
+          (res: any) => {
+            console.log(res);
+
+            this.employeeList = res;
           },
           (err: any) => {
             console.log(err);
@@ -215,9 +230,9 @@ export class AssignEmailTemplateComponent implements OnInit {
   synch() {
     this.emailService.syncDateForTemplate(this.accountId).subscribe(
       (res: any) => {
-        if(res.status ===200){
+        if (res.status === 200) {
           this.toast.success(res.message);
-        }else{
+        } else {
           this.toast.error("Synchronize assign auto_reply mail fail!");
         }
 
@@ -240,14 +255,14 @@ export class AssignEmailTemplateComponent implements OnInit {
           element["fullName"] = res[i].first_name + " " + res[i].last_name;
           element["primary_email"] = res[i].primary_email;
           this.detailResponse.push(element);
-        }        
+        }
       },
       (err) => {
         console.log(err);
         // this.
       }
     )
-    this.modalService.open(modal, {  backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+    this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
   closeModal() {

@@ -30,6 +30,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -75,6 +76,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatInputModule,
     MatSelectModule,
     DragDropModule,
+    NgxLoadingModule,
     RouterModule.forChild(AutoReplymailRoutes)
   ],
   declarations: [AutoReplymailComponent, AssignEmailTemplateComponent]
