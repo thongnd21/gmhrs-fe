@@ -216,7 +216,7 @@ export class SignatureTemplateComponent implements OnInit {
   ) { }
   showEmployeeSpecific(specificBy, specID): void {
     this.isTableSpecificLoading = true;
-    let listEm = new Array();
+    let listEm = new Map();
     if (specificBy === 'department') {
       for (let spec of this.listOfSpecTemplate.specRuleCheck) {
         if (spec.idSpec === specID) {
@@ -224,7 +224,7 @@ export class SignatureTemplateComponent implements OnInit {
             for (let em of this.listOfSpecTemplate.allEmployee) {
               if (de.status) {
                 if (em.department_id === de.id) {
-                  listEm.push(em);
+                  listEm.set(em, em);
                 }
               }
             }
@@ -238,7 +238,7 @@ export class SignatureTemplateComponent implements OnInit {
             for (let em of this.listOfSpecTemplate.allEmployee) {
               if (po.status) {
                 if (em.position_id === po.id) {
-                  listEm.push(em);
+                  listEm.set(em, em);
                 }
               }
             }
@@ -253,7 +253,7 @@ export class SignatureTemplateComponent implements OnInit {
               if (team.status) {
                 for (let teamOfEm of em.team_employees) {
                   if (teamOfEm.team_id === team.id) {
-                    listEm.push(em);
+                    listEm.set(em, em);
                   }
                 }
               }
@@ -266,13 +266,13 @@ export class SignatureTemplateComponent implements OnInit {
         if (spec.idSpec === specID) {
           for (let em of spec.employee) {
             if (em.status) {
-              listEm.push(em);
+              listEm.set(em, em);
             }
           }
         }
       }
     }
-    this.listEmployeeSpecificApply = listEm;
+    this.listEmployeeSpecificApply = Array.from(listEm.values());
     this.showSpecificEmployeeModel = true;
     this.isTableSpecificLoading = false;
   }
@@ -332,14 +332,14 @@ export class SignatureTemplateComponent implements OnInit {
     this.showListSignatureTemplateRule = false;
     this.showSpecificModel = false;
   }
-  select(event) {
-    const start = event.target.selectionStart;
-    const end = event.target.selectionEnd;
-    let s = window.getSelection();
-    // alert(s.anchorOffset)
-    // console.log('editor: ' + s.anchorNode);
-    // console.log('range: ' + s.getRangeAt(0));
-  }
+  // select(event) {
+  // const start = event.target.selectionStart;
+  // const end = event.target.selectionEnd;
+  // let s = window.getSelection();
+  // alert(s.anchorOffset)
+  // console.log('editor: ' + s.anchorNode);
+  // console.log('range: ' + s.getRangeAt(0));
+  // }
   setPrimaryTemplate(): void {
     this.isSetPrimaryTemplateLoading = true;
     this.isSpinning = true;

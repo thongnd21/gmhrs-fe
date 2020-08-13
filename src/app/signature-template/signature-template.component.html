@@ -69,10 +69,10 @@
                     <nz-table [nzData]="listSignatureTemplate">
                         <thead>
                             <tr>
-                                <th style="width: 30%; text-align: center;">Name</th>
-                                <th style="width: 10%; text-align: center;">Default</th>
-                                <th style="width: 10%; text-align: center;">Load</th>
-                                <th style="width: 10%; text-align: center;">Delete</th>
+                                <th style="width: 35%; text-align: center;">Name</th>
+                                <th style="width: 15%; text-align: center;">Default</th>
+                                <th style="width: 5%; text-align: center;">Load</th>
+                                <th style="width: 5%; text-align: center;">Delete</th>
                             </tr>
                         </thead>
                         <tbody style="text-align: center;">
@@ -82,13 +82,11 @@
                                         [nzType]="'check-circle'" [nzTheme]="'twotone'"
                                         [nzTwotoneColor]="'#52c41a'"></i></td>
                                 <td>
-                                    <button nz-button style="float: right;"
-                                        (click)="getSignatureTemplateByName(data.name)"
+                                    <button nz-button (click)="getSignatureTemplateByName(data.name)"
                                         [nzLoading]="isGetAllSignatureLoading" nzType="primary">Load</button>
                                 </td>
                                 <td>
-                                    <button nz-button nzDanger style="float: right;"
-                                        (click)="showConfirmDeleteSiganture(data.name)"
+                                    <button nz-button nzDanger (click)="showConfirmDeleteSiganture(data.name)"
                                         [nzLoading]="isDeleteTemplateLoading" nzType="primary">Delete</button>
                                 </td>
                             </tr>
@@ -96,22 +94,22 @@
                     </nz-table>
                 </nz-modal>
                 <!-- Model all specific template -->
-                <nz-modal style="display: inline-block;" nzWidth="70%" [(nzVisible)]="showSpecificModel"
+                <nz-modal style="display: inline-block;" nzWidth="90%" [(nzVisible)]="showSpecificModel"
                     [nzAutofocus]="null" nzTitle="Apply template for specific" nzCancelText="Close"
                     (nzOnCancel)="handleCloseModel()" (nzOnOk)="showConfirmSaveSpecTem()">
                     <nz-alert nzType="info"
                         nzMessage="Note: The table is arranged in descending priority from top to bottom. You can you can pull up/down row if you want!"
                         style="font-size: medium;" nzShowIcon>
                     </nz-alert>
-                    <nz-table [nzLoading]="isTableSpecificLoading" nzBordered [nzData]="listOfSpecTemplate"
-                        [nzFrontPagination]="false" [nzShowPagination]="false">
+                    <nz-table nzBordered [nzData]="listOfSpecTemplate" [nzFrontPagination]="false"
+                        [nzShowPagination]="false">
                         <thead>
                             <tr>
-                                <th nzWidth="27%">Specific by</th>
-                                <th nzWidth="27%">Value</th>
-                                <th nzWidth="27%">Name of Signature</th>
-                                <th nzWidth="11%">View employee</th>
-                                <th nzWidth="10%">Delete</th>
+                                <th class="textCenter" nzWidth="10%">Specific by</th>
+                                <th class="textCenter" nzWidth="55%">Value</th>
+                                <th class="textCenter" nzWidth="15%">Name of Signature</th>
+                                <th class="textCenter" nzWidth="10%">View employee</th>
+                                <th class="textCenter" nzWidth="10%">Delete</th>
                             </tr>
                         </thead>
                         <tbody cdkDropList (cdkDropListDropped)="drop($event)">
@@ -126,16 +124,18 @@
                                         </nz-option>
                                     </nz-select>
                                 </td>
-                                <td>
+                                <td nzWidth="27%">
                                     <div *ngIf="specRuleCheck.specificBy === 'team'">
-                                        <button style="width: 100%;" nz-button nz-dropdown [nzDropdownMenu]="teamMenu">
-                                            List team
-                                            <i nz-icon nzType="down"></i>
+                                        <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
+                                            nz-button nz-dropdown [nzDropdownMenu]="teamMenu">
+                                            <span *ngFor="let team of specRuleCheck.team">
+                                                <span *ngIf="team.status">{{team.name + ','}}&nbsp;</span>
+                                            </span>
                                         </button>
                                         <nz-dropdown-menu #teamMenu="nzDropdownMenu">
                                             <ul nz-menu>
                                                 <li *ngFor="let team of specRuleCheck.team" nz-menu-item>
-                                                    <label nz-menu-item nz-checkbox
+                                                    <label nz-menu-item nz-checkbox style="width: 100%; height: 100%;"
                                                         [(ngModel)]="team.status">{{team.name}}
                                                     </label>
                                                 </li>
@@ -143,15 +143,17 @@
                                         </nz-dropdown-menu>
                                     </div>
                                     <div *ngIf="specRuleCheck.specificBy === 'employee'">
-                                        <button style="width: 100%;" nz-button nz-dropdown
-                                            [nzDropdownMenu]="employeeMenu">
-                                            List employee
-                                            <i nz-icon nzType="down"></i>
+                                        <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
+                                            nz-button nz-dropdown [nzDropdownMenu]="employeeMenu">
+                                            <span *ngFor="let employee of specRuleCheck.employee">
+                                                <span
+                                                    *ngIf="employee.status">{{employee.first_name + ' ' + employee.last_name + ','}}&nbsp;</span>
+                                            </span>
                                         </button>
                                         <nz-dropdown-menu #employeeMenu="nzDropdownMenu">
                                             <ul nz-menu>
                                                 <li *ngFor="let employee of specRuleCheck.employee" nz-menu-item>
-                                                    <label nz-menu-item nz-checkbox
+                                                    <label nz-menu-item nz-checkbox style="width: 100%; height: 100%;"
                                                         [(ngModel)]="employee.status">{{employee.first_name + ' ' + employee.last_name}}
                                                     </label>
                                                 </li>
@@ -159,15 +161,16 @@
                                         </nz-dropdown-menu>
                                     </div>
                                     <div *ngIf="specRuleCheck.specificBy === 'department'">
-                                        <button style="width: 100%;" nz-button nz-dropdown
-                                            [nzDropdownMenu]="departmentMenu">
-                                            List department
-                                            <i nz-icon nzType="down"></i>
+                                        <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
+                                            nz-button nz-dropdown [nzDropdownMenu]="departmentMenu">
+                                            <span *ngFor="let department of specRuleCheck.department">
+                                                <span *ngIf="department.status">{{department.name + ','}}&nbsp;</span>
+                                            </span>
                                         </button>
                                         <nz-dropdown-menu #departmentMenu="nzDropdownMenu">
                                             <ul nz-menu>
                                                 <li *ngFor="let department of specRuleCheck.department" nz-menu-item>
-                                                    <label nz-menu-item nz-checkbox
+                                                    <label nz-menu-item nz-checkbox style="width: 100%; height: 100%;"
                                                         [(ngModel)]="department.status">{{department.name}}
                                                     </label>
                                                 </li>
@@ -175,15 +178,16 @@
                                         </nz-dropdown-menu>
                                     </div>
                                     <div *ngIf="specRuleCheck.specificBy === 'position'">
-                                        <button style="width: 100%;" nz-button nz-dropdown
-                                            [nzDropdownMenu]="positionMenu">
-                                            List position
-                                            <i nz-icon nzType="down"></i>
+                                        <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
+                                            nz-button nz-dropdown [nzDropdownMenu]="positionMenu">
+                                            <span *ngFor="let position of specRuleCheck.position">
+                                                <span *ngIf="position.status">{{position.name + ','}}&nbsp;</span>
+                                            </span>
                                         </button>
                                         <nz-dropdown-menu #positionMenu="nzDropdownMenu">
                                             <ul nz-menu>
                                                 <li *ngFor="let position of specRuleCheck.position" nz-menu-item>
-                                                    <label nz-menu-item nz-checkbox
+                                                    <label nz-menu-item nz-checkbox style="width: 100%; height: 100%;"
                                                         [(ngModel)]="position.status">{{position.name}}
                                                     </label>
                                                 </li>
@@ -247,8 +251,8 @@
                 </div>
                 <!-- Editor -->
                 <div style="margin-top: 1mm;">
-                    <angular-editor style="outline-color: white;" (click)="select($event)" id="editor1"
-                        [(ngModel)]="htmlContent" [config]="editorConfig">
+                    <angular-editor style="outline-color: white;" id="editor1" [(ngModel)]="htmlContent"
+                        [config]="editorConfig">
                     </angular-editor>
                 </div>
                 <ul nz-menu nzMode="horizontal">
@@ -342,9 +346,9 @@
                                 </nz-select>
                             </td>
                             <td>
-                                <textarea (select)="select($event)" nzAutosize placeholder="Input content" type="text"
-                                    nz-input (click)="startEdit(data.id, $event);" [(ngModel)]="data.content"
-                                    (blur)="stopEdit()" spellcheck="false"></textarea>
+                                <textarea nzAutosize placeholder="Input content" type="text" nz-input
+                                    (click)="startEdit(data.id, $event);" [(ngModel)]="data.content" (blur)="stopEdit()"
+                                    spellcheck="false"></textarea>
                             </td>
                             <td>
                                 <a style="color: red;" (click)="deleteRow(data.id)">Delete</a>
@@ -379,10 +383,10 @@
                     <nz-table [nzData]="listSignatureTemplateRule">
                         <thead>
                             <tr>
-                                <th style="width: 30%;">Name</th>
-                                <th style="width: 30%;">Default</th>
-                                <th style="width: 20%;">Load</th>
-                                <th style="width: 20%;">Delete</th>
+                                <th style="width: 45%;">Name</th>
+                                <th style="width: 45%;">Default</th>
+                                <th style="width: 5%;">Load</th>
+                                <th style="width: 5%;">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -392,12 +396,11 @@
                                         [nzType]="'check-circle'" [nzTheme]="'twotone'"
                                         [nzTwotoneColor]="'#52c41a'"></i></td>
                                 <td>
-                                    <button nz-button style="float: right;"
-                                        (click)="getSignatureTemplateRuleByID(data.id)"
+                                    <button nz-button (click)="getSignatureTemplateRuleByID(data.id)"
                                         [nzLoading]="isGetAllSignatureRuleLoading" nzType="primary">Load</button>
                                 </td>
                                 <td>
-                                    <button nz-button nzDanger style="float: right;"
+                                    <button nz-button nzDanger
                                         (click)="showConfirmDeleteSigantureRule(data.id, data.name)"
                                         [nzLoading]="isDeleteTemplateRuleLoading" nzType="primary">Delete</button>
                                 </td>

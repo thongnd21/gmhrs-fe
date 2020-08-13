@@ -19,6 +19,9 @@
 /* .dropDownInModel {
     z-index: 100000 !important;
 } */
+.textCenter {
+    text-align: center;
+}
 ::ng-deep .cdk-drag-preview  {
     display: table;
     border-radius: 5px;
