@@ -272,54 +272,6 @@ export class AssignEmailTemplateComponent implements OnInit {
   closeModal() {
     this.modalService.dismissAll();
   }
-
-  // filter(filter: string): User[] {
-  //   this.lastFilter = filter;
-  //   if (filter) {
-  //     return this.users.filter(option => {
-  //       return option.firstname.toLowerCase().indexOf(filter.toLowerCase()) >= 0
-  //         || option.lastname.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
-  //     })
-  //   } else {
-  //     return this.users.slice();
-  //   }
-  // }
-
-  displayFn() {
-    console.log(this.employeeList);
-
-    let displayValue: string;
-    if (this.employeeList != undefined) {
-      if (this.employeeList.length > 0 || this.employeeList.length != undefined) {
-        for (let i = 0; i < this.employeeList.length; i++) {
-          if (i === 0) {
-            displayValue = this.employeeList[i].primary_email;
-          } else {
-            displayValue += ', ' + this.employeeList[i].primary_email;
-          }
-        };
-      }
-    }
-    else {
-      displayValue = "";
-    }
-    return displayValue;
-  }
-
-  // optionClicked(event: Event, user: User) {
-  //   event.stopPropagation();
-  //   this.toggleSelection(user);
-  // }
-
-  // toggleSelection(user: User) {
-  //   user.selected = !user.selected;
-  //   if (user.selected) {
-  //     this.selectedUsers.push(user);
-  //   } else {
-  //     const i = this.selectedUsers.findIndex(value => value.firstname === user.firstname && value.lastname === user.lastname);
-  //     this.selectedUsers.splice(i, 1);
-  //   }
-
-  //   this.userControl.setValue(this.selectedUsers);
-  // }
+  
+ 
 }

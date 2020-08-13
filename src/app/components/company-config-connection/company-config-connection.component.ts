@@ -375,10 +375,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
   disableTestAuthenGsuiteButton = true;
   fileChange(element) {
     this.uploadedFiles = element.target.files;
-    if (this.uploadedFiles[0].name.split('.')[1] != "json") {
+    var check = this.uploadedFiles[0].name.split('.').length;
+
+    if (this.uploadedFiles[0].name.split('.')[check - 1] != "json") {
       this.toast.error("Please input only JSON file!");
       this.disableTestAuthenGsuiteButton = true;
-    } else {
+    }
+    else {
       this.disableTestAuthenGsuiteButton = false;
     }
   }
