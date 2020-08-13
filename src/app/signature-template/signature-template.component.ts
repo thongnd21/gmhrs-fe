@@ -7,6 +7,7 @@ import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Signature } from '../model/signature';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { FormControl } from '@angular/forms';
 
 class DepartmentSpec {
   id: number;
@@ -50,6 +51,16 @@ class ItemData {
   content: string;
   action: string;
 }
+class WrongSignatureEmployee {
+  email: string;
+  firstName: string;
+  lastName: string;
+  message: string[];
+}
+class DynamicRule {
+  name: string;
+  content: string;
+}
 @Component({
   selector: 'app-signature-template',
   templateUrl: './signature-template.component.html',
@@ -63,12 +74,12 @@ export class SignatureTemplateComponent implements OnInit {
   isSaveRuleDisable = false;
   isSaveTemplateDisable = false;
   isSetPrimaryRuleDisable = false;
-  dynamicRule = new Array();
+  dynamicRule = new Array<DynamicRule>();
   listEmployeeSpecificApply = new Array();
-  listRulesCheckErr = new Array();
-  listWrongSignature = new Array();
-  listSignatureTemplate = new Array();
-  listSignatureTemplateRule = new Array();
+  listRulesCheckErr = new Array<String>();
+  listWrongSignature = new Array<WrongSignatureEmployee>();
+  listSignatureTemplate = new Array<Signature>();
+  listSignatureTemplateRule = new Array<Signature>();
   topCenterPosition: NzPlacementType = 'topCenter';
   imgWidth = 100;
   imgHeigh = 100;
@@ -215,7 +226,7 @@ export class SignatureTemplateComponent implements OnInit {
   ) { }
   showEmployeeSpecific(specificBy, specID): void {
     this.isTableSpecificLoading = true;
-    let listEm = new Array();
+    let listEm = new Map();
     if (specificBy === 'department') {
       for (let spec of this.listOfSpecTemplate.specRuleCheck) {
         if (spec.idSpec === specID) {
@@ -223,7 +234,7 @@ export class SignatureTemplateComponent implements OnInit {
             for (let em of this.listOfSpecTemplate.allEmployee) {
               if (de.status) {
                 if (em.department_id === de.id) {
-                  listEm.push(em);
+                  listEm.set(em, em);
                 }
               }
             }
@@ -237,7 +248,23 @@ export class SignatureTemplateComponent implements OnInit {
             for (let em of this.listOfSpecTemplate.allEmployee) {
               if (po.status) {
                 if (em.position_id === po.id) {
-                  listEm.push(em);
+                  listEm.set(em, em);
+                }
+              }
+            }
+          }
+        }
+      }
+    } else if (specificBy === 'team') {
+      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+        if (spec.idSpec === specID) {
+          for (let team of spec.team) {
+            for (let em of this.listOfSpecTemplate.allEmployee) {
+              if (team.status) {
+                for (let teamOfEm of em.team_employees) {
+                  if (teamOfEm.team_id === team.id) {
+                    listEm.set(em, em);
+                  }
                 }
               }
             }
@@ -249,13 +276,13 @@ export class SignatureTemplateComponent implements OnInit {
         if (spec.idSpec === specID) {
           for (let em of spec.employee) {
             if (em.status) {
-              listEm.push(em);
+              listEm.set(em, em);
             }
           }
         }
       }
     }
-    this.listEmployeeSpecificApply = listEm;
+    this.listEmployeeSpecificApply = Array.from(listEm.values());
     this.showSpecificEmployeeModel = true;
     this.isTableSpecificLoading = false;
   }
@@ -315,14 +342,14 @@ export class SignatureTemplateComponent implements OnInit {
     this.showListSignatureTemplateRule = false;
     this.showSpecificModel = false;
   }
-  select(event) {
-    const start = event.target.selectionStart;
-    const end = event.target.selectionEnd;
-    let s = window.getSelection();
-    // alert(s.anchorOffset)
-    // console.log('editor: ' + s.anchorNode);
-    // console.log('range: ' + s.getRangeAt(0));
-  }
+  // select(event) {
+  // const start = event.target.selectionStart;
+  // const end = event.target.selectionEnd;
+  // let s = window.getSelection();
+  // alert(s.anchorOffset)
+  // console.log('editor: ' + s.anchorNode);
+  // console.log('range: ' + s.getRangeAt(0));
+  // }
   setPrimaryTemplate(): void {
     this.isSetPrimaryTemplateLoading = true;
     this.isSpinning = true;
@@ -694,16 +721,23 @@ export class SignatureTemplateComponent implements OnInit {
     signature.account_id = id;
     this.signatureService.saveSignatureTemplate(id, signature).subscribe(
       (res: any) => {
-        if (res.status === true) {
-          this.toast.success(res.message);
-          if (res.action === 'create') {
-            this.signatureID = res.id;
+        let respone = {
+          action: '',
+          message: null,
+          status: null,
+          id: null
+        }
+        respone = res;
+        if (respone.status === true) {
+          this.toast.success(respone.message);
+          if (respone.action === 'create') {
+            this.signatureID = respone.id;
             this.isSetPrimaryDisable = false;
           }
           this.listRulesCheckErr = [];
         } else {
           this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
-          this.listRulesCheckErr = res.message;
+          this.listRulesCheckErr = respone.message;
         }
         this.isSaveTemplateLoading = false;
         this.isSpinning = false;
@@ -719,12 +753,14 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         // console.log('result get by name' + res);
         if (res.status) {
-          this.htmlContent = res.data.content;
-          this.signatureName = res.data.name;
-          this.signatureID = res.data.id;
+          let signature = new Signature();
+          signature = res.data;
+          this.htmlContent = signature.content;
+          this.signatureName = signature.name;
+          this.signatureID = signature.id;
           this.loadReview();
           this.showListSignatureTemplate = false;
-          this.isSetPrimaryDisable = res.data.is_primary > 0;
+          this.isSetPrimaryDisable = signature.is_primary > 0;
           this.toast.success('Load sinature: ' + this.signatureName + ' success!');
         } else {
           this.toast.warning(res.message);
@@ -759,7 +795,6 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.getAllsigantureTemplate(id).subscribe(
       (res: any) => {
         // console.log('list siganture: ' + res);
-
         if (res.status) {
           this.listSignatureTemplate = res.data;
           this.showListSignatureTemplate = true;
@@ -1004,7 +1039,7 @@ export class SignatureTemplateComponent implements OnInit {
                     listRule: null
                   };
                   this.listOfRules = [];
-                  this.toast.warning(res.message)
+                  // this.toast.warning(res.message)
                 }
               }
             );
@@ -1023,7 +1058,6 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           // console.log(res.data);
-
           this.dynamicRule = res.data;
         } else {
           this.toast.error(res.message);
