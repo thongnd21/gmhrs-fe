@@ -761,7 +761,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.loadReview();
           this.showListSignatureTemplate = false;
           this.isSetPrimaryDisable = signature.is_primary > 0;
-          this.toast.success('Load sinature: ' + this.signatureName + ' success!');
+          this.toast.success('Load signature: ' + this.signatureName + ' successfully!');
         } else {
           this.toast.warning(res.message);
         }
@@ -952,7 +952,7 @@ export class SignatureTemplateComponent implements OnInit {
                   });
 
                   this.rules.listRule = this.listOfRules;
-                  this.toast.success('Load rule: ' + this.signatureRuleName + ' success!');
+                  this.toast.success('Load rule: ' + this.signatureRuleName + ' successfully!');
                   // console.log('this.rule: ' + this.rules);
                 } else {
                   this.toast.warning(res.message)

@@ -91,7 +91,7 @@ export class AutoReplymailComponent implements OnInit {
               this.toast.success(res.message);
             },
             (err) => {
-              this.toast.error("Services í not available!");
+              this.toast.error("Services is not available!");
             }
           )
         }

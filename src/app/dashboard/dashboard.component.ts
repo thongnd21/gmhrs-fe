@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit {
 				item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
 				listAccount.push(item);
 			}))
-			if(this.employees.length == 0) {
+			if (this.employees.length == 0) {
 				this.isNewEmp = false;
 			}
 			this.employees = listAccount;
@@ -171,7 +171,7 @@ export class DashboardComponent implements OnInit {
 		this.signatureService.sendMailRemindEmployees(id).subscribe(
 			(res) => {
 				if (res) {
-					this.toast.success('Send mails success!');
+					this.toast.success('Send mails successfully!');
 				} else {
 					this.toast.error('Some Error!')
 				}
@@ -193,9 +193,9 @@ export class DashboardComponent implements OnInit {
 			this.listActivityLog = res;
 
 			this.listActivityLog.forEach((element => {
-				var EmpObject= new Object();
-				var TeamObject= new Object();
-				var DepartmentObject= new Object();
+				var EmpObject = new Object();
+				var TeamObject = new Object();
+				var DepartmentObject = new Object();
 				let newEmployeeList = [];
 				let updateEmployeeList = [];
 				let deleteEmployeeList = [];
@@ -205,17 +205,17 @@ export class DashboardComponent implements OnInit {
 				let newDepartmentList = [];
 				let updateDepartmentList = [];
 				let deleteDepartmentList = [];
-				var item= new Object();
+				var item = new Object();
 				item['name'] = element.name;
 				item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
 				item['status'] = element.status == 1;
-				
+
 				/* mapping model employee
 				*  author: son
 				*/
-				
+
 				element.employee.newEmp.forEach(newEmpItem => {
-					let newEmp= new Object();
+					let newEmp = new Object();
 					newEmp['type'] = newEmpItem.type;
 					newEmp['modified_date'] = moment.utc(newEmpItem.modified_date).local().format('LLLL');
 					newEmp['primary_email'] = newEmpItem.employee.primary_email;
@@ -227,7 +227,7 @@ export class DashboardComponent implements OnInit {
 					newEmployeeList.push(newEmp);
 				});
 				element.employee.updateEmp.forEach(updateEmpItem => {
-					let updateEmp= new Object();
+					let updateEmp = new Object();
 					updateEmp['type'] = updateEmpItem.type;
 					updateEmp['modified_date'] = moment.utc(updateEmpItem.modified_date).local().format('LLLL');
 					updateEmp['primary_email'] = updateEmpItem.employee.primary_email;
@@ -239,7 +239,7 @@ export class DashboardComponent implements OnInit {
 					updateEmployeeList.push(updateEmp);
 				});
 				element.employee.deleteEmp.forEach(deleteEmpItem => {
-					let deleteEmp= new Object();
+					let deleteEmp = new Object();
 					deleteEmp['type'] = deleteEmpItem.type;
 					deleteEmp['modified_date'] = moment.utc(deleteEmpItem.modified_date).local().format('LLLL');
 					deleteEmp['primary_email'] = deleteEmpItem.employee.primary_email;
@@ -255,7 +255,7 @@ export class DashboardComponent implements OnInit {
 				*  author: son
 				*/
 				element.team.newTeam.forEach(newTeamItem => {
-					let newTeam= new Object();
+					let newTeam = new Object();
 					newTeam['type'] = newTeamItem.type;
 					newTeam['modified_date'] = moment.utc(newTeamItem.modified_date).local().format('LLLL');
 					newTeam['email'] = newTeamItem.team.email;
@@ -264,7 +264,7 @@ export class DashboardComponent implements OnInit {
 					newTeamList.push(newTeam);
 				});
 				element.team.updateTeam.forEach(updateTeamItem => {
-					let updateTeam= new Object();
+					let updateTeam = new Object();
 					updateTeam['type'] = updateTeamItem.type;
 					updateTeam['modified_date'] = moment.utc(updateTeamItem.modified_date).local().format('LLLL');
 					updateTeam['email'] = updateTeamItem.team.email;
@@ -273,7 +273,7 @@ export class DashboardComponent implements OnInit {
 					updateTeamList.push(updateTeam);
 				});
 				element.team.deleteTeam.forEach(deleteTeamItem => {
-					let deleteTeam= new Object();
+					let deleteTeam = new Object();
 					deleteTeam['type'] = deleteTeamItem.type;
 					deleteTeam['modified_date'] = moment.utc(deleteTeamItem.modified_date).local().format('LLLL');
 					deleteTeam['email'] = deleteTeamItem.team.email;
@@ -286,7 +286,7 @@ export class DashboardComponent implements OnInit {
 				*  author: son
 				*/
 				element.department.newDepartment.forEach(newDepItem => {
-					let newDepartment= new Object();
+					let newDepartment = new Object();
 					newDepartment['type'] = newDepItem.type;
 					newDepartment['modified_date'] = moment.utc(newDepItem.modified_date).local().format('LLLL');
 					newDepartment['email'] = newDepItem.department.email;
@@ -295,7 +295,7 @@ export class DashboardComponent implements OnInit {
 					newDepartmentList.push(newDepartment);
 				});
 				element.department.updateDepartment.forEach(updateDepItem => {
-					let updateDepartment= new Object();
+					let updateDepartment = new Object();
 					updateDepartment['type'] = updateDepItem.type;
 					updateDepartment['modified_date'] = moment.utc(updateDepItem.modified_date).local().format('LLLL');
 					updateDepartment['email'] = updateDepItem.department.email;
@@ -304,7 +304,7 @@ export class DashboardComponent implements OnInit {
 					updateDepartmentList.push(updateDepartment);
 				});
 				element.department.deleteDepartment.forEach(deleteDepItem => {
-					let deleteDepartment= new Object();
+					let deleteDepartment = new Object();
 					deleteDepartment['type'] = deleteDepItem.type;
 					deleteDepartment['modified_date'] = moment.utc(deleteDepItem.modified_date).local().format('LLLL');
 					deleteDepartment['email'] = deleteDepItem.department.email;
@@ -329,7 +329,7 @@ export class DashboardComponent implements OnInit {
 				console.log(this.list);
 				this.list.push(item);
 			}))
-			if(this.list.length == 0){
+			if (this.list.length == 0) {
 				this.isLogged = true;
 			}
 		})

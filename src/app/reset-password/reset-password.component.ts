@@ -41,19 +41,19 @@ export class ResetPasswordComponent implements OnInit {
       otp: this.changePasswordForm.controls['otp'].value,
     };
     this.accountService.changePassword(account).subscribe(
-      (res) =>{
+      (res) => {
         const status: any = res;
         if (status.status == "success") {
-            this.toast.success("Change Password success!");
-            localStorage.clear();
-            this.router.navigate(['/']);
+          this.toast.success("Change Password successfully!");
+          localStorage.clear();
+          this.router.navigate(['/']);
         } else if (status.status == "fail") {
           this.toast.error("Input information again!");
         }
-    },
-    (error) => {
+      },
+      (error) => {
         this.toast.error("Server is not available!");
-    }
+      }
     );
   }
 

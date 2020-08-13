@@ -171,7 +171,7 @@ export class CompanyComponent implements OnInit {
     // this.account.connection_database = data.connection_database
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res) => {
-        this.toast.success("Update Account success!");
+        this.toast.success("Update Account successfully!");
         this.getAllCompany();
         this.closeModal();
       },
@@ -188,17 +188,17 @@ export class CompanyComponent implements OnInit {
     this.account.email = this.accountCompanyForm.controls['email'].value,
       this.account.username = this.accountCompanyForm.controls['username'].value,
       this.account.password = this.accountCompanyForm.controls['password'].value,
-    this.companyServices.createAccountCompany(this.account).subscribe(
-      (res) => {
-        this.toast.success("Create Account success!");
-        this.getAllCompany();
-        this.closeModal();
-      },
-      (error) => {
-        this.toast.error("Server is not available!");
-        this.closeModal();
-      }
-    );
+      this.companyServices.createAccountCompany(this.account).subscribe(
+        (res) => {
+          this.toast.success("Create Account successfully!");
+          this.getAllCompany();
+          this.closeModal();
+        },
+        (error) => {
+          this.toast.error("Server is not available!");
+          this.closeModal();
+        }
+      );
   }
 
   applyFilter(event: Event) {

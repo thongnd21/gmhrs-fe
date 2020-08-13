@@ -135,7 +135,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
-            gsuite_id : o.gsuite_id,
+            gsuite_id: o.gsuite_id,
             selected: true
           }
         });
@@ -147,7 +147,7 @@ export class AppHeaderComponent {
             description: o.description,
             modified_date: o.modified_date,
             created_date: o.created_date,
-            gsuite_id : o.gsuite_id,
+            gsuite_id: o.gsuite_id,
             selected: true
           }
         });
@@ -194,7 +194,7 @@ export class AppHeaderComponent {
           }
         });
         listSync.employee.outOfHRMS = res.employees.outOfHRMS.map(o => {
-          if(this.isFirstSync == true){
+          if (this.isFirstSync == true) {
             return {
               id: o.id,
               address: o.addresses[0].formatted,
@@ -206,7 +206,7 @@ export class AppHeaderComponent {
               phone: o.phones[0].value,
               selected: true
             }
-          }else{
+          } else {
             return {
               id: o.id,
               address: o.address,
@@ -298,7 +298,7 @@ export class AppHeaderComponent {
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
           this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
-          this.toast.success('Synchronize success!');
+          this.toast.success('Synchronize successfully!');
           // this.dashBoard.getActivityLog();
           this.closeModal();
         },
@@ -668,12 +668,12 @@ export class AppHeaderComponent {
       if (this.listNewEmp[0].id === item.id) {
         this.listNewEmp = [];
       } else {
-        let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
+        let emp = this.listItemSynch.employees.newEmployee.find(x => x.id == item.id);
         this.listNewEmp[0] = emp;
       }
     } else {
-      let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
-      this.listNewEmp[0]=emp;
+      let emp = this.listItemSynch.employees.newEmployee.find(x => x.id == item.id);
+      this.listNewEmp[0] = emp;
     }
     console.log(item.id);
     console.log(this.listNewEmp[0].id);
@@ -684,12 +684,12 @@ export class AppHeaderComponent {
       if (this.listOutEmp[0].id === item.id) {
         this.listOutEmp = [];
       } else {
-        let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
+        let emp = this.listItemSynch.employees.outOfHRMS.find(x => x.id == item.id);
         this.listOutEmp[0] = emp;
       }
     } else {
-      let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
-      this.listOutEmp[0]=emp;
+      let emp = this.listItemSynch.employees.outOfHRMS.find(x => x.id == item.id);
+      this.listOutEmp[0] = emp;
     }
     console.log(item.id);
     console.log(this.listOutEmp[0].id);
@@ -697,12 +697,12 @@ export class AppHeaderComponent {
 
   matchFirstNewAndOut() {
     this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
-    const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x=> x.id = this.listNewEmp[0].id);
+    const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x => x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
       this.listSynchonize.employees.newEmployee.splice(index_new, 1);
     }
-    const index_out: number = this.listSyncFinal.employee.outOfHRMS.findIndex(x=> x.id = this.listOutEmp[0].id);
+    const index_out: number = this.listSyncFinal.employee.outOfHRMS.findIndex(x => x.id = this.listOutEmp[0].id);
     if (index_out !== -1) {
       this.listSyncFinal.employee.outOfHRMS.splice(index_out, 1);
       this.listSynchonize.employees.outOfHRMS.splice(index_out, 1);
@@ -719,11 +719,11 @@ export class AppHeaderComponent {
       if (this.listNewEmp[0].id === item.id) {
         this.listNewEmp = [];
       } else {
-        let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
+        let emp = this.listItemSynch.employees.newEmployee.find(x => x.id == item.id);
         this.listNewEmp[0] = emp;
       }
     } else {
-      let emp = this.listItemSynch.employees.newEmployee.find(x=> x.id == item.id);
+      let emp = this.listItemSynch.employees.newEmployee.find(x => x.id == item.id);
       this.listNewEmp.push(emp);
     }
     console.log(this.listNewEmp);
@@ -734,11 +734,11 @@ export class AppHeaderComponent {
       if (this.listOutEmp[0].id === item.id) {
         this.listOutEmp = [];
       } else {
-        let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
+        let emp = this.listItemSynch.employees.outOfHRMS.find(x => x.id == item.id);
         this.listOutEmp[0] = emp;
       }
     } else {
-      let emp = this.listItemSynch.employees.outOfHRMS.find(x=> x.id == item.id);
+      let emp = this.listItemSynch.employees.outOfHRMS.find(x => x.id == item.id);
       this.listOutEmp.push(emp);
     }
     console.log(this.listOutEmp);
@@ -746,12 +746,12 @@ export class AppHeaderComponent {
 
   matchNewAndOut() {
     this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
-    const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x=> x.id = this.listNewEmp[0].id);
+    const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x => x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
       this.listSynchonize.employees.newEmployee.splice(index_new, 1);
     }
-    const index_out: number = this.listSyncFinal.employee.outOfHRMS.findIndex(x=> x.id = this.listOutEmp[0].id);
+    const index_out: number = this.listSyncFinal.employee.outOfHRMS.findIndex(x => x.id = this.listOutEmp[0].id);
     if (index_out !== -1) {
       this.listSyncFinal.employee.outOfHRMS.splice(index_out, 1);
       this.listSynchonize.employees.outOfHRMS.splice(index_out, 1);

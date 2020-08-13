@@ -508,7 +508,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
         if (res.status == "success") {
-          this.toast.success("Save API Endpoint success!");
+          this.toast.success("Save API Endpoint successfully!");
           this.nextButonConditonApiEnpoint = true;
           this.closeModal();
         }
@@ -891,7 +891,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
         if (res.status == "success") {
-          this.toast.success("Save connection success!");
+          this.toast.success("Save connection successfully!");
           this.nextButonConditonConnectionString = true;
           this.closeModal();
         };

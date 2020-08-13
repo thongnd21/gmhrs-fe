@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
                 const status: any = res;
                 if (status.status == "success") {
                     localStorage.setItem('username', account.username);
-                    this.toast.success("Reset Password success!");
+                    this.toast.success("Reset Password successfully!");
                     this.router.navigate(['/resetPassword']);
                 } else if (status.status == "fail") {
                     this.toast.error("Input information again!");
@@ -144,7 +144,7 @@ export class LoginComponent implements OnInit {
                 if (res.status == "success") {
                     this.login = 0;
                     this.registerForm.reset();
-                    this.toast.success("Create Account success!");
+                    this.toast.success("Create Account successfully!");
                 } else if (res.status == "fail") {
                     this.toast.error(res.message);
                 } else {
