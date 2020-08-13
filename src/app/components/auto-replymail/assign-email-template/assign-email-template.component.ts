@@ -8,6 +8,7 @@ import { PositionApiService } from './../../../api-services/position-api.service
 import { TeamApiService } from './../../../api-services/team-api.service';
 import { EmailApiService } from './../../../api-services/email-api.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-assign-email-template',
@@ -30,7 +31,9 @@ export class AssignEmailTemplateComponent implements OnInit {
   loading = false;
   accountId = localStorage.getItem('id');
 
+  employeeControl = new FormControl();
 
+  selectedEmployee = [];
 
   constructor(
     private modalService: NgbModal,
@@ -73,7 +76,7 @@ export class AssignEmailTemplateComponent implements OnInit {
         this.positionService.getAllPositionByAccountId(this.accountId).subscribe(
           (res: any) => {
             console.log(res);
-            
+
             if (res.length < 1) {
               this.toast.error("There are no any position")
             } else {
@@ -108,9 +111,10 @@ export class AssignEmailTemplateComponent implements OnInit {
       } if (event.source.value == "E" && event.source.selected == true) {
         this.accountService.getAllEmployeeByAccountId(this.accountId).subscribe(
           (res: any) => {
-            console.log(res);
+
 
             this.employeeList = res;
+            console.log(this.employeeList);
           },
           (err: any) => {
             console.log(err);
@@ -268,4 +272,54 @@ export class AssignEmailTemplateComponent implements OnInit {
   closeModal() {
     this.modalService.dismissAll();
   }
+
+  // filter(filter: string): User[] {
+  //   this.lastFilter = filter;
+  //   if (filter) {
+  //     return this.users.filter(option => {
+  //       return option.firstname.toLowerCase().indexOf(filter.toLowerCase()) >= 0
+  //         || option.lastname.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+  //     })
+  //   } else {
+  //     return this.users.slice();
+  //   }
+  // }
+
+  displayFn() {
+    console.log(this.employeeList);
+
+    let displayValue: string;
+    if (this.employeeList != undefined) {
+      if (this.employeeList.length > 0 || this.employeeList.length != undefined) {
+        for (let i = 0; i < this.employeeList.length; i++) {
+          if (i === 0) {
+            displayValue = this.employeeList[i].primary_email;
+          } else {
+            displayValue += ', ' + this.employeeList[i].primary_email;
+          }
+        };
+      }
+    }
+    else {
+      displayValue = "";
+    }
+    return displayValue;
+  }
+
+  // optionClicked(event: Event, user: User) {
+  //   event.stopPropagation();
+  //   this.toggleSelection(user);
+  // }
+
+  // toggleSelection(user: User) {
+  //   user.selected = !user.selected;
+  //   if (user.selected) {
+  //     this.selectedUsers.push(user);
+  //   } else {
+  //     const i = this.selectedUsers.findIndex(value => value.firstname === user.firstname && value.lastname === user.lastname);
+  //     this.selectedUsers.splice(i, 1);
+  //   }
+
+  //   this.userControl.setValue(this.selectedUsers);
+  // }
 }
