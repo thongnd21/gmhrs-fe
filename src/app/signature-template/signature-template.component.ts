@@ -192,29 +192,14 @@ export class SignatureTemplateComponent implements OnInit {
     minHeight: '5rem',
     placeholder: 'Enter text here...',
     translate: 'no',
-    defaultFontName: 'Arial',
     toolbarHiddenButtons: [
       ['bold'],
       [
         'insertImage',
         'insertVideo',
+        'customClasses'
       ],
     ],
-    customClasses: [
-      {
-        name: "quote",
-        class: "quote",
-      },
-      {
-        name: 'redText',
-        class: 'redText'
-      },
-      {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
-      },
-    ]
   };
 
   constructor(

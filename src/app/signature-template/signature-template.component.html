@@ -114,9 +114,9 @@
                         [nzShowPagination]="false">
                         <thead>
                             <tr>
-                                <th class="textCenter" nzWidth="10%">Specific by</th>
+                                <th class="textCenter" nzWidth="13%">Specific by</th>
                                 <th class="textCenter" nzWidth="55%">Value</th>
-                                <th class="textCenter" nzWidth="15%">Name of Signature</th>
+                                <th class="textCenter" nzWidth="12%">Signature Name</th>
                                 <th class="textCenter" nzWidth="10%">View employee</th>
                                 <th class="textCenter" nzWidth="10%">Delete</th>
                             </tr>
@@ -394,23 +394,23 @@
                     <nz-table [nzData]="listSignatureTemplateRule">
                         <thead>
                             <tr>
-                                <th style="width: 45%;">Name</th>
-                                <th style="width: 45%;">Default</th>
-                                <th style="width: 5%;">Load</th>
-                                <th style="width: 5%;">Delete</th>
+                                <th class="textCenter" style="width: 45%;">Name</th>
+                                <th class="textCenter" style="width: 45%;">Default</th>
+                                <th class="textCenter" style="width: 5%;">Load</th>
+                                <th class="textCenter" style="width: 5%;">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let data of listSignatureTemplateRule">
-                                <td style="font-size: large;">{{ data.name }}</td>
-                                <td><i *ngIf="data.is_primary === 1" nz-icon style="font-size: x-large;"
-                                        [nzType]="'check-circle'" [nzTheme]="'twotone'"
+                                <td class="textCenter" style="font-size: large;">{{ data.name }}</td>
+                                <td class="textCenter"><i *ngIf="data.is_primary === 1" nz-icon
+                                        style="font-size: x-large;" [nzType]="'check-circle'" [nzTheme]="'twotone'"
                                         [nzTwotoneColor]="'#52c41a'"></i></td>
-                                <td>
+                                <td class="textCenter">
                                     <button nz-button (click)="getSignatureTemplateRuleByID(data.id)"
                                         [nzLoading]="isGetAllSignatureRuleLoading" nzType="primary">Load</button>
                                 </td>
-                                <td>
+                                <td class="textCenter">
                                     <button nz-button nzDanger
                                         (click)="showConfirmDeleteSigantureRule(data.id, data.name)"
                                         [nzLoading]="isDeleteTemplateRuleLoading" nzType="primary">Delete</button>
