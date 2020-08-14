@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         this.login = 0;
         console.log(this.login);
-        const accPassword = new FormControl("", [Validators.required]);
+        const accPassword = new FormControl("", [Validators.required, Validators.minLength(5)]);
         const confirmPassword = new FormControl(
             "",
             CustomValidators.equalTo(accPassword)
@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit {
         this.registerForm = new FormGroup({
             username: new FormControl("", [
                 Validators.required,
-                Validators.minLength(4),
-                Validators.maxLength(9)
+                Validators.minLength(5),
+                Validators.maxLength(20)
             ]),
             email: new FormControl("", [Validators.required, Validators.email]),
             password: accPassword,
