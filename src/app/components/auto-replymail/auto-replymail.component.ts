@@ -226,6 +226,7 @@ export class AutoReplymailComponent implements OnInit {
       (res: any) => {
         this.loadingFull = false;
         console.log(res);
+        this.getAllTemplate();
         this.dialog.closeAll();
       },
       (err) => {

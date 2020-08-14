@@ -66,12 +66,12 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
           (res: any) => {
             // location.reload();
             this.loadingFull = false;
-            console.log(res);
             if (res.status == 200) {
-              this.toast.success("Create Template Successfully !")
+              console.log(res);
+              this.toast.success("Create Template Successfully !");
               //               this.router.navigate(['/auto-reply-mail']);
             } else if (res.status == 400) {
-              this.toast.error("Template with this subject existed ! Please input another again !")
+              this.toast.error("Template with this subject existed ! Please input another again !");
             }
 
           },
@@ -96,4 +96,4 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
   }
 
 }
-  
+
