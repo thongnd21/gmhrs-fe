@@ -59,4 +59,8 @@ export class EmailApiService {
     deleteTemplate(id) {
         return this.httpClient.delete(this.URL + AppSettings.EMAIL + id);
     }
+
+    updateEmailTemplate(emailObj) {
+        return this.httpClient.post(this.URL + AppSettings.EMAIL + 'updateEmail', emailObj);
+    }
 }

@@ -49,7 +49,7 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllTemplate();
+    // this.getAllTemplate();
     this.getAllTemplateRuleByAccountId();
 
   }
@@ -65,6 +65,7 @@ export class AssignEmailTemplateComponent implements OnInit {
         this.departmentService.getAllDepartmentByAccountId(this.accountId).subscribe(
           (res: any) => {
             this.depList = res;
+            this.getAllTemplate();
           },
           (err: any) => {
             console.log(err);
@@ -82,6 +83,7 @@ export class AssignEmailTemplateComponent implements OnInit {
               this.toast.error("There are no any position")
             } else {
               this.positionList = res;
+              this.getAllTemplate();
 
             }
           },
@@ -102,6 +104,7 @@ export class AssignEmailTemplateComponent implements OnInit {
             // this.depList.push(dep);
             // }
             this.teamList = res;
+            this.getAllTemplate();
           },
           (err: any) => {
             console.log(err);
@@ -221,7 +224,7 @@ export class AssignEmailTemplateComponent implements OnInit {
       (res: any) => {
 
         console.log(res);
-        
+
         if (res.code === 200) {
           this.toast.success("Save successfully");
         } else if (res.code === 500) {

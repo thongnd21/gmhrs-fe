@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmailEditorComponent } from 'angular-email-editor';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-detail-auto-reply-mail-template',
@@ -13,13 +14,14 @@ import { EmailEditorComponent } from 'angular-email-editor';
 export class DetailAutoReplyMailTemplateComponent implements OnInit {
   @ViewChild(EmailEditorComponent)
   emailEditor: EmailEditorComponent;
-  loading = false;
+  loadingFull = false;
   templateId;
   tempate = {};
   name = "";
-  subject = "" ;
+  subject = "";
   checkAdd = true;
   accountId = localStorage.getItem('id');
+  updateTemplateForm: FormGroup;
 
   constructor(
     private emailServices: EmailApiService,
@@ -30,9 +32,9 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(param => {
-      this.templateId = param['id'];
-    })
+
+    this.templateId = localStorage.getItem('templateId');
+
     console.log(this.templateId);
 
     this.openTemplateDetail(this.templateId);
@@ -40,10 +42,22 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
 
 
   openTemplateDetail(id) {
+    this.loadingFull=true;
+    this.updateTemplateForm = new FormGroup({
+      name: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+      subject: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+
+    });
     this.emailServices.getTemplate(id).subscribe(
       (res) => {
+        this.loadingFull=false;
         const templateEmail: any = res;
         console.log(res);
+        this.updateTemplateForm = new FormGroup({
+          name: new FormControl(templateEmail.templateName, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+          subject: new FormControl(templateEmail.subject, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+
+        });
         this.tempate['id'] = id;
         this.tempate['templateName'] = templateEmail.templateName;
         this.tempate['template'] = templateEmail.template;
@@ -53,12 +67,13 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
 
         // update.result.then((res)=>{
         //   console.log('aaaaaaaaa');
-        
+
         this.emailEditor.loadDesign(JSON.parse(this.tempate['template']));
         // })
       },
       (err) => {
-        this.toast.error("Services í not available!");
+        this.loadingFull=false;
+        this.toast.error("Services is not available!");
       }
     )
   }
@@ -71,44 +86,55 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
     }
   }
 
-  closeDetailTemplate(){
+  closeDetailTemplate() {
+    localStorage.removeItem('templateId');
     this.router.navigate(['/auto-reply-mail']);
   }
 
-  editorExport() {
+  updateTemplate() {
+    this.loadingFull=true;
     let emailObj;
     let jsonData = null;
     let html = null;
-    if (this.name.length < 6 || this.name.length > 50) {
-      this.checkAdd = false;
-    } else {
-      console.log(this.emailEditor);
-      this.emailEditor.saveDesign((data) => {
-        jsonData = data;
-        this.emailEditor.exportHtml((data: any) => {
-          html = data.html;
-          emailObj = {
-            accountId: this.accountId,
-            name: this.name,
-            dataTemplate: JSON.stringify(jsonData),
-            html: html
-          };
-          console.log(emailObj);
-          this.emailServices.createEmailTemplate(emailObj).subscribe(
-            (res: any) => {
-              // location.reload();
+    let name = this.updateTemplateForm.controls['name'].value;
+    let subject = this.updateTemplateForm.controls['subject'].value;
+    console.log(this.emailEditor);
+    this.emailEditor.saveDesign((data) => {
+      jsonData = data;
+      this.emailEditor.exportHtml((data: any) => {
+        html = data.html;
+        emailObj = {
+          templateId: this.templateId,
+          accountId: this.accountId,
+          name: name,
+          subject: subject,
+          dataTemplate: JSON.stringify(jsonData),
+          html: html
+        };
+        console.log(emailObj);
+        this.emailServices.updateEmailTemplate(emailObj).subscribe(
+          (res: any) => {
+            // location.reload();
+            this.loadingFull=false;
+            console.log(res);
+            if (res.status == 200) {
               this.toast.success(res.message);
-              this.router.navigate(['/auto-reply-mail']);
-            },
-            (err) => {
-              this.toast.error("Services is not available!");
+            } else if (res.status == 400) {
+              this.toast.error(res.message)
             }
-          )
-        }
-        );
+          },
+          (err) => {
+            this.loadingFull=false;
+            this.toast.error("Services is not available!");
+          }
+        )
       }
       );
     }
+    );
+
   }
+
+
 
 }

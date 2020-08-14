@@ -1,42 +1,71 @@
-<div>
-    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }">
-    </ngx-loading>
-</div>
-<div>
-    <div class="card-body">
-        <div>
-            <div class="editor card ">
-                <div class="card-header" style="background-color: #777777">
-                    <h4>Create template</h4>
-                </div>
-                <div class="card-body">
-
-                    <div>
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Template name</mat-label>
-                            <input matInput type=" text" [(ngModel)]="name" placeholder="name" name="name" />
-                            <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
-                            </small>
-                        </mat-form-field>
+<nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
+    <div>
+        <div class="card-body">
+            <div>
+                <div class="editor card ">
+                    <div class="card-header" style="background-color: #777777">
+                        <h4>Create template</h4>
                     </div>
-                    <div>
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Subject</mat-label>
-                            <input matInput type="text" [(ngModel)]="subject" placeholder="Subject" name="subject" />
-                            <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
-                            </small>
-                        </mat-form-field>
-                    </div>
+                    <form [formGroup]="templateForm">
+                        <div class="card-body">
+
+                            <div>
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Template name</mat-label>
+                                    <input matInput type=" text" placeholder="name" name="name"
+                                        formControlName="name" />
+                                    <!-- <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
+                                </small> -->
+                                    <small
+                                        *ngIf="templateForm.controls['name'].hasError('required') && templateForm.controls['name'].touched"
+                                        class="form-error-msg"> Template name is required </small>
+                                    <small
+                                        *ngIf="templateForm.controls['name'].hasError('minlength') && templateForm.controls['name'].touched"
+                                        class="form-error-msg"> Template name require at least
+                                        {{templateForm.controls['name'].errors.minlength.requiredLength}} characters
+                                    </small>
+                                    <small
+                                        *ngIf="templateForm.controls['name'].hasError('maxlength') && templateForm.controls['name'].touched"
+                                        class="form-error-msg"> Template name can not contain more than
+                                        {{templateForm.controls['name'].errors.maxlength.requiredLength}} characters
+                                    </small>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Subject</mat-label>
+                                    <input matInput type="text" placeholder="Subject" name="subject"
+                                        formControlName="subject" />
+                                    <!-- <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
+                                </small> -->
+                                    <small
+                                        *ngIf="templateForm.controls['subject'].hasError('required') && templateForm.controls['subject'].touched"
+                                        class="form-error-msg"> Subject is required </small>
+                                    <small
+                                        *ngIf="templateForm.controls['subject'].hasError('minlength') && templateForm.controls['subject'].touched"
+                                        class="form-error-msg"> Subject require at least
+                                        {{templateForm.controls['subject'].errors.minlength.requiredLength}} characters
+                                    </small>
+                                    <small
+                                        *ngIf="templateForm.controls['subject'].hasError('maxlength') && templateForm.controls['subject'].touched"
+                                        class="form-error-msg"> Subject can not contain more than
+                                        {{templateForm.controls['subject'].errors.maxlength.requiredLength}} characters
+                                    </small>
+                                </mat-form-field>
+                            </div>
 
 
-                </div>
-                <email-editor id="email-editor"></email-editor>
-                <div class="col-auto">
-                    <button mat-raised-button color="primary" mat-button (click)="editorExport()">
-                        Create Template
-                    </button>
+                        </div>
+                        <email-editor id="email-editor"></email-editor>
+                        <div class="col-auto">
+                            <button mat-raised-button color="primary" mat-button (click)="editorExport()"
+                                [disabled]="templateForm.invalid">
+                                Create Template
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</nz-spin>

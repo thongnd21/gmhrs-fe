@@ -462,12 +462,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   //upload file authen gsuite
   upload(value) {
+    this.loadingFull = true;
     this.account = new AccountCompanyModel;
     this.account.primary_email = value.company_email;
     this.account.id = localStorage.getItem('id');
     this.companyConnectionService.gsuiteCredentialSave(this.account)
       .subscribe(
         (res) => {
+          this.loadingFull = false;
           const result: any = res;
           if (result.status == "success") {
             this.toast.success("Con-fig G-Suite Authentication Successfully!");
@@ -480,6 +482,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           }
         },
         (error) => {
+          this.loadingFull = false;
           this.toast.error("Server is not available!");
           this.nextButonConditonGSuiteCredential = false;
         })
@@ -514,12 +517,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // api endpoint
   onSubmitURLConection(value) {
+    this.loadingFull = true;
     this.account = new AccountCompanyModel();
     this.account.id = localStorage.getItem('id');
     this.account.api_endpoint = value.url;
     console.log(this.account);
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
+        this.loadingFull = false;
         if (res.status == "success") {
           this.toast.success("Save API Endpoint successfully!");
           this.nextButonConditonApiEnpoint = true;
@@ -531,6 +536,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         }
       },
       (error) => {
+        this.loadingFull = false;
         this.toast.error("Server is not available!");
         this.nextButonConditonApiEnpoint = false;
       }
@@ -889,6 +895,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // save connection string
   onSubmitConection(value) {
+    this.loadingFull = true;
     this.companyConnection = new CompanyConnection();
     this.companyConnection.dbName = value.dbName;
     this.companyConnection.host = value.host;
@@ -912,16 +919,19 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
         if (res.status == "success") {
+          this.loadingFull = false;
           this.toast.success("Save connection successfully!");
           this.nextButonConditonConnectionString = true;
           this.closeModal();
         };
         if (res.status == "fail") {
+          this.loadingFull = false;
           this.toast.error("Save connection fail!");
           this.nextButonConditonConnectionString = false;
         }
       },
       (error) => {
+        this.loadingFull = false;
         this.toast.error("Server is not available!");
         this.nextButonConditonConnectionString = false;
       }
@@ -970,6 +980,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   saveScheduleTime() {
+    this.loadingFull = true;
     let check = false;
     let minute = '*';
     let hours = '*';
@@ -979,7 +990,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     // console.log(this.monthTime);
     console.log(this.weekTime);
     console.log(this.dailyTime);
-    if (this.typeSync === 1 && this.monthDayChoose !== null && this.monthDayChoose.length > 0 && this.monthTime !== undefined ) {
+    if (this.typeSync === 1 && this.monthDayChoose !== null && this.monthDayChoose.length > 0 && this.monthTime !== undefined) {
       this.monthTime = moment(this.monthTime, 'HH:mm').utc().format('HH:mm');
       dayInMonth = '';
       for (let i = 0; i < this.monthDayChoose.length; i++) {
@@ -993,38 +1004,40 @@ export class CompanyConfigConnectionComponent implements OnInit {
       let length = this.monthTime.length;
       minute = this.monthTime.slice(n + 1, length);
       check = true;
-    } else if (this.typeSync === 2 && this.weekDayChoose !== null && this.weekDayChoose.length > 0 && this.weekTime !== undefined  ) {
-        this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
-        dayInWeek = '';
-        for (let i = 0; i < this.weekDayChoose.length; i++) {
-          dayInWeek += this.weekDayChoose[i];
-          if (i != this.weekDayChoose.length - 1) {
-            dayInWeek += ',';
-          }
+    } else if (this.typeSync === 2 && this.weekDayChoose !== null && this.weekDayChoose.length > 0 && this.weekTime !== undefined) {
+      this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
+      dayInWeek = '';
+      for (let i = 0; i < this.weekDayChoose.length; i++) {
+        dayInWeek += this.weekDayChoose[i];
+        if (i != this.weekDayChoose.length - 1) {
+          dayInWeek += ',';
         }
-        hours = this.weekTime.split(':', 1);
-        let n = this.weekTime.indexOf(":");
-        let lenght = this.weekTime.length;
-        minute = this.weekTime.slice(n + 1, lenght);
-        check = true;
-    } else if (this.typeSync === 3 && this.dailyTime !== undefined ) {
-        this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
-        hours = this.dailyTime.split(':', 1);
-        let n = this.dailyTime.indexOf(":");
-        let lenght = this.dailyTime.length;
-        minute = this.dailyTime.slice(n + 1, lenght);
-        check = true;
+      }
+      hours = this.weekTime.split(':', 1);
+      let n = this.weekTime.indexOf(":");
+      let lenght = this.weekTime.length;
+      minute = this.weekTime.slice(n + 1, lenght);
+      check = true;
+    } else if (this.typeSync === 3 && this.dailyTime !== undefined) {
+      this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
+      hours = this.dailyTime.split(':', 1);
+      let n = this.dailyTime.indexOf(":");
+      let lenght = this.dailyTime.length;
+      minute = this.dailyTime.slice(n + 1, lenght);
+      check = true;
     }
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
     account['schedule_time'] = minute + ' ' + hours + ' ' + dayInMonth + ' * ' + dayInWeek;
-    if(check){
+    if (check) {
       this.companyConnectionService.saveSchedule(account).subscribe(
         (res: any) => {
+          this.loadingFull = false;
           this.loadingSubmit = false;
           this.toast.success(res.message);
           this.getSchedule();
         }, (err) => {
+          this.loadingFull = false;
           this.loadingSubmit = false;
           if (err.status == 0) {
             this.toast.error("Connection timeout!");
@@ -1034,7 +1047,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.toast.error("Server is not available!");
         }
       )
-    }else{
+    } else {
+      this.loadingFull = false;
       this.toast.error("Invalid input!");
     }
   }
