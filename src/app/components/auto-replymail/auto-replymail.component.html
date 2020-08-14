@@ -1,4 +1,8 @@
 <div>
+  <ngx-loading [show]="loadingFull" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }">
+  </ngx-loading>
+</div>
+<div>
   <mat-tab-group>
     <mat-tab label="Mail Template">
       <div class="card-body">
@@ -148,7 +152,7 @@
 <ng-template id="dialog" #dialog>
   <mat-dialog-content>
     <div *ngIf="checkAssign==true" style="color: red;">
-      This template is assign specific.<br/> Please delete specific assign before ?
+      This template is assign specific.<br /> Please delete specific assign before ?
     </div>
     <div *ngIf="checkAssign==false">
       Are you sure want to delete this template ?

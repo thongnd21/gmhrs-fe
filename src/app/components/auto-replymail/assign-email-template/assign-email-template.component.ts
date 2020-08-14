@@ -158,6 +158,7 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   getAllTemplateRuleByAccountId() {
+    this.loading = true;
     this.emailService.getAllTemplateRuleByAccountId(this.accountId).subscribe(
       (res: any) => {
         this.asignRuleListBegin = res;
@@ -165,10 +166,11 @@ export class AssignEmailTemplateComponent implements OnInit {
         this.data = res
         this.dataSource = new MatTableDataSource(this.data);
         console.log(res);
-
+        this.loading = false;
       },
       (err) => {
         console.log(err);
+        this.loading = false;
         this.toast.error("Server is unavailable!");
       }
     )
@@ -238,17 +240,23 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   synch() {
+    this.dialog.closeAll();
+    this.loading = true;
     this.emailService.syncDateForTemplate(this.accountId).subscribe(
       (res: any) => {
         if (res.status === 200) {
-          this.toast.success(res.message);
+          this.toast.success("Apply Template Successfully!");
+          this.loading = false;
         } else {
-          this.toast.error("Synchronize assign auto_reply mail fail!");
+          this.loading = false;
+          this.toast.error("Aplly Template Fail!");
         }
 
       },
       (err) => {
+        this.loading = false;
         console.log(err);
+        this.toast.error("Server unavailable");
 
       }
     )
@@ -256,6 +264,7 @@ export class AssignEmailTemplateComponent implements OnInit {
 
   detailResponse = [];
   detail(modal, data) {
+    this.loading = true;
     console.log(data);
     this.detailResponse = [];
     this.emailService.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
@@ -266,10 +275,12 @@ export class AssignEmailTemplateComponent implements OnInit {
           element["primary_email"] = res[i].primary_email;
           this.detailResponse.push(element);
         }
+        this.loading = false;
       },
       (err) => {
+        this.loading = false;
         console.log(err);
-        // this.
+        this.toast.error("Server unavailable!")
       }
     )
     this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
