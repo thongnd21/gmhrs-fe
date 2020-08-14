@@ -24,6 +24,7 @@ import * as moment from 'moment';
 
 export class AppHeaderComponent {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+  role = Number.parseInt(localStorage.getItem('roleId'));
   username;
   lastSyncTime = localStorage.getItem('last_sync_at');
   selectedAll = true;

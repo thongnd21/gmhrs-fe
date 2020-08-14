@@ -23,7 +23,7 @@ export class AutoReplymailComponent implements OnInit {
 
   displayedColumns: string[] = [];
   dataSource: any;
-  loading = false;
+  loadingFull = false;
   tempate = {};
   name = "";
   checkAdd = true;
@@ -108,6 +108,7 @@ export class AutoReplymailComponent implements OnInit {
 
   getAllTemplate() {
     let listTemplate = [];
+    this.loadingFull = true
     this.emailServices.getAllTemplate(this.accountId).subscribe(
       (res) => {
         const templateList: any = res;
@@ -122,9 +123,11 @@ export class AutoReplymailComponent implements OnInit {
         this.dataSource = new MatTableDataSource(listTemplate);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.loadingFull = false
       },
       (err) => {
         console.log(err);
+        this.loadingFull = false
         this.toast.error("Server unavailable!");
 
       }
@@ -144,12 +147,15 @@ export class AutoReplymailComponent implements OnInit {
 
 
   syncTemplate(id) {
+    this.loadingFull = true
     this.emailServices.syncEmailTemplate(id).subscribe(
       (res: any) => {
         this.getAllTemplate();
+        this.loadingFull = false
         this.toast.success(res.message);
       },
       (err) => {
+        this.loadingFull = false
         this.toast.error("Services is not available!");
       }
     )
@@ -158,17 +164,19 @@ export class AutoReplymailComponent implements OnInit {
   setDefault(templateId) {
     var data = {};
     console.log(templateId);
-
+    this.loadingFull = true
     data["id"] = templateId;
     data["accountId"] = localStorage.getItem('id');
     this.emailServices.setTemplateDefault(data).subscribe(
       (res: any) => {
         console.log(res);
         this.getAllTemplate();
+        this.loadingFull = false
         this.toast.success("Set Default Successfully!")
       },
       (err) => {
         console.log(err);
+        this.loadingFull = false
         this.toast.success("Set Default Fail!")
       }
     )
@@ -211,15 +219,18 @@ export class AutoReplymailComponent implements OnInit {
   }
 
   delete() {
+    this.loadingFull = true;
     console.log(this.deleteTemplateId);
-    
+
     this.emailServices.deleteTemplate(this.deleteTemplateId).subscribe(
       (res: any) => {
+        this.loadingFull = false;
         console.log(res);
         this.dialog.closeAll();
         location.reload();
       },
       (err) => {
+        this.loadingFull = false
         console.log(err);
 
       }
