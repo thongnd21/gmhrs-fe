@@ -3,15 +3,19 @@ import { EmailEditorComponent } from 'angular-email-editor';
 import { EmailApiService } from '../../api-services/email-api.service';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { AssignEmailTemplateComponent } from './assign-email-template/assign-email-template.component'
+import { Template } from '@angular/compiler/src/render3/r3_ast';
 @Component({
   selector: 'app-auto-replymail',
   templateUrl: './auto-replymail.component.html',
-  styleUrls: ['./auto-replymail.component.css']
+  styleUrls: ['./auto-replymail.component.css'],
+  template: `<app-assign-email-template #assign></app-assign-email-template>`
 })
 export class AutoReplymailComponent implements OnInit {
+  @ViewChild("assign") assignComponent: AssignEmailTemplateComponent;
   @ViewChild(EmailEditorComponent)
   emailEditor: EmailEditorComponent;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -28,6 +32,7 @@ export class AutoReplymailComponent implements OnInit {
     private toast: ToastrService,
     private modalService: NgbModal,
     private router: Router,
+    public dialog: MatDialog,
   ) { }
   accountId = localStorage.getItem('id');
 
@@ -165,6 +170,58 @@ export class AutoReplymailComponent implements OnInit {
       (err) => {
         console.log(err);
         this.toast.success("Set Default Fail!")
+      }
+    )
+  }
+
+  deleteTemplateId;
+  assignTemplateList = [];
+  checkTemplateAssigningList = [];
+  checkAssign: Boolean;
+  openDialogDelete(dialog, templateId) {
+    this.checkTemplateAssigningList = [];
+    this.deleteTemplateId = templateId;
+
+    this.emailServices.getAllTemplateRuleByAccountId(this.accountId).subscribe(
+      (res: any) => {
+        console.log(res);
+
+        this.assignTemplateList = res
+        console.log(this.assignTemplateList);
+
+        if (this.assignTemplateList != null && this.assignTemplateList.length > 0 && this.assignTemplateList.length != undefined) {
+          for (let i = 0; i < this.assignTemplateList.length; i++) {
+            if (this.deleteTemplateId == this.assignTemplateList[i].templateId) {
+              this.checkTemplateAssigningList.push(this.assignTemplateList[i]);
+            }
+          }
+        }
+        if (this.checkTemplateAssigningList != null && this.checkTemplateAssigningList.length > 0 && this.checkTemplateAssigningList.length != undefined) {
+          this.checkAssign = true;
+        } else { this.checkAssign = false };
+        console.log(this.checkAssign);
+
+      },
+      (err) => {
+        console.log(err);
+        this.toast.error("Server is unavailable!");
+      }
+    )
+    this.dialog.open(dialog);
+  }
+
+  delete() {
+    console.log(this.deleteTemplateId);
+    
+    this.emailServices.deleteTemplate(this.deleteTemplateId).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.dialog.closeAll();
+        location.reload();
+      },
+      (err) => {
+        console.log(err);
+
       }
     )
   }

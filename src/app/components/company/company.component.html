@@ -18,7 +18,7 @@
       </div>
     </div>
   </div>
-  <mat-table [dataSource]="dataSource" matSort>
+  <mat-table [dataSource]="dataSource" matSort boder="true">
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         Email
@@ -58,16 +58,14 @@
       <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
 
         <!-- view detail account company icon button -->
-        <button mat-icon-button (click)="openDetail(detail,row.id)">
+        <!-- <button mat-icon-button (click)="openDetail(detail,row.id)">
           <mat-icon>
             remove_red_eye
           </mat-icon>
-        </button>
+        </button> -->
         <!-- update account company icon button -->
-        <button mat-icon-button (click)="opentUpdate(update,row)">
-          <mat-icon class="mat-18 mat-color-primary">
-            edit
-          </mat-icon>
+        <button mat-raised-button color="primary" (click)="opentUpdate(update,row)">
+          View
         </button>
       </mat-cell>
     </ng-container>
@@ -146,7 +144,7 @@
               <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
                 <div class="pb-1">
                   <mat-form-field hidden>
-                    <input matInput name="id" formControlName="id"  value="">
+                    <input matInput name="id" formControlName="id" value="">
                   </mat-form-field>
                   <mat-form-field class="full-width">
                     <input matInput name="email" formControlName="email" placeholder="Email" value="">
@@ -170,13 +168,23 @@
                     <input matInput name="phone" formControlName="phone" placeholder="Phone" value="">
                   </mat-form-field>
                 </div>
+                <div class="pb-1">
+                  <mat-form-field class="full-width" >
+                    <input matInput name="created_date" formControlName="created_date" placeholder="Created Date" value="" readonly>
+                  </mat-form-field>
+                </div>
+                <div class="pb-1">
+                  <mat-form-field class="full-width">
+                    <input matInput name="modified_date" formControlName="modified_date" placeholder="Modified Date" value="" readonly>
+                  </mat-form-field>
+                </div>
               </div>
             </div>
             <button mat-flat-button class="col-md-2 ml-2" color="accent" (click)="closeModal()">
               Close
             </button>
-            <button mat-flat-button class="col-md-4 ml-2 btn-success" type="submit" color="primary" ngbAutofocus
-              [disabled]="accountCompanyForm.invalid">Update</button>
+            <!-- <button mat-flat-button class="col-md-4 ml-2 btn-success" type="submit" color="primary" ngbAutofocus
+              [disabled]="accountCompanyForm.invalid">Update</button> -->
           </form>
         </mat-card-content>
       </mat-card>

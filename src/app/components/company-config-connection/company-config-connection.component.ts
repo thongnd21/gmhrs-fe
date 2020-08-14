@@ -248,6 +248,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   nextButonConditonApiEnpoint = false;
   nextButonConditonGSuiteCredential = false;
   file_name_auth_gsuite_company;
+  loadingFull = false;
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(
@@ -278,6 +279,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // form connection String
   createConnectionStringForm() {
+    this.loadingFull = true;
     const accountId = localStorage.getItem('id');
     // this.account = new AccountCompanyModel;
     this.nextButonConditonConnectionString = false;
@@ -310,11 +312,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
           });
           this.disableSaveConnectionStringButton = false;
           this.nextButonConditonConnectionString = true;
+          this.loadingFull = false;
           // this.disableTestConnectionStringButton = false;
         }
         else {
           this.disableSaveConnectionStringButton = false;
           this.nextButonConditonConnectionString = false;
+          this.loadingFull = false;
           // this.disableTestConnectionStringButton = true;
         }
 
@@ -389,8 +393,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   //test file authen guite
   onTest(modal, value) {
+    this.loadingFull = true;
     let formData = new FormData();
     let company_email = value.company_email;
+    console.log(this.loadingFull);
+
     if (company_email == "" || company_email == null || company_email == undefined) {
       this.toast.error("Please input company email");
     } else {
@@ -399,6 +406,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
           formData.set("company_email", company_email);
           this.sendFile(modal, formData);
+
         }
       }
       if (this.uploadedFiles == undefined) {
@@ -443,9 +451,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
         // console.log(this.gsuiteAuthenStatus);
         // this.toast.success("Upload file success!");
         //open modal
+        this.loadingFull = false;
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
       },
       (error) => {
+        this.loadingFull = false;
         this.toast.error("Server is not available!");
       })
   }
@@ -529,6 +539,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
 
   onTestURLConection(modal, value) {
+    this.loadingFull = true;
     console.log(value);
     const endpoint = value.url
     this.loadingTestAPI = true;
@@ -554,6 +565,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.apiEndpointFail = false;
         this.enableDataAPIResult = true;
         this.loadingTestAPI = false;
+        this.loadingFull = false;
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
       },
       (error) => {
@@ -581,6 +593,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.loadingTestAPI = false;
         this.enableDataAPIResult = true;
         this.anableButtonSaveAPIEndpoint = false;
+        this.loadingFull = false;
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
         // this.toast.error(error.message);
         console.log(error);
@@ -791,6 +804,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // test connection string
   onTestConection(modal, value) {
+    this.loadingFull = true;
     this.loadingTestConnection = true;
     this.companyConnection = new CompanyConnection();
     this.companyConnection.dbName = value.dbName;
@@ -826,6 +840,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionFail = false;
             this.disableSaveConnectionStringButton = check;
             console.log(this.dataAPIEndpoindEmployee);
+            this.loadingFull = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           } if (res.checkConnection.status == "fail" || res.status == 0) {
             this.connectionStatus.connection.status = "Fail";
@@ -852,10 +867,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.enableDataConnectionResult = true;
             this.connectionFail = true;
             this.loadingTestConnection = false;
+            this.loadingFull = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
           }
         } else {
+          this.loadingFull = false;
           this.loadingTestConnection = false;
           console.log(res);
         }
@@ -863,6 +880,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       },
       (error) => {
         console.log(error);
+        this.loadingFull = false;
         this.loadingTestConnection = false;
         this.toast.error("Server is not available!");
       }
