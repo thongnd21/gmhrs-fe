@@ -151,7 +151,7 @@
                                             </ul>
                                         </nz-dropdown-menu>
                                     </div>
-                                    <div *ngIf="specRuleCheck.specificBy === 'employee'">
+                                    <!-- <div *ngIf="specRuleCheck.specificBy === 'employee'">
                                         <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
                                             nz-button nz-dropdown [nzDropdownMenu]="employeeMenu">
                                             <span *ngFor="let employee of specRuleCheck.employee">
@@ -168,7 +168,7 @@
                                                 </li>
                                             </ul>
                                         </nz-dropdown-menu>
-                                    </div>
+                                    </div> -->
                                     <div *ngIf="specRuleCheck.specificBy === 'department'">
                                         <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
                                             nz-button nz-dropdown [nzDropdownMenu]="departmentMenu">
@@ -286,10 +286,9 @@
                             nzType="primary">New</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmUpdateAllSignature()"
                             [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Synchronize now</button>
-                        <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplate()"
+                        <button nz-button style="margin-right: 1cm;" (click)="showConfirmSetPrimaryTemplate()"
                             [disabled]="isSetPrimaryDisable" [nzLoading]="isSetPrimaryTemplateLoading"
-                            nzType="primary">Set
-                            default</button>
+                            nzType="primary">Set default</button>
                     </p>
                 </div>
             </mat-tab>
@@ -425,7 +424,7 @@
                         nzType="primary">Save</button>
                     <button nz-button style="margin-right: 1cm;" (click)="newSignatureRule()"
                         nzType="primary">New</button>
-                    <button nz-button style="margin-right: 1cm;" (click)="setPrimaryTemplateRule()"
+                    <button nz-button style="margin-right: 1cm;" (click)="showConfirmSetPrimaryTemplateRule()"
                         [disabled]="isSetPrimaryRuleDisable" [nzLoading]="isSetPrimaryTemplateRuleLoading"
                         nzType="primary">Set default</button>
                 </div>
