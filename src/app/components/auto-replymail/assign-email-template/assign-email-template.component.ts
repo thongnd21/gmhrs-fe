@@ -220,13 +220,14 @@ export class AssignEmailTemplateComponent implements OnInit {
     this.emailService.saveAssignTemplate(send).subscribe(
       (res: any) => {
 
-
+        console.log(res);
+        
         if (res.code === 200) {
           this.toast.success("Save successfully");
         } else if (res.code === 500) {
-          this.toast.error("Save fail");
+          this.toast.error("Save fail!");
         } else if (res.code === 400) {
-          this.toast.error
+          this.toast.error("Miss Field!")
         }
         this.dialog.closeAll();
       },
