@@ -1,42 +1,46 @@
-<div>
+<!-- <div>
     <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }">
     </ngx-loading>
-</div>
-<div>
-    <div class="card-body">
-        <div>
-            <div class="editor card ">
-                <div class="card-header" style="background-color: #777777">
-                    <h4>Create template</h4>
-                </div>
-                <div class="card-body">
-
-                    <div>
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Template name</mat-label>
-                            <input matInput type=" text" [(ngModel)]="name" placeholder="name" name="name" />
-                            <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
-                            </small>
-                        </mat-form-field>
+</div> -->
+<nz-spin [nzSpinning]="loading" nzTip="Loading..." [nzSize]="'large'">
+    <div>
+        <div class="card-body">
+            <div>
+                <div class="editor card ">
+                    <div class="card-header" style="background-color: #777777">
+                        <h4>Create template</h4>
                     </div>
-                    <div>
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Subject</mat-label>
-                            <input matInput type="text" [(ngModel)]="subject" placeholder="Subject" name="subject" />
-                            <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
-                            </small>
-                        </mat-form-field>
+                    <div class="card-body">
+                        <div>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Template name</mat-label>
+                                <input matInput type=" text" [(ngModel)]="name" placeholder="name" name="name" />
+                                <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
+                                </small>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Subject</mat-label>
+                                <input matInput type="text" [(ngModel)]="subject" placeholder="Subject"
+                                    name="subject" />
+                                <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
+                                </small>
+                            </mat-form-field>
+                        </div>
                     </div>
-
-
-                </div>
-                <email-editor id="email-editor"></email-editor>
-                <div class="col-auto">
-                    <button mat-raised-button color="primary" mat-button (click)="editorExport()">
-                        Create Template
-                    </button>
+                    <email-editor id="email-editor"></email-editor>
+                    <div class="col-auto">
+                        <button style="margin-right: 5mm;" mat-raised-button color="primary" mat-button
+                            (click)="editorExport()">
+                            Create Template
+                        </button>
+                        <button mat-raised-button color="primary" mat-button (click)="goToAssignEmail()">
+                            Close
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</nz-spin>
