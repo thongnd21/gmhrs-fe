@@ -979,7 +979,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
     // console.log(this.monthTime);
     console.log(this.weekTime);
     console.log(this.dailyTime);
-    if (this.typeSync === 1 && this.monthDayChoose !== null && this.monthDayChoose.length > 0 && this.monthTime !== undefined ) {
+    console.log(this.typeSync);
+    
+    if (this.typeSync === 1 && this.monthDayChoose !== null && this.monthDayChoose !== undefined
+      && this.monthDayChoose.length > 0
+       && this.monthTime !== undefined 
+       && this.monthTime !== null 
+       && this.monthTime !== ''  
+       ) {
       this.monthTime = moment(this.monthTime, 'HH:mm').utc().format('HH:mm');
       dayInMonth = '';
       for (let i = 0; i < this.monthDayChoose.length; i++) {
@@ -993,7 +1000,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
       let length = this.monthTime.length;
       minute = this.monthTime.slice(n + 1, length);
       check = true;
-    } else if (this.typeSync === 2 && this.weekDayChoose !== null && this.weekDayChoose.length > 0 && this.weekTime !== undefined  ) {
+    } else if (this.typeSync === 2 && this.weekDayChoose !== null && this.weekDayChoose !== undefined
+       && this.weekDayChoose.length > 0 
+       && this.weekTime !== undefined 
+       && this.weekTime !== null 
+       && this.weekTime !== ''   ) {
         this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
         dayInWeek = '';
         for (let i = 0; i < this.weekDayChoose.length; i++) {
@@ -1007,7 +1018,10 @@ export class CompanyConfigConnectionComponent implements OnInit {
         let lenght = this.weekTime.length;
         minute = this.weekTime.slice(n + 1, lenght);
         check = true;
-    } else if (this.typeSync === 3 && this.dailyTime !== undefined ) {
+    } else if (this.typeSync === 3 && this.dailyTime !== undefined 
+      && this.dailyTime !== null 
+       && this.dailyTime !== ''
+      ) {
         this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
         hours = this.dailyTime.split(':', 1);
         let n = this.dailyTime.indexOf(":");
@@ -1018,6 +1032,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
     account['schedule_time'] = minute + ' ' + hours + ' ' + dayInMonth + ' * ' + dayInWeek;
+    console.log(check);
     if(check){
       this.companyConnectionService.saveSchedule(account).subscribe(
         (res: any) => {
@@ -1035,6 +1050,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         }
       )
     }else{
+      this.getSchedule();
       this.toast.error("Invalid input!");
     }
   }
