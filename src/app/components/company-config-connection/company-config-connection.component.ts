@@ -970,17 +970,18 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   saveScheduleTime() {
-    this.loadingSubmit = true;
-    console.log(this.loadingSubmit);
+    let check = false;
     let minute = '*';
     let hours = '*';
     let dayInMonth = '*';
     let dayInWeek = '*';
-    console.log("start parst time");
-    if (this.typeSync === 1) {
+    // console.log("start parst time");
+    // console.log(this.monthTime);
+    console.log(this.weekTime);
+    console.log(this.dailyTime);
+    if (this.typeSync === 1 && this.monthDayChoose !== null && this.monthDayChoose.length > 0 && this.monthTime !== undefined ) {
       this.monthTime = moment(this.monthTime, 'HH:mm').utc().format('HH:mm');
       dayInMonth = '';
-      console.log(this.monthDayChoose);
       for (let i = 0; i < this.monthDayChoose.length; i++) {
         dayInMonth += this.monthDayChoose[i];
         if (i != this.monthDayChoose.length - 1) {
@@ -991,8 +992,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
       let n = this.monthTime.indexOf(":");
       let length = this.monthTime.length;
       minute = this.monthTime.slice(n + 1, length);
-    } else
-      if (this.typeSync === 2) {
+      check = true;
+    } else if (this.typeSync === 2 && this.weekDayChoose !== null && this.weekDayChoose.length > 0 && this.weekTime !== undefined  ) {
         this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
         dayInWeek = '';
         for (let i = 0; i < this.weekDayChoose.length; i++) {
@@ -1005,31 +1006,37 @@ export class CompanyConfigConnectionComponent implements OnInit {
         let n = this.weekTime.indexOf(":");
         let lenght = this.weekTime.length;
         minute = this.weekTime.slice(n + 1, lenght);
-      } else {
+        check = true;
+    } else if (this.typeSync === 3 && this.dailyTime !== undefined ) {
         this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
         hours = this.dailyTime.split(':', 1);
-        let n = this.dailyTime.indexOf("@");
+        let n = this.dailyTime.indexOf(":");
         let lenght = this.dailyTime.length;
         minute = this.dailyTime.slice(n + 1, lenght);
-      }
+        check = true;
+    }
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
     account['schedule_time'] = minute + ' ' + hours + ' ' + dayInMonth + ' * ' + dayInWeek;
-    this.companyConnectionService.saveSchedule(account).subscribe(
-      (res: any) => {
-        this.loadingSubmit = false;
-        this.toast.success(res.message);
-        this.getSchedule();
-      }, (err) => {
-        this.loadingSubmit = false;
-        if (err.status == 0) {
-          this.toast.error("Connection timeout!");
-        } if (err.status == 400) {
+    if(check){
+      this.companyConnectionService.saveSchedule(account).subscribe(
+        (res: any) => {
+          this.loadingSubmit = false;
+          this.toast.success(res.message);
+          this.getSchedule();
+        }, (err) => {
+          this.loadingSubmit = false;
+          if (err.status == 0) {
+            this.toast.error("Connection timeout!");
+          } if (err.status == 400) {
+            this.toast.error("Server is not available!");
+          }
           this.toast.error("Server is not available!");
         }
-        this.toast.error("Server is not available!");
-      }
-    )
+      )
+    }else{
+      this.toast.error("Invalid input!");
+    }
   }
 
   async getSchedule() {
