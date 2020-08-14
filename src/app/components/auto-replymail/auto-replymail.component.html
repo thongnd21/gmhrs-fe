@@ -1,143 +1,140 @@
-<div>
-  <ngx-loading [show]="loadingFull" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }">
-  </ngx-loading>
-</div>
-<div>
-  <mat-tab-group>
-    <mat-tab label="Mail Template">
-      <div class="card-body">
+<nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
+  <div>
+    <mat-tab-group>
+      <mat-tab label="Mail Template">
+        <div class="card-body">
 
-        <div class="row">
-          <div class="col-auto mr-auto">
+          <div class="row">
+            <div class="col-auto mr-auto">
 
+            </div>
+            <div class="col-auto">
+              <button color="primary" mat-button [routerLink]="['/create-auto-reply-mail']">
+                <mat-icon>
+                  create
+                </mat-icon>
+                Create Template
+              </button>
+            </div>
           </div>
-          <div class="col-auto">
-            <button color="primary" mat-button [routerLink]="['/create-auto-reply-mail']">
-              <mat-icon>
-                create
-              </mat-icon>
-              Create Template
-            </button>
-          </div>
-        </div>
-        <!-- template detail -->
-        <div class=" ml-05 mr-05 mt-10 pb-1 pt-08" style="margin-top: 30px;">
-          <mat-table [dataSource]="dataSource" matSort style="text-align: center;">
-            <ng-container matColumnDef="count">
-              <mat-header-cell *matHeaderCellDef>
-                No.
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row; let i = index" data-label="No.">
-                {{ i + 1 }}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="templateName">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>
-                Template Name
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                {{ row.templateName }}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="status">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>
-                Default
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                <!-- <mat-chip-list aria-label="Fish selection"> -->
-                <!-- <mat-chip selected > -->
-                <i class="material-icons" style="color:green" *ngIf="row.status==true">check_circle_outline</i>
-                <!-- </mat-chip> -->
-                <!-- <mat-chip *ngIf="row.status==false">Cease</mat-chip> -->
-                <!-- </mat-chip-list> -->
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="create_at">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>
-                Created At
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                {{ row.create_at }}
-              </mat-cell>
-            </ng-container>
+          <!-- template detail -->
+          <div class=" ml-05 mr-05 mt-10 pb-1 pt-08" style="margin-top: 30px;">
+            <mat-table [dataSource]="dataSource" matSort style="text-align: center;">
+              <ng-container matColumnDef="count">
+                <mat-header-cell *matHeaderCellDef>
+                  No.
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row; let i = index" data-label="No.">
+                  {{ i + 1 }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="templateName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Template Name
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                  {{ row.templateName }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Default
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                  <!-- <mat-chip-list aria-label="Fish selection"> -->
+                  <!-- <mat-chip selected > -->
+                  <i class="material-icons" style="color:green" *ngIf="row.status==true">check_circle_outline</i>
+                  <!-- </mat-chip> -->
+                  <!-- <mat-chip *ngIf="row.status==false">Cease</mat-chip> -->
+                  <!-- </mat-chip-list> -->
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="create_at">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Created At
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                  {{ row.create_at }}
+                </mat-cell>
+              </ng-container>
 
-            <ng-container matColumnDef="action">
-              <mat-header-cell *matHeaderCellDef>
-                Action
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-                <!-- view detail account company icon button -->
-                <!-- <button mat-icon-button (click)="openTemplateDetail(row.templateId)"> -->
-                <!-- <mat-icon>
+              <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef>
+                  Action
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+                  <!-- view detail account company icon button -->
+                  <!-- <button mat-icon-button (click)="openTemplateDetail(row.templateId)"> -->
+                  <!-- <mat-icon>
                     remove_red_eye
                   </mat-icon> -->
-                <button mat-raised-button color="primary" style="margin-right: 20px;"
-                  (click)="openTemplateDetail(row.templateId)">
-                  View
-                </button>
-                <button mat-raised-button color="primary" style="margin-right: 20px;"
-                  (click)="setDefault(row.templateId)">
-                  Set Default
-                </button>
-                <button mat-raised-button color="warn" (click)="openDialogDelete(dialog, row.templateId)">
-                  Delete
-                </button>
-                <!-- </button> -->
-                <!-- update account company icon button -->
-                <!-- <button mat-icon-button (click)="syncTemplate(row.templateId)">
+                  <button mat-raised-button color="primary" style="margin-right: 20px;"
+                    (click)="openTemplateDetail(row.templateId)">
+                    View
+                  </button>
+                  <button mat-raised-button color="primary" style="margin-right: 20px;"
+                    (click)="setDefault(row.templateId)">
+                    Set Default
+                  </button>
+                  <button mat-raised-button color="warn" (click)="openDialogDelete(dialog, row.templateId)">
+                    Delete
+                  </button>
+                  <!-- </button> -->
+                  <!-- update account company icon button -->
+                  <!-- <button mat-icon-button (click)="syncTemplate(row.templateId)">
                   <mat-icon class="mat-18 mat-color-primary">
                     autorenew
                   </mat-icon>
                 </button> -->
-              </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
-          </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Assign Auto-reply mail template">
+        <div class="card-body">
+          <app-assign-email-template></app-assign-email-template>
+        </div>
+
+      </mat-tab>
+    </mat-tab-group>
+
+    <!-- editor -->
+
+
+  </div>
+  <div>
+    <!-- <app-assign-email-template></app-assign-email-template> -->
+  </div>
+
+  <ng-template #detail let-modal>
+    <div class="modal-body">
+
+      <div class="card-body">
+        <div class="editor">
+          <email-editor (loaded)="editorLoaded($event)"></email-editor>
         </div>
       </div>
-    </mat-tab>
-    <mat-tab label="Assign Auto-reply mail template">
-      <div class="card-body">
-        <app-assign-email-template></app-assign-email-template>
-      </div>
-
-    </mat-tab>
-  </mat-tab-group>
-
-  <!-- editor -->
-
-
-</div>
-<div>
-  <!-- <app-assign-email-template></app-assign-email-template> -->
-</div>
-
-<ng-template #detail let-modal>
-  <div class="modal-body">
-
-    <div class="card-body">
-      <div class="editor">
-        <email-editor (loaded)="editorLoaded($event)"></email-editor>
-      </div>
     </div>
-  </div>
-  <div class="card-footer">
-    <div class="button-container  mr-4">
-      <!-- <div class="spinner-container" *ngIf="loading">
+    <div class="card-footer">
+      <div class="button-container  mr-4">
+        <!-- <div class="spinner-container" *ngIf="loading">
                 <mat-spinner diameter="24"></mat-spinner>
             </div> -->
-      <button (click)="editorExport()" mat-raised-button [disabled]="loading">
-        Save
-      </button>
+        <button (click)="editorExport()" mat-raised-button [disabled]="loading">
+          Save
+        </button>
+      </div>
+      <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
-    <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
-  </div>
-</ng-template>
+  </ng-template>
 
-<!-- <div class="editor"> -->
-<!-- <button (click)="editorExport()">Export</button>
+  <!-- <div class="editor"> -->
+  <!-- <button (click)="editorExport()">Export</button>
     <script src="https://editor.unlayer.com/embed.js"></script>
     <div id="editor"></div>
     <script>
@@ -147,25 +144,26 @@
         })
     </script>
     <email-editor (loaded)="editorLoaded($event)" id="email-editor"></email-editor>  -->
-<!-- </div>    -->
+  <!-- </div>    -->
 
-<ng-template id="dialog" #dialog>
-  <mat-dialog-content>
-    <div *ngIf="checkAssign==true" style="color: red;">
-      This template is assign specific.<br /> Please delete specific assign before ?
-    </div>
-    <div *ngIf="checkAssign==false">
-      Are you sure want to delete this template ?
-    </div>
+  <ng-template id="dialog" #dialog>
+    <mat-dialog-content>
+      <div *ngIf="checkAssign==true" style="color: red;">
+        This template is assign specific.<br /> Please delete specific assign before ?
+      </div>
+      <div *ngIf="checkAssign==false">
+        Are you sure want to delete this template ?
+      </div>
 
-    <!-- {{timeSchedule}} -->
-  </mat-dialog-content>
-  <mat-dialog-actions align="center">
+      <!-- {{timeSchedule}} -->
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
 
-    <button *ngIf="checkAssign==false" mat-raised-button color="warn" (click)="delete()">
-      Delete
-    </button>
+      <button *ngIf="checkAssign==false" mat-raised-button color="warn" (click)="delete()">
+        Delete
+      </button>
 
-    <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
-  </mat-dialog-actions>
-</ng-template>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+  </ng-template>
+</nz-spin>

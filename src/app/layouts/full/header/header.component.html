@@ -12,733 +12,735 @@
 <a style="font-size: 15px; color: red;">
     Last sync : 2 hours ago
 </a> -->
-<button mat-icon-button [matMenuTriggerFor]="sync" class="m-r-5" *ngIf="role === 2">
-    <mat-icon>sync_alt</mat-icon>
-</button>
-<mat-menu #sync="matMenu" class="customize">
-    <div class="card">
-        <div class="card-header" (click)="doNotClose($event)">
-            <h5>Synchronization</h5>
-        </div>
-        <div class="card-body" (click)="doNotClose($event)">
-            <p style="font-size: 15px; ">Last sync at: </p>
-            <p style="font-size: 15px;  color: green;">{{lastSyncTime}}</p>
-            <div class="button-container  mr-4">
-                <div class="spinner-container" *ngIf="loading">
-                    <mat-spinner diameter="24"></mat-spinner>
+<nz-spin [nzSpinning]="loading" nzTip="Loading..." [nzSize]="'large'">
+    <button mat-icon-button [matMenuTriggerFor]="sync" class="m-r-5" *ngIf="role === 2">
+        <mat-icon>sync_alt</mat-icon>
+    </button>
+    <mat-menu #sync="matMenu" class="customize">
+        <div class="card">
+            <div class="card-header" (click)="doNotClose($event)">
+                <h5>Synchronization</h5>
+            </div>
+            <div class="card-body" (click)="doNotClose($event)">
+                <p style="font-size: 15px; ">Last sync at: </p>
+                <p style="font-size: 15px;  color: green;">{{lastSyncTime}}</p>
+                <div class="button-container  mr-4">
+                    <div class="spinner-container" *ngIf="loading">
+                        <mat-spinner diameter="24"></mat-spinner>
+                    </div>
+                    <button (click)="getListSynchronize($event,first,second)" mat-raised-button [disabled]="loading">
+                        Synchronize Now
+                    </button>
                 </div>
-                <button (click)="getListSynchronize($event,first,second)" mat-raised-button [disabled]="loading">
-                    Synchronize Now
-                </button>
             </div>
         </div>
-    </div>
-</mat-menu>
-<button mat-icon-button [matMenuTriggerFor]="profile" class="m-r-5" >
-    <mat-icon>settings</mat-icon>
-</button>
-<mat-menu #profile="matMenu" class="mymegamenu">
-    <button mat-menu-item [routerLink]="['/company-config-connection']" *ngIf="role === 2">
-        <mat-icon>settings</mat-icon> Settings Connection
+    </mat-menu>
+    <button mat-icon-button [matMenuTriggerFor]="profile" class="m-r-5">
+        <mat-icon>settings</mat-icon>
     </button>
-    <button mat-menu-item *ngIf="role === 2">
-        <mat-icon>account_box</mat-icon> Profile
-    </button>
-    <!-- <button mat-menu-item>
+    <mat-menu #profile="matMenu" class="mymegamenu">
+        <button mat-menu-item [routerLink]="['/company-config-connection']" *ngIf="role === 2">
+            <mat-icon>settings</mat-icon> Settings Connection
+        </button>
+        <button mat-menu-item *ngIf="role === 2">
+            <mat-icon>account_box</mat-icon> Profile
+        </button>
+        <!-- <button mat-menu-item>
         <mat-icon>notifications_off</mat-icon> Disable notifications
     </button> -->
-    <button mat-menu-item (click)="signOut()" [routerLink]="['/']">
-        <mat-icon>exit_to_app</mat-icon> Sign Out
-    </button>
-</mat-menu>
+        <button mat-menu-item (click)="signOut()" [routerLink]="['/']">
+            <mat-icon>exit_to_app</mat-icon> Sign Out
+        </button>
+    </mat-menu>
 
-<!-- Modal get first -->
-<ng-template #first let-modal>
-    <div class="modal-body">
-        <div class="card-body">
-            <h3>Synchronize Detail</h3>
-            <mat-accordion>
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            View Employee
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            View all employees
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <!-- table matched -->
-                    <p>Mathched Employee :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First name</th>
-                                <th scope="col">Last name</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Primary email</th>
-                                <th scope="col">Personal email</th>
-                                <th scope="col">Created Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
-                                <td>No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.first_name}}</td>
-                                <td>{{item.last_name}}</td>
-                                <td>{{item.address}}</td>
-                                <td>{{item.primary_email}}</td>
-                                <td>{{item.personal_email}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table new -->
-                    <button (click)="matchFirstNewAndOut()" mat-raised-button
-                        [disabled]="listNewEmp.length == 0 || listOutEmp.length == 0">Match employee </button>
-                    <p>New Employee :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First name</th>
-                                <th scope="col">Last name</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Primary email</th>
-                                <th scope="col">Personal email</th>
-                                <th scope="col">Created Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.employee.newEmployee.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.newEmployee; let i=index"
-                                [ngClass]="(listNewEmp.length > 0 && listNewEmp[0].id == item.id) ? 'select-row': 'non-select-row'"
-                                (click)="rowFirstNewSelected(item);">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.first_name}}</td>
-                                <td>{{item.last_name}}</td>
-                                <td>{{item.address}}</td>
-                                <td>{{item.primary_email}}</td>
-                                <td>{{item.personal_email}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table out -->
-                    <p>Employee out of your HR system:</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Full name</th>
-                                <th scope="col">Personal email</th>
-                                <th scope="col">Primary email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.employee.outOfHRMS.length == 0">
-                                No data
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.outOfHRMS; let i=index"
-                                [ngClass]="(listOutEmp.length > 0 && listOutEmp[0].id === item.id) ? 'select-row': 'non-select-row'"
-                                (click)="rowFirstOutSelected(item);">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.fullName}}</td>
-                                <td>{{item.personal_email}}</td>
-                                <td>{{item.primary_email}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-expansion-panel>
+    <!-- Modal get first -->
+    <ng-template #first let-modal>
+        <div class="modal-body">
+            <div class="card-body">
+                <h3>Synchronize Detail</h3>
+                <mat-accordion>
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                View Employee
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                View all employees
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <!-- table matched -->
+                        <p>Mathched Employee :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Primary email</th>
+                                    <th scope="col">Personal email</th>
+                                    <th scope="col">Created Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
+                                    <td>No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.first_name}}</td>
+                                    <td>{{item.last_name}}</td>
+                                    <td>{{item.address}}</td>
+                                    <td>{{item.primary_email}}</td>
+                                    <td>{{item.personal_email}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table new -->
+                        <button (click)="matchFirstNewAndOut()" mat-raised-button
+                            [disabled]="listNewEmp.length == 0 || listOutEmp.length == 0">Match employee </button>
+                        <p>New Employee :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Primary email</th>
+                                    <th scope="col">Personal email</th>
+                                    <th scope="col">Created Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.employee.newEmployee.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.employee.newEmployee; let i=index"
+                                    [ngClass]="(listNewEmp.length > 0 && listNewEmp[0].id == item.id) ? 'select-row': 'non-select-row'"
+                                    (click)="rowFirstNewSelected(item);">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.first_name}}</td>
+                                    <td>{{item.last_name}}</td>
+                                    <td>{{item.address}}</td>
+                                    <td>{{item.primary_email}}</td>
+                                    <td>{{item.personal_email}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table out -->
+                        <p>Employee out of your HR system:</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Full name</th>
+                                    <th scope="col">Personal email</th>
+                                    <th scope="col">Primary email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.employee.outOfHRMS.length == 0">
+                                    No data
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.employee.outOfHRMS; let i=index"
+                                    [ngClass]="(listOutEmp.length > 0 && listOutEmp[0].id === item.id) ? 'select-row': 'non-select-row'"
+                                    (click)="rowFirstOutSelected(item);">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.fullName}}</td>
+                                    <td>{{item.personal_email}}</td>
+                                    <td>{{item.primary_email}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
 
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            View Team
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            View all teams
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <!-- table matched -->
-                    <p>Mathched Team :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.team.matchedTeam.length == 0">
-                                <td>No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.matchedTeam; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.email}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table new -->
-                    <p>New Team :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.team.newTeam.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.newTeam; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.email}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table out -->
-                    <p>Team out of your HR system:</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.team.outOfHRMS.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.email}}</td>
-                                <td>{{item.description}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-expansion-panel>
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                View Team
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                View all teams
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <!-- table matched -->
+                        <p>Mathched Team :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.team.matchedTeam.length == 0">
+                                    <td>No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.team.matchedTeam; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table new -->
+                        <p>New Team :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.team.newTeam.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.team.newTeam; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table out -->
+                        <p>Team out of your HR system:</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.team.outOfHRMS.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.description}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
 
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            View Department
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            View all departments
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <!-- table matched -->
-                    <p>Mathched Department :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.department.matchedDepartment.length == 0">
-                                <td>No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.department.matchedDepartment; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table new -->
-                    <p>New Department :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.department.newDepartment.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.department.newDepartment; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table out -->
-                    <p>Department out of your HR system:</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.department.outOfHRMS.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.description}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-expansion-panel>
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            View Position
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            View all positions
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                View Department
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                View all departments
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <!-- table matched -->
+                        <p>Mathched Department :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.department.matchedDepartment.length == 0">
+                                    <td>No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.department.matchedDepartment; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table new -->
+                        <p>New Department :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.department.newDepartment.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.department.newDepartment; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table out -->
+                        <p>Department out of your HR system:</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.department.outOfHRMS.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.description}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                View Position
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                View all positions
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
 
-                    <!-- table new -->
-                    <p>New Position :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>\
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.position.newPosition.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.position.newPosition; let i=index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{item.name}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-        <div class="card-footer">
-            <div class="button-container  mr-4">
-                <div class="spinner-container" *ngIf="loading">
-                    <mat-spinner diameter="24"></mat-spinner>
-                </div>
-                <button (click)="synchronize()" mat-raised-button [disabled]="loading">
-                    Synchronize Now
-                </button>
+                        <!-- table new -->
+                        <p>New Position :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>\
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.position.newPosition.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.position.newPosition; let i=index">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{item.name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
+                </mat-accordion>
             </div>
-            <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
-        </div>
-    </div>
-</ng-template>
-
-<!-- Modal get second -->
-<ng-template #second let-modal>
-    <div class="modal-body">
-        <div class="card-body">
-            <h3>Synchronize Detail</h3>
-            <mat-accordion>
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            View Employee
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            View all employees
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <!-- table matched -->
-                    <p>Mathched Employee :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0" class="btn"
-                                        type="checkbox" value="" [(ngModel)]="selectedEmpMatchAll"
-                                        (change)="selectAllEmpMatch();">
-                                </th>
-                                <th scope="col">First name</th>
-                                <th scope="col">Last name</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Primary email</th>
-                                <th scope="col">Personal email</th>
-                                <th scope="col">Created Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
-                                <td>No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedEmpMatch(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.first_name}}</td>
-                                <td>{{item.last_name}}</td>
-                                <td>{{item.address}}</td>
-                                <td>{{item.primary_email}}</td>
-                                <td>{{item.personal_email}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table new -->
-                    <button (click)="matchNewAndOut()" mat-raised-button
-                        [disabled]="listNewEmp.length == 0 || listOutEmp.length == 0">Match employee </button>
-                    <p>New Employee :</p>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.employee.newEmployee.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedEmpNewAll"
-                                        (change)="selectAllEmpNew();">
-                                </th>
-                                <th scope="col">First name</th>
-                                <th scope="col">Last name</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Primary email</th>
-                                <th scope="col">Personal email</th>
-                                <th scope="col">Created Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.employee.newEmployee.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.newEmployee; let i=index"
-                                [ngClass]="(listNewEmp.length > 0 && listNewEmp[0].id == item.id) ? 'select-row': 'non-select-row'"
-                                (click)="rowNewSelected(item);">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelecteEmpNew(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.first_name}}</td>
-                                <td>{{item.last_name}}</td>
-                                <td>{{item.address}}</td>
-                                <td>{{item.primary_email}}</td>
-                                <td>{{item.personal_email}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table out -->
-                    <p>Employee out of your HR system:</p>
-                    <table class="table ">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.employee.outOfHRMS.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedEmpOutAll"
-                                        (change)="selectAllEmpOut();">
-                                </th>
-                                <th scope="col">Fist name</th>
-                                <th scope="col">last name</th>
-                                <th scope="col">Primary email</th>
-                                <th scope="col">Personal name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.employee.outOfHRMS.length == 0">
-                                No data
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.outOfHRMS; let i=index"
-                                [ngClass]="(listOutEmp.length > 0 && listOutEmp[0].id === item.id) ? 'select-row': 'non-select-row'"
-                                (click)="rowOutSelected(item);">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedEmpOut(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.first_name}}</td>
-                                <td>{{item.last_name}}</td>
-                                <td>{{item.primary_email}}</td>
-                                <td>{{item.personal_email}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            View Team
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            View all teams
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <!-- table matched -->
-                    <p>Mathched Team :</p>
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.team.matchedTeam.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedTeamMatchAll"
-                                        (change)="selectAllTeamMatch();">
-                                </th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.team.matchedTeam.length == 0">
-                                <td>No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.matchedTeam; let i=index">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedTeamMatch(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.email}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table new -->
-                    <p>New Team :</p>
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.team.newTeam.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedTeamNewAll"
-                                        (change)="selectAllTeamNew();">
-                                </th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.team.newTeam.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.newTeam; let i=index">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedTeamNew(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.email}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table out -->
-                    <p>Team out of your HR system:</p>
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.team.outOfHRMS.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedTeamOutAll"
-                                        (change)="selectAllTeamOut();">
-                                </th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.team.outOfHRMS.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedTeamOut(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.email}}</td>
-                                <td>{{item.description}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            View Department
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            View all departments
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <!-- table matched -->
-                    <p>Mathched Department :</p>
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedDepMatchAll"
-                                        (change)="selectAllDepMatch();">
-                                </th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
-                                <td>No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedDepMatch(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table new -->
-                    <p>New Department :</p>
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.department.newDepartment.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedDepNewAll"
-                                        (change)="selectAllDepNew();">
-                                </th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.department.newDepartment.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.department.newDepartment; let i=index">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedDepNew(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- table out -->
-                    <p>Department out of your HR system:</p>
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <input [disabled]="listSyncFinal.department.outOfHRMS.length == 0" class="btn"
-                                        type="checkbox" svalue="" [(ngModel)]="selectedDepOutAll"
-                                        (change)="selectAllDepOut();">
-                                </th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="col-12" *ngIf="listSyncFinal.department.outOfHRMS.length == 0">
-                                <td class="col-12">No data</td>
-                            </tr>
-                            <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
-                                            (change)="checkSelectedDepOut(item.id);">
-                                    </label>
-                                </td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.description}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-        <div class="card-footer">
-            <div class="button-container  mr-4">
-                <div class="spinner-container" *ngIf="loading">
-                    <mat-spinner diameter="24"></mat-spinner>
+            <div class="card-footer">
+                <div class="button-container  mr-4">
+                    <div class="spinner-container" *ngIf="loading">
+                        <mat-spinner diameter="24"></mat-spinner>
+                    </div>
+                    <button (click)="synchronize()" mat-raised-button [disabled]="loading">
+                        Synchronize Now
+                    </button>
                 </div>
-                <button (click)="synchronize()" mat-raised-button [disabled]="loading">
-                    Synchronize Now
-                </button>
+                <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
             </div>
-            <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
         </div>
-    </div>
-</ng-template>
+    </ng-template>
+
+    <!-- Modal get second -->
+    <ng-template #second let-modal>
+        <div class="modal-body">
+            <div class="card-body">
+                <h3>Synchronize Detail</h3>
+                <mat-accordion>
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                View Employee
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                View all employees
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <!-- table matched -->
+                        <p>Mathched Employee :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0"
+                                            class="btn" type="checkbox" value="" [(ngModel)]="selectedEmpMatchAll"
+                                            (change)="selectAllEmpMatch();">
+                                    </th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Primary email</th>
+                                    <th scope="col">Personal email</th>
+                                    <th scope="col">Created Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
+                                    <td>No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedEmpMatch(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.first_name}}</td>
+                                    <td>{{item.last_name}}</td>
+                                    <td>{{item.address}}</td>
+                                    <td>{{item.primary_email}}</td>
+                                    <td>{{item.personal_email}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table new -->
+                        <button (click)="matchNewAndOut()" mat-raised-button
+                            [disabled]="listNewEmp.length == 0 || listOutEmp.length == 0">Match employee </button>
+                        <p>New Employee :</p>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.employee.newEmployee.length == 0" class="btn"
+                                            type="checkbox" svalue="" [(ngModel)]="selectedEmpNewAll"
+                                            (change)="selectAllEmpNew();">
+                                    </th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Primary email</th>
+                                    <th scope="col">Personal email</th>
+                                    <th scope="col">Created Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.employee.newEmployee.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.employee.newEmployee; let i=index"
+                                    [ngClass]="(listNewEmp.length > 0 && listNewEmp[0].id == item.id) ? 'select-row': 'non-select-row'"
+                                    (click)="rowNewSelected(item);">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelecteEmpNew(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.first_name}}</td>
+                                    <td>{{item.last_name}}</td>
+                                    <td>{{item.address}}</td>
+                                    <td>{{item.primary_email}}</td>
+                                    <td>{{item.personal_email}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table out -->
+                        <p>Employee out of your HR system:</p>
+                        <table class="table ">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.employee.outOfHRMS.length == 0" class="btn"
+                                            type="checkbox" svalue="" [(ngModel)]="selectedEmpOutAll"
+                                            (change)="selectAllEmpOut();">
+                                    </th>
+                                    <th scope="col">Fist name</th>
+                                    <th scope="col">last name</th>
+                                    <th scope="col">Primary email</th>
+                                    <th scope="col">Personal name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.employee.outOfHRMS.length == 0">
+                                    No data
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.employee.outOfHRMS; let i=index"
+                                    [ngClass]="(listOutEmp.length > 0 && listOutEmp[0].id === item.id) ? 'select-row': 'non-select-row'"
+                                    (click)="rowOutSelected(item);">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedEmpOut(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.first_name}}</td>
+                                    <td>{{item.last_name}}</td>
+                                    <td>{{item.primary_email}}</td>
+                                    <td>{{item.personal_email}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                View Team
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                View all teams
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <!-- table matched -->
+                        <p>Mathched Team :</p>
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.team.matchedTeam.length == 0" class="btn"
+                                            type="checkbox" svalue="" [(ngModel)]="selectedTeamMatchAll"
+                                            (change)="selectAllTeamMatch();">
+                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.team.matchedTeam.length == 0">
+                                    <td>No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.team.matchedTeam; let i=index">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedTeamMatch(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table new -->
+                        <p>New Team :</p>
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.team.newTeam.length == 0" class="btn"
+                                            type="checkbox" svalue="" [(ngModel)]="selectedTeamNewAll"
+                                            (change)="selectAllTeamNew();">
+                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.team.newTeam.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.team.newTeam; let i=index">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedTeamNew(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table out -->
+                        <p>Team out of your HR system:</p>
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.team.outOfHRMS.length == 0" class="btn"
+                                            type="checkbox" svalue="" [(ngModel)]="selectedTeamOutAll"
+                                            (change)="selectAllTeamOut();">
+                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.team.outOfHRMS.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.team.outOfHRMS; let i=index">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedTeamOut(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.description}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                View Department
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                View all departments
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <!-- table matched -->
+                        <p>Mathched Department :</p>
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0"
+                                            class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepMatchAll"
+                                            (change)="selectAllDepMatch();">
+                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
+                                    <td>No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedDepMatch(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table new -->
+                        <p>New Department :</p>
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.department.newDepartment.length == 0"
+                                            class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepNewAll"
+                                            (change)="selectAllDepNew();">
+                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Modified date</th>
+                                    <th scope="col">Created date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.department.newDepartment.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.department.newDepartment; let i=index">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedDepNew(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.created_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- table out -->
+                        <p>Department out of your HR system:</p>
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">
+                                        <input [disabled]="listSyncFinal.department.outOfHRMS.length == 0" class="btn"
+                                            type="checkbox" svalue="" [(ngModel)]="selectedDepOutAll"
+                                            (change)="selectAllDepOut();">
+                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="col-12" *ngIf="listSyncFinal.department.outOfHRMS.length == 0">
+                                    <td class="col-12">No data</td>
+                                </tr>
+                                <tr *ngFor="let item of listSyncFinal.department.outOfHRMS; let i=index">
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                                (change)="checkSelectedDepOut(item.id);">
+                                        </label>
+                                    </td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.description}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+            <div class="card-footer">
+                <div class="button-container  mr-4">
+                    <div class="spinner-container" *ngIf="loading">
+                        <mat-spinner diameter="24"></mat-spinner>
+                    </div>
+                    <button (click)="synchronize()" mat-raised-button [disabled]="loading">
+                        Synchronize Now
+                    </button>
+                </div>
+                <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+            </div>
+        </div>
+    </ng-template>
+</nz-spin>

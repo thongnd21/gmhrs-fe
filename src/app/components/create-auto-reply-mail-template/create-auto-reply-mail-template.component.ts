@@ -36,11 +36,11 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
   ): void {
     this.createTemplateForm();
 
-  ngOnInit(): void {
+
   }
   goToAssignEmail() {
     this.router.navigate(['/auto-reply-mail'])
-
+  }
   editorExport() {
     this.loadingFull = true;
     let emailObj;
@@ -69,7 +69,7 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
             console.log(res);
             if (res.status == 200) {
               this.toast.success("Create Template Successfully !")
-//               this.router.navigate(['/auto-reply-mail']);
+              //               this.router.navigate(['/auto-reply-mail']);
             } else if (res.status == 400) {
               this.toast.error("Template with this subject existed ! Please input another again !")
             }
@@ -96,3 +96,4 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
   }
 
 }
+  
