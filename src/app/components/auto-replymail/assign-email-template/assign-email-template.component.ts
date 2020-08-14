@@ -1,7 +1,7 @@
 import { Component, OnInit, ContentChild, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { MatFormFieldControl, MatFormField, MatTableDataSource, MatTable } from '@angular/material';
+import { MatFormFieldControl, MatFormField, MatTableDataSource, MatTable, MatDialog } from '@angular/material';
 import { DepartmentApiService } from './../../../api-services/department-api.service';
 import { AccountApiService } from './../../../api-services/account-api.service';
 import { PositionApiService } from './../../../api-services/position-api.service';
@@ -43,6 +43,7 @@ export class AssignEmailTemplateComponent implements OnInit {
     private positionService: PositionApiService,
     private teamService: TeamApiService,
     private emailService: EmailApiService,
+    public dialog: MatDialog,
 
   ) {
   }
@@ -211,16 +212,21 @@ export class AssignEmailTemplateComponent implements OnInit {
     var result = this.formatListTemplateRuleByPriority(this.dataSource.data);
     send["accountId"] = this.accountId;
     send["listCreate"] = result;
+    console.log(result);
+    console.log(this.asignRuleListBegin);
+
     this.emailService.saveAssignTemplate(send).subscribe(
       (res: any) => {
 
 
         if (res.code === 200) {
           this.toast.success("Save successfully");
-        } else if (res.code === 400) {
+        } else if (res.code === 500) {
           this.toast.error("Save fail");
+        } else if (res.code === 400) {
+          this.toast.error
         }
-
+        this.dialog.closeAll();
       },
       (err) => {
         console.log(err);
@@ -272,6 +278,12 @@ export class AssignEmailTemplateComponent implements OnInit {
   closeModal() {
     this.modalService.dismissAll();
   }
-  
- 
+
+  openDialogSave(dialog) {
+    this.dialog.open(dialog);
+  }
+
+  opendialogApply(dialogApply) {
+    this.dialog.open(dialogApply);
+  }
 }

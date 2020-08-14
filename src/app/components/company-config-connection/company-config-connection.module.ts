@@ -20,6 +20,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
     imports: [
@@ -46,6 +47,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatDialogModule,
         NgxJsonViewerModule,
         MaterialFileInputModule,
+        NgxLoadingModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

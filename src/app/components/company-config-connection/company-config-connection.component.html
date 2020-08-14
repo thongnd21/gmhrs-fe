@@ -1,5 +1,8 @@
 <div>
-
+    <ngx-loading [show]="loadingFull" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }">
+    </ngx-loading>
+</div>
+<div>
     <mat-horizontal-stepper linear #stepper>
         <!-- #docregion editable -->
         <mat-step [stepControl]="accessDBForm">
@@ -369,7 +372,7 @@
                 </button>
                 <button mat-flat-button class="col-md-2 ml-2" style="margin-left: 40px;"
                     (click)="upload(gsuiteCredentialForm.value)" color="primary" [disabled]="gsuiteAuthenStatus">
-                    Upload
+                    Save
                 </button>
             </div>
         </div>

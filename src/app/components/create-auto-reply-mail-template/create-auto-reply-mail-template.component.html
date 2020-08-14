@@ -1,4 +1,8 @@
 <div>
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }">
+    </ngx-loading>
+</div>
+<div>
     <div class="card-body">
         <div>
             <div class="editor card ">
@@ -6,30 +10,32 @@
                     <h4>Create template</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-auto mr-auto">
-                            TemplateName: <input matInput type="text" [(ngModel)]="name" placeholder="name"
-                                name="name" />
+
+                    <div>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Template name</mat-label>
+                            <input matInput type=" text" [(ngModel)]="name" placeholder="name" name="name" />
                             <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
                             </small>
-                        </div>
-                        <div class="col-md-3 ml-md-auto">
-                            Subject: <input matInput type="text" [(ngModel)]="subject" placeholder="Subject"
-                                name="subject" />
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Subject</mat-label>
+                            <input matInput type="text" [(ngModel)]="subject" placeholder="Subject" name="subject" />
                             <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
                             </small>
-                        </div>
+                        </mat-form-field>
                     </div>
-                    <div class="col-auto">
-                        <button color="primary" mat-button (click)="editorExport()">
-                            <mat-icon>
-                                create
-                            </mat-icon>
-                            Create Template
-                        </button>
-                    </div>
+
+
                 </div>
                 <email-editor id="email-editor"></email-editor>
+                <div class="col-auto">
+                    <button mat-raised-button color="primary" mat-button (click)="editorExport()">
+                        Create Template
+                    </button>
+                </div>
             </div>
         </div>
     </div>

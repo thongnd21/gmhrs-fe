@@ -9,10 +9,10 @@
 
             </div>
             <div class="col-auto">
-                <button mat-button color="primary" (click)="synch()">
+                <button mat-button color="primary" (click)="opendialogApply(dialogApply)">
                     <mat-icon>assignment_turned_in</mat-icon> Apply
                 </button>
-                <button color="primary" mat-button (click)="saveTemplateRule()">
+                <button color="primary" mat-button (click)="openDialogSave(dialog)">
                     <mat-icon>
                         save
                     </mat-icon>
@@ -173,4 +173,32 @@
         </div>
     </div>
 
+</ng-template>
+
+<ng-template #dialog>
+    <mat-dialog-content>
+        <div>
+            Do you want to save ?
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" (click)="saveTemplateRule()">
+            Save
+        </button>
+        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+</ng-template>
+
+<ng-template #dialogApply>
+    <mat-dialog-content>
+        <div>
+            Do you want to apply ?
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" (click)="synch()()">
+            Apply
+        </button>
+        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
 </ng-template>

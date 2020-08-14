@@ -53,6 +53,10 @@ export class EmailApiService {
     setTemplateDefault(data) {
         // let param = new HttpParams().set('id', id);
         // return this.httpClient.get('http://localhost:3000/api/email/getTemplateRuleDetail',{params: param});
-        return this.httpClient.put(this.URL + AppSettings.EMAIL , data);
+        return this.httpClient.put(this.URL + AppSettings.EMAIL, data);
+    }
+
+    deleteTemplate(id) {
+        return this.httpClient.delete(this.URL + AppSettings.EMAIL + id);
     }
 }
