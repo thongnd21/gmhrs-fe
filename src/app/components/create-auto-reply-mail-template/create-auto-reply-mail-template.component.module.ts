@@ -26,7 +26,6 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -69,7 +68,7 @@ import { NgxLoadingModule } from 'ngx-loading';
     NzCollapseModule,
     NzSpinModule,
     NzMenuModule,
-    NgxLoadingModule,
+    NzSpinModule,
     RouterModule.forChild(CreateAutoReplyMailTemplateRoutes)
   ],
   declarations: [CreateAutoReplyMailTemplateComponent]

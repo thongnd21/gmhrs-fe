@@ -350,41 +350,113 @@ export class SignatureTemplateComponent implements OnInit {
   // console.log('editor: ' + s.anchorNode);
   // console.log('range: ' + s.getRangeAt(0));
   // }
+  showConfirmSetPrimaryTemplate(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Are you sure?</i>',
+      nzContent: '<b>Set primary will automatic save!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.setPrimaryTemplate()
+    });
+  }
   setPrimaryTemplate(): void {
     this.isSetPrimaryTemplateLoading = true;
     this.isSpinning = true;
+    let signature = new Signature;
     let id = localStorage.getItem('id');
-    let data = new Signature();
-    data.account_id = id;
-    data.name = this.signatureName;
-    this.signatureService.setPrimaryTemplate(data).subscribe(
+    signature.name = this.signatureName;
+    signature.content = this.htmlContent;
+    signature.account_id = id;
+    this.signatureService.saveSignatureTemplate(id, signature).subscribe(
       (res: any) => {
-        if (res.status) {
-          this.isSetPrimaryDisable = true;
-          this.toast.success(res.message);
+        let respone = {
+          action: '',
+          message: null,
+          status: null,
+          id: null
+        }
+        respone = res;
+        if (respone.status === true) {
+          this.toast.success(respone.message);
+          if (respone.action === 'create') {
+            this.signatureID = respone.id;
+            this.isSetPrimaryDisable = false;
+          }
+          // set primary
+          let data = new Signature();
+          data.account_id = id;
+          data.name = this.signatureName;
+          this.signatureService.setPrimaryTemplate(data).subscribe(
+            (res: any) => {
+              if (res.status) {
+                this.isSetPrimaryDisable = true;
+                this.toast.success(res.message);
+              } else {
+                this.toast.error(res.message);
+              }
+            }
+          )
+          //
+          this.listRulesCheckErr = [];
         } else {
-          this.toast.error(res.message);
+          if (respone.message[0].signatureName !== undefined) {
+            this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
+            this.listRulesCheckErr = respone.message;
+          } else {
+            this.toast.warning(respone.message);
+          }
         }
         this.isSetPrimaryTemplateLoading = false;
+        this.isSaveTemplateLoading = false;
         this.isSpinning = false;
       }
     )
   }
+  showConfirmSetPrimaryTemplateRule(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Are you sure?</i>',
+      nzContent: '<b>Set primary will automatic save!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.setPrimaryTemplateRule()
+    });
+  }
   setPrimaryTemplateRule(): void {
     this.isSetPrimaryTemplateRuleLoading = true;
     this.isSpinning = true;
-    let data = new Signature();
-    data.account_id = localStorage.getItem('id');
-    data.name = this.signatureRuleName;
-    this.signatureService.setPrimaryTemplateRule(data).subscribe(
+
+    this.rules.listRule = this.listOfRules;
+    let id = localStorage.getItem('id');
+    let signature = new Signature();
+    signature.is_primary = this.is_primary_rule;
+    signature.account_id = id;
+    signature.content = JSON.stringify(this.rules);
+    signature.name = this.signatureRuleName;
+    this.signatureService.saveSignatureTemplateRules(signature).subscribe(
       (res: any) => {
         if (res.status) {
-          this.isSetPrimaryRuleDisable = true;
-          this.is_primary_rule = 1;
           this.toast.success(res.message);
+          if (res.action === 'create') {
+            this.isSetPrimaryRuleDisable = false;
+          }
+          //set primary
+          let data = new Signature();
+          data.account_id = localStorage.getItem('id');
+          data.name = this.signatureRuleName;
+          this.signatureService.setPrimaryTemplateRule(data).subscribe(
+            (res: any) => {
+              if (res.status) {
+                this.isSetPrimaryRuleDisable = true;
+                this.is_primary_rule = 1;
+                this.toast.success(res.message);
+              } else {
+                this.toast.error(res.message);
+              }
+            }
+          )
+          // 
         } else {
           this.toast.error(res.message);
         }
+        this.isSaveRulesLoading = false;
         this.isSpinning = false;
         this.isSetPrimaryTemplateRuleLoading = false;
       }

@@ -30,17 +30,23 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
     private modalService: NgbModal,
   ) { }
 
+
   ngOnInit(
 
   ): void {
     this.createTemplateForm();
+
+  ngOnInit(): void {
   }
+  goToAssignEmail() {
+    this.router.navigate(['/auto-reply-mail'])
 
   editorExport() {
     this.loadingFull = true;
     let emailObj;
     let jsonData = null;
     let html = null;
+
     let name = this.templateForm.controls['name'].value;
     let subject = this.templateForm.controls['subject'].value;
     console.log(this.emailEditor);
@@ -63,7 +69,7 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
             console.log(res);
             if (res.status == 200) {
               this.toast.success("Create Template Successfully !")
-              this.router.navigate(['/auto-reply-mail']);
+//               this.router.navigate(['/auto-reply-mail']);
             } else if (res.status == 400) {
               this.toast.error("Template with this subject existed ! Please input another again !")
             }

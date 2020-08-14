@@ -1,4 +1,6 @@
+
 <nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
+
     <div>
         <div class="card-body">
             <div>
@@ -53,8 +55,6 @@
                                     </small>
                                 </mat-form-field>
                             </div>
-
-
                         </div>
                         <email-editor id="email-editor"></email-editor>
                         <div class="col-auto">
@@ -62,6 +62,9 @@
                                 [disabled]="templateForm.invalid">
                                 Create Template
                             </button>
+                            <button mat-raised-button color="primary" mat-button (click)="goToAssignEmail()">
+                            Close
+                        </button>
                         </div>
                     </form>
                 </div>
