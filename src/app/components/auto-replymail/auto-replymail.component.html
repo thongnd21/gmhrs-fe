@@ -1,4 +1,8 @@
 <div>
+  <ngx-loading [show]="loadingFull" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }">
+  </ngx-loading>
+</div>
+<div>
   <mat-tab-group>
     <mat-tab label="Mail Template">
       <div class="card-body">
@@ -18,7 +22,7 @@
         </div>
         <!-- template detail -->
         <div class=" ml-05 mr-05 mt-10 pb-1 pt-08" style="margin-top: 30px;">
-          <mat-table [dataSource]="dataSource" matSort>
+          <mat-table [dataSource]="dataSource" matSort style="text-align: center;">
             <ng-container matColumnDef="count">
               <mat-header-cell *matHeaderCellDef>
                 No.
@@ -74,6 +78,9 @@
                 <button mat-raised-button color="primary" style="margin-right: 20px;"
                   (click)="setDefault(row.templateId)">
                   Set Default
+                </button>
+                <button mat-raised-button color="warn" (click)="openDialogDelete(dialog, row.templateId)">
+                  Delete
                 </button>
                 <!-- </button> -->
                 <!-- update account company icon button -->
@@ -141,3 +148,24 @@
     </script>
     <email-editor (loaded)="editorLoaded($event)" id="email-editor"></email-editor>  -->
 <!-- </div>    -->
+
+<ng-template id="dialog" #dialog>
+  <mat-dialog-content>
+    <div *ngIf="checkAssign==true" style="color: red;">
+      This template is assign specific.<br /> Please delete specific assign before ?
+    </div>
+    <div *ngIf="checkAssign==false">
+      Are you sure want to delete this template ?
+    </div>
+
+    <!-- {{timeSchedule}} -->
+  </mat-dialog-content>
+  <mat-dialog-actions align="center">
+
+    <button *ngIf="checkAssign==false" mat-raised-button color="warn" (click)="delete()">
+      Delete
+    </button>
+
+    <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+  </mat-dialog-actions>
+</ng-template>

@@ -12,7 +12,7 @@
 <a style="font-size: 15px; color: red;">
     Last sync : 2 hours ago
 </a> -->
-<button mat-icon-button [matMenuTriggerFor]="sync" class="m-r-5">
+<button mat-icon-button [matMenuTriggerFor]="sync" class="m-r-5" *ngIf="role === 2">
     <mat-icon>sync_alt</mat-icon>
 </button>
 <mat-menu #sync="matMenu" class="customize">
@@ -34,14 +34,14 @@
         </div>
     </div>
 </mat-menu>
-<button mat-icon-button [matMenuTriggerFor]="profile" class="m-r-5">
+<button mat-icon-button [matMenuTriggerFor]="profile" class="m-r-5" >
     <mat-icon>settings</mat-icon>
 </button>
 <mat-menu #profile="matMenu" class="mymegamenu">
-    <button mat-menu-item [routerLink]="['/company-config-connection']">
+    <button mat-menu-item [routerLink]="['/company-config-connection']" *ngIf="role === 2">
         <mat-icon>settings</mat-icon> Settings Connection
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item *ngIf="role === 2">
         <mat-icon>account_box</mat-icon> Profile
     </button>
     <!-- <button mat-menu-item>

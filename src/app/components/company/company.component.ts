@@ -109,6 +109,8 @@ export class CompanyComponent implements OnInit {
     this.account.role = data.role;
     this.account.address = data.address;
     this.account.phone = data.phone;
+    console.log(this.account);
+
     this.accountCompanyForm = new FormGroup({
       id: new FormControl(this.account.id),
       email: new FormControl(this.account.email, [Validators.required, Validators.email]),
@@ -124,6 +126,8 @@ export class CompanyComponent implements OnInit {
       phone: new FormControl(this.account.phone, [
         Validators.required,
       ]),
+      created_date: new FormControl(this.account.created_date),
+      modified_date: new FormControl(this.account.modified_date)
     });
 
     this.modalService.open(update, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });

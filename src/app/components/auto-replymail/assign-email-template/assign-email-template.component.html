@@ -9,10 +9,10 @@
 
             </div>
             <div class="col-auto">
-                <button mat-button color="primary" (click)="synch()">
+                <button mat-button color="primary" (click)="opendialogApply(dialogApply)">
                     <mat-icon>assignment_turned_in</mat-icon> Apply
                 </button>
-                <button color="primary" mat-button (click)="saveTemplateRule()">
+                <button color="primary" mat-button (click)="openDialogSave(dialog)">
                     <mat-icon>
                         save
                     </mat-icon>
@@ -90,28 +90,18 @@
                     </mat-form-field>
 
                     <mat-form-field *ngIf="row.type === 'E'" style="width: 80%;" appearance="outline">
-                        <!-- <mat-label>Choose Value</mat-label>
+
+
+                        <mat-label>Choose Value</mat-label>
                         <mat-select [(ngModel)]="row.listId" multiple>
                             <mat-option *ngFor="let employee of employeeList" [value]="employee.id"
                                 (onSelectionChange)="fieldChang($event)">{{employee.primary_email}}
                             </mat-option>
-                        </mat-select> -->
-                        <mat-form-field class="example-full-width">
-                            <input type="text" placeholder="Select Users" aria-label="Select Employee" matInput
-                                [matAutocomplete]="auto" [formControl]="employeeControl">
-                            <mat-hint>Enter text to find users by primary email</mat-hint>
-                        </mat-form-field>
-
-                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                            <mat-option *ngFor="let employee of employeeList" [value]="employee.id">
-                                <div (click)="optionClicked($event, user)">
-                                    <mat-checkbox [checked]="employee.selected" >
-                                        {{ employee.primary_email }}
-                                    </mat-checkbox>
-                                </div>
-                            </mat-option>
-                        </mat-autocomplete>
+                        </mat-select>
                     </mat-form-field>
+
+
+
 
                 </mat-cell>
             </ng-container>
@@ -183,4 +173,32 @@
         </div>
     </div>
 
+</ng-template>
+
+<ng-template #dialog>
+    <mat-dialog-content>
+        <div>
+            Do you want to save ?
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" (click)="saveTemplateRule()">
+            Save
+        </button>
+        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+</ng-template>
+
+<ng-template #dialogApply>
+    <mat-dialog-content>
+        <div>
+            Do you want to apply ?
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" (click)="synch()()">
+            Apply
+        </button>
+        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
 </ng-template>

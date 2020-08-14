@@ -50,7 +50,7 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
           emailObj = {
             accountId: this.accountId,
             name: this.name,
-            subject : this.subject,
+            subject: this.subject,
             dataTemplate: JSON.stringify(jsonData),
             html: html
           };
@@ -58,8 +58,15 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
           this.emailServices.createEmailTemplate(emailObj).subscribe(
             (res: any) => {
               // location.reload();
-              this.toast.success(res.message);
-              this.router.navigate(['/auto-reply-mail']);
+              console.log(res);
+              if (res.status == 200) {
+                this.toast.success("Create Template Successfully !")
+                this.toast.success(res.message);
+                this.router.navigate(['/auto-reply-mail']);
+              } else if (res.status == 400) {
+                this.toast.error("Template with this subject existed ! Please input another again !")
+              }
+
             },
             (err) => {
               this.toast.error("Services is not available!");

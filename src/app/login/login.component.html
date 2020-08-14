@@ -126,6 +126,10 @@
                       value="">
                   </mat-form-field>
                   <small
+                    *ngIf="registerForm.controls['password'].hasError('minlength') && registerForm.controls['password'].touched"
+                    class="form-error-msg"> Password require at least
+                    {{registerForm.controls['password'].errors.minlength.requiredLength}} characters </small>
+                  <small
                     *ngIf="registerForm.controls['password'].hasError('required') && registerForm.controls['password'].touched"
                     class="form-error-msg"> Password is required </small>
                 </div>

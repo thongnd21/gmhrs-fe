@@ -1,7 +1,7 @@
 import { Component, OnInit, ContentChild, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { MatFormFieldControl, MatFormField, MatTableDataSource, MatTable } from '@angular/material';
+import { MatFormFieldControl, MatFormField, MatTableDataSource, MatTable, MatDialog } from '@angular/material';
 import { DepartmentApiService } from './../../../api-services/department-api.service';
 import { AccountApiService } from './../../../api-services/account-api.service';
 import { PositionApiService } from './../../../api-services/position-api.service';
@@ -43,6 +43,7 @@ export class AssignEmailTemplateComponent implements OnInit {
     private positionService: PositionApiService,
     private teamService: TeamApiService,
     private emailService: EmailApiService,
+    public dialog: MatDialog,
 
   ) {
   }
@@ -157,6 +158,7 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   getAllTemplateRuleByAccountId() {
+    this.loading = true;
     this.emailService.getAllTemplateRuleByAccountId(this.accountId).subscribe(
       (res: any) => {
         this.asignRuleListBegin = res;
@@ -164,10 +166,11 @@ export class AssignEmailTemplateComponent implements OnInit {
         this.data = res
         this.dataSource = new MatTableDataSource(this.data);
         console.log(res);
-
+        this.loading = false;
       },
       (err) => {
         console.log(err);
+        this.loading = false;
         this.toast.error("Server is unavailable!");
       }
     )
@@ -211,16 +214,22 @@ export class AssignEmailTemplateComponent implements OnInit {
     var result = this.formatListTemplateRuleByPriority(this.dataSource.data);
     send["accountId"] = this.accountId;
     send["listCreate"] = result;
+    console.log(result);
+    console.log(this.asignRuleListBegin);
+
     this.emailService.saveAssignTemplate(send).subscribe(
       (res: any) => {
 
-
+        console.log(res);
+        
         if (res.code === 200) {
           this.toast.success("Save successfully");
+        } else if (res.code === 500) {
+          this.toast.error("Save fail!");
         } else if (res.code === 400) {
-          this.toast.error("Save fail");
+          this.toast.error("Miss Field!")
         }
-
+        this.dialog.closeAll();
       },
       (err) => {
         console.log(err);
@@ -232,17 +241,23 @@ export class AssignEmailTemplateComponent implements OnInit {
   }
 
   synch() {
+    this.dialog.closeAll();
+    this.loading = true;
     this.emailService.syncDateForTemplate(this.accountId).subscribe(
       (res: any) => {
         if (res.status === 200) {
-          this.toast.success(res.message);
+          this.toast.success("Apply Template Successfully!");
+          this.loading = false;
         } else {
-          this.toast.error("Synchronize assign auto_reply mail fail!");
+          this.loading = false;
+          this.toast.error("Aplly Template Fail!");
         }
 
       },
       (err) => {
+        this.loading = false;
         console.log(err);
+        this.toast.error("Server unavailable");
 
       }
     )
@@ -250,6 +265,7 @@ export class AssignEmailTemplateComponent implements OnInit {
 
   detailResponse = [];
   detail(modal, data) {
+    this.loading = true;
     console.log(data);
     this.detailResponse = [];
     this.emailService.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
@@ -260,10 +276,12 @@ export class AssignEmailTemplateComponent implements OnInit {
           element["primary_email"] = res[i].primary_email;
           this.detailResponse.push(element);
         }
+        this.loading = false;
       },
       (err) => {
+        this.loading = false;
         console.log(err);
-        // this.
+        this.toast.error("Server unavailable!")
       }
     )
     this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
@@ -273,53 +291,11 @@ export class AssignEmailTemplateComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  // filter(filter: string): User[] {
-  //   this.lastFilter = filter;
-  //   if (filter) {
-  //     return this.users.filter(option => {
-  //       return option.firstname.toLowerCase().indexOf(filter.toLowerCase()) >= 0
-  //         || option.lastname.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
-  //     })
-  //   } else {
-  //     return this.users.slice();
-  //   }
-  // }
-
-  displayFn() {
-    console.log(this.employeeList);
-
-    let displayValue: string;
-    if (this.employeeList != undefined) {
-      if (this.employeeList.length > 0 || this.employeeList.length != undefined) {
-        for (let i = 0; i < this.employeeList.length; i++) {
-          if (i === 0) {
-            displayValue = this.employeeList[i].primary_email;
-          } else {
-            displayValue += ', ' + this.employeeList[i].primary_email;
-          }
-        };
-      }
-    }
-    else {
-      displayValue = "";
-    }
-    return displayValue;
+  openDialogSave(dialog) {
+    this.dialog.open(dialog);
   }
 
-  // optionClicked(event: Event, user: User) {
-  //   event.stopPropagation();
-  //   this.toggleSelection(user);
-  // }
-
-  // toggleSelection(user: User) {
-  //   user.selected = !user.selected;
-  //   if (user.selected) {
-  //     this.selectedUsers.push(user);
-  //   } else {
-  //     const i = this.selectedUsers.findIndex(value => value.firstname === user.firstname && value.lastname === user.lastname);
-  //     this.selectedUsers.splice(i, 1);
-  //   }
-
-  //   this.userControl.setValue(this.selectedUsers);
-  // }
+  opendialogApply(dialogApply) {
+    this.dialog.open(dialogApply);
+  }
 }
