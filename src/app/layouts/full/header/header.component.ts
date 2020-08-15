@@ -105,6 +105,7 @@ export class AppHeaderComponent {
             modified_date: d.modified_date,
             created_date: d.created_date,
             gsuite_id: d.gsuite_id,
+            email: d.email,
             selected: true
           }
         });
@@ -115,6 +116,7 @@ export class AppHeaderComponent {
             description: d.description,
             modified_date: d.modified_date,
             created_date: d.created_date,
+            email: d.email,
             selected: true
           }
         });

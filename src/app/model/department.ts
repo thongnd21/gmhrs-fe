@@ -7,5 +7,6 @@ export class Department{
     orgunits_path: string
     status_id : Number
     gsuite_id : Number
+    email: string
     selected : boolean
 }

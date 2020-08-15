@@ -13,6 +13,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCommentModule } from 'ng-zorro-antd/comment';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 @NgModule({
   imports: [
     CommonModule,
@@ -26,6 +27,7 @@ import { NzCommentModule } from 'ng-zorro-antd/comment';
     NzListModule,
     NzTagModule,
     NzCommentModule,
+    NzSpinModule,
     RouterModule.forChild(DashboardRoutes)
   ],
   declarations: [DashboardComponent]

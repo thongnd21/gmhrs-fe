@@ -22,7 +22,7 @@
         </div>
         <div class="card-body" (click)="doNotClose($event)">
             <p style="font-size: 15px; ">Last sync at: </p>
-            <p style="font-size: 15px;  color: green;">{{lastSyncTime}}</p>
+            <p style="font-size: 15px;  color: green;">{{lastSyncTime ? lastSyncTime : "Not sync yet"}}</p>
             <div class="button-container  mr-4">
                 <div class="spinner-container" *ngIf="loading">
                     <mat-spinner diameter="24"></mat-spinner>
@@ -261,6 +261,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">Email</th>
                                 <th scope="col">Modified date</th>
                                 <th scope="col">Created date</th>
                             </tr>
@@ -273,6 +274,7 @@
                                 <td>{{ i+1 }}</td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.description}}</td>
+                                <td>{{item.email}}</td>
                                 <td>{{item.modified_date}}</td>
                                 <td>{{item.created_date}}</td>
                             </tr>
