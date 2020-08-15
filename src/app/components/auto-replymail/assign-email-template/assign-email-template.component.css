@@ -40,3 +40,11 @@
   ::ng-deep .mat-form-field-underline {
     display: none;
   }
+  .mat-header-cell {
+    display:flex;
+    justify-content:center;
+   }
+   .mat-cell {
+    display:flex;
+    justify-content:center;
+   }

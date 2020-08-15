@@ -1,40 +1,63 @@
-<div class="card-body">
-    <!-- <div class="col-auto mr-auto">
-        TemplateName: <input matInput type="text" [(ngModel)]="tempate['templateName']" placeholder="name" name="name" />
-        <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
-        </small>
-    </div>
-    <div class="col-md-3 ml-md-auto">
-        Subject: <input matInput type="text" [(ngModel)]="tempate['subject']" placeholder="Subject" name="subject" />
-        <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
-        </small>
-    </div> -->
-    <mat-form-field class="example-full-width">
-        <mat-label>Template name</mat-label>
-        <input matInput name="name" placeholder="name" value="name" [(ngModel)]="tempate['templateName']">
-      </mat-form-field>
-    
-      <mat-form-field class="example-full-width">
-        <mat-label>Subject</mat-label>
-        <input matInput name="subject"  placeholder="Ex. This is email auto reply" value="subject"  [(ngModel)]="tempate['subject']" >
-      </mat-form-field>
-    <div class="editor">
-        <email-editor (loaded)="editorLoaded()"></email-editor>
-    </div>
-</div>
-<!-- <div class="card-footer"> -->
-    <div class="example-button-row" style="margin-left: 30px;">
-        <!-- <div class="spinner-container" *ngIf="loading">
-              <mat-spinner diameter="24"></mat-spinner>
-          </div> -->
-        <!-- <button mat-raised-button (click)="closeDetailTemplate()">
-            Close
-        </button>
-        <button mat-raised-button [disabled]="loading" (click)="editorExport()">
-            Save
-        </button> -->
-        <button nz-tooltip nz-button style="margin-right: 1cm;" (click)="editorExport()" nzType="primary">Save</button>
-        <button nz-button style="margin-right: 1cm;" (click)="closeDetailTemplate()" nzType="primary">Close</button>
-    </div>
+<nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
+    <div class="card-body">
+        <div>
+            <div class="editor card ">
+                <div class="card-header" style="background-color: #777777">
+                    <h4>Template Detail</h4>
+                </div>
+                <form [formGroup]="updateTemplateForm">
+                    <div class="card-body">
 
-<!-- </div> -->
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Template name</mat-label>
+                            <input matInput name="name" placeholder="name" formControlName="name">
+                            <small
+                                *ngIf="updateTemplateForm.controls['name'].hasError('required') && updateTemplateForm.controls['name'].touched"
+                                class="form-error-msg"> Template name is required </small>
+                            <small
+                                *ngIf="updateTemplateForm.controls['name'].hasError('minlength') && updateTemplateForm.controls['name'].touched"
+                                class="form-error-msg"> Template name require at least
+                                {{updateTemplateForm.controls['name'].errors.minlength.requiredLength}} characters
+                            </small>
+                            <small
+                                *ngIf="updateTemplateForm.controls['name'].hasError('maxlength') && updateTemplateForm.controls['name'].touched"
+                                class="form-error-msg"> Template name can not contain more than
+                                {{updateTemplateForm.controls['name'].errors.maxlength.requiredLength}} characters
+                            </small>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Subject</mat-label>
+                            <input matInput name="subject" placeholder="Ex. This is email auto reply"
+                                formControlName="subject">
+                            <small
+                                *ngIf="updateTemplateForm.controls['subject'].hasError('required') && updateTemplateForm.controls['subject'].touched"
+                                class="form-error-msg"> Subject is required </small>
+                            <small
+                                *ngIf="updateTemplateForm.controls['subject'].hasError('minlength') && updateTemplateForm.controls['subject'].touched"
+                                class="form-error-msg"> Subject require at least
+                                {{updateTemplateForm.controls['subject'].errors.minlength.requiredLength}} characters
+                            </small>
+                            <small
+                                *ngIf="updateTemplateForm.controls['subject'].hasError('maxlength') && updateTemplateForm.controls['subject'].touched"
+                                class="form-error-msg"> Subject can not contain more than
+                                {{updateTemplateForm.controls['subject'].errors.maxlength.requiredLength}} characters
+                            </small>
+                        </mat-form-field>
+                        <div class="editor">
+                            <email-editor (loaded)="editorLoaded()"></email-editor>
+                        </div>
+                    </div>
+
+                    <div class="example-button-row" style="margin-left: 30px;">
+
+                        <button nz-tooltip nz-button style="margin-right: 1cm;" (click)="updateTemplate()"
+                            nzType="primary">Save</button>
+                        <button nz-button style="margin-right: 1cm;" (click)="closeDetailTemplate()"
+                            nzType="primary">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</nz-spin>

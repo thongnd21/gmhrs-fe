@@ -29,6 +29,7 @@ import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { EmailEditorModule } from 'angular-email-editor';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -54,6 +55,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     SharedModule,
     NgbModule,
     NzTagModule,
+    NzSpinModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot(AppRoutes, { useHash: true })
   ],

@@ -248,6 +248,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   nextButonConditonApiEnpoint = false;
   nextButonConditonGSuiteCredential = false;
   file_name_auth_gsuite_company;
+  loadingFull = false;
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(
@@ -278,6 +279,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // form connection String
   createConnectionStringForm() {
+    this.loadingFull = true;
     const accountId = localStorage.getItem('id');
     // this.account = new AccountCompanyModel;
     this.nextButonConditonConnectionString = false;
@@ -310,11 +312,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
           });
           this.disableSaveConnectionStringButton = false;
           this.nextButonConditonConnectionString = true;
+          this.loadingFull = false;
           // this.disableTestConnectionStringButton = false;
         }
         else {
           this.disableSaveConnectionStringButton = false;
           this.nextButonConditonConnectionString = false;
+          this.loadingFull = false;
           // this.disableTestConnectionStringButton = true;
         }
 
@@ -389,8 +393,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   //test file authen guite
   onTest(modal, value) {
+    this.loadingFull = true;
     let formData = new FormData();
     let company_email = value.company_email;
+    console.log(this.loadingFull);
+
     if (company_email == "" || company_email == null || company_email == undefined) {
       this.toast.error("Please input company email");
     } else {
@@ -399,6 +406,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           formData.append("file", this.uploadedFiles[i], this.uploadedFiles[i].name);
           formData.set("company_email", company_email);
           this.sendFile(modal, formData);
+
         }
       }
       if (this.uploadedFiles == undefined) {
@@ -443,21 +451,25 @@ export class CompanyConfigConnectionComponent implements OnInit {
         // console.log(this.gsuiteAuthenStatus);
         // this.toast.success("Upload file success!");
         //open modal
+        this.loadingFull = false;
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
       },
       (error) => {
+        this.loadingFull = false;
         this.toast.error("Server is not available!");
       })
   }
 
   //upload file authen gsuite
   upload(value) {
+    this.loadingFull = true;
     this.account = new AccountCompanyModel;
     this.account.primary_email = value.company_email;
     this.account.id = localStorage.getItem('id');
     this.companyConnectionService.gsuiteCredentialSave(this.account)
       .subscribe(
         (res) => {
+          this.loadingFull = false;
           const result: any = res;
           if (result.status == "success") {
             this.toast.success("Con-fig G-Suite Authentication Successfully!");
@@ -470,6 +482,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           }
         },
         (error) => {
+          this.loadingFull = false;
           this.toast.error("Server is not available!");
           this.nextButonConditonGSuiteCredential = false;
         })
@@ -504,12 +517,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // api endpoint
   onSubmitURLConection(value) {
+    this.loadingFull = true;
     this.account = new AccountCompanyModel();
     this.account.id = localStorage.getItem('id');
     this.account.api_endpoint = value.url;
     console.log(this.account);
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
+        this.loadingFull = false;
         if (res.status == "success") {
           this.toast.success("Save API Endpoint successfully!");
           this.nextButonConditonApiEnpoint = true;
@@ -521,6 +536,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         }
       },
       (error) => {
+        this.loadingFull = false;
         this.toast.error("Server is not available!");
         this.nextButonConditonApiEnpoint = false;
       }
@@ -529,6 +545,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
 
   onTestURLConection(modal, value) {
+    this.loadingFull = true;
     console.log(value);
     const endpoint = value.url
     this.loadingTestAPI = true;
@@ -554,6 +571,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.apiEndpointFail = false;
         this.enableDataAPIResult = true;
         this.loadingTestAPI = false;
+        this.loadingFull = false;
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
       },
       (error) => {
@@ -581,6 +599,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.loadingTestAPI = false;
         this.enableDataAPIResult = true;
         this.anableButtonSaveAPIEndpoint = false;
+        this.loadingFull = false;
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
         // this.toast.error(error.message);
         console.log(error);
@@ -791,6 +810,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // test connection string
   onTestConection(modal, value) {
+    this.loadingFull = true;
     this.loadingTestConnection = true;
     this.companyConnection = new CompanyConnection();
     this.companyConnection.dbName = value.dbName;
@@ -826,6 +846,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionFail = false;
             this.disableSaveConnectionStringButton = check;
             console.log(this.dataAPIEndpoindEmployee);
+            this.loadingFull = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           } if (res.checkConnection.status == "fail" || res.status == 0) {
             this.connectionStatus.connection.status = "Fail";
@@ -852,10 +873,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.enableDataConnectionResult = true;
             this.connectionFail = true;
             this.loadingTestConnection = false;
+            this.loadingFull = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
           }
         } else {
+          this.loadingFull = false;
           this.loadingTestConnection = false;
           console.log(res);
         }
@@ -863,6 +886,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       },
       (error) => {
         console.log(error);
+        this.loadingFull = false;
         this.loadingTestConnection = false;
         this.toast.error("Server is not available!");
       }
@@ -871,6 +895,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // save connection string
   onSubmitConection(value) {
+    this.loadingFull = true;
     this.companyConnection = new CompanyConnection();
     this.companyConnection.dbName = value.dbName;
     this.companyConnection.host = value.host;
@@ -894,16 +919,19 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
         if (res.status == "success") {
+          this.loadingFull = false;
           this.toast.success("Save connection successfully!");
           this.nextButonConditonConnectionString = true;
           this.closeModal();
         };
         if (res.status == "fail") {
+          this.loadingFull = false;
           this.toast.error("Save connection fail!");
           this.nextButonConditonConnectionString = false;
         }
       },
       (error) => {
+        this.loadingFull = false;
         this.toast.error("Server is not available!");
         this.nextButonConditonConnectionString = false;
       }
@@ -952,17 +980,28 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   saveScheduleTime() {
-    this.loadingSubmit = true;
-    console.log(this.loadingSubmit);
+    this.loadingFull = true;
+    let check = false;
     let minute = '*';
     let hours = '*';
     let dayInMonth = '*';
     let dayInWeek = '*';
-    console.log("start parst time");
-    if (this.typeSync === 1) {
+    // console.log("start parst time");
+    // console.log(this.monthTime);
+    console.log(this.weekTime);
+    console.log(this.dailyTime);
+
+    console.log(this.typeSync);
+    
+    if (this.typeSync === 1 && this.monthDayChoose !== null && this.monthDayChoose !== undefined
+      && this.monthDayChoose.length > 0
+       && this.monthTime !== undefined 
+       && this.monthTime !== null 
+       && this.monthTime !== ''  
+       ) {
+
       this.monthTime = moment(this.monthTime, 'HH:mm').utc().format('HH:mm');
       dayInMonth = '';
-      console.log(this.monthDayChoose);
       for (let i = 0; i < this.monthDayChoose.length; i++) {
         dayInMonth += this.monthDayChoose[i];
         if (i != this.monthDayChoose.length - 1) {
@@ -973,8 +1012,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
       let n = this.monthTime.indexOf(":");
       let length = this.monthTime.length;
       minute = this.monthTime.slice(n + 1, length);
-    } else
-      if (this.typeSync === 2) {
+      check = true;
+
+    } else if (this.typeSync === 2 && this.weekDayChoose !== null && this.weekDayChoose !== undefined
+       && this.weekDayChoose.length > 0 
+       && this.weekTime !== undefined 
+       && this.weekTime !== null 
+       && this.weekTime !== ''   ) {
         this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
         dayInWeek = '';
         for (let i = 0; i < this.weekDayChoose.length; i++) {
@@ -987,31 +1031,44 @@ export class CompanyConfigConnectionComponent implements OnInit {
         let n = this.weekTime.indexOf(":");
         let lenght = this.weekTime.length;
         minute = this.weekTime.slice(n + 1, lenght);
-      } else {
+        check = true;
+    } else if (this.typeSync === 3 && this.dailyTime !== undefined 
+      && this.dailyTime !== null 
+       && this.dailyTime !== ''
+      ) {
         this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
         hours = this.dailyTime.split(':', 1);
-        let n = this.dailyTime.indexOf("@");
+        let n = this.dailyTime.indexOf(":");
         let lenght = this.dailyTime.length;
         minute = this.dailyTime.slice(n + 1, lenght);
-      }
+        check = true;
+
+    }
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
     account['schedule_time'] = minute + ' ' + hours + ' ' + dayInMonth + ' * ' + dayInWeek;
-    this.companyConnectionService.saveSchedule(account).subscribe(
-      (res: any) => {
-        this.loadingSubmit = false;
-        this.toast.success(res.message);
-        this.getSchedule();
-      }, (err) => {
-        this.loadingSubmit = false;
-        if (err.status == 0) {
-          this.toast.error("Connection timeout!");
-        } if (err.status == 400) {
+    if(check){
+      this.companyConnectionService.saveSchedule(account).subscribe(
+        (res: any) => {
+          this.loadingFull = false;
+          this.loadingSubmit = false;
+          this.toast.success(res.message);
+          this.getSchedule();
+        }, (err) => {
+          this.loadingFull = false;
+          this.loadingSubmit = false;
+          if (err.status == 0) {
+            this.toast.error("Connection timeout!");
+          } if (err.status == 400) {
+            this.toast.error("Server is not available!");
+          }
           this.toast.error("Server is not available!");
         }
-        this.toast.error("Server is not available!");
-      }
-    )
+      )
+    }else{
+      this.getSchedule();
+      this.toast.error("Invalid input!");
+    }
   }
 
   async getSchedule() {

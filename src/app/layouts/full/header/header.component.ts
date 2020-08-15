@@ -24,6 +24,7 @@ import * as moment from 'moment';
 
 export class AppHeaderComponent {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+  role = Number.parseInt(localStorage.getItem('roleId'));
   username;
   lastSyncTime = localStorage.getItem('last_sync_at');
   selectedAll = true;
@@ -71,7 +72,6 @@ export class AppHeaderComponent {
     positions: {
       matchedPosition: [],
       newPosition: [],
-      outOfHRMS: [],
     }
   };
   open = (modal) =>
@@ -224,7 +224,7 @@ export class AppHeaderComponent {
             }
           }
         });
-
+        // position
         listSync.position.newPosition = res.positions.newPosition.map(o => {
           return {
             id: o.id,
@@ -322,6 +322,27 @@ export class AppHeaderComponent {
 
 
   closeModal() {
+    this.listSynchonize= {
+      employees: {
+        matchedEmployee: [],
+        newEmployee: [],
+        outOfHRMS: [],
+      },
+      departments: {
+        matchedDepartment: [],
+        newDepartment: [],
+        outOfHRMS: [],
+      },
+      teams: {
+        matchedTeam: [],
+        newTeam: [],
+        outOfHRMS: [],
+      },
+      positions: {
+        matchedPosition: [],
+        newPosition: [],
+      }
+    };
     this.modalService.dismissAll();
   }
   doNotClose(event) {

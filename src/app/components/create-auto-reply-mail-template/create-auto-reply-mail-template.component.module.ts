@@ -68,6 +68,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     NzCollapseModule,
     NzSpinModule,
     NzMenuModule,
+    NzSpinModule,
     RouterModule.forChild(CreateAutoReplyMailTemplateRoutes)
   ],
   declarations: [CreateAutoReplyMailTemplateComponent]

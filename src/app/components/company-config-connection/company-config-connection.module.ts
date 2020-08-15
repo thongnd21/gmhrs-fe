@@ -20,6 +20,8 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { NgxLoadingModule } from 'ngx-loading';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
     imports: [
@@ -46,6 +48,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatDialogModule,
         NgxJsonViewerModule,
         MaterialFileInputModule,
+        NgxLoadingModule,
+        NzSpinModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

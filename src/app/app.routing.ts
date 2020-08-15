@@ -9,12 +9,12 @@ import { LoginPageGuard } from './shared/guard/loginpage.guard';
 
 export const AppRoutes: Routes = [
   {
-    path: 'resetPassword', loadChildren: () => import('./reset-password/reset-password.module')
-      .then(m => m.ResetPasswordModule)
+    path: 'resetPassword',
+    loadChildren: () => import('./reset-password/reset-password.module').then(m => m.ResetPasswordModule)
   },
   {
-    path: '', loadChildren: () => import('./login/login.module')
-      .then(m => m.LoginModule), canActivate: [LoginPageGuard]
+    path: '',
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginPageGuard]
   },
 
   {
@@ -89,7 +89,7 @@ export const AppRoutes: Routes = [
       {
         path: 'guides',
         loadChildren: () => import('./components/guides/guides.module').then(m => m.GuidesModule)
-      }, 
+      },
       {
         path: 'create-auto-reply-mail',
         loadChildren:
