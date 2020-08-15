@@ -4,6 +4,9 @@
 <mat-card *ngIf="showOrNot" class="center-screen-div">
     <mat-card-header class="center-screen-div">
         <mat-card-title>Use any 2FA application to scan this QR code!</mat-card-title>
+        <mat-card-title><b>Please get our app <a target="_blank" rel="noopener noreferrer"
+                    href="https://1drv.ms/u/s!An31p-R-fDAsrFXP2ClbQzamEF5d?e=2TOlIo">here</a> for best experience with
+                GmHRS!</b></mat-card-title>
         <mat-card-subtitle class="red-text">For sercurity, please do not share this QR for anyone!</mat-card-subtitle>
     </mat-card-header>
     <qrcode class="qr-code-img" [qrdata]="QrCodeLink" [width]="220" [errorCorrectionLevel]="'M'"></qrcode>
