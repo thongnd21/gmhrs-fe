@@ -378,11 +378,12 @@ export class SignatureTemplateComponent implements OnInit {
         if (respone.status === true) {
           this.toast.success(respone.message);
           if (respone.action === 'create') {
-            this.signatureID = respone.id;
             this.isSetPrimaryDisable = false;
+            this.signatureID = respone.id;
           }
           // set primary
           let data = new Signature();
+          data.id = this.signatureID;
           data.account_id = id;
           data.name = this.signatureName;
           this.signatureService.setPrimaryTemplate(data).subscribe(
@@ -422,7 +423,6 @@ export class SignatureTemplateComponent implements OnInit {
   setPrimaryTemplateRule(): void {
     this.isSetPrimaryTemplateRuleLoading = true;
     this.isSpinning = true;
-
     this.rules.listRule = this.listOfRules;
     let id = localStorage.getItem('id');
     let signature = new Signature();
@@ -434,11 +434,13 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.toast.success(res.message);
+          this.signatureRuleID = res.id;
           if (res.action === 'create') {
             this.isSetPrimaryRuleDisable = false;
           }
           //set primary
           let data = new Signature();
+          data.id = this.signatureRuleID;
           data.account_id = localStorage.getItem('id');
           data.name = this.signatureRuleName;
           this.signatureService.setPrimaryTemplateRule(data).subscribe(
@@ -752,6 +754,7 @@ export class SignatureTemplateComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.toast.success(res.message);
+          this.signatureRuleID = res.id;
           if (res.action === 'create') {
             this.isSetPrimaryRuleDisable = false;
           }
