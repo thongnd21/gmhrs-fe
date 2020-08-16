@@ -32,6 +32,9 @@ export class EmployeeComponent implements OnInit {
   column = [
    
     {
+      prop: 'count'
+    },
+    {
       prop: 'primary_email',
       name: 'primary_email'
     },

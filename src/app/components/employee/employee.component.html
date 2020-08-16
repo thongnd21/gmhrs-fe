@@ -10,7 +10,14 @@
     </div>
   </div>
   <mat-table [dataSource]="dataSource" matSort>
-   
+    <ng-container matColumnDef="count">
+      <mat-header-cell *matHeaderCellDef >
+        No.
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row ;let i = index;" data-label="No.">
+        {{i+1}}
+      </mat-cell>
+    </ng-container>
 
     <ng-container matColumnDef="primary_email">
       <mat-header-cell *matHeaderCellDef mat-sort-header>

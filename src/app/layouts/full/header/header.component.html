@@ -12,7 +12,7 @@
 <a style="font-size: 15px; color: red;">
     Last sync : 2 hours ago
 </a> -->
-<nz-spin [nzSpinning]="loading" nzTip="Loading..." [nzSize]="'large'">
+<!-- <nz-spin [nzSpinning]="loading" nzTip="Loading..." [nzSize]="'large'"> -->
     <button mat-icon-button [matMenuTriggerFor]="sync" class="m-r-5" *ngIf="role === 2">
         <mat-icon>sync_alt</mat-icon>
     </button>
@@ -23,7 +23,7 @@
             </div>
             <div class="card-body" (click)="doNotClose($event)">
                 <p style="font-size: 15px; ">Last sync at: </p>
-                <p style="font-size: 15px;  color: green;">{{lastSyncTime == "null" ? lastSyncTime : "Not sync yet"}}</p>
+                <p style="font-size: 15px;  color: green;">{{lastSyncTime !== "Invalid date" ? lastSyncTime : "Not sync yet"}}</p>
                 <div class="button-container  mr-4">
                     <div class="spinner-container" *ngIf="loading">
                         <mat-spinner diameter="24"></mat-spinner>
@@ -745,4 +745,4 @@
             </div>
         </div>
     </ng-template>
-</nz-spin>
+<!-- </nz-spin> -->

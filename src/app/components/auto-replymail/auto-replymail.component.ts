@@ -140,6 +140,7 @@ export class AutoReplymailComponent implements OnInit {
     console.log(id);
 
     this.router.navigate(['/detail-auto-reply-mail', { 'id': id }]);
+    localStorage.setItem('templateId', id);
   }
   closeModal() {
     this.modalService.dismissAll();
