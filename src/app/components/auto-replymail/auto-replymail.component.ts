@@ -132,17 +132,31 @@ export class AutoReplymailComponent implements OnInit {
 
   syncTemplate(id) {
     this.loadingFull = true
-    this.emailServices.syncEmailTemplate(id).subscribe(
-      (res: any) => {
-        this.getAllTemplate();
-        this.loadingFull = false
-        this.toast.success(res.message);
-      },
-      (err) => {
-        this.loadingFull = false
-        this.toast.error("Services is not available!");
+    let checkDefault = false;
+    for (let i = 0; i < this.templateList.length; i++) {
+      if (this.templateList[i].status === true) {
+        checkDefault = true;
       }
-    )
+    }
+    console.log(checkDefault);
+
+    if (checkDefault == true) {
+      this.emailServices.syncEmailTemplate(id).subscribe(
+        (res: any) => {
+          this.getAllTemplate();
+          this.loadingFull = false
+          this.toast.success(res.message);
+        },
+        (err) => {
+          this.loadingFull = false
+          this.toast.error("Services is not available!");
+        }
+      )
+    } else {
+      this.loadingFull = false;
+      this.toast.warning("Please set template default before apply!");
+    }
+
   }
 
   setDefault(templateId) {
@@ -403,24 +417,37 @@ export class AutoReplymailComponent implements OnInit {
   synch() {
     this.dialog.closeAll();
     this.loadingFull = true;
-    this.emailServices.syncDateForTemplate(this.accountId).subscribe(
-      (res: any) => {
-        if (res.status === 200) {
-          this.toast.success("Apply Template Successfully!");
-          this.loadingFull = false;
-        } else {
-          this.loadingFull = false;
-          this.toast.error("Aplly Template Fail!");
-        }
-
-      },
-      (err) => {
-        this.loadingFull = false;
-        console.log(err);
-        this.toast.error("Server unavailable");
-
+    let checkDefault = false;
+    for (let i = 0; i < this.templateList.length; i++) {
+      if (this.templateList[i].status === true) {
+        checkDefault = true;
       }
-    )
+    }
+    console.log(checkDefault);
+    if (checkDefault === true) {
+      this.emailServices.syncDateForTemplate(this.accountId).subscribe(
+        (res: any) => {
+          if (res.status === 200) {
+            this.toast.success("Apply Template Successfully!");
+            this.loadingFull = false;
+          } else {
+            this.loadingFull = false;
+            this.toast.error("Aplly Template Fail!");
+          }
+
+        },
+        (err) => {
+          this.loadingFull = false;
+          console.log(err);
+          this.toast.error("Server unavailable");
+
+        }
+      )
+    } else {
+      this.loadingFull = false;
+      this.toast.warning("Please Set template default before apply!")
+    }
+
   }
 
   detailResponse = [];
