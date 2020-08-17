@@ -287,6 +287,7 @@ export class AppHeaderComponent {
 
   synchronize() {
     let accountId = localStorage.getItem('id');
+    this.loading = true;
     let syncList = {
       accountId: accountId,
       is_first_sync: this.isFirstSync,
@@ -299,6 +300,7 @@ export class AppHeaderComponent {
     if (this.isFirstSync != null) {
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
+          this.loading = false;
           this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
           this.toast.success('Synchronize successfully!');
           // this.dashBoard.getActivityLog();
