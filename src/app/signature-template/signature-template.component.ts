@@ -36,7 +36,7 @@ class SpecRuleCheck {
   department: DepartmentSpec[];
   position: PositionSpec[];
   team: TeamSpec[];
-  employee: EmployeeSpec[];
+  // employee: EmployeeSpec[];
 }
 class Rules {
   lengthRule: {
@@ -271,17 +271,18 @@ export class SignatureTemplateComponent implements OnInit {
           }
         }
       }
-    } else if (specificBy === 'employee') {
-      for (let spec of this.listOfSpecTemplate.specRuleCheck) {
-        if (spec.idSpec === specID) {
-          for (let em of spec.employee) {
-            if (em.status) {
-              listEm.set(em, em);
-            }
-          }
-        }
-      }
     }
+    // else if (specificBy === 'employee') {
+    //   for (let spec of this.listOfSpecTemplate.specRuleCheck) {
+    //     if (spec.idSpec === specID) {
+    //       for (let em of spec.employee) {
+    //         if (em.status) {
+    //           listEm.set(em, em);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
     this.listEmployeeSpecificApply = Array.from(listEm.values());
     this.showSpecificEmployeeModel = true;
     this.isTableSpecificLoading = false;
@@ -556,11 +557,11 @@ export class SignatureTemplateComponent implements OnInit {
           check = true;
         }
       }
-      for (let em of spec.employee) {
-        if (em.status) {
-          check = true;
-        }
-      }
+      // for (let em of spec.employee) {
+      //   if (em.status) {
+      //     check = true;
+      //   }
+      // }
       if (!check) {
         this.toast.error('Please select value to save!');
         return;
@@ -925,7 +926,7 @@ export class SignatureTemplateComponent implements OnInit {
     newRow.signature_id = this.listOfSpecTemplate.allSignature[0].id;
     newRow.department = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allDepartment));
     newRow.position = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allPosition));
-    newRow.employee = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allEmployee));
+    // newRow.employee = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allEmployee));
     newRow.team = JSON.parse(JSON.stringify(this.listOfSpecTemplate.allTeam));
     newRow.allSignature = this.listOfSpecTemplate.allSignature;
     this.listOfSpecTemplate.specRuleCheck.push(newRow);
