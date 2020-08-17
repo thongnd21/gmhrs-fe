@@ -75,6 +75,7 @@ export class AutoReplymailComponent implements OnInit {
 
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop);
+    console.log('manage page');
     this.getAllTemplate();
     this.getAllTemplateRuleByAccountId();
     this.createTemplateForm();
@@ -223,7 +224,7 @@ export class AutoReplymailComponent implements OnInit {
     this.emailServices.deleteTemplate(this.deleteTemplateId).subscribe(
       (res: any) => {
         this.loadingFull = false;
-        console.log(res);
+        this.toast.error("Template is deleted!");
         this.getAllTemplate();
         this.dialog.closeAll();
       },
