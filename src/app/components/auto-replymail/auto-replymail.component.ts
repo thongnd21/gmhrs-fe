@@ -12,6 +12,7 @@ import { DepartmentApiService } from '../../api-services/department-api.service'
 import { AccountApiService } from '../../api-services/account-api.service';
 import { PositionApiService } from '../../api-services/position-api.service';
 import { TeamApiService } from '../../api-services/team-api.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-auto-replymail',
   templateUrl: './auto-replymail.component.html',
@@ -29,8 +30,6 @@ export class AutoReplymailComponent implements OnInit {
   dataSource: any;
   dataSourceRule: MatTableDataSource<any>;;
   loadingFull = false;
-  tempate = {};
-  name = "";
   checkAdd = true;
   data = [];
   employeeList = []
@@ -78,6 +77,7 @@ export class AutoReplymailComponent implements OnInit {
     this.displayedColumns = this.column.map((c) => c.prop);
     this.getAllTemplate();
     this.getAllTemplateRuleByAccountId();
+    this.createTemplateForm();
   }
 
   editorLoaded() {
@@ -88,40 +88,6 @@ export class AutoReplymailComponent implements OnInit {
     }
   }
 
-  editorExport() {
-    let emailObj;
-    let jsonData = null;
-    let html = null;
-    if (this.name.length < 6 || this.name.length > 50) {
-      this.checkAdd = false;
-    } else {
-      console.log(this.emailEditor);
-      this.emailEditor.saveDesign((data) => {
-        jsonData = data;
-        this.emailEditor.exportHtml((data: any) => {
-          html = data.html;
-          emailObj = {
-            accountId: this.accountId,
-            name: this.name,
-            dataTemplate: JSON.stringify(jsonData),
-            html: html
-          };
-          console.log(emailObj);
-          this.emailServices.createEmailTemplate(emailObj).subscribe(
-            (res: any) => {
-              location.reload();
-              this.toast.success(res.message);
-            },
-            (err) => {
-              this.toast.error("Services is not available!");
-            }
-          )
-        }
-        );
-      }
-      );
-    }
-  }
 
   getAllTemplate() {
     let listTemplate = [];
@@ -157,8 +123,7 @@ export class AutoReplymailComponent implements OnInit {
   openTemplateDetail(id) {
     console.log(id);
 
-    this.router.navigate(['/detail-auto-reply-mail', { 'id': id }]);
-    localStorage.setItem('templateId', id);
+    this.router.navigate(['/detail-auto-reply-mail'], { queryParams: { 'id': id, skipLocationChange: true } });
   }
   closeModal() {
     this.modalService.dismissAll();
@@ -167,17 +132,31 @@ export class AutoReplymailComponent implements OnInit {
 
   syncTemplate(id) {
     this.loadingFull = true
-    this.emailServices.syncEmailTemplate(id).subscribe(
-      (res: any) => {
-        this.getAllTemplate();
-        this.loadingFull = false
-        this.toast.success(res.message);
-      },
-      (err) => {
-        this.loadingFull = false
-        this.toast.error("Services is not available!");
+    let checkDefault = false;
+    for (let i = 0; i < this.templateList.length; i++) {
+      if (this.templateList[i].status === true) {
+        checkDefault = true;
       }
-    )
+    }
+    console.log(checkDefault);
+
+    if (checkDefault == true) {
+      this.emailServices.syncEmailTemplate(id).subscribe(
+        (res: any) => {
+          this.getAllTemplate();
+          this.loadingFull = false
+          this.toast.success(res.message);
+        },
+        (err) => {
+          this.loadingFull = false
+          this.toast.error("Services is not available!");
+        }
+      )
+    } else {
+      this.loadingFull = false;
+      this.toast.warning("Please set template default before apply!");
+    }
+
   }
 
   setDefault(templateId) {
@@ -438,40 +417,54 @@ export class AutoReplymailComponent implements OnInit {
   synch() {
     this.dialog.closeAll();
     this.loadingFull = true;
-    this.emailServices.syncDateForTemplate(this.accountId).subscribe(
-      (res: any) => {
-        if (res.status === 200) {
-          this.toast.success("Apply Template Successfully!");
-          this.loadingFull = false;
-        } else {
-          this.loadingFull = false;
-          this.toast.error("Aplly Template Fail!");
-        }
-
-      },
-      (err) => {
-        this.loadingFull = false;
-        console.log(err);
-        this.toast.error("Server unavailable");
-
+    let checkDefault = false;
+    for (let i = 0; i < this.templateList.length; i++) {
+      if (this.templateList[i].status === true) {
+        checkDefault = true;
       }
-    )
+    }
+    console.log(checkDefault);
+    if (checkDefault === true) {
+      this.emailServices.syncDateForTemplate(this.accountId).subscribe(
+        (res: any) => {
+          if (res.status === 200) {
+            this.toast.success("Apply Template Successfully!");
+            this.loadingFull = false;
+          } else {
+            this.loadingFull = false;
+            this.toast.error("Aplly Template Fail!");
+          }
+
+        },
+        (err) => {
+          this.loadingFull = false;
+          console.log(err);
+          this.toast.error("Server unavailable");
+
+        }
+      )
+    } else {
+      this.loadingFull = false;
+      this.toast.warning("Please Set template default before apply!")
+    }
+
   }
 
   detailResponse = [];
-  detail(modal, data) {
+  opentDetail(modal, data) {
     this.loadingFull = true;
     console.log(data);
     this.detailResponse = [];
     this.emailServices.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
       (res: any) => {
+        this.loadingFull = false;
+
         for (let i = 0; i < res.length; i++) {
           var element = {};
           element["fullName"] = res[i].first_name + " " + res[i].last_name;
           element["primary_email"] = res[i].primary_email;
           this.detailResponse.push(element);
         }
-        this.loadingFull = false;
       },
       (err) => {
         this.loadingFull = false;
@@ -479,7 +472,7 @@ export class AutoReplymailComponent implements OnInit {
         this.toast.error("Server unavailable!")
       }
     )
-    this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
 
@@ -490,5 +483,73 @@ export class AutoReplymailComponent implements OnInit {
 
   opendialogApply(dialogApply) {
     this.dialog.open(dialogApply);
+  }
+  checkCreate = false;
+  openCreate(createTemplate) {
+    this.checkCreate = true;
+  }
+
+  editorExport() {
+    this.loadingFull = true;
+    let emailObj;
+    let jsonData = null;
+    let html = null;
+
+    let name = this.templateForm.controls['name'].value;
+    let subject = this.templateForm.controls['subject'].value;
+    console.log(this.emailEditor);
+    this.emailEditor.saveDesign((data) => {
+      jsonData = data;
+      this.emailEditor.exportHtml((data: any) => {
+        html = data.html;
+        emailObj = {
+          accountId: this.accountId,
+          name: name,
+          subject: subject,
+          dataTemplate: JSON.stringify(jsonData),
+          html: html
+        };
+        console.log(emailObj);
+        this.emailServices.createEmailTemplate(emailObj).subscribe(
+          (res: any) => {
+            // location.reload();
+            this.loadingFull = false;
+            if (res.status == 200) {
+              console.log(res);
+              this.templateForm.reset();
+              this.toast.success("Create Template Successfully !");
+              this.checkCreate = false;
+            } else if (res.status == 400) {
+              this.toast.error("Template with this subject existed ! Please input another again !");
+            }
+
+          },
+          (err) => {
+            this.loadingFull = false;
+            this.toast.error("Services is not available!");
+          }
+        )
+      }
+      );
+    }
+    );
+
+  }
+
+  name = "";
+
+  tempate = {};
+  subject = "";
+  templateForm: FormGroup;
+  createTemplateForm() {
+    this.templateForm = new FormGroup({
+      name: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+      subject: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+
+    });
+  }
+
+  goToAssignEmail() {
+    this.checkCreate = false;
   }
 }

@@ -1,5 +1,5 @@
 <nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
-  <div>
+  <div *ngIf="checkCreate==false">
     <mat-tab-group>
       <mat-tab label="Mail Template">
         <div class="card-body">
@@ -9,7 +9,11 @@
 
             </div>
             <div class="col-auto">
-              <button color="primary" mat-button [routerLink]="['/create-auto-reply-mail']">
+              <button mat-button color="primary" (click)="opendialogApply(dialogApply)">
+                <mat-icon>assignment_turned_in</mat-icon> Apply
+              </button>
+              <button color="primary" mat-button (click)="openCreate(createTemplate)">
+                <!--[routerLink]="['/create-auto-reply-mail']"-->
                 <mat-icon>
                   create
                 </mat-icon>
@@ -99,146 +103,149 @@
         <div class="card-body">
           <div>
             <div>
-                <div class="row">
-                    <div class="col-auto mr-auto">
-        
-                    </div>
-                    <div class="col-auto">
-                        <button mat-button color="primary" (click)="opendialogApply(dialogApply)">
-                            <mat-icon>assignment_turned_in</mat-icon> Apply
-                        </button>
-                        <button color="primary" mat-button (click)="openDialogSave(dialogSave)">
-                            <mat-icon>
-                                save
-                            </mat-icon>
-                            Save
-                        </button>
-                    </div>
+              <div class="row">
+                <div class="col-auto mr-auto">
+
                 </div>
-                <mat-table #table cdkDropList [dataSource]="dataSourceRule" [cdkDropListData]="dataSourceRule"
-                    (cdkDropListDropped)="dropTable($event)">
-        
-        
-        
-        
-        
-                    <ng-container matColumnDef="type">
-                        <mat-header-cell *matHeaderCellDef>
-                            Specific by
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color" style="margin-top: 10px;">
-                            <mat-form-field style="width: 80%;" appearance="outline">
-                                <mat-label>Choose type</mat-label>
-                                <mat-select [(ngModel)]="row.type">
-                                    <!-- <mat-option value="0" (onSelectionChange)="fieldChang($event)">choose
+                <div class="col-auto">
+                  <button mat-button color="primary" (click)="opendialogApply(dialogApply)">
+                    <mat-icon>assignment_turned_in</mat-icon> Apply
+                  </button>
+                  <button color="primary" mat-button (click)="openDialogSave(dialogSave)">
+                    <mat-icon>
+                      save
+                    </mat-icon>
+                    Save
+                  </button>
+                </div>
+              </div>
+              <mat-table #table cdkDropList [dataSource]="dataSourceRule" [cdkDropListData]="dataSourceRule"
+                (cdkDropListDropped)="dropTable($event)">
+
+
+
+
+
+                <ng-container matColumnDef="type">
+                  <mat-header-cell *matHeaderCellDef>
+                    Specific by
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color"
+                    style="margin-top: 10px;">
+                    <mat-form-field style="width: 80%;" appearance="outline">
+                      <mat-label>Choose type</mat-label>
+                      <mat-select [(ngModel)]="row.type">
+                        <!-- <mat-option value="0" (onSelectionChange)="fieldChang($event)">choose
                                     </mat-option> -->
-                                    <mat-option value="D" (onSelectionChange)="fieldChang($event)">Department
-                                    </mat-option>
-                                    <mat-option value="T" (onSelectionChange)="fieldChang($event)">Team
-                                    </mat-option>
-                                    <mat-option value="P" (onSelectionChange)="fieldChang($event)">Position
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="listId" style="margin-top: 10px;">
-                        <mat-header-cell *matHeaderCellDef>
-                            Value
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color" style="margin-top: 10px;">
-        
-                            <mat-form-field *ngIf="row.type != 'D' && row.type != 'P' && row.type != 'T' && row.type != 'E'"
-                                style="width: 80%;" appearance="outline">
-                                <mat-label>Choose Value</mat-label>
-                                <mat-select>
-                                </mat-select>
-                            </mat-form-field>
-        
-                            <mat-form-field *ngIf="row.type === 'D'" style="width: 80%;" appearance="outline">
-                                <mat-label>Choose Value</mat-label>
-                                <mat-select [(ngModel)]="row.listId" multiple>
-                                    <mat-option *ngFor="let department of depList" [value]="department.id"
-                                        (onSelectionChange)="fieldChang($event)">{{department.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-        
-                            <mat-form-field *ngIf="row.type === 'T'" style="width: 80%;" appearance="outline">
-                                <mat-label>Choose Value</mat-label>
-                                <mat-select [(ngModel)]="row.listId" multiple>
-                                    <mat-option *ngFor="let team of teamList" [value]="team.id"
-                                        (onSelectionChange)="fieldChang($event)">{{team.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-        
-                            <mat-form-field *ngIf="row.type === 'P'" style="width: 80%;" appearance="outline">
-                                <mat-label>Choose Value</mat-label>
-                                <mat-select [(ngModel)]="row.listId" multiple>
-                                    <mat-option *ngFor="let position of positionList" [value]="position.id"
-                                        (onSelectionChange)="fieldChang($event)">{{position.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-        
-                            <mat-form-field *ngIf="row.type === 'E'" style="width: 80%;" appearance="outline">
-        
-        
-                                <mat-label>Choose Value</mat-label>
-                                <mat-select [(ngModel)]="row.listId" multiple>
-                                    <mat-option *ngFor="let employee of employeeList" [value]="employee.id"
-                                        (onSelectionChange)="fieldChang($event)">{{employee.primary_email}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-        
-        
-        
-        
-                        </mat-cell>
-                    </ng-container>
-        
-                    <ng-container matColumnDef="templateId">
-                        <mat-header-cell *matHeaderCellDef>
-                            Template
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color" style="margin-top: 10px;">
-                            <mat-form-field style="width: 80%;" appearance="outline">
-                                <mat-label>Choose Template</mat-label>
-                                <mat-select [(ngModel)]="row.templateId">
-                                    <mat-option *ngFor="let template of templateList" [value]="template.templateId"
-                                        (onSelectionChange)="fieldChang($event)">
-                                        {{template.templateName}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="action">
-                        <mat-header-cell *matHeaderCellDef>
-                            Action
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row; let i = index" [style.color]="row.color" data-label="color">
-                            <!-- update account company icon button -->
-                            <button mat-raised-button color="primary" style="margin-right: 20px;"
-                                (click)="detail(assignTemplateMail,row)">
-                                View
-                            </button>
-                            <button mat-raised-button color="warn" (click)="removeAt(i)">
-                                Delete
-                            </button>
-                        </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="displayedColumnsRule"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumnsRule" cdkDrag> </mat-row>
-                </mat-table>
-                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-                <button mat-raised-button style="width: 100%; text-align: center;" (click)="addRow()">Add
-                    row</button>
+                        <mat-option value="D" (onSelectionChange)="fieldChang($event)">Department
+                        </mat-option>
+                        <mat-option value="T" (onSelectionChange)="fieldChang($event)">Team
+                        </mat-option>
+                        <mat-option value="P" (onSelectionChange)="fieldChang($event)">Position
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="listId" style="margin-top: 10px;">
+                  <mat-header-cell *matHeaderCellDef>
+                    Value
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color"
+                    style="margin-top: 10px;">
+
+                    <mat-form-field *ngIf="row.type != 'D' && row.type != 'P' && row.type != 'T' && row.type != 'E'"
+                      style="width: 80%;" appearance="outline">
+                      <mat-label>Choose Value</mat-label>
+                      <mat-select>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="row.type === 'D'" style="width: 80%;" appearance="outline">
+                      <mat-label>Choose Value</mat-label>
+                      <mat-select [(ngModel)]="row.listId" multiple>
+                        <mat-option *ngFor="let department of depList" [value]="department.id"
+                          (onSelectionChange)="fieldChang($event)">{{department.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="row.type === 'T'" style="width: 80%;" appearance="outline">
+                      <mat-label>Choose Value</mat-label>
+                      <mat-select [(ngModel)]="row.listId" multiple>
+                        <mat-option *ngFor="let team of teamList" [value]="team.id"
+                          (onSelectionChange)="fieldChang($event)">{{team.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="row.type === 'P'" style="width: 80%;" appearance="outline">
+                      <mat-label>Choose Value</mat-label>
+                      <mat-select [(ngModel)]="row.listId" multiple>
+                        <mat-option *ngFor="let position of positionList" [value]="position.id"
+                          (onSelectionChange)="fieldChang($event)">{{position.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="row.type === 'E'" style="width: 80%;" appearance="outline">
+
+
+                      <mat-label>Choose Value</mat-label>
+                      <mat-select [(ngModel)]="row.listId" multiple>
+                        <mat-option *ngFor="let employee of employeeList" [value]="employee.id"
+                          (onSelectionChange)="fieldChang($event)">{{employee.primary_email}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+
+
+
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="templateId">
+                  <mat-header-cell *matHeaderCellDef>
+                    Template
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color"
+                    style="margin-top: 10px;">
+                    <mat-form-field style="width: 80%;" appearance="outline">
+                      <mat-label>Choose Template</mat-label>
+                      <mat-select [(ngModel)]="row.templateId">
+                        <mat-option *ngFor="let template of templateList" [value]="template.templateId"
+                          (onSelectionChange)="fieldChang($event)">
+                          {{template.templateName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                  <mat-header-cell *matHeaderCellDef>
+                    Action
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i = index" [style.color]="row.color" data-label="color">
+                    <!-- update account company icon button -->
+                    <button mat-raised-button color="primary" style="margin-right: 20px;"
+                      (click)="opentDetail(assignTemplateMail, row)">
+                      View
+                    </button>
+                    <button mat-raised-button color="warn" (click)="removeAt(i)">
+                      Delete
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumnsRule"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsRule" cdkDrag> </mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+              <button mat-raised-button style="width: 100%; text-align: center;" (click)="addRow()">Add
+                row</button>
             </div>
-        </div>
-        
+          </div>
+
         </div>
 
       </mat-tab>
@@ -248,9 +255,7 @@
 
 
   </div>
-  <div>
-    <!-- <app-assign-email-template></app-assign-email-template> -->
-  </div>
+
 
   <ng-template #detail let-modal>
     <div class="modal-body">
@@ -310,58 +315,130 @@
 
   <ng-template #assignTemplateMail let-modal>
     <div class="modal-header">
-        <h4>Assign For Employee</h4>
+      <h4>Assign For Employee</h4>
     </div>
     <div class="modal-body">
-        <table class="table">
-            <tr *ngIf="detailResponse.length != 0">
-                <th>Full Name</th>
-                <th>Primary Email</th>
-            </tr>
-            <tr class="col-12" style="text-size-adjust: 14;" *ngIf="detailResponse.length == 0">No Data</tr>
-            <tr *ngFor="let employee of detailResponse">
-                <td>{{ employee.fullName }}</td>
-                <td>{{ employee.primary_email }}</td>
-            </tr>
-        </table>
+      <table class="table">
+        <tr *ngIf="detailResponse.length != 0">
+          <th>Full Name</th>
+          <th>Primary Email</th>
+        </tr>
+        <tr class="col-12" style="text-size-adjust: 14;" *ngIf="detailResponse.length == 0">No Data</tr>
+        <tr *ngFor="let employee of detailResponse">
+          <td>{{ employee.fullName }}</td>
+          <td>{{ employee.primary_email }}</td>
+        </tr>
+      </table>
     </div>
     <div class="row">
-        <div class="col-auto mr-auto">
+      <div class="col-auto mr-auto">
 
-        </div>
-        <div class="col-auto">
-            <button mat-raised-button style="margin:20px" color="primary" (click)="closeModal()">Close</button>
+      </div>
+      <div class="col-auto">
+        <button mat-raised-button style="margin:20px" color="primary" (click)="closeModal()">Close</button>
 
-        </div>
+      </div>
     </div>
 
-</ng-template>
+  </ng-template>
 
-<ng-template #dialogSave>
+  <ng-template #dialogSave>
     <mat-dialog-content>
-        <div>
-            Do you want to save ?
-        </div>
+      <div>
+        Do you want to save ?
+      </div>
     </mat-dialog-content>
     <mat-dialog-actions align="center">
-        <button mat-raised-button color="primary" (click)="saveTemplateRule()">
-            Save
-        </button>
-        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+      <button mat-raised-button color="primary" (click)="saveTemplateRule()">
+        Save
+      </button>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
     </mat-dialog-actions>
-</ng-template>
+  </ng-template>
 
-<ng-template #dialogApply>
+  <ng-template #dialogApply>
     <mat-dialog-content>
-        <div>
-            Do you want to apply ?
-        </div>
+      <div>
+        Do you want to apply ?
+      </div>
     </mat-dialog-content>
     <mat-dialog-actions align="center">
-        <button mat-raised-button color="primary" (click)="synch()()">
-            Apply
-        </button>
-        <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+      <button mat-raised-button color="primary" (click)="synch()">
+        Apply
+      </button>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
     </mat-dialog-actions>
-</ng-template>
+  </ng-template>
+
+
+  <div *ngIf="checkCreate==true">
+    <div>
+      <div class="card-body">
+        <div>
+          <div class="editor card ">
+            <div class="card-header" style="background-color: #777777">
+              <h4>Create template</h4>
+            </div>
+            <form [formGroup]="templateForm">
+              <div class="card-body">
+
+                <div>
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Template name</mat-label>
+                    <input matInput type=" text" placeholder="name" name="name" formControlName="name" />
+                    <!-- <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
+                              </small> -->
+                    <small
+                      *ngIf="templateForm.controls['name'].hasError('required') && templateForm.controls['name'].touched"
+                      class="form-error-msg"> Template name is required </small>
+                    <small
+                      *ngIf="templateForm.controls['name'].hasError('minlength') && templateForm.controls['name'].touched"
+                      class="form-error-msg"> Template name require at least
+                      {{templateForm.controls['name'].errors.minlength.requiredLength}} characters
+                    </small>
+                    <small
+                      *ngIf="templateForm.controls['name'].hasError('maxlength') && templateForm.controls['name'].touched"
+                      class="form-error-msg"> Template name can not contain more than
+                      {{templateForm.controls['name'].errors.maxlength.requiredLength}} characters
+                    </small>
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Subject</mat-label>
+                    <input matInput type="text" placeholder="Subject" name="subject" formControlName="subject" />
+                    <!-- <small *ngIf="checkAdd ==false " class="form-error-msg">Name must have 6-50 characteries
+                              </small> -->
+                    <small
+                      *ngIf="templateForm.controls['subject'].hasError('required') && templateForm.controls['subject'].touched"
+                      class="form-error-msg"> Subject is required </small>
+                    <small
+                      *ngIf="templateForm.controls['subject'].hasError('minlength') && templateForm.controls['subject'].touched"
+                      class="form-error-msg"> Subject require at least
+                      {{templateForm.controls['subject'].errors.minlength.requiredLength}} characters
+                    </small>
+                    <small
+                      *ngIf="templateForm.controls['subject'].hasError('maxlength') && templateForm.controls['subject'].touched"
+                      class="form-error-msg"> Subject can not contain more than
+                      {{templateForm.controls['subject'].errors.maxlength.requiredLength}} characters
+                    </small>
+                  </mat-form-field>
+                </div>
+              </div>
+              <email-editor id="email-editor"></email-editor>
+              <div class="col-auto">
+                <button mat-raised-button color="primary" mat-button (click)="editorExport()"
+                  [disabled]="templateForm.invalid">
+                  Create Template
+                </button>
+                <button mat-raised-button color="primary" mat-button (click)="goToAssignEmail()">
+                  Close
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </nz-spin>
