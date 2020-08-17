@@ -377,7 +377,7 @@ export class SignatureTemplateComponent implements OnInit {
         }
         respone = res;
         if (respone.status === true) {
-          this.toast.success(respone.message);
+          // this.toast.success(respone.message);
           if (respone.action === 'create') {
             this.isSetPrimaryDisable = false;
             this.signatureID = respone.id;
@@ -434,7 +434,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.saveSignatureTemplateRules(signature).subscribe(
       (res: any) => {
         if (res.status) {
-          this.toast.success(res.message);
+          // this.toast.success(res.message);
           this.signatureRuleID = res.id;
           if (res.action === 'create') {
             this.isSetPrimaryRuleDisable = false;
@@ -705,7 +705,7 @@ export class SignatureTemplateComponent implements OnInit {
       this.htmlContentReview = this.htmlContentReview.split('{email}').join(primary_email);
       this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
       this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
-      this.toast.success('Load review successfully!');
+      // this.toast.success('Load review successfully!');
     } else {
       this.toast.error('You have not synchronized data!')
     }
