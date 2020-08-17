@@ -12,6 +12,7 @@ import { DepartmentApiService } from '../../api-services/department-api.service'
 import { AccountApiService } from '../../api-services/account-api.service';
 import { PositionApiService } from '../../api-services/position-api.service';
 import { TeamApiService } from '../../api-services/team-api.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-auto-replymail',
   templateUrl: './auto-replymail.component.html',
@@ -29,8 +30,6 @@ export class AutoReplymailComponent implements OnInit {
   dataSource: any;
   dataSourceRule: MatTableDataSource<any>;;
   loadingFull = false;
-  tempate = {};
-  name = "";
   checkAdd = true;
   data = [];
   employeeList = []
@@ -78,6 +77,7 @@ export class AutoReplymailComponent implements OnInit {
     this.displayedColumns = this.column.map((c) => c.prop);
     this.getAllTemplate();
     this.getAllTemplateRuleByAccountId();
+    this.createTemplateForm();
   }
 
   editorLoaded() {
@@ -88,40 +88,6 @@ export class AutoReplymailComponent implements OnInit {
     }
   }
 
-  editorExport() {
-    let emailObj;
-    let jsonData = null;
-    let html = null;
-    if (this.name.length < 6 || this.name.length > 50) {
-      this.checkAdd = false;
-    } else {
-      console.log(this.emailEditor);
-      this.emailEditor.saveDesign((data) => {
-        jsonData = data;
-        this.emailEditor.exportHtml((data: any) => {
-          html = data.html;
-          emailObj = {
-            accountId: this.accountId,
-            name: this.name,
-            dataTemplate: JSON.stringify(jsonData),
-            html: html
-          };
-          console.log(emailObj);
-          this.emailServices.createEmailTemplate(emailObj).subscribe(
-            (res: any) => {
-              location.reload();
-              this.toast.success(res.message);
-            },
-            (err) => {
-              this.toast.error("Services is not available!");
-            }
-          )
-        }
-        );
-      }
-      );
-    }
-  }
 
   getAllTemplate() {
     let listTemplate = [];
@@ -490,5 +456,72 @@ export class AutoReplymailComponent implements OnInit {
 
   opendialogApply(dialogApply) {
     this.dialog.open(dialogApply);
+  }
+  checkCreate = false;
+  openCreate(createTemplate) {
+    this.checkCreate = true;
+  }
+
+  editorExport() {
+    this.loadingFull = true;
+    let emailObj;
+    let jsonData = null;
+    let html = null;
+
+    let name = this.templateForm.controls['name'].value;
+    let subject = this.templateForm.controls['subject'].value;
+    console.log(this.emailEditor);
+    this.emailEditor.saveDesign((data) => {
+      jsonData = data;
+      this.emailEditor.exportHtml((data: any) => {
+        html = data.html;
+        emailObj = {
+          accountId: this.accountId,
+          name: name,
+          subject: subject,
+          dataTemplate: JSON.stringify(jsonData),
+          html: html
+        };
+        console.log(emailObj);
+        this.emailServices.createEmailTemplate(emailObj).subscribe(
+          (res: any) => {
+            // location.reload();
+            this.loadingFull = false;
+            if (res.status == 200) {
+              console.log(res);
+              this.toast.success("Create Template Successfully !");
+              this.checkCreate = false;
+            } else if (res.status == 400) {
+              this.toast.error("Template with this subject existed ! Please input another again !");
+            }
+
+          },
+          (err) => {
+            this.loadingFull = false;
+            this.toast.error("Services is not available!");
+          }
+        )
+      }
+      );
+    }
+    );
+
+  }
+
+  name = "";
+
+  tempate = {};
+  subject = "";
+  templateForm: FormGroup;
+  createTemplateForm() {
+    this.templateForm = new FormGroup({
+      name: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+      subject: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
+
+    });
+  }
+
+  goToAssignEmail() {
+    this.checkCreate = false;
   }
 }
