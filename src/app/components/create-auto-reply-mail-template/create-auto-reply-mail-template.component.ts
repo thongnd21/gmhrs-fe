@@ -17,9 +17,10 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
 
 
   loadingFull = false;
-  name = "";
   checkAdd = true;
   accountId = localStorage.getItem('id');
+  name = "";
+
   tempate = {};
   subject = "";
   templateForm: FormGroup;

@@ -33,16 +33,26 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.templateId = localStorage.getItem('templateId');
+    // this.templateId = localStorage.getItem('templateId');
 
+
+    console.log(this.route.snapshot.queryParamMap);
+    this.route.queryParams.subscribe(params => {
+      this.templateId = params['id'];
+    });
+    if (this.templateId === undefined) {
+      this.router.navigate(['/auto-reply-mail']);
+    } else {
+      this.openTemplateDetail(this.templateId);
+
+    }
     console.log(this.templateId);
 
-    this.openTemplateDetail(this.templateId);
   }
 
 
   openTemplateDetail(id) {
-    this.loadingFull=true;
+    this.loadingFull = true;
     this.updateTemplateForm = new FormGroup({
       name: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
       subject: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
@@ -50,7 +60,7 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
     });
     this.emailServices.getTemplate(id).subscribe(
       (res) => {
-        this.loadingFull=false;
+        this.loadingFull = false;
         const templateEmail: any = res;
         console.log(res);
         this.updateTemplateForm = new FormGroup({
@@ -72,7 +82,7 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
         // })
       },
       (err) => {
-        this.loadingFull=false;
+        this.loadingFull = false;
         this.toast.error("Services is not available!");
       }
     )
@@ -92,7 +102,7 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
   }
 
   updateTemplate() {
-    this.loadingFull=true;
+    this.loadingFull = true;
     let emailObj;
     let jsonData = null;
     let html = null;
@@ -115,7 +125,7 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
         this.emailServices.updateEmailTemplate(emailObj).subscribe(
           (res: any) => {
             // location.reload();
-            this.loadingFull=false;
+            this.loadingFull = false;
             console.log(res);
             if (res.status == 200) {
               this.toast.success(res.message);
@@ -124,7 +134,7 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
             }
           },
           (err) => {
-            this.loadingFull=false;
+            this.loadingFull = false;
             this.toast.error("Services is not available!");
           }
         )

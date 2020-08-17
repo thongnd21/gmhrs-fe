@@ -123,8 +123,7 @@ export class AutoReplymailComponent implements OnInit {
   openTemplateDetail(id) {
     console.log(id);
 
-    this.router.navigate(['/detail-auto-reply-mail', { 'id': id }]);
-    localStorage.setItem('templateId', id);
+    this.router.navigate(['/detail-auto-reply-mail'], { queryParams: { 'id': id, skipLocationChange: true } });
   }
   closeModal() {
     this.modalService.dismissAll();
@@ -425,19 +424,20 @@ export class AutoReplymailComponent implements OnInit {
   }
 
   detailResponse = [];
-  detail(modal, data) {
+  opentDetail(modal, data) {
     this.loadingFull = true;
     console.log(data);
     this.detailResponse = [];
     this.emailServices.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
       (res: any) => {
+        this.loadingFull = false;
+
         for (let i = 0; i < res.length; i++) {
           var element = {};
           element["fullName"] = res[i].first_name + " " + res[i].last_name;
           element["primary_email"] = res[i].primary_email;
           this.detailResponse.push(element);
         }
-        this.loadingFull = false;
       },
       (err) => {
         this.loadingFull = false;
@@ -445,7 +445,7 @@ export class AutoReplymailComponent implements OnInit {
         this.toast.error("Server unavailable!")
       }
     )
-    this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
 
 
@@ -489,6 +489,7 @@ export class AutoReplymailComponent implements OnInit {
             this.loadingFull = false;
             if (res.status == 200) {
               console.log(res);
+              this.templateForm.reset();
               this.toast.success("Create Template Successfully !");
               this.checkCreate = false;
             } else if (res.status == 400) {

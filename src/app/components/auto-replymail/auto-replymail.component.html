@@ -9,6 +9,9 @@
 
             </div>
             <div class="col-auto">
+              <button mat-button color="primary" (click)="opendialogApply(dialogApply)">
+                <mat-icon>assignment_turned_in</mat-icon> Apply
+              </button>
               <button color="primary" mat-button (click)="openCreate(createTemplate)">
                 <!--[routerLink]="['/create-auto-reply-mail']"-->
                 <mat-icon>
@@ -226,7 +229,7 @@
                   <mat-cell *matCellDef="let row; let i = index" [style.color]="row.color" data-label="color">
                     <!-- update account company icon button -->
                     <button mat-raised-button color="primary" style="margin-right: 20px;"
-                      (click)="detail(assignTemplateMail,row)">
+                      (click)="opentDetail(assignTemplateMail, row)">
                       View
                     </button>
                     <button mat-raised-button color="warn" (click)="removeAt(i)">
@@ -252,9 +255,7 @@
 
 
   </div>
-  <div>
-    <!-- <app-assign-email-template></app-assign-email-template> -->
-  </div>
+
 
   <ng-template #detail let-modal>
     <div class="modal-body">
@@ -362,7 +363,7 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions align="center">
-      <button mat-raised-button color="primary" (click)="synch()()">
+      <button mat-raised-button color="primary" (click)="synch()">
         Apply
       </button>
       <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
