@@ -52,6 +52,7 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
     console.log(this.emailEditor);
     this.emailEditor.saveDesign((data) => {
       jsonData = data;
+      
       this.emailEditor.exportHtml((data: any) => {
         html = data.html;
         emailObj = {
@@ -61,29 +62,25 @@ export class CreateAutoReplyMailTemplateComponent implements OnInit {
           dataTemplate: JSON.stringify(jsonData),
           html: html
         };
-        console.log(emailObj);
         this.emailServices.createEmailTemplate(emailObj).subscribe(
           (res: any) => {
-            // location.reload();
-            this.loadingFull = false;
             if (res.status == 200) {
               console.log(res);
+              this.router.navigate(['/auto-reply-mail']);
+
               this.toast.success("Create Template Successfully !");
-              //               this.router.navigate(['/auto-reply-mail']);
             } else if (res.status == 400) {
               this.toast.error("Template with this subject existed ! Please input another again !");
             }
-
+            this.loadingFull = false;
           },
           (err) => {
             this.loadingFull = false;
             this.toast.error("Services is not available!");
           }
-        )
-      }
-      );
-    }
-    );
+        );
+      });
+    });
 
   }
 

@@ -6,7 +6,6 @@ import { AutoReplymailComponent } from './auto-replymail.component';
 import { EmailEditorModule } from 'angular-email-editor';
 import { MatTableModule, MatPaginatorModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatCardModule, MatRadioModule, MatChipsModule, MatSortModule, MatInputModule, MatSpinner, MatProgressSpinnerModule, MatTabsModule, MatFormFieldModule, MatSelectModule, MatAutocompleteModule, MatCheckbox, MatCheckboxModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AssignEmailTemplateComponent } from './assign-email-template/assign-email-template.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -81,6 +80,6 @@ import { NgxLoadingModule } from 'ngx-loading';
     MatCheckboxModule,
     RouterModule.forChild(AutoReplymailRoutes)
   ],
-  declarations: [AutoReplymailComponent, AssignEmailTemplateComponent]
+  declarations: [AutoReplymailComponent]
 })
 export class AutoReplymailModule { }

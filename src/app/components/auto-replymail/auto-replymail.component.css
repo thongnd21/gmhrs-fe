@@ -47,3 +47,7 @@
     display:flex;
     justify-content:center;
    }
+
+   .form-error-msg{
+    color: red;
+}

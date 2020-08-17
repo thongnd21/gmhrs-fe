@@ -138,7 +138,8 @@
                                         <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
                                             nz-button nz-dropdown [nzDropdownMenu]="teamMenu">
                                             <span *ngFor="let team of specRuleCheck.team">
-                                                <span *ngIf="team.status">{{team.name + ','}}&nbsp;</span>
+                                                <span class="checkItem"
+                                                    *ngIf="team.status">&nbsp;{{team.name}}&nbsp;</span>&nbsp;
                                             </span>
                                         </button>
                                         <nz-dropdown-menu #teamMenu="nzDropdownMenu">
@@ -173,7 +174,8 @@
                                         <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
                                             nz-button nz-dropdown [nzDropdownMenu]="departmentMenu">
                                             <span *ngFor="let department of specRuleCheck.department">
-                                                <span *ngIf="department.status">{{department.name + ','}}&nbsp;</span>
+                                                <span class="checkItem"
+                                                    *ngIf="department.status">&nbsp;{{department.name}}&nbsp;</span>&nbsp;
                                             </span>
                                         </button>
                                         <nz-dropdown-menu #departmentMenu="nzDropdownMenu">
@@ -190,7 +192,8 @@
                                         <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
                                             nz-button nz-dropdown [nzDropdownMenu]="positionMenu">
                                             <span *ngFor="let position of specRuleCheck.position">
-                                                <span *ngIf="position.status">{{position.name + ','}}&nbsp;</span>
+                                                <span class="checkItem"
+                                                    *ngIf="position.status">&nbsp;{{position.name}}&nbsp;</span>&nbsp;
                                             </span>
                                         </button>
                                         <nz-dropdown-menu #positionMenu="nzDropdownMenu">
