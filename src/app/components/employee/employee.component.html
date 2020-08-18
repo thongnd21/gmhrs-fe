@@ -2,7 +2,7 @@
   <div class="container ">
     <div class="row mt-1">
       <div class="col-md-12 align-self-start">
-        <mat-form-field >
+        <mat-form-field>
           <mat-label>Filter</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
         </mat-form-field>
@@ -11,7 +11,7 @@
   </div>
   <mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="count">
-      <mat-header-cell *matHeaderCellDef >
+      <mat-header-cell *matHeaderCellDef>
         No.
       </mat-header-cell>
       <mat-cell *matCellDef="let row ;let i = index;" data-label="No.">
@@ -70,6 +70,14 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
         {{ row.created_date }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="position_name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Position name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+        {{ row.position_name }}
       </mat-cell>
     </ng-container>
 
