@@ -1,5 +1,5 @@
 
-  
+  <nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
   <div *ngIf="checkCreate==false">
     <mat-tab-group>
       <mat-tab label="Mail Template">
@@ -371,7 +371,7 @@
     </mat-dialog-actions>
   </ng-template>
 
-  <nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
+  
   <div *ngIf="checkCreate==true">
     <div>
       <div class="card-body">

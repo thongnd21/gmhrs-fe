@@ -458,14 +458,24 @@ export class AutoReplymailComponent implements OnInit {
     this.detailResponse = new Array();
     this.emailServices.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
       (res: any) => {
-        for (let i = 0; i < res.length; i++) {
-          var element = {};
-          element["fullName"] = res[i].first_name + " " + res[i].last_name;
-          element["primary_email"] = res[i].primary_email;
-          this.detailResponse.push(element);
-        }
-        this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
         this.loadingFull = false;
+        console.log(res);
+        if (res != null) {
+          if (res.length != undefined && res.length > 0) {
+            for (let i = 0; i < res.length; i++) {
+              var element = {};
+              element["fullName"] = res[i].first_name + " " + res[i].last_name;
+              element["primary_email"] = res[i].primary_email;
+              this.detailResponse.push(element);
+            }
+            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          } else {
+            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          }
+        } else {
+          this.toast.warning("Please chooes information!");
+        }
+
       },
       (err) => {
         this.loadingFull = false;
