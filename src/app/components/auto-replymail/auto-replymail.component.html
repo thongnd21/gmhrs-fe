@@ -1,5 +1,4 @@
-
-  <nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
+<nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
   <div *ngIf="checkCreate==false">
     <mat-tab-group>
       <mat-tab label="Mail Template">
@@ -231,7 +230,7 @@
                     <!-- update account company icon button -->
                     <button mat-raised-button color="primary" style="margin-right: 20px;"
                       (click)="opentDetail(assignTemplateMail, row)">
-                      View
+                      View employee
                     </button>
                     <button mat-raised-button color="warn" (click)="removeAt(i)">
                       Delete
@@ -371,7 +370,7 @@
     </mat-dialog-actions>
   </ng-template>
 
-  
+
   <div *ngIf="checkCreate==true">
     <div>
       <div class="card-body">
@@ -442,5 +441,5 @@
       </div>
     </div>
   </div>
-  
+
 </nz-spin>

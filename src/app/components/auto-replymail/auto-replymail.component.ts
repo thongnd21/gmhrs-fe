@@ -473,7 +473,7 @@ export class AutoReplymailComponent implements OnInit {
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           }
         } else {
-          this.toast.warning("Please chooes information!");
+          this.toast.warning("Please chooses information!");
         }
 
       },

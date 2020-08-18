@@ -324,7 +324,7 @@ export class AppHeaderComponent {
 
 
   closeModal() {
-    this.listSynchonize= {
+    this.listSynchonize = {
       employees: {
         matchedEmployee: [],
         newEmployee: [],
@@ -721,7 +721,7 @@ export class AppHeaderComponent {
   }
 
   matchFirstNewAndOut() {
-    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].gsuite_id;
     const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x => x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
@@ -770,7 +770,7 @@ export class AppHeaderComponent {
   }
 
   matchNewAndOut() {
-    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].gsuite_id;
     const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x => x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
