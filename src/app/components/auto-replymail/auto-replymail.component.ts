@@ -451,21 +451,21 @@ export class AutoReplymailComponent implements OnInit {
 
   }
 
-  detailResponse = [];
+  detailResponse = new Array();
   opentDetail(modal, data) {
     this.loadingFull = true;
     console.log(data);
-    this.detailResponse = [];
+    this.detailResponse = new Array();
     this.emailServices.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
       (res: any) => {
-        this.loadingFull = false;
-
         for (let i = 0; i < res.length; i++) {
           var element = {};
           element["fullName"] = res[i].first_name + " " + res[i].last_name;
           element["primary_email"] = res[i].primary_email;
           this.detailResponse.push(element);
         }
+        this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+        this.loadingFull = false;
       },
       (err) => {
         this.loadingFull = false;
@@ -473,11 +473,8 @@ export class AutoReplymailComponent implements OnInit {
         this.toast.error("Server unavailable!")
       }
     )
-    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+
   }
-
-
-
   openDialogSave(dialog) {
     this.dialog.open(dialog);
   }
@@ -514,7 +511,7 @@ export class AutoReplymailComponent implements OnInit {
       );
     }
     );
-    setTimeout(()=>{
+    setTimeout(() => {
       this.emailServices.createEmailTemplate(emailObj).subscribe(
         (res: any) => {
           // location.reload();
@@ -527,14 +524,14 @@ export class AutoReplymailComponent implements OnInit {
             console.log(res.status);
             this.toast.error("Template with this subject existed ! Please input another again !");
           }
-          this.loadingFull =false;
+          this.loadingFull = false;
         },
         (err) => {
           this.loadingFull = false;
           this.toast.error("Services is not available!");
         }
       )
-    },5000)
+    }, 5000)
 
   }
 
