@@ -3,9 +3,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { CustomValidators } from "ngx-custom-validators";
-import { SelectionModel } from '@angular/cdk/collections';
 import { DepartmentApiService } from '../../api-services/department-api.service';
 import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
@@ -30,6 +27,10 @@ export class DepartmentComponent implements OnInit {
     {
       prop: 'departmentName',
       name: 'Department Name'
+    },
+    {
+      prop: 'departmentEmail',
+      name: 'Department Email'
     },
     {
       prop: 'description',
@@ -64,6 +65,7 @@ export class DepartmentComponent implements OnInit {
           item['id'] = element.id;
           item['name'] = element.name;
           item['description'] = element.description;
+          item['email'] = element.email;
           item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
           item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
           listDepartment.push(item);

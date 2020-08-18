@@ -36,6 +36,7 @@ export class DashboardComponent implements OnInit {
 	list: any = new Array;
 	isNewEmp: boolean = true;
 	isLogged: boolean = false;
+	author: string = localStorage.getItem('username');
 	panelss = [
 		{
 			name: 'Employee',
