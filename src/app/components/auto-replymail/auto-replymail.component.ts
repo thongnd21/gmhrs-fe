@@ -224,7 +224,7 @@ export class AutoReplymailComponent implements OnInit {
     this.emailServices.deleteTemplate(this.deleteTemplateId).subscribe(
       (res: any) => {
         this.loadingFull = false;
-        this.toast.error("Template is deleted!");
+        this.toast.success("Template is deleted!");
         this.getAllTemplate();
         this.dialog.closeAll();
       },
@@ -514,12 +514,13 @@ export class AutoReplymailComponent implements OnInit {
         this.emailServices.createEmailTemplate(emailObj).subscribe(
           (res: any) => {
             // location.reload();
-            this.loadingFull = false;
             if (res.status == 200) {
-              console.log(res);
+              this.loadingFull = false;
+              this.getAllTemplate();
               this.templateForm.reset();
               this.toast.success("Create Template Successfully !");
               this.checkCreate = false;
+
             } else if (res.status == 400) {
               this.toast.error("Template with this subject existed ! Please input another again !");
             }
