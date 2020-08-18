@@ -510,31 +510,31 @@ export class AutoReplymailComponent implements OnInit {
           dataTemplate: JSON.stringify(jsonData),
           html: html
         };
-        console.log(emailObj);
-        this.emailServices.createEmailTemplate(emailObj).subscribe(
-          (res: any) => {
-            // location.reload();
-            if (res.status == 200) {
-              this.loadingFull = false;
-              this.getAllTemplate();
-              this.templateForm.reset();
-              this.toast.success("Create Template Successfully !");
-              this.checkCreate = false;
-
-            } else if (res.status == 400) {
-              this.toast.error("Template with this subject existed ! Please input another again !");
-            }
-
-          },
-          (err) => {
-            this.loadingFull = false;
-            this.toast.error("Services is not available!");
-          }
-        )
       }
       );
     }
     );
+    setTimeout(()=>{
+      this.emailServices.createEmailTemplate(emailObj).subscribe(
+        (res: any) => {
+          // location.reload();
+          if (res.status == 200) {
+            this.getAllTemplate();
+            this.templateForm.reset();
+            this.checkCreate = false;
+
+          } else if (res.status == 400) {
+            console.log(res.status);
+            this.toast.error("Template with this subject existed ! Please input another again !");
+          }
+          this.loadingFull =false;
+        },
+        (err) => {
+          this.loadingFull = false;
+          this.toast.error("Services is not available!");
+        }
+      )
+    },5000)
 
   }
 
