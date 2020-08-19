@@ -39,7 +39,8 @@ export class AppSettings {
     public static SAVESPECSIGNATURE = 'signature/saveSpecSignature/'
     public static POSITION = 'position/';
     public static CHECKFILEGSUITEKEY = 'signature/checkFileGsuiteKey/'
-    public static CONNECTION = 'connection/';
+    public static CONNECTION = 'connection/'
+    public static UPDATESIGNATUREFORONLYWRONG = 'signature/updateSignatureTemplateForOnlyWrongEmployee/'
 
 
 }

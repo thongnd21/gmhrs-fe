@@ -224,6 +224,27 @@ export class SignatureTemplateComponent implements OnInit {
     this.listOfRules = [];
     // this.toast.success('New signature rule successfully!')
   }
+  updateSignatureForOnyWrongEmployee(): void {
+    this.isSpinning = true;
+    let id = localStorage.getItem('id');
+    this.signatureService.updateSignatureForOnlyWrongEmployee(id).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.toast.success(res.message);
+          this.listRulesCheckErr = [];
+        } else {
+          if (res.message[0].signatureName !== undefined) {
+            this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
+            this.listRulesCheckErr = res.message;
+          } else {
+            this.toast.warning(res.message);
+          }
+        }
+        this.showListWrongSignature = false;
+        this.isSpinning = false;
+      }
+    )
+  }
   showEmployeeSpecific(specificBy, specID): void {
     this.isTableSpecificLoading = true;
     let listEm = new Map();
