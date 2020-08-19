@@ -30,6 +30,15 @@
         </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="departmentEmail">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Department Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="departmentEmail">
+          {{ row.email }}
+        </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="description">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Description

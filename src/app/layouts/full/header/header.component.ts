@@ -287,6 +287,7 @@ export class AppHeaderComponent {
 
   synchronize() {
     let accountId = localStorage.getItem('id');
+    this.loading = true;
     let syncList = {
       accountId: accountId,
       is_first_sync: this.isFirstSync,
@@ -299,6 +300,7 @@ export class AppHeaderComponent {
     if (this.isFirstSync != null) {
       this.syncService.synchronize(syncList).subscribe(
         (res: any) => {
+          this.loading = false;
           this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
           this.toast.success('Synchronize successfully!');
           // this.dashBoard.getActivityLog();
@@ -322,7 +324,7 @@ export class AppHeaderComponent {
 
 
   closeModal() {
-    this.listSynchonize= {
+    this.listSynchonize = {
       employees: {
         matchedEmployee: [],
         newEmployee: [],
@@ -719,7 +721,7 @@ export class AppHeaderComponent {
   }
 
   matchFirstNewAndOut() {
-    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].gsuite_id;
     const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x => x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);
@@ -768,7 +770,7 @@ export class AppHeaderComponent {
   }
 
   matchNewAndOut() {
-    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].id;
+    this.listNewEmp[0]['gsuite_id'] = this.listOutEmp[0].gsuite_id;
     const index_new: number = this.listSyncFinal.employee.newEmployee.findIndex(x => x.id = this.listNewEmp[0].id);
     if (index_new !== -1) {
       this.listSyncFinal.employee.newEmployee.splice(index_new, 1);

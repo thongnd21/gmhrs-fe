@@ -75,6 +75,7 @@ export class AutoReplymailComponent implements OnInit {
 
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop);
+    console.log('manage page');
     this.getAllTemplate();
     this.getAllTemplateRuleByAccountId();
     this.createTemplateForm();
@@ -223,7 +224,7 @@ export class AutoReplymailComponent implements OnInit {
     this.emailServices.deleteTemplate(this.deleteTemplateId).subscribe(
       (res: any) => {
         this.loadingFull = false;
-        console.log(res);
+        this.toast.success("Template is deleted!");
         this.getAllTemplate();
         this.dialog.closeAll();
       },
@@ -450,21 +451,31 @@ export class AutoReplymailComponent implements OnInit {
 
   }
 
-  detailResponse = [];
+  detailResponse = new Array();
   opentDetail(modal, data) {
     this.loadingFull = true;
     console.log(data);
-    this.detailResponse = [];
+    this.detailResponse = new Array();
     this.emailServices.getEmailTemplateRuleDetailBySpecificTemplateId(data).subscribe(
       (res: any) => {
         this.loadingFull = false;
-
-        for (let i = 0; i < res.length; i++) {
-          var element = {};
-          element["fullName"] = res[i].first_name + " " + res[i].last_name;
-          element["primary_email"] = res[i].primary_email;
-          this.detailResponse.push(element);
+        console.log(res);
+        if (res != null) {
+          if (res.length != undefined && res.length > 0) {
+            for (let i = 0; i < res.length; i++) {
+              var element = {};
+              element["fullName"] = res[i].first_name + " " + res[i].last_name;
+              element["primary_email"] = res[i].primary_email;
+              this.detailResponse.push(element);
+            }
+            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          } else {
+            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+          }
+        } else {
+          this.toast.warning("Please chooses information!");
         }
+
       },
       (err) => {
         this.loadingFull = false;
@@ -472,11 +483,8 @@ export class AutoReplymailComponent implements OnInit {
         this.toast.error("Server unavailable!")
       }
     )
-    this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+
   }
-
-
-
   openDialogSave(dialog) {
     this.dialog.open(dialog);
   }
@@ -509,30 +517,31 @@ export class AutoReplymailComponent implements OnInit {
           dataTemplate: JSON.stringify(jsonData),
           html: html
         };
-        console.log(emailObj);
-        this.emailServices.createEmailTemplate(emailObj).subscribe(
-          (res: any) => {
-            // location.reload();
-            this.loadingFull = false;
-            if (res.status == 200) {
-              console.log(res);
-              this.templateForm.reset();
-              this.toast.success("Create Template Successfully !");
-              this.checkCreate = false;
-            } else if (res.status == 400) {
-              this.toast.error("Template with this subject existed ! Please input another again !");
-            }
-
-          },
-          (err) => {
-            this.loadingFull = false;
-            this.toast.error("Services is not available!");
-          }
-        )
       }
       );
     }
     );
+    setTimeout(() => {
+      this.emailServices.createEmailTemplate(emailObj).subscribe(
+        (res: any) => {
+          // location.reload();
+          if (res.status == 200) {
+            this.getAllTemplate();
+            this.templateForm.reset();
+            this.checkCreate = false;
+
+          } else if (res.status == 400) {
+            console.log(res.status);
+            this.toast.error("Template with this subject existed ! Please input another again !");
+          }
+          this.loadingFull = false;
+        },
+        (err) => {
+          this.loadingFull = false;
+          this.toast.error("Services is not available!");
+        }
+      )
+    }, 5000)
 
   }
 

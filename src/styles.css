@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~ng-zorro-antd/ng-zorro-antd.min.css";
 button, input[type="button"], input[type="submit"] { 
-    border: none;
-    outline: none;
+    border: none !important;
+    outline: none !important;
 } 
 /* .cdk-global-overlay-wrapper, .cdk-overlay-container {
     z-index: 99999 !important;
