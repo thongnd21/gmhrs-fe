@@ -378,8 +378,7 @@
                 <!-- Model wrong signature -->
                 <nz-modal style="display: inline-block;" [(nzVisible)]="showListWrongSignature" [nzAutofocus]="null"
                     nzTitle="List wrong signature employee" nzCancelText="Close" nzOkText="Send mail remind employees"
-                    (nzOnCancel)="updateSignatureForOnyWrongEmployee()" nzCancelText="Update signature for list above"
-                    (nzOnOk)="sendMailRemind()">
+                    (nzOnCancel)="handleCloseModel()" nzCancelText="Close" (nzOnOk)="sendMailRemind()">
                     <nz-collapse nzAccordion>
                         <nz-collapse-panel *ngFor="let element of listWrongSignature" [nzHeader]="element.email">
                             <p>
@@ -389,6 +388,10 @@
                             </p>
                         </nz-collapse-panel>
                     </nz-collapse>
+                    <br />
+                    <button style="width: 100%;" nz-button nzType="primary"
+                        (click)="showConfirmUpdateOnlyWrong()">Update
+                        signature for list above</button>
                 </nz-modal>
                 <!-- Model all template rule -->
                 <nz-modal nzWidth="70%" [(nzVisible)]="showListSignatureTemplateRule" [nzAutofocus]="null"

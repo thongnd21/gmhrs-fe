@@ -10,7 +10,7 @@ export class SignatureService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
     updateSignatureForOnlyWrongEmployee(id) {
-        return this.httpClient.get(this.URL + AppSettings.CHECKFILEGSUITEKEY + id);
+        return this.httpClient.get(this.URL + AppSettings.UPDATESIGNATUREFORONLYWRONG + id);
     }
     checkFileGsuiteKey(id) {
         return this.httpClient.get(this.URL + AppSettings.CHECKFILEGSUITEKEY + id);

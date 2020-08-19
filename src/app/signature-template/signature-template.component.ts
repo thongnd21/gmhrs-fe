@@ -193,7 +193,7 @@ export class SignatureTemplateComponent implements OnInit {
     placeholder: 'Enter text here...',
     translate: 'no',
     toolbarHiddenButtons: [
-      ['bold'],
+      [],
       [
         'insertImage',
         'insertVideo',
@@ -224,7 +224,16 @@ export class SignatureTemplateComponent implements OnInit {
     this.listOfRules = [];
     // this.toast.success('New signature rule successfully!')
   }
+  showConfirmUpdateOnlyWrong(): void {
+    this.modal.confirm({
+      nzTitle: '<i>Are you sure?</i>',
+      nzContent: '<b>It will update signature for only wrong signature employees in the list!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.updateSignatureForOnyWrongEmployee()
+    });
+  }
   updateSignatureForOnyWrongEmployee(): void {
+    this.showListWrongSignature = false;
     this.isSpinning = true;
     let id = localStorage.getItem('id');
     this.signatureService.updateSignatureForOnlyWrongEmployee(id).subscribe(
@@ -240,7 +249,6 @@ export class SignatureTemplateComponent implements OnInit {
             this.toast.warning(res.message);
           }
         }
-        this.showListWrongSignature = false;
         this.isSpinning = false;
       }
     )
