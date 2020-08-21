@@ -288,7 +288,7 @@
                         <button nz-button style="margin-right: 1cm;" (click)="newSignature()"
                             nzType="primary">New</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmUpdateAllSignature()"
-                            [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Synchronize now</button>
+                            [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Apply all employees</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmSetPrimaryTemplate()"
                             [disabled]="isSetPrimaryDisable" [nzLoading]="isSetPrimaryTemplateLoading"
                             nzType="primary">Set default</button>
@@ -391,7 +391,7 @@
                     <br />
                     <button style="width: 100%;" nz-button nzType="primary"
                         (click)="showConfirmUpdateOnlyWrong()">Update
-                        signature for list above</button>
+                        signature for eployee list above</button>
                 </nz-modal>
                 <!-- Model all template rule -->
                 <nz-modal nzWidth="70%" [(nzVisible)]="showListSignatureTemplateRule" [nzAutofocus]="null"
