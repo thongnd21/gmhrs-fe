@@ -1,94 +1,96 @@
-<div class="ml-05 mr-05 mt-05 pb-1">
-  <div class="mat-elevation-z8">
-    <div class="container ">
-      <div class="row mt-1">
-        <div class="col-md-12 align-self-start">
-          <mat-form-field >
-            <mat-label>Filter</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
-          </mat-form-field>
+<nz-spin [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
+  <div class="ml-05 mr-05 mt-05 pb-1">
+    <div class="mat-elevation-z8">
+      <div class="container ">
+        <div class="row mt-1">
+          <div class="col-md-12 align-self-start">
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
+            </mat-form-field>
+          </div>
         </div>
       </div>
+      <mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="count">
+          <mat-header-cell *matHeaderCellDef>
+            No.
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row ;let i = index;" data-label="No.">
+            {{i+1}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="departmentName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Department Name
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="departmentName">
+            {{ row.name }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="departmentEmail">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Department Email
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="departmentEmail">
+            {{ row.email }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Description
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="description">
+            {{ row.description }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <mat-header-cell *matHeaderCellDef>
+            Action
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+            <button mat-raised-button color="primary" style="margin-right: 20px;"
+              (click)="detail(EmpDetail,row)">View</button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
-    <mat-table [dataSource]="dataSource" matSort>
-      
-      <ng-container matColumnDef="count">
-        <mat-header-cell *matHeaderCellDef >
-          No.
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row ;let i = index;" data-label="No.">
-          {{i+1}}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="departmentName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          Department Name
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row" data-label="departmentName">
-          {{ row.name }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="departmentEmail">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          Department Email
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row" data-label="departmentEmail">
-          {{ row.email }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="description">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          Description
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row" data-label="description">
-          {{ row.description }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="action">
-        <mat-header-cell *matHeaderCellDef>
-          Action
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-          <button mat-raised-button color="primary" style="margin-right: 20px;" (click)="detail(EmpDetail,row)">View</button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
-    </mat-table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </div>
-</div>
 
-<ng-template #EmpDetail let-modal>
-  <div class="modal-header">
+  <ng-template #EmpDetail let-modal>
+    <div class="modal-header">
       <h4>Employees In Department {{ departmentName }}</h4>
-  </div>
-  <div class="modal-body">
+    </div>
+    <div class="modal-body">
       <table class="table">
-          <tr *ngIf="detailResponse.length != 0">
-              <th>Full Name</th>
-              <th>Primary Email</th>
-          </tr>
-          <tr class="col-12" style="text-size-adjust: 14;" *ngIf="detailResponse.length == 0">No Data</tr>
-          <tr *ngFor="let employee of detailResponse">
-              <td>{{ employee.fullName }}</td>
-              <td>{{ employee.primary_email }}</td>
-          </tr>
+        <tr *ngIf="detailResponse.length != 0">
+          <th>Full Name</th>
+          <th>Primary Email</th>
+        </tr>
+        <tr class="col-12" style="text-size-adjust: 14;" *ngIf="detailResponse.length == 0">No Data</tr>
+        <tr *ngFor="let employee of detailResponse">
+          <td>{{ employee.fullName }}</td>
+          <td>{{ employee.primary_email }}</td>
+        </tr>
       </table>
-  </div>
-  <div class="row">
+    </div>
+    <div class="row">
       <div class="col-auto mr-auto">
 
       </div>
       <div class="col-auto">
-          <button mat-raised-button style="margin:20px" color="primary" (click)="closeModal()">Close</button>
+        <button mat-raised-button style="margin:20px" color="primary" (click)="closeModal()">Close</button>
 
       </div>
-  </div>
-
-</ng-template>
+    </div>
+  </ng-template>
+</nz-spin>

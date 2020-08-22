@@ -19,7 +19,7 @@ export class DepartmentComponent implements OnInit {
 
   displayedColumns: string[] = [];
   dataSource: any;
-
+  isSpinning = false;
   column = [
     {
       prop: 'count',
@@ -56,6 +56,7 @@ export class DepartmentComponent implements OnInit {
 
   accountId = localStorage.getItem('id')
   getAll() {
+    this.isSpinning = true;
     const listDepartment = [];
     this.depServices.getAllDepartment(this.accountId).subscribe(
       (res) => {
@@ -74,9 +75,11 @@ export class DepartmentComponent implements OnInit {
         this.dataSource = new MatTableDataSource(listDepartment);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.isSpinning = false;
       },
       (error) => {
         this.toast.error('Server is not avaiable!');
+        this.isSpinning = false;
       }
     );
   }

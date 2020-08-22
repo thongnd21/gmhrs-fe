@@ -14,6 +14,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatRadioModule } from "@angular/material/radio";
 import { TeamRoutes } from './team.routing';
 import { TeamComponent } from './team.component';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { TeamComponent } from './team.component';
     MatTableModule,
     MatIconModule,
     MatChipsModule,
-    RouterModule.forChild(TeamRoutes) 
+    NzSpinModule,
+    RouterModule.forChild(TeamRoutes)
   ],
   declarations: [TeamComponent]
 })

@@ -24,6 +24,7 @@ export class TeamComponent implements OnInit {
   displayedColumns: string[] = [];
   dataSource: any;
   grpForm: FormGroup;
+  isSpinning = false;
   selection = new SelectionModel<any>(true, []);
   column = [
     {
@@ -61,6 +62,7 @@ export class TeamComponent implements OnInit {
   }
   accountId = localStorage.getItem('id');
   getAll() {
+    this.isSpinning = true;
     const listTeam = [];
     this.teamService.getAllTeamByAccountId(this.accountId).subscribe(
       (res) => {
@@ -78,9 +80,11 @@ export class TeamComponent implements OnInit {
         this.dataSource = new MatTableDataSource(listTeam);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.isSpinning = false;
       },
       (error) => {
         this.toast.error("Server is not avaiable!");
+        this.isSpinning = false;
       }
     );
   }
@@ -117,7 +121,7 @@ export class TeamComponent implements OnInit {
     )
   }
 
-  closeModal(){
+  closeModal() {
     this.modalService.dismissAll();
   }
 

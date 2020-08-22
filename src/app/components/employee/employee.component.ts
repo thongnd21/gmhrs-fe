@@ -29,6 +29,7 @@ export class EmployeeComponent implements OnInit {
   insEmp = {};
   departmentList = [];
   listEmployee = [];
+  isSpinning = false;
   column = [
 
     {
@@ -80,6 +81,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   getAllAccount() {
+    this.isSpinning = true;
     const listAccount = [];
     this.accountServices.getAllEmployee().subscribe(
       (res) => {
@@ -107,6 +109,7 @@ export class EmployeeComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         }
+        this.isSpinning = false;
       },
       (error) => {
         if (error.status == 0) {
@@ -115,6 +118,7 @@ export class EmployeeComponent implements OnInit {
           this.toast.error("Server is not available!");
         }
         this.toast.error("Server is not available!");
+        this.isSpinning = false;
       }
     );
   }
