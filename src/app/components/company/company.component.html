@@ -176,11 +176,17 @@
                   <mat-form-field class="full-width">
                     <input matInput name="email" formControlName="email" placeholder="Email" value="">
                   </mat-form-field>
+                  <small
+                    *ngIf="accountCompanyForm.controls['email'].hasError('required') && accountCompanyForm.controls['email'].touched"
+                    class="form-error-msg"> Email is required </small>
+                    <small
+                    *ngIf="accountCompanyForm.controls['email'].hasError('email') && accountCompanyForm.controls['email'].touched"
+                    class="form-error-msg"> Email is invalid </small>
                 </div>
                 <!-- username field -->
                 <div class="pb-1">
                   <mat-form-field class="full-width">
-                    <input matInput name="username" formControlName="username" placeholder="User Name" value="">
+                    <input matInput name="username" formControlName="username" placeholder="User Name" value="" readonly>
                   </mat-form-field>
                 </div>
                 <!-- address field -->
@@ -194,6 +200,13 @@
                   <mat-form-field class="full-width">
                     <input matInput name="phone" formControlName="phone" placeholder="Phone" value="">
                   </mat-form-field>
+                  <small
+                    *ngIf="accountCompanyForm.controls['phone'].hasError('required') && accountCompanyForm.controls['phone'].touched"
+                    class="form-error-msg"> Phone is required </small>
+                  <small *ngIf="accountCompanyForm.controls['phone'].hasError('pattern') && accountCompanyForm.controls['phone'].touched"
+                    class="form-error-msg"> Invaild phone </small>
+                  <small *ngIf="accountCompanyForm.controls['phone'].hasError('maxLength') && accountCompanyForm.controls['phone'].touched"
+                    class="form-error-msg"> Phone must be less than 15 characteries </small>
                 </div>
                 <div class="pb-1">
                   <mat-form-field class="full-width" >
@@ -205,80 +218,26 @@
                     <input matInput name="modified_date" formControlName="modified_date" placeholder="Modified Date" value="" readonly>
                   </mat-form-field>
                 </div>
+                <div class="pb-1">
+                  <mat-form-field class="full-width">
+                    <input matInput name="api_endpoint" formControlName="api_endpoint" placeholder="Api endpoint" value="" >
+                  </mat-form-field>
+                </div>
+                <div class="pb-1">
+                  <mat-form-field class="full-width">
+                    <input matInput name="connection_database" formControlName="connection_database" placeholder="Database connection" value="" readonly>
+                  </mat-form-field>
+                </div>
               </div>
             </div>
             <button mat-flat-button class="col-md-2 ml-2" color="accent" (click)="closeModal()">
               Close
             </button>
-            <!-- <button mat-flat-button class="col-md-4 ml-2 btn-success" type="submit" color="primary" ngbAutofocus
-              [disabled]="accountCompanyForm.invalid">Update</button> -->
+            <button mat-flat-button class="col-md-4 ml-2 btn-success" type="submit" color="primary" ngbAutofocus
+              [disabled]="accountCompanyForm.invalid">Update</button>
           </form>
         </mat-card-content>
       </mat-card>
-    </div>
-  </div>
-</ng-template>
-
-
-<ng-template #detail let-modal>
-  <div class="modal-header">
-    <h4>Detail</h4>
-  </div>
-  <div class="modal-body">
-    <div class="card-body">
-      <table class="table">
-        <tr>
-          <td>
-            Username
-          </td>
-          <td>
-            : {{account.username}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Email
-          </td>
-          <td>
-            : {{account.email}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Create Date
-          </td>
-          <td>
-            : {{account.created_date}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Modified Date
-          </td>
-          <td>
-            : {{account.modified_date}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Address
-          </td>
-          <td>
-            : {{account.address}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Phone
-          </td>
-          <td>
-            : {{account.phone}}
-          </td>
-        </tr>
-      </table>
-      <button mat-flat-button class="col-md-2 ml-2" color="accent" (click)="closeModal()">
-        Close
-      </button>
     </div>
   </div>
 </ng-template>

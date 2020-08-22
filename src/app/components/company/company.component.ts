@@ -66,6 +66,7 @@ export class CompanyComponent implements OnInit {
     this.companyServices.getAllCompany().subscribe(
       (data: any) => {
         this.loadingFull = false;
+        console.log(data);
         let list = [];
         data.forEach(company => {
           let item = {};
@@ -78,6 +79,8 @@ export class CompanyComponent implements OnInit {
           item['status_id'] = company.status_id;
           item['address'] = company.address;
           item['phone'] = company.phone;
+          item['connection_database'] = company.connection_database;
+          item['api_endpoint'] = company.api_endpoint;
           list.push(item);
         });
         this.dataSource = new MatTableDataSource(list);
@@ -123,6 +126,7 @@ export class CompanyComponent implements OnInit {
 
   opentUpdate(update, data) {
     this.account = new AccountCompanyModel();
+    console.log(data);
     this.account.id = data.id;
     this.account.email = data.email;
     this.account.username = data.username;
@@ -131,6 +135,8 @@ export class CompanyComponent implements OnInit {
     this.account.role = data.role;
     this.account.address = data.address;
     this.account.phone = data.phone;
+    this.account.connection_database = data.connection_database;
+    this.account.api_endpoint = data.api_endpoint;
     console.log(this.account);
 
     this.accountCompanyForm = new FormGroup({
@@ -142,14 +148,15 @@ export class CompanyComponent implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(30)
       ]),
-      address: new FormControl(this.account.address, [
-        Validators.required,
-      ]),
+      address: new FormControl(this.account.address),
       phone: new FormControl(this.account.phone, [
         Validators.required,
+        Validators.maxLength(15),
       ]),
       created_date: new FormControl(this.account.created_date),
-      modified_date: new FormControl(this.account.modified_date)
+      modified_date: new FormControl(this.account.modified_date),
+      api_endpoint: new FormControl(this.account.api_endpoint),
+      connection_database: new FormControl(this.account.connection_database)
     });
 
     this.modalService.open(update, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
@@ -195,9 +202,11 @@ export class CompanyComponent implements OnInit {
     this.loadingFull = true;
     this.account = new AccountCompanyModel()
     this.account.id = data.id;
+    this.account.email = data.email;
     this.account.address = data.address;
     this.account.phone = data.phone;
-    // this.account.api_endpoint = data.api_endpoint,
+    console.log(this.account);
+    this.account.api_endpoint = data.api_endpoint,
     // this.account.connection_database = data.connection_database
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res) => {
