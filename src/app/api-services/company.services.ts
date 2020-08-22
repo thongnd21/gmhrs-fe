@@ -31,5 +31,9 @@ export class CompanyServices {
     // 'https://gmhrs-api.herokuapp.com/api/accounts', { params: idAccount }
   }
 
+  changeAccountCompany(accountInfo){
+    const path = 'change'
+    return this.httpClient.put(this.URL + AppSettings.ACCOUNT +path , accountInfo);
+  }
 
 }
