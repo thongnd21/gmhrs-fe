@@ -12,10 +12,14 @@
     width: 100%;
 }
 .mat-column-count{
+    flex: 0 0 5% !important;
+    width: 5% !important;
+}
+.mat-column-name{
     flex: 0 0 20% !important;
     width: 20% !important;
 }
-.mat-column-name{
+.mat-column-departmentEmail {
     flex: 0 0 30% !important;
     width: 30% !important;
 }
@@ -24,7 +28,7 @@
     width: 30% !important;
 }
 .mat-column-action{
-    flex: 0 0 20% !important;
-    width: 20% !important;
+    flex: 0 0 10% !important;
+    width: 10% !important;
 }
 
