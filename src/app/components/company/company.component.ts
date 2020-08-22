@@ -17,7 +17,7 @@ export class CompanyComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [];
-  isLoading = true;
+  loadingFull = true;
   dataSource: any;
   accountCompanyForm: FormGroup;
   column = [
@@ -38,17 +38,22 @@ export class CompanyComponent implements OnInit {
       name: 'modified_date'
     },
     {
+      prop: 'status',
+      name: 'status'
+    },
+    {
       prop: 'action',
       name: 'action'
     },
   ];
   account;
-
+  accountInfo ={};
   constructor(
     private modalService: NgbModal,
     private companyServices: CompanyServices,
     private toast: ToastrService,
     private router: Router,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -57,10 +62,10 @@ export class CompanyComponent implements OnInit {
   }
 
   getAllCompany() {
+    this.loadingFull = true;
     this.companyServices.getAllCompany().subscribe(
       (data: any) => {
-        console.log(data);
-
+        this.loadingFull = false;
         let list = [];
         data.forEach(company => {
           let item = {};
@@ -78,6 +83,14 @@ export class CompanyComponent implements OnInit {
         this.dataSource = new MatTableDataSource(list);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+      },
+      (error)=>{
+        this.loadingFull = false;
+        if (error.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (error.status == 400) {
+          this.toast.error("Server is not available!");
+        }
       }
     )
   }
@@ -94,6 +107,15 @@ export class CompanyComponent implements OnInit {
         // this.account.role = data.role.name;
         this.account.address = data.address;
         this.account.phone = data.phone;
+        this.account.status_id = data.status_id;
+      },
+      (error)=>{
+        this.loadingFull = false;
+        if (error.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (error.status == 400) {
+          this.toast.error("Server is not available!");
+        }
       }
 
     )
@@ -143,20 +165,23 @@ export class CompanyComponent implements OnInit {
       email: new FormControl("", [Validators.required, Validators.email]),
       username: new FormControl("", [
         Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(30)
+        Validators.minLength(6),
+        Validators.maxLength(20)
       ]),
       password: new FormControl("", [
         Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(30)
+        Validators.minLength(6)
       ]),
-
+      phone: new FormControl("", [
+        Validators.required,
+        Validators.maxLength(15)
+    ]),
     });
     this.accountCompanyForm.setValue({
       email: '',
       username: '',
       password: '',
+      phone :''
     });
     this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
   }
@@ -167,6 +192,7 @@ export class CompanyComponent implements OnInit {
 
 
   updateAccountCompany(data) {
+    this.loadingFull = true;
     this.account = new AccountCompanyModel()
     this.account.id = data.id;
     this.account.address = data.address;
@@ -180,27 +206,39 @@ export class CompanyComponent implements OnInit {
         this.closeModal();
       },
       (error) => {
-        this.toast.error("Server is not available!");
         this.closeModal();
+        this.loadingFull = false;
+        if (error.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (error.status == 400) {
+          this.toast.error("Server is not available!");
+        }
       }
     )
 
   }
 
   createAccountCompany() {
+    this.loadingFull = true;
     this.account = new AccountCompanyModel();
     this.account.email = this.accountCompanyForm.controls['email'].value,
       this.account.username = this.accountCompanyForm.controls['username'].value,
       this.account.password = this.accountCompanyForm.controls['password'].value,
       this.companyServices.createAccountCompany(this.account).subscribe(
         (res) => {
+          this.closeModal();
+          this.loadingFull = false;
           this.toast.success("Create Account successfully!");
           this.getAllCompany();
-          this.closeModal();
         },
         (error) => {
-          this.toast.error("Server is not available!");
           this.closeModal();
+          this.loadingFull = false;
+          if (error.status == 0) {
+            this.toast.error("Connection timeout!");
+          } if (error.status == 400) {
+            this.toast.error("Server is not available!");
+          }
         }
       );
   }
@@ -216,6 +254,44 @@ export class CompanyComponent implements OnInit {
 
   setPage(event) {
 
+  }
+
+  changeDetail(){
+    this.loadingFull = true;
+    let status_id = 1;
+    if(this.accountInfo['status_id'] === 1){
+      status_id =  Number(2);
+    }else{
+      status_id = Number(1);
+    }
+    const accInfo = {
+      id : this.accountInfo['id'],
+      status_id : status_id,
+    } 
+    this.companyServices.changeAccountCompany(accInfo).subscribe(
+      (res) => {
+        this.dialog.closeAll();
+        this.loadingFull = false;
+        this.toast.success("Change status successfully!");
+        this.getAllCompany();
+      },
+      (error) => {
+        this.dialog.closeAll();
+        this.loadingFull = false;
+        if (error.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (error.status == 400) {
+          this.toast.error("Server is not available!");
+        }
+      }
+    );
+  }
+
+  openDialogChangeConfirm(dialog,event,account) {
+    this.accountInfo['id'] = account.id;
+    this.accountInfo['status_id'] = account.status_id;
+    event.source.checked = account.status_id === 1 ? true : false;
+    const dialogRef = this.dialog.open(dialog);
   }
 
 }

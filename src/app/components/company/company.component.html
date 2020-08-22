@@ -1,3 +1,4 @@
+<nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
 <div class="ml-05 mr-05 mt-05 pb-1">
   <div class="mat-elevation-z8">
     <div class="container">
@@ -51,19 +52,21 @@
         {{ row.modified_date }}
       </mat-cell>
     </ng-container>
+    
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Status
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+        <mat-slide-toggle [checked]="row.status_id === 1"(change)="openDialogChangeConfirm(dialog,$event,row)">
+        </mat-slide-toggle>
+      </mat-cell>
+    </ng-container>
     <ng-container matColumnDef="action">
       <mat-header-cell *matHeaderCellDef>
         Action
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-
-        <!-- view detail account company icon button -->
-        <!-- <button mat-icon-button (click)="openDetail(detail,row.id)">
-          <mat-icon>
-            remove_red_eye
-          </mat-icon>
-        </button> -->
-        <!-- update account company icon button -->
         <button mat-raised-button color="primary" (click)="opentUpdate(update,row)">
           View
         </button>
@@ -91,18 +94,27 @@
                   <mat-form-field class="full-width">
                     <input matInput name="email" formControlName="email" placeholder="Email *" value="">
                   </mat-form-field>
-                  <!-- <small
-                    *ngIf="accountCompanyForm.controls['firstname'].hasError('required') && accountCompanyForm.controls['firstname'].touched"
-                    class="form-error-msg"> First name is required </small> -->
+                  <small
+                    *ngIf="accountCompanyForm.controls['email'].hasError('required') && accountCompanyForm.controls['email'].touched"
+                    class="form-error-msg"> Email is required </small>
+                    <small
+                    *ngIf="accountCompanyForm.controls['email'].hasError('email') && accountCompanyForm.controls['email'].touched"
+                    class="form-error-msg"> Email is invalid </small>
                 </div>
 
                 <div class="pb-1">
                   <mat-form-field class="full-width">
                     <input matInput name="username" formControlName="username" placeholder="User Name *" value="">
                   </mat-form-field>
-                  <!-- <small
-                    *ngIf="accountCompanyForm.controls['lastname'].hasError('required') && accountCompanyForm.controls['lastname'].touched"
-                    class="form-error-msg"> Last name is required </small> -->
+                  <small
+                    *ngIf="accountCompanyForm.controls['username'].hasError('required') && accountCompanyForm.controls['username'].touched"
+                    class="form-error-msg"> Username is required </small>
+                    <small
+                    *ngIf="accountCompanyForm.controls['username'].hasError('minLength') && accountCompanyForm.controls['username'].touched"
+                    class="form-error-msg"> Password must be more than 5 characteries </small>
+                    <small
+                    *ngIf="accountCompanyForm.controls['username'].hasError('maxLength') && accountCompanyForm.controls['username'].touched"
+                    class="form-error-msg"> Password must be less than 20 characteries </small>
                 </div>
 
                 <div class="pb-1">
@@ -110,11 +122,26 @@
                     <input matInput type="password" name="password" formControlName="password" placeholder="Password *"
                       value="">
                   </mat-form-field>
-                  <!-- <small
-                    *ngIf="accountCompanyForm.controls['primary_email'].hasError('required') && accountCompanyForm.controls['primary_email'].touched"
-                    class="form-error-msg"> Email is required </small>
-                  <small *ngIf="accountCompanyForm.controls['primary_email'].hasError('email') && accountCompanyForm.controls['v'].touched"
-                    class="form-error-msg"> Invaild email address </small> -->
+                  <small
+                    *ngIf="accountCompanyForm.controls['password'].hasError('required') && accountCompanyForm.controls['password'].touched"
+                    class="form-error-msg"> Password is required </small>
+                    <small
+                    *ngIf="accountCompanyForm.controls['password'].hasError('minLength') && accountCompanyForm.controls['password'].touched"
+                    class="form-error-msg"> Password must be more than 5 characteries </small>
+                </div>
+
+                <div class="pb-1">
+                  <mat-form-field class="full-width">
+                    <input matInput type="text" name="phone" formControlName="phone" placeholder="Phone *"
+                      value="">
+                  </mat-form-field>
+                  <small
+                    *ngIf="accountCompanyForm.controls['phone'].hasError('required') && accountCompanyForm.controls['phone'].touched"
+                    class="form-error-msg"> Phone is required </small>
+                  <small *ngIf="accountCompanyForm.controls['phone'].hasError('pattern') && accountCompanyForm.controls['phone'].touched"
+                    class="form-error-msg"> Invaild phone </small>
+                  <small *ngIf="accountCompanyForm.controls['phone'].hasError('maxLength') && accountCompanyForm.controls['phone'].touched"
+                    class="form-error-msg"> Phone must be less than 15 characteries </small>
                 </div>
               </div>
             </div>
@@ -255,3 +282,19 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template id="dialog" #dialog>
+  <mat-dialog-content>
+          Are you sure want to change status
+      <!-- {{timeSchedule}} -->
+  </mat-dialog-content>
+  <mat-dialog-actions align="center">
+      <div class="button-container  mr-4">
+          <button mat-raised-button color="primary" (click)="changeDetail()">
+              Change
+          </button>
+      </div>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+  </mat-dialog-actions>
+</ng-template>
+</nz-spin>
