@@ -208,14 +208,14 @@ export class SignatureTemplateComponent implements OnInit {
     private modal: NzModalService,
     private router: Router
   ) { }
-  newSignature(): void {
+  clearDataSignature(): void {
     this.signatureID = '';
     this.signatureName = '';
     this.htmlContent = '';
     this.htmlContentReview = '';
     // this.toast.success('New signature successfully!')
   }
-  newSignatureRule(): void {
+  clearDataSignatureRule(): void {
     this.signatureRuleID = '';
     this.signatureRuleName = '';
     this.rules.lengthRule.maxLength = 0;

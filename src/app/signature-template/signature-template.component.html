@@ -282,11 +282,12 @@
                 <br />
                 <div>
                     <p>
+                        <button nz-button style="margin-right: 1cm;" nzType="primary">New</button>
                         <button nz-button style="margin-right: 1cm;" [disabled]="isSaveTemplateDisable"
                             [nzLoading]="isSaveTemplateLoading" (click)="showConfirmSaveSignature()"
-                            nzType="primary">Save</button>
-                        <button nz-button style="margin-right: 1cm;" (click)="newSignature()"
-                            nzType="primary">New</button>
+                            nzType="primary">Update</button>
+                        <button nz-button style="margin-right: 1cm;" (click)="clearDataSignature()"
+                            nzType="primary">Clear data</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmUpdateAllSignature()"
                             [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Apply all employees</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmSetPrimaryTemplate()"
@@ -426,11 +427,12 @@
                     </nz-table>
                 </nz-modal>
                 <div>
+                    <button nz-button style="margin-right: 1cm;" nzType="primary">New</button>
                     <button [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
-                        nzType="primary">Save</button>
-                    <button nz-button style="margin-right: 1cm;" (click)="newSignatureRule()"
-                        nzType="primary">New</button>
+                        nzType="primary">Update</button>
+                    <button nz-button style="margin-right: 1cm;" (click)="clearDataSignatureRule()"
+                        nzType="primary">Clear data</button>
                     <button nz-button style="margin-right: 1cm;" (click)="showConfirmSetPrimaryTemplateRule()"
                         [disabled]="isSetPrimaryRuleDisable" [nzLoading]="isSetPrimaryTemplateRuleLoading"
                         nzType="primary">Set default</button>
