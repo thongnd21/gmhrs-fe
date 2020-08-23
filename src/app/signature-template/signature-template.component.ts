@@ -243,10 +243,10 @@ export class SignatureTemplateComponent implements OnInit {
           this.listRulesCheckErr = [];
         } else {
           if (res.message[0].signatureName !== undefined) {
-            this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
+            this.toast.error('You signature template not follow the rule, please check notification', 'Signature template rules check');
             this.listRulesCheckErr = res.message;
           } else {
-            this.toast.warning(res.message);
+            this.toast.error(res.message);
           }
         }
         this.isSpinning = false;
@@ -350,7 +350,7 @@ export class SignatureTemplateComponent implements OnInit {
         if (res.status) {
           this.listOfSpecTemplate = res.data;
           if (this.listOfSpecTemplate.allSignature.length === 0) {
-            this.toast.warning('You do not have any signature!');
+            this.toast.error('You do not have any signature!');
           } else {
             for (let specRow of this.listOfSpecTemplate.specRuleCheck) {
               specRow.idSpec = this.idSpec;
@@ -396,7 +396,7 @@ export class SignatureTemplateComponent implements OnInit {
     signature.name = this.signatureName;
     signature.content = this.htmlContent;
     signature.account_id = id;
-    this.signatureService.saveSignatureTemplate(id, signature).subscribe(
+    this.signatureService.updateSignatureTemplate(id, signature).subscribe(
       (res: any) => {
         let respone = {
           action: '',
@@ -407,10 +407,7 @@ export class SignatureTemplateComponent implements OnInit {
         respone = res;
         if (respone.status === true) {
           // this.toast.success(respone.message);
-          if (respone.action === 'create') {
-            this.isSetPrimaryDisable = false;
-            this.signatureID = respone.id;
-          }
+          this.isSetPrimaryDisable = false;
           // set primary
           let data = new Signature();
           data.id = this.signatureID;
@@ -430,10 +427,10 @@ export class SignatureTemplateComponent implements OnInit {
           this.listRulesCheckErr = [];
         } else {
           if (respone.message[0].signatureName !== undefined) {
-            this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
+            this.toast.error('You signature template not follow the rule, please check notification', 'Signature template rules check');
             this.listRulesCheckErr = respone.message;
           } else {
-            this.toast.warning(respone.message);
+            this.toast.error(respone.message);
           }
         }
         this.isSetPrimaryTemplateLoading = false;
@@ -460,14 +457,11 @@ export class SignatureTemplateComponent implements OnInit {
     signature.account_id = id;
     signature.content = JSON.stringify(this.rules);
     signature.name = this.signatureRuleName;
-    this.signatureService.saveSignatureTemplateRules(signature).subscribe(
+    this.signatureService.updateSignatureTemplateRules(signature).subscribe(
       (res: any) => {
         if (res.status) {
           // this.toast.success(res.message);
           this.signatureRuleID = res.id;
-          if (res.action === 'create') {
-            this.isSetPrimaryRuleDisable = false;
-          }
           //set primary
           let data = new Signature();
           data.id = this.signatureRuleID;
@@ -627,7 +621,7 @@ export class SignatureTemplateComponent implements OnInit {
       nzOnOk: () => this.sendMailNotifyRules()
     });
   }
-  showConfirmSaveSignatureRules(): void {
+  showConfirmNewSignatureRules(): void {
     if (this.signatureRuleName === '' || this.rules.listRule === null) {
       this.toast.error('Please input rule name and rule content!');
       return;
@@ -645,10 +639,34 @@ export class SignatureTemplateComponent implements OnInit {
       }
     }
     this.modal.confirm({
-      nzTitle: '<i>Do you Want to Save this signature rules?</i>',
-      nzContent: '<b>If this rule name existed in DB it will update, unless it will create new one.</b>',
+      nzTitle: '<i>Do you Want to create a new signature rule?</i>',
+      nzContent: '<b>It will create new signature rule!</b>',
       nzOkText: "OK, do it!",
-      nzOnOk: () => this.submitSignatureRules()
+      nzOnOk: () => this.newSignatureRules()
+    });
+  }
+  showConfirmUpdateSignatureRules(): void {
+    if (this.signatureRuleName === '' || this.rules.listRule === null) {
+      this.toast.error('Please input rule name and rule content!');
+      return;
+    } else if (this.rules.listRule.length === 0) {
+      this.toast.error('Please input rule data table!');
+      return;
+    } else if (this.rules.lengthRule.maxLength <= this.rules.lengthRule.minLength) {
+      this.toast.error('Please check maximun and minimum length!');
+      return;
+    }
+    for (let rule of this.rules.listRule) {
+      if (rule.content === '') {
+        this.toast.error('Content of rule can not blank!');
+        return;
+      }
+    }
+    this.modal.confirm({
+      nzTitle: '<i>Do you Want to create a new signature rule?</i>',
+      nzContent: '<b>It will update this signature rule!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.updateSignatureRules()
     });
   }
   showConfirmUpdateAllSignature(): void {
@@ -659,7 +677,7 @@ export class SignatureTemplateComponent implements OnInit {
       nzOnOk: () => this.syncSignatureAll()
     });
   }
-  showConfirmSaveSignature(): void {
+  showConfirmNewSignature(): void {
     if (this.signatureName === '') {
       this.toast.error('Input signature name!');
       return;
@@ -668,10 +686,25 @@ export class SignatureTemplateComponent implements OnInit {
       return;
     }
     this.modal.confirm({
-      nzTitle: '<i>Do you Want to Save this signature?</i>',
-      nzContent: '<b>If name of this signature existed in DB, it will update this siganture template for this name. Else it will create the new one!</b>',
+      nzTitle: '<i>Do you want to new signature?</i>',
+      nzContent: '<b>It will create a new signature template!</b>',
       nzOkText: "OK, do it!",
-      nzOnOk: () => this.submitSignature()
+      nzOnOk: () => this.newSignature()
+    });
+  }
+  showConfirmUpdateSignature(): void {
+    if (this.signatureName === '') {
+      this.toast.error('Input signature name!');
+      return;
+    } else if (this.htmlContent === '') {
+      this.toast.error('Input signature template content!');
+      return;
+    }
+    this.modal.confirm({
+      nzTitle: '<i>Do you want to new signature?</i>',
+      nzContent: '<b>It will create a new signature template!</b>',
+      nzOkText: "OK, do it!",
+      nzOnOk: () => this.updateSignature()
     });
   }
   sendMailNotifyRules(): void {
@@ -770,7 +803,7 @@ export class SignatureTemplateComponent implements OnInit {
     // console.log(this.rules);
 
   }
-  submitSignatureRules(): void {
+  newSignatureRules(): void {
     this.isSaveRulesLoading = true;
     this.isSpinning = true;
     this.rules.listRule = this.listOfRules;
@@ -780,18 +813,37 @@ export class SignatureTemplateComponent implements OnInit {
     signature.account_id = id;
     signature.content = JSON.stringify(this.rules);
     signature.name = this.signatureRuleName;
-    this.signatureService.saveSignatureTemplateRules(signature).subscribe(
+    this.signatureService.newSignatureTemplateRules(signature).subscribe(
       (res: any) => {
         if (res.status) {
           this.toast.success(res.message);
           this.signatureRuleID = res.id;
-          if (res.action === 'create') {
-            this.isSetPrimaryRuleDisable = false;
-          }
+          this.is_primary_rule = 0;
+          this.isSetPrimaryRuleDisable = false;
         } else {
           this.toast.error(res.message);
         }
         this.isSaveRulesLoading = false;
+        this.isSpinning = false;
+      }
+    )
+  }
+  updateSignatureRules(): void {
+    this.isSpinning = true;
+    this.rules.listRule = this.listOfRules;
+    let id = localStorage.getItem('id');
+    let signature = new Signature();
+    signature.is_primary = this.is_primary_rule;
+    signature.account_id = id;
+    signature.content = JSON.stringify(this.rules);
+    signature.name = this.signatureRuleName;
+    this.signatureService.updateSignatureTemplateRules(signature).subscribe(
+      (res: any) => {
+        if (res.status) {
+          this.toast.success(res.message);
+        } else {
+          this.toast.error(res.message);
+        }
         this.isSpinning = false;
       }
     )
@@ -808,10 +860,10 @@ export class SignatureTemplateComponent implements OnInit {
           this.listRulesCheckErr = [];
         } else {
           if (res.message[0].signatureName !== undefined) {
-            this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
+            this.toast.error('You signature template not follow the rule, please check notification', 'Signature template rules check');
             this.listRulesCheckErr = res.message;
           } else {
-            this.toast.warning(res.message);
+            this.toast.error(res.message);
           }
         }
         this.isUpdatedTemplateLoading = false;
@@ -819,7 +871,7 @@ export class SignatureTemplateComponent implements OnInit {
       }
     )
   }
-  submitSignature(): void {
+  newSignature(): void {
     this.isSaveTemplateLoading = true;
     this.isSpinning = true;
     let signature = new Signature;
@@ -827,7 +879,7 @@ export class SignatureTemplateComponent implements OnInit {
     signature.name = this.signatureName;
     signature.content = this.htmlContent;
     signature.account_id = id;
-    this.signatureService.saveSignatureTemplate(id, signature).subscribe(
+    this.signatureService.newSignatureTemplate(id, signature).subscribe(
       (res: any) => {
         let respone = {
           action: '',
@@ -838,20 +890,49 @@ export class SignatureTemplateComponent implements OnInit {
         respone = res;
         if (respone.status === true) {
           this.toast.success(respone.message);
-          if (respone.action === 'create') {
-            this.signatureID = respone.id;
-            this.isSetPrimaryDisable = false;
-          }
+          this.signatureID = respone.id;
+          this.isSetPrimaryDisable = false;
           this.listRulesCheckErr = [];
         } else {
           if (respone.message[0].signatureName !== undefined) {
-            this.toast.warning('You signature template not follow the rule, please check notification', 'Signature template rules check');
+            this.toast.error('You signature template not follow the rule, please check notification', 'Signature template rules check');
             this.listRulesCheckErr = respone.message;
           } else {
-            this.toast.warning(respone.message);
+            this.toast.error(respone.message);
           }
         }
         this.isSaveTemplateLoading = false;
+        this.isSpinning = false;
+      }
+    )
+  }
+  updateSignature(): void {
+    this.isSpinning = true;
+    let signature = new Signature;
+    let id = localStorage.getItem('id');
+    signature.name = this.signatureName;
+    signature.content = this.htmlContent;
+    signature.account_id = id;
+    this.signatureService.updateSignatureTemplate(id, signature).subscribe(
+      (res: any) => {
+        let respone = {
+          action: '',
+          message: null,
+          status: null,
+          id: null
+        }
+        respone = res;
+        if (respone.status === true) {
+          this.toast.success(respone.message);
+          this.listRulesCheckErr = [];
+        } else {
+          if (respone.message[0].signatureName !== undefined) {
+            this.toast.error('You signature template not follow the rule, please check notification', 'Signature template rules check');
+            this.listRulesCheckErr = respone.message;
+          } else {
+            this.toast.error(respone.message);
+          }
+        }
         this.isSpinning = false;
       }
     )
@@ -875,7 +956,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.isSetPrimaryDisable = signature.is_primary > 0;
           this.toast.success('Load signature: ' + this.signatureName + ' successfully!');
         } else {
-          this.toast.warning(res.message);
+          this.toast.error(res.message);
         }
         this.isGetAllSignatureLoading = false;
         this.isSpinning = false;
@@ -893,7 +974,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.success(res.message);
           this.loadTemplate();
         } else {
-          this.toast.warning(res.message);
+          this.toast.error(res.message);
         }
         this.isDeleteTemplateLoading = false;
         this.isSpinning = false;
@@ -911,7 +992,7 @@ export class SignatureTemplateComponent implements OnInit {
           this.listSignatureTemplate = res.data;
           this.showListSignatureTemplate = true;
         } else {
-          this.toast.warning(res.message);
+          this.toast.error(res.message);
         }
         this.isGetAllSignatureLoading = false;
         this.isSpinning = false;
@@ -1009,7 +1090,7 @@ export class SignatureTemplateComponent implements OnInit {
                 this.signatureName = '';
                 this.htmlContent = '';
                 this.htmlContentReview = '';
-                this.toast.warning(res.message);
+                this.toast.error(res.message);
               }
               this.isSpinning = false;
             }
@@ -1067,7 +1148,7 @@ export class SignatureTemplateComponent implements OnInit {
                   this.toast.success('Load rule: ' + this.signatureRuleName + ' successfully!');
                   // console.log('this.rule: ' + this.rules);
                 } else {
-                  this.toast.warning(res.message)
+                  this.toast.error(res.message)
                 }
               }
             );
@@ -1151,7 +1232,6 @@ export class SignatureTemplateComponent implements OnInit {
                     listRule: null
                   };
                   this.listOfRules = [];
-                  // this.toast.warning(res.message)
                 }
               }
             );

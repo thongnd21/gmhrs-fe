@@ -282,9 +282,10 @@
                 <br />
                 <div>
                     <p>
-                        <button nz-button style="margin-right: 1cm;" nzType="primary">New</button>
+                        <button nz-button style="margin-right: 1cm;" nzType="primary"
+                            (click)="showConfirmNewSignature()">New</button>
                         <button nz-button style="margin-right: 1cm;" [disabled]="isSaveTemplateDisable"
-                            [nzLoading]="isSaveTemplateLoading" (click)="showConfirmSaveSignature()"
+                            (click)="showConfirmUpdateSignature()" [nzLoading]="isSaveTemplateLoading"
                             nzType="primary">Update</button>
                         <button nz-button style="margin-right: 1cm;" (click)="clearDataSignature()"
                             nzType="primary">Clear data</button>
@@ -427,9 +428,11 @@
                     </nz-table>
                 </nz-modal>
                 <div>
-                    <button nz-button style="margin-right: 1cm;" nzType="primary">New</button>
+                    <button nz-button style="margin-right: 1cm;" nzType="primary"
+                        (click)="showConfirmNewSignatureRules()">
+                        New</button>
                     <button [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
-                        (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
+                        (click)="showConfirmUpdateSignatureRules()" [nzLoading]="isSaveRulesLoading"
                         nzType="primary">Update</button>
                     <button nz-button style="margin-right: 1cm;" (click)="clearDataSignatureRule()"
                         nzType="primary">Clear data</button>

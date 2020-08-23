@@ -57,18 +57,21 @@ export class SignatureService {
     getSignatureTemplateByName(id, name) {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURETEMPLATEBYNAME + id + '/' + name);
     }
-    saveSignatureTemplate(id, template) {
-        return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATE + id, template);
+    newSignatureTemplate(id, template) {
+        return this.httpClient.post(this.URL + AppSettings.NEWSIGNATURETEMPLATE + id, template);
     }
-
+    updateSignatureTemplate(id, template) {
+        return this.httpClient.post(this.URL + AppSettings.UPDATESIGNATURETEMPLATE + id, template);
+    }
     getSignatureTemplate(id) {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURE + id);
     }
-
-    saveSignatureTemplateRules(signature) {
-        return this.httpClient.post(this.URL + AppSettings.SIGNATURETEMPLATERULES, signature);
+    newSignatureTemplateRules(signature) {
+        return this.httpClient.post(this.URL + AppSettings.NEWSIGNATURETEMPLATERULES, signature);
     }
-
+    updateSignatureTemplateRules(signature) {
+        return this.httpClient.post(this.URL + AppSettings.UPDATESIGNATURETEMPLATERULES, signature);
+    }
     getSignatureTemplateRules(id) {
         return this.httpClient.get(this.URL + AppSettings.GETSIGNATURERULES + id);
     }
