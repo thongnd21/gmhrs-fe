@@ -15,30 +15,81 @@
     flex: 0 0 5% !important;
     width: 5% !important;
 }
-.mat-column-name{
-    flex: 0 0 20% !important;
-    width: 30% !important;
+.mat-column-primary_email{
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 32% !important;
+    width: 32% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    word-break: break-word;
+
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
-.mat-column-gender{
-    flex: 0 0 10% !important;
-    width: 10% !important;
+.mat-column-personal_email{
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 23% !important;
+    width: 23% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    word-break: break-word;
+
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+.mat-column-name{
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 15% !important;
+    width: 15% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    word-break: break-word;
+
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 .mat-column-phone{
-    flex: 0 0 10% !important;
-    width: 10% !important;
-}
-.mat-column-status{
-    flex: 0 0 10% !important;
-    width: 10% !important;
-}
-.mat-column-action{
-    flex: 0 0 5% !important;
-    width: 5% !important;
-}
+    word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 12% !important;
+  width: 12% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 
-.mat-select-panel {
-    z-index: 99999 !important;
- }
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.mat-column-position_name{
+    word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 13% !important;
+  width: 13% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
 .form-error-msg{
     color: red;
 }

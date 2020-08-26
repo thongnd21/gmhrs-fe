@@ -55,10 +55,10 @@ export class EmployeeComponent implements OnInit {
     //   prop: 'depName',
     //   name: 'depName'
     // },
-    {
-      prop: 'created_date',
-      name: 'CreateAt'
-    },
+    // {
+    //   prop: 'created_date',
+    //   name: 'CreateAt'
+    // },
     {
       prop: 'position_name',
       name: 'Position name'
@@ -100,8 +100,8 @@ export class EmployeeComponent implements OnInit {
             item['is_sync'] = element.is_sync;
             // item['departmentName'] = element.department.name;
             item['position_name'] = element.position_in_company.name;
-            item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
-            item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
+            // item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
+            // item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
             listAccount.push(item);
           });
           console.log(listAccount);
