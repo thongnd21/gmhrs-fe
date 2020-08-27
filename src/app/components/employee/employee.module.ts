@@ -15,6 +15,7 @@ import { MatRadioModule } from "@angular/material/radio";
 import { EmployeeRoutes } from './employee.routing';
 import { EmployeeComponent } from './employee.component';
 import { MatSelectModule } from '@angular/material/select';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatIconModule,
     MatChipsModule,
-    RouterModule.forChild(EmployeeRoutes) 
+    NzSpinModule,
+    RouterModule.forChild(EmployeeRoutes)
   ],
   declarations: [EmployeeComponent]
 })

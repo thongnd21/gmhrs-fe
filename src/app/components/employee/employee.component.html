@@ -1,61 +1,62 @@
-<div class="ml-05 mr-05 mt-05 pb-1">
-  <div class="container ">
-    <div class="row mt-1">
-      <div class="col-md-12 align-self-start">
-        <mat-form-field>
-          <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
-        </mat-form-field>
+<nz-spin [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
+  <div class="ml-05 mr-05 mt-05 pb-1">
+    <div class="container ">
+      <div class="row mt-1">
+        <div class="col-md-12 align-self-start">
+          <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Enter your keyword">
+          </mat-form-field>
+        </div>
       </div>
     </div>
-  </div>
-  <mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="count">
-      <mat-header-cell *matHeaderCellDef>
-        No.
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row ;let i = index;" data-label="No.">
-        {{i+1}}
-      </mat-cell>
-    </ng-container>
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="count">
+        <mat-header-cell *matHeaderCellDef>
+          No.
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row ;let i = index;" data-label="No.">
+          {{i+1}}
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="primary_email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Primary Email
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-        {{ row.primary_email }}
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="primary_email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Primary Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.primary_email }}
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="personal_email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Personal Email
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-        {{ row.personal_email }}
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="personal_email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Personal Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.personal_email }}
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Name
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-        {{ row.name }}
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.name }}
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="phone">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Phone
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-        {{ row.phone }}
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="phone">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Phone
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.phone }}
+        </mat-cell>
+      </ng-container>
 
-    <!-- <ng-container matColumnDef="depName">
+      <!-- <ng-container matColumnDef="depName">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         Department
       </mat-header-cell>
@@ -64,26 +65,27 @@
       </mat-cell>
     </ng-container> -->
 
-    <ng-container matColumnDef="created_date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Join At
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-        {{ row.created_date }}
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="position_name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Position name
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-        {{ row.position_name }}
-      </mat-cell>
-    </ng-container>
+      <!-- <ng-container matColumnDef="created_date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Join At
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.created_date }}
+        </mat-cell>
+      </ng-container> -->
+      <ng-container matColumnDef="position_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Position name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          {{ row.position_name }}
+        </mat-cell>
+      </ng-container>
 
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
-  </mat-table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-</div>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+</nz-spin>

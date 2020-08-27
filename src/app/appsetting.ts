@@ -13,8 +13,10 @@ export class AppSettings {
     public static DEACTIVATED2FA = 'twofa/deactivated2fa/'
     public static CHECK2FASTATUS = 'twofa/check2fastatus/'
     public static CHECKBYPASSOTP = 'twofa/checkbypassotp/'
-    public static SIGNATURETEMPLATE = 'signature/saveSignatureTemplateToDB/'
-    public static SIGNATURETEMPLATERULES = 'signature/saveSignatureTemplateRules/'
+    public static NEWSIGNATURETEMPLATE = 'signature/newSignatureTemplate/'
+    public static UPDATESIGNATURETEMPLATE = 'signature/updateSignatureTemplate/'
+    public static NEWSIGNATURETEMPLATERULES = 'signature/newSignatureTemplateRules/'
+    public static UPDATESIGNATURETEMPLATERULES = 'signature/updateSignatureTemplateRules/'
     public static GETSIGNATURE = 'signature/getSignatureTemplate/'
     public static GETSIGNATURERULES = 'signature/getSignatureTemplateRules/'
     public static GETINFOTOREVIEW = 'signature/getInfoToReview/'
@@ -39,7 +41,8 @@ export class AppSettings {
     public static SAVESPECSIGNATURE = 'signature/saveSpecSignature/'
     public static POSITION = 'position/';
     public static CHECKFILEGSUITEKEY = 'signature/checkFileGsuiteKey/'
-    public static CONNECTION = 'connection/';
+    public static CONNECTION = 'connection/'
+    public static UPDATESIGNATUREFORONLYWRONG = 'signature/updateSignatureTemplateForOnlyWrongEmployee/'
 
 
 }

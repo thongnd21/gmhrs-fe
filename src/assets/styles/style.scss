@@ -28,3 +28,8 @@ File: scss
 
 @import "../styles/icons/material-design-iconic-font/css/materialdesignicons.min.css";
 @import "~bootstrap/dist/css/bootstrap.css";
+@import '~@angular/material/theming';
+$custom-typography: mat-typography-config(
+  $font-family: '"Open Sans", sans-serif;'
+);
+@include mat-core($custom-typography);

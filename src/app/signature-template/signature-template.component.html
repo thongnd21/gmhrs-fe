@@ -282,13 +282,15 @@
                 <br />
                 <div>
                     <p>
+                        <button nz-button style="margin-right: 1cm;" nzType="primary"
+                            (click)="showConfirmNewSignature()">New</button>
                         <button nz-button style="margin-right: 1cm;" [disabled]="isSaveTemplateDisable"
-                            [nzLoading]="isSaveTemplateLoading" (click)="showConfirmSaveSignature()"
-                            nzType="primary">Save</button>
-                        <button nz-button style="margin-right: 1cm;" (click)="newSignature()"
-                            nzType="primary">New</button>
+                            (click)="showConfirmUpdateSignature()" [nzLoading]="isSaveTemplateLoading"
+                            nzType="primary">Update</button>
+                        <button nz-button style="margin-right: 1cm;" (click)="clearDataSignature()"
+                            nzType="primary">Clear data</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmUpdateAllSignature()"
-                            [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Synchronize now</button>
+                            [nzLoading]="isUpdatedTemplateLoading" nzType="primary">Apply all employees</button>
                         <button nz-button style="margin-right: 1cm;" (click)="showConfirmSetPrimaryTemplate()"
                             [disabled]="isSetPrimaryDisable" [nzLoading]="isSetPrimaryTemplateLoading"
                             nzType="primary">Set default</button>
@@ -378,7 +380,7 @@
                 <!-- Model wrong signature -->
                 <nz-modal style="display: inline-block;" [(nzVisible)]="showListWrongSignature" [nzAutofocus]="null"
                     nzTitle="List wrong signature employee" nzCancelText="Close" nzOkText="Send mail remind employees"
-                    (nzOnCancel)="handleCloseModel()" (nzOnOk)="sendMailRemind()">
+                    (nzOnCancel)="handleCloseModel()" nzCancelText="Close" (nzOnOk)="sendMailRemind()">
                     <nz-collapse nzAccordion>
                         <nz-collapse-panel *ngFor="let element of listWrongSignature" [nzHeader]="element.email">
                             <p>
@@ -388,6 +390,10 @@
                             </p>
                         </nz-collapse-panel>
                     </nz-collapse>
+                    <br />
+                    <button style="width: 100%;" nz-button nzType="primary"
+                        (click)="showConfirmUpdateOnlyWrong()">Update
+                        signature for eployee list above</button>
                 </nz-modal>
                 <!-- Model all template rule -->
                 <nz-modal nzWidth="70%" [(nzVisible)]="showListSignatureTemplateRule" [nzAutofocus]="null"
@@ -422,11 +428,14 @@
                     </nz-table>
                 </nz-modal>
                 <div>
+                    <button nz-button style="margin-right: 1cm;" nzType="primary"
+                        (click)="showConfirmNewSignatureRules()">
+                        New</button>
                     <button [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
-                        (click)="showConfirmSaveSignatureRules()" [nzLoading]="isSaveRulesLoading"
-                        nzType="primary">Save</button>
-                    <button nz-button style="margin-right: 1cm;" (click)="newSignatureRule()"
-                        nzType="primary">New</button>
+                        (click)="showConfirmUpdateSignatureRules()" [nzLoading]="isSaveRulesLoading"
+                        nzType="primary">Update</button>
+                    <button nz-button style="margin-right: 1cm;" (click)="clearDataSignatureRule()"
+                        nzType="primary">Clear data</button>
                     <button nz-button style="margin-right: 1cm;" (click)="showConfirmSetPrimaryTemplateRule()"
                         [disabled]="isSetPrimaryRuleDisable" [nzLoading]="isSetPrimaryTemplateRuleLoading"
                         nzType="primary">Set default</button>
