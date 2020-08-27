@@ -119,6 +119,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
         id: "Required",
         name: "Required",
       },
+      vacation_start_date: "Required",
+      vacation_end_date: "Required"
     }
 
   };
@@ -126,6 +128,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     department: {
       id: "Required",
       name: "Required",
+      email: "Required",
       description: "Optional"
     }
   };
@@ -199,13 +202,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
       department: {
         id: "Required",
         name: "Required"
-      }
+      },
+      vacation_start_date: "Required",
+      vacation_end_date: "Requried"
     }
   };
   connectionStringDataResponseDepartment = {// json format department to admin company checking field when input api endpoint
     department: {
       id: "Required",
       name: "Required",
+      email: "Required",
       description: "Optional"
     }
   };
@@ -609,6 +615,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // checking data json from api endpoint result after test
   checkingFormatData(employee, department, team, position) {
+    console.log(employee);
 
     //check fields in each employee
     for (var i = 0; i < employee.length; i++) {
@@ -623,6 +630,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
       employee[i].department.name === undefined ? this.dataAPIEndpoindEmployee.employee.department.name = "Missing Field" : this.dataAPIEndpoindEmployee.employee.department.name = "Pass";
       employee[i].department.name === undefined ? this.dataAPIEndpoindEmployee.employee.department.name = "Missing Field" : this.dataAPIEndpoindEmployee.employee.department.name = "Pass";
       employee[i].position_id === undefined ? this.dataAPIEndpoindEmployee.employee.position_id = "Missing Field" : this.dataAPIEndpoindEmployee.employee.position_id = "Pass";
+      employee[i].vacation_start_date === undefined ? this.dataAPIEndpoindEmployee.employee.vacation_start_date = "Missing Field" : this.dataAPIEndpoindEmployee.employee.vacation_start_date = "Pass";
+      employee[i].vacation_end_date === undefined ? this.dataAPIEndpoindEmployee.employee.vacation_end_date = "Missing Field" : this.dataAPIEndpoindEmployee.employee.vacation_end_date = "Pass";
       console.log("vong for: " + i);
       // if pass all field stop for 
       if (this.dataAPIEndpoindEmployee.employee.id == "Pass" && this.dataAPIEndpoindEmployee.employee.primary_email == "Pass"
@@ -630,7 +639,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
         && this.dataAPIEndpoindEmployee.employee.phone == "Pass" && this.dataAPIEndpoindEmployee.employee.address == "Pass"
         && this.dataAPIEndpoindEmployee.employee.position_id == "Pass"
         && this.dataAPIEndpoindEmployee.employee.department.id == "Pass"
-        && this.dataAPIEndpoindEmployee.employee.department.name == "Pass") {
+        && this.dataAPIEndpoindEmployee.employee.department.name == "Pass"
+        && this.dataAPIEndpoindEmployee.employee.vacation_start_date == "Pass" && this.dataAPIEndpoindEmployee.employee.vacation_end_date == "Pass") {
         this.employeeValidate = true;
         i = employee.length - 1;
       }
@@ -639,10 +649,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
     for (var i = 0; i < department.length; i++) {
       department[i].id === undefined ? this.dataAPIEndpoindDepartment.department.id = "Missing Field" : this.dataAPIEndpoindDepartment.department.id = "Pass";
       department[i].name === undefined ? this.dataAPIEndpoindDepartment.department.name = "Missing Field" : this.dataAPIEndpoindDepartment.department.name = "Pass";
+      department[i].name === undefined ? this.dataAPIEndpoindDepartment.department.email = "Missing Field" : this.dataAPIEndpoindDepartment.department.email = "Pass";
       console.log("vong for dep: " + i);
       //if pass all fields >> stop for
       if (this.dataAPIEndpoindDepartment.department.id == "Pass"
-        && this.dataAPIEndpoindDepartment.department.name == "Pass") {
+        && this.dataAPIEndpoindDepartment.department.name == "Pass"
+        && this.dataAPIEndpoindDepartment.department.email == "Pass") {
         this.departmentValidate = true;
         i = department.length - 1;;
       }
@@ -722,6 +734,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
       employee[i].department.name === undefined ? this.connectionStringDataResponseEmployee.employee.department.name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department.name = "Pass";
       employee[i].department.name === undefined ? this.connectionStringDataResponseEmployee.employee.department.name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department.name = "Pass";
       employee[i].position_id === undefined ? this.connectionStringDataResponseEmployee.employee.position_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.position_id = "Pass";
+      employee[i].vacation_start_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Pass";
+      employee[i].vacation_end_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Pass";
       console.log("vong for: " + i);
       // if pass all field stop for 
       if (this.connectionStringDataResponseEmployee.employee.id == "Pass" && this.connectionStringDataResponseEmployee.employee.primary_email == "Pass"
@@ -729,7 +743,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
         && this.connectionStringDataResponseEmployee.employee.phone == "Pass" && this.connectionStringDataResponseEmployee.employee.address == "Pass"
         && this.connectionStringDataResponseEmployee.employee.position_id == "Pass"
         && this.connectionStringDataResponseEmployee.employee.department.id == "Pass"
-        && this.connectionStringDataResponseEmployee.employee.department.name == "Pass") {
+        && this.connectionStringDataResponseEmployee.employee.department.name == "Pass"
+        && this.connectionStringDataResponseEmployee.employee.vacation_start_date == "Pass" && this.connectionStringDataResponseEmployee.employee.vacation_end_date == "Pass") {
         this.employeeValidate = true;
         i = employee.length - 1;
       }
@@ -738,10 +753,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
     for (var i = 0; i < department.length; i++) {
       department[i].id === undefined ? this.connectionStringDataResponseDepartment.department.id = "Missing Field" : this.connectionStringDataResponseDepartment.department.id = "Pass";
       department[i].name === undefined ? this.connectionStringDataResponseDepartment.department.name = "Missing Field" : this.connectionStringDataResponseDepartment.department.name = "Pass";
+      department[i].email === undefined ? this.connectionStringDataResponseDepartment.department.email = "Missing Field" : this.connectionStringDataResponseDepartment.department.email = "Pass";
       console.log("vong for dep: " + i);
       //if pass all fields >> stop for
       if (this.connectionStringDataResponseDepartment.department.id == "Pass"
-        && this.connectionStringDataResponseDepartment.department.name == "Pass") {
+        && this.connectionStringDataResponseDepartment.department.name == "Pass" && this.connectionStringDataResponseDepartment.department.email == "Pass") {
         this.departmentValidate = true;
         i = department.length - 1;;
       }
@@ -992,13 +1008,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
     console.log(this.dailyTime);
 
     console.log(this.typeSync);
-    
+
     if (this.typeSync === 1 && this.monthDayChoose !== null && this.monthDayChoose !== undefined
       && this.monthDayChoose.length > 0
-       && this.monthTime !== undefined 
-       && this.monthTime !== null 
-       && this.monthTime !== ''  
-       ) {
+      && this.monthTime !== undefined
+      && this.monthTime !== null
+      && this.monthTime !== ''
+    ) {
 
       this.monthTime = moment(this.monthTime, 'HH:mm').utc().format('HH:mm');
       dayInMonth = '';
@@ -1015,39 +1031,39 @@ export class CompanyConfigConnectionComponent implements OnInit {
       check = true;
 
     } else if (this.typeSync === 2 && this.weekDayChoose !== null && this.weekDayChoose !== undefined
-       && this.weekDayChoose.length > 0 
-       && this.weekTime !== undefined 
-       && this.weekTime !== null 
-       && this.weekTime !== ''   ) {
-        this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
-        dayInWeek = '';
-        for (let i = 0; i < this.weekDayChoose.length; i++) {
-          dayInWeek += this.weekDayChoose[i];
-          if (i != this.weekDayChoose.length - 1) {
-            dayInWeek += ',';
-          }
+      && this.weekDayChoose.length > 0
+      && this.weekTime !== undefined
+      && this.weekTime !== null
+      && this.weekTime !== '') {
+      this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
+      dayInWeek = '';
+      for (let i = 0; i < this.weekDayChoose.length; i++) {
+        dayInWeek += this.weekDayChoose[i];
+        if (i != this.weekDayChoose.length - 1) {
+          dayInWeek += ',';
         }
-        hours = this.weekTime.split(':', 1);
-        let n = this.weekTime.indexOf(":");
-        let lenght = this.weekTime.length;
-        minute = this.weekTime.slice(n + 1, lenght);
-        check = true;
-    } else if (this.typeSync === 3 && this.dailyTime !== undefined 
-      && this.dailyTime !== null 
-       && this.dailyTime !== ''
-      ) {
-        this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
-        hours = this.dailyTime.split(':', 1);
-        let n = this.dailyTime.indexOf(":");
-        let lenght = this.dailyTime.length;
-        minute = this.dailyTime.slice(n + 1, lenght);
-        check = true;
+      }
+      hours = this.weekTime.split(':', 1);
+      let n = this.weekTime.indexOf(":");
+      let lenght = this.weekTime.length;
+      minute = this.weekTime.slice(n + 1, lenght);
+      check = true;
+    } else if (this.typeSync === 3 && this.dailyTime !== undefined
+      && this.dailyTime !== null
+      && this.dailyTime !== ''
+    ) {
+      this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
+      hours = this.dailyTime.split(':', 1);
+      let n = this.dailyTime.indexOf(":");
+      let lenght = this.dailyTime.length;
+      minute = this.dailyTime.slice(n + 1, lenght);
+      check = true;
 
     }
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
     account['schedule_time'] = minute + ' ' + hours + ' ' + dayInMonth + ' * ' + dayInWeek;
-    if(check){
+    if (check) {
       this.companyConnectionService.saveSchedule(account).subscribe(
         (res: any) => {
           this.loadingFull = false;
@@ -1065,7 +1081,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.toast.error("Server is not available!");
         }
       )
-    }else{
+    } else {
       this.getSchedule();
       this.toast.error("Invalid input!");
     }

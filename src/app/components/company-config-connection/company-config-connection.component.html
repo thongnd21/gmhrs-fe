@@ -540,6 +540,40 @@
                                             close</mat-icon>
                                     </td>
                                 </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.vacation_start_date.id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.vacation_start_date!='Pass'}">
+                                    <td></td>
+                                    <td>vacation_start_date</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.vacation_start_date}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.vacation_start_date=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.vacation_start_date!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.vacation_end_date.id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.vacation_end_date!='Pass'}">
+                                    <td></td>
+                                    <td>vacation_end_date</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.vacation_end_date}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.vacation_end_date=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.vacation_end_date!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
                                 <!-- <tr
                                 [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.department.name=='Pass' ,
                         'response-status-fail' : connectionStringDataResponseEmployee.employee.department.name!='Pass'}">
@@ -581,6 +615,20 @@
                                             style="color: green;">done
                                         </mat-icon>
                                         <mat-icon *ngIf="connectionStringDataResponseDepartment.department.name!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.email=='Pass' ,
+                        'response-status-fail' : connectionStringDataResponseDepartment.department.email!='Pass'}">
+                                    <td></td>
+                                    <td>email</td>
+                                    <td>{{connectionStringDataResponseDepartment.department.email}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseDepartment.department.email=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseDepartment.department.email !='Pass'"
                                             style="color: red;">
                                             close</mat-icon>
                                     </td>
@@ -893,6 +941,34 @@
                                             close</mat-icon>
                                     </td>
                                 </tr>
+                                <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.vacation_start_date=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.vacation_start_date!='Pass'}">
+                                    <td></td>
+                                    <td>vacation_start_date</td>
+                                    <td>{{dataAPIEndpoindEmployee.employee.vacation_start_date}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.vacation_start_date=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.vacation_start_date!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : dataAPIEndpoindEmployee.employee.department.id=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindEmployee.employee.department.id!='Pass'}">
+                                    <td></td>
+                                    <td>vacation_end_date</td>
+                                    <td>{{dataAPIEndpoindEmployee.employee.department.id}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="dataAPIEndpoindEmployee.employee.department.id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
                                 <tr [ngClass]="{'response-status-success' : dataAPIEndpoindDepartment.department.id=='Pass' ,
                     'response-status-fail' : dataAPIEndpoindDepartment.department.id!='Pass'}">
                                     <td>department</td>
@@ -918,6 +994,21 @@
                                             done
                                         </mat-icon>
                                         <mat-icon *ngIf="dataAPIEndpoindDepartment.department.name!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : dataAPIEndpoindDepartment.department.email=='Pass' ,
+                    'response-status-fail' : dataAPIEndpoindDepartment.department.email!='Pass'}">
+                                    <td></td>
+                                    <td>email</td>
+                                    <td>{{dataAPIEndpoindDepartment.department.email}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="dataAPIEndpoindDepartment.department.email=='Pass'"
+                                            style="color: green;">
+                                            done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="dataAPIEndpoindDepartment.department.email!='Pass'"
                                             style="color: red;">
                                             close</mat-icon>
                                     </td>
