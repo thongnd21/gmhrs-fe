@@ -51,11 +51,14 @@
 
         <ng-container matColumnDef="action">
           <mat-header-cell *matHeaderCellDef>
-            Action
+            View employees
           </mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
-            <button mat-raised-button color="primary" style="margin-right: 20px;"
-              (click)="detail(EmpDetail,row)">View</button>
+            <button mat-raised-button color="primary" style="margin-right: 20px;" (click)="detail(EmpDetail,row)">
+              <span class="material-icons">
+                remove_red_eye
+              </span>
+            </button>
           </mat-cell>
         </ng-container>
 

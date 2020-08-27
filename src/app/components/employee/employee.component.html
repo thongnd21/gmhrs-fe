@@ -29,14 +29,14 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="personal_email">
+      <!-- <ng-container matColumnDef="personal_email">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Personal Email
         </mat-header-cell>
         <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
           {{ row.personal_email }}
         </mat-cell>
-      </ng-container>
+      </ng-container> -->
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -81,11 +81,81 @@
           {{ row.position_name }}
         </mat-cell>
       </ng-container>
-
-
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          View details
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color" data-label="color">
+          <button mat-raised-button color="primary" (click)="viewEmDetails(EmpDetail, row.id)">
+            <span class="material-icons">
+              remove_red_eye
+            </span>
+          </button>
+        </mat-cell>
+      </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
     </mat-table>
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </div>
+  <ng-template #EmpDetail let-modal>
+    <div class="modal-header">
+      <h4>Employee infomation</h4>
+    </div>
+    <div class="modal-body">
+      <table class="table">
+        <tr>
+          <td>Primary email</td>
+          <td>{{ employeeInfo.primary_email }}</td>
+        </tr>
+        <tr>
+          <td>Personal email</td>
+          <td>{{ employeeInfo.personal_email }}</td>
+        </tr>
+        <tr>
+          <td>Phone</td>
+          <td>{{ employeeInfo.phone }}</td>
+        </tr>
+        <tr>
+          <td>Fullname</td>
+          <td>{{ employeeInfo.name }}</td>
+        </tr>
+        <tr>
+          <td>Department</td>
+          <td>{{ employeeInfo.departmentName }}</td>
+        </tr>
+        <tr>
+          <td>Team</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip color="primary" *ngFor="let team of employeeInfo.team">
+                {{ team }}
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Position</td>
+          <td>{{ employeeInfo.position_name }}</td>
+        </tr>
+        <tr>
+          <td>Create date</td>
+          <td>{{ employeeInfo.created_date }}</td>
+        </tr>
+        <tr>
+          <td>Modify date</td>
+          <td>{{ employeeInfo.modified_date }}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-auto mr-auto">
+
+      </div>
+      <div class="col-auto">
+        <button mat-raised-button style="margin:20px" color="primary" (click)="closeModal()">Close</button>
+
+      </div>
+    </div>
+  </ng-template>
 </nz-spin>
