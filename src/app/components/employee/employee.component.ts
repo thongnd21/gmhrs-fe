@@ -113,8 +113,10 @@ export class EmployeeComponent implements OnInit {
             }
             item['team'] = team;
             item['position_name'] = element.position_in_company.name;
-            item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
-            item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
+            item['vacation_start'] = moment.utc(element.vacation_start_date).local().format('DD-MM-YYYY');
+            item['vacation_end'] = moment.utc(element.vacation_end_date).local().format('DD-MM-YYYY');
+            // item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
+            // item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
             this.listAccount.push(item);
           });
           // console.log(listAccount);
