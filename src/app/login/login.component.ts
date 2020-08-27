@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         this.login = 0;
         console.log(this.login);
-        const accPassword = new FormControl("", [Validators.required, Validators.minLength(5)]);
+        const accPassword = new FormControl("", [Validators.required, Validators.minLength(6)]);
         const confirmPassword = new FormControl(
             "",
             CustomValidators.equalTo(accPassword)
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         this.registerForm = new FormGroup({
             username: new FormControl("", [
                 Validators.required,
-                Validators.minLength(5),
+                Validators.minLength(6),
                 Validators.maxLength(20)
             ]),
             email: new FormControl("", [Validators.required, Validators.email]),
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
             confirmPassword: confirmPassword,
             phone: new FormControl("", [
                 Validators.required,
-                Validators.pattern(new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g))
+                Validators.maxLength(15)
             ]),
             address: new FormControl("")
         });
