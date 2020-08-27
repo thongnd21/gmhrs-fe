@@ -18,23 +18,8 @@
 .mat-column-primary_email{
     word-wrap: break-word !important;
     white-space: unset !important;
-    flex: 0 0 32% !important;
-    width: 32% !important;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-
-    word-break: break-word;
-
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-}
-.mat-column-personal_email{
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    flex: 0 0 23% !important;
-    width: 23% !important;
+    flex: 0 0 40% !important;
+    width: 40% !important;
     overflow-wrap: break-word;
     word-wrap: break-word;
 
@@ -48,8 +33,8 @@
 .mat-column-name{
     word-wrap: break-word !important;
     white-space: unset !important;
-    flex: 0 0 15% !important;
-    width: 15% !important;
+    flex: 0 0 22% !important;
+    width: 22% !important;
     overflow-wrap: break-word;
     word-wrap: break-word;
 
@@ -80,6 +65,21 @@
   white-space: unset !important;
   flex: 0 0 13% !important;
   width: 13% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.mat-column-action{
+    word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 16% !important;
+  width: 16% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 

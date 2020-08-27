@@ -11,6 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DepartmentApiService } from '../../api-services/department-api.service';
 import { TeamApiService } from '../../api-services/team-api.service';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
@@ -29,9 +30,9 @@ export class EmployeeComponent implements OnInit {
   insEmp = {};
   departmentList = [];
   listEmployee = [];
+  listAccount = [];
   isSpinning = false;
   column = [
-
     {
       prop: 'count'
     },
@@ -39,10 +40,10 @@ export class EmployeeComponent implements OnInit {
       prop: 'primary_email',
       name: 'primary_email'
     },
-    {
-      prop: 'personal_email',
-      name: 'personal_email'
-    },
+    // {
+    //   prop: 'personal_email',
+    //   name: 'personal_email'
+    // },
     {
       prop: 'name',
       name: 'name'
@@ -51,20 +52,17 @@ export class EmployeeComponent implements OnInit {
       prop: 'phone',
       name: 'phone'
     },
-    // {
-    //   prop: 'depName',
-    //   name: 'depName'
-    // },
-    // {
-    //   prop: 'created_date',
-    //   name: 'CreateAt'
-    // },
     {
       prop: 'position_name',
       name: 'Position name'
+    },
+    {
+      prop: 'action',
+      name: 'View details'
     }
   ];
   listTeam = [];
+  employeeInfo: any;
 
   constructor(
     private modalService: NgbModal,
@@ -72,21 +70,31 @@ export class EmployeeComponent implements OnInit {
     private depServices: DepartmentApiService,
     private router: Router,
     private toast: ToastrService,
-    private teamService: TeamApiService
+    private teamService: TeamApiService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     this.displayedColumns = this.column.map((c) => c.prop)
     this.getAllAccount();
   }
+  viewEmDetails(modal, id) {
+    for (let employee of this.listAccount) {
+      if (employee.id === id) {
+        this.employeeInfo = employee;
+        this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+      }
+    }
+  }
 
   getAllAccount() {
     this.isSpinning = true;
-    const listAccount = [];
     this.accountServices.getAllEmployee().subscribe(
       (res) => {
         const accounts: any = res;
-        console.log('account: ' + res);
+        console.log('res; ');
+
+        console.log(res);
 
         if (accounts != null) {
           accounts.forEach(element => {
@@ -98,18 +106,27 @@ export class EmployeeComponent implements OnInit {
             item['name'] = element.first_name + " " + element.last_name;
             item['status'] = element.status_id;
             item['is_sync'] = element.is_sync;
-            // item['departmentName'] = element.department.name;
+            item['departmentName'] = element.department.name;
+            let team = new Array();
+            for (let teamRes of element.team_employees) {
+              team.push(teamRes.team.name);
+            }
+            item['team'] = team;
             item['position_name'] = element.position_in_company.name;
-            // item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
-            // item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
-            listAccount.push(item);
+            item['created_date'] = moment.utc(element.created_date).local().format('LLLL');
+            item['modified_date'] = moment.utc(element.modified_date).local().format('LLLL');
+            this.listAccount.push(item);
           });
-          console.log(listAccount);
-          this.dataSource = new MatTableDataSource(listAccount);
+          // console.log(listAccount);
+          this.dataSource = new MatTableDataSource(this.listAccount);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         }
         this.isSpinning = false;
+        console.log('list employee: ');
+
+        console.log(this.listAccount);
+
       },
       (error) => {
         if (error.status == 0) {
