@@ -28,7 +28,15 @@
     width: 25% !important;
 }
 .mat-column-action{
-    flex: 0 0 15% !important;
-    width: 15% !important;
+    flex: 0 0 20% !important;
+    width: 20% !important;
 }
+.mat-header-cell {
+    display:flex;
+    justify-content:center;
+   }
+   .mat-cell {
+    display:flex;
+    justify-content:center;
+   }
 
