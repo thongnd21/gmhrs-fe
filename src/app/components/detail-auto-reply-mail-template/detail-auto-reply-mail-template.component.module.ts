@@ -26,13 +26,14 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-
+import { ClipboardModule } from 'ngx-clipboard';
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     MatTableModule,
     MatPaginatorModule,
+    ClipboardModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatDialogModule,

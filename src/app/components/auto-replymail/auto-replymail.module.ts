@@ -30,7 +30,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { NgxLoadingModule } from 'ngx-loading';
-import { ClipboardModule } from 'ngx-clipboard'
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   imports: [
