@@ -289,6 +289,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">Email</th>
                                 <th scope="col">Modified date</th>
                                 <th scope="col">Created date</th>
                             </tr>
@@ -301,6 +302,7 @@
                                 <td>{{ i+1 }}</td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.description}}</td>
+                                <td>{{item.email}}</td>
                                 <td>{{item.modified_date}}</td>
                                 <td>{{item.created_date}}</td>
                             </tr>
@@ -637,7 +639,7 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">
-                                        <input [disabled]="listSyncFinal.employee.matchedEmployee.length == 0"
+                                        <input [disabled]="listSyncFinal.department.matchedDepartment.length == 0"
                                             class="btn" type="checkbox" svalue="" [(ngModel)]="selectedDepMatchAll"
                                             (change)="selectAllDepMatch();">
                                     </th>
@@ -648,10 +650,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="col-12" *ngIf="listSyncFinal.employee.matchedEmployee.length == 0">
+                                <tr class="col-12" *ngIf="listSyncFinal.department.matchedDepartment.length == 0">
                                     <td>No data</td>
                                 </tr>
-                                <tr *ngFor="let item of listSyncFinal.employee.matchedEmployee; let i=index">
+                                <tr *ngFor="let item of listSyncFinal.department.matchedDepartment; let i=index">
                                     <td>
                                         <label>
                                             <input type="checkbox" value="" [checked]="item.selected" class="btn"

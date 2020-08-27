@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import * as Chartist from 'chartist';
 import { ChartType, ChartEvent } from 'ng-chartist';
@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 import { NzButtonSize } from 'ng-zorro-antd/button';
 import { SignatureService } from '../api-services/signature.services';
 import { formatDistance } from 'date-fns';
+import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+
 export interface Chart {
 	type: ChartType;
 	data: Chartist.IChartistData;
@@ -24,6 +26,8 @@ export interface Chart {
 	styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+	@ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild(MatSort) sort: MatSort;
 	employees: any;
 	signatureInvalid: any;
 	size: NzButtonSize = 'large';
