@@ -301,6 +301,7 @@ export class AppHeaderComponent {
           this.lastSyncTime = moment.utc(res.last_sync_date).local().format('LLLL');
           this.toast.success('Synchronize successfully!');
           // this.dashBoard.getActivityLog();
+          localStorage.setItem('last_sync_at', this.lastSyncTime);
           this.closeModal();
         },
         (err) => {
