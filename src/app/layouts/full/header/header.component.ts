@@ -1,18 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { ViewEncapsulation } from '@angular/core';
 import { CompanyConnectionService } from '../../../api-services/company-connection-api.service';
 import { ToastrService } from 'ngx-toastr';
-import { OutOfHRMSDep } from './../../../model/outOfHRMSDep';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SynchronizeService } from '../../../api-services/synchronize-api.service';
 import { DepartmentSync } from '../../../model/listSyncDepartment';
 import { TeamSync } from '../../../model/listSyncTeam';
 import { EmployeeSync } from '../../../model/listSyncEmp';
-import { Department } from '../../../model/department';
-import { Team } from '../../../model/team';
-import { Employee } from '../../../model/employee';
 import { MatMenuTrigger } from '@angular/material';
-import { CheckOtpModule } from '../../../check-otp/check-otp.module';
 import { PositionSync } from '../../../model/listSyncPosition';
 import * as moment from 'moment';
 @Component({
@@ -125,6 +119,9 @@ export class AppHeaderComponent {
             id: d.id,
             name: d.name,
             description: d.description,
+            modified_date: d.modified_date,
+            created_date: d.created_date,
+            email: d.email,
             selected: true
           }
         });
