@@ -110,7 +110,7 @@
                         nzMessage="Note: The table is arranged in descending priority from top to bottom. You can you can pull up/down row if you want!"
                         style="font-size: medium;" nzShowIcon>
                     </nz-alert>
-                    <nz-table nzBordered [nzData]="listOfSpecTemplate" [nzFrontPagination]="false"
+                    <nz-table class="example-list" nzBordered [nzData]="listOfSpecTemplate" [nzFrontPagination]="false"
                         [nzShowPagination]="false">
                         <thead>
                             <tr>
@@ -122,9 +122,9 @@
                             </tr>
                         </thead>
                         <tbody cdkDropList (cdkDropListDropped)="drop($event)">
-                            <tr class="dropDragTr" *ngFor="let specRuleCheck of listOfSpecTemplate.specRuleCheck"
+                            <tr class="example-box" *ngFor="let specRuleCheck of listOfSpecTemplate.specRuleCheck"
                                 cdkDrag>
-                                <td>
+                                <td nzWidth="13%">
                                     <nz-select
                                         (ngModelChange)="loadSpecificBy(specRuleCheck.specificBy, specRuleCheck.idSpec)"
                                         style="width: 100%;" [(ngModel)]="specRuleCheck.specificBy">
@@ -133,7 +133,7 @@
                                         </nz-option>
                                     </nz-select>
                                 </td>
-                                <td nzWidth="27%">
+                                <td nzWidth="55%">
                                     <div *ngIf="specRuleCheck.specificBy === 'team'">
                                         <button style="width: 100%;" [nzTrigger]="'click'" [nzClickHide]="false"
                                             nz-button nz-dropdown [nzDropdownMenu]="teamMenu">
@@ -207,19 +207,19 @@
                                         </nz-dropdown-menu>
                                     </div>
                                 </td>
-                                <td>
+                                <td nzWidth="12%">
                                     <nz-select style="width: 100%;" [(ngModel)]="specRuleCheck.signature_id">
                                         <nz-option *ngFor="let signature of listOfSpecTemplate.allSignature"
                                             [nzValue]="signature.id" [nzLabel]="signature.name"></nz-option>
                                     </nz-select>
                                 </td>
-                                <td>
+                                <td nzWidth="10%">
                                     <button nz-button
                                         (click)="showEmployeeSpecific(specRuleCheck.specificBy, specRuleCheck.idSpec)"
                                         nzType="primary">
                                         View employee</button>
                                 </td>
-                                <td>
+                                <td nzWidth="10%">
                                     <button nz-button nzDanger (click)="deleteRowSpec(specRuleCheck.idSpec)"
                                         nzType="primary">
                                         Delete</button>
@@ -283,7 +283,7 @@
                 <div>
                     <p>
                         <button nz-button style="margin-right: 1cm;" nzType="primary"
-                            (click)="showConfirmNewSignature()">New</button>
+                            (click)="showConfirmNewSignature()">Save new signature</button>
                         <button nz-button style="margin-right: 1cm;" [disabled]="isSaveTemplateDisable"
                             (click)="showConfirmUpdateSignature()" [nzLoading]="isSaveTemplateLoading"
                             nzType="primary">Update</button>
@@ -430,7 +430,7 @@
                 <div>
                     <button nz-button style="margin-right: 1cm;" nzType="primary"
                         (click)="showConfirmNewSignatureRules()">
-                        New</button>
+                        Save new rule</button>
                     <button [disabled]="isSaveRuleDisable" nz-button style="margin-right: 1cm;"
                         (click)="showConfirmUpdateSignatureRules()" [nzLoading]="isSaveRulesLoading"
                         nzType="primary">Update</button>
