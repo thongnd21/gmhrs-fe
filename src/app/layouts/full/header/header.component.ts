@@ -119,6 +119,9 @@ export class AppHeaderComponent {
             id: d.id,
             name: d.name,
             description: d.description,
+            modified_date: d.modified_date,
+            created_date: d.created_date,
+            email: d.email,
             selected: true
           }
         });
