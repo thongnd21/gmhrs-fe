@@ -32,11 +32,6 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    // this.templateId = localStorage.getItem('templateId');
-
-
-    console.log(this.route.snapshot.queryParamMap);
     this.route.queryParams.subscribe(params => {
       this.templateId = params['id'];
     });
@@ -122,29 +117,28 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
           html: html
         };
         console.log(emailObj);
-        this.emailServices.updateEmailTemplate(emailObj).subscribe(
-          (res: any) => {
-            // location.reload();
-            this.loadingFull = false;
-            console.log(res);
-            if (res.status == 200) {
-              this.toast.success(res.message);
-            } else if (res.status == 400) {
-              this.toast.error(res.message)
-            }
-          },
-          (err) => {
-            this.loadingFull = false;
-            this.toast.error("Services is not available!");
-          }
-        )
+        this.toast.success("Get template success!");
       }
       );
     }
     );
+    setTimeout(()=>{
+      this.emailServices.updateEmailTemplate(emailObj).subscribe(
+        (res: any) => {
+          this.loadingFull = false;
+          console.log(res);
+          if (res.status == 200) {
+            this.toast.success(res.message);
+          } else if (res.status == 400) {
+            this.toast.error(res.message)
+          }
+        },
+        (err) => {
+          this.loadingFull = false;
+          this.toast.error("Services is not available!");
+        }
+      );
+      }, 5000);  
 
   }
-
-
-
 }

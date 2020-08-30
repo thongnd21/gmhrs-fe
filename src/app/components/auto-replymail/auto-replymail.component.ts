@@ -505,7 +505,6 @@ export class AutoReplymailComponent implements OnInit {
 
     let name = this.templateForm.controls['name'].value;
     let subject = this.templateForm.controls['subject'].value;
-    console.log(this.emailEditor);
     this.emailEditor.saveDesign((data) => {
       jsonData = data;
       this.emailEditor.exportHtml((data: any) => {
@@ -524,15 +523,14 @@ export class AutoReplymailComponent implements OnInit {
     setTimeout(() => {
       this.emailServices.createEmailTemplate(emailObj).subscribe(
         (res: any) => {
-          // location.reload();
           if (res.status == 200) {
             this.getAllTemplate();
             this.templateForm.reset();
+            this.toast.success("Created success!");
             this.checkCreate = false;
-
           } else if (res.status == 400) {
             console.log(res.status);
-            this.toast.error("Template with this subject existed ! Please input another again !");
+            this.toast.warning("Template name is existed!");
           }
           this.loadingFull = false;
         },
