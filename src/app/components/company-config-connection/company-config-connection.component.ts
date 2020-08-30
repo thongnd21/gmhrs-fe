@@ -233,6 +233,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
       name: "Required"
     }
   };
+  connectionStringDataResponseVacation = {// json format postion to admin company checking field when input api endpoint
+    vacation: {
+      employee_id: "Required",
+      start_date: "Required",
+      end_date: "Required"
+    }
+  };
   connectionStatus = {
     connection: {
       status: "",
@@ -352,10 +359,10 @@ export class CompanyConfigConnectionComponent implements OnInit {
           // this.disableTestConnectionStringButton = true;
         }
       },
-      (error) =>{
+      (error) => {
         this.loadingFull = false;
       }
-      )
+    )
 
   }
 
@@ -516,7 +523,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       (error) => {
         this.loadingFull = false;
       }
-      )
+    )
   }
 
 
@@ -718,23 +725,47 @@ export class CompanyConfigConnectionComponent implements OnInit {
     }
   }
 
-  checkingFormatDataConnectionString(employee, department, team, team_employee, position) {
+  checkingFormatDataConnectionString(employee, department, team, team_employee, position, vacation, length_emp, length_dep, length_team, length_position) {
 
+    console.log(vacation);
 
-
+    var empValid = false;
+    var depValid = false;
+    var teamValid = false;
+    var positionValid = false;
+    var teamEmpValid = false;
+    var vacationValid = false;
     //check fields in each employee
     // for (var i = 0; i < employee.length; i++) {
-      employee.id === undefined ? this.connectionStringDataResponseEmployee.employee.id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.id = "Pass";
-      employee.primary_email === undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
-      employee.personal_email === undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
-      employee.first_name === undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
-      employee.last_name === undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
-      employee.phone === undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Missing Field" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
-      employee.address === undefined ? this.connectionStringDataResponseEmployee.employee.address = "Missing Field" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
-      employee.department_id === undefined ? this.connectionStringDataResponseEmployee.employee.department_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department_id = "Pass";
-      employee.position_id === undefined ? this.connectionStringDataResponseEmployee.employee.position_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.position_id = "Pass";
-      employee.vacation_start_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Pass";
-      employee.vacation_end_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Pass";
+    employee.id === undefined ? this.connectionStringDataResponseEmployee.employee.id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.id = "Pass";
+    employee.primary_email === undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
+    employee.personal_email === undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
+    employee.first_name === undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
+    employee.last_name === undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
+    employee.phone === undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Missing Field" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
+    employee.address === undefined ? this.connectionStringDataResponseEmployee.employee.address = "Missing Field" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
+    employee.department_id === undefined ? this.connectionStringDataResponseEmployee.employee.department_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department_id = "Pass";
+    employee.position_id === undefined ? this.connectionStringDataResponseEmployee.employee.position_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.position_id = "Pass";
+    employee.vacation_start_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Pass";
+    employee.vacation_end_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Pass";
+
+
+    //check length
+    length_emp.primary_email !== undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Character maximum length 254" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
+    length_emp.personal_email !== undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Character maximum length 254" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
+    length_emp.first_name !== undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Character maximum length 45" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
+    length_emp.last_name !== undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Character maximum length 45" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
+    length_emp.phone !== undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Character maximum length 15" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
+    length_emp.address !== undefined ? this.connectionStringDataResponseEmployee.employee.address = "Character maximum length 512" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
+
+
+    if (this.connectionStringDataResponseEmployee.employee.id == "Pass" && this.connectionStringDataResponseEmployee.employee.primary_email == "Pass"
+      && this.connectionStringDataResponseEmployee.employee.personal_email == "Pass" && this.connectionStringDataResponseEmployee.employee.first_name == "Pass"
+      && this.connectionStringDataResponseEmployee.employee.last_name == "Pass" && this.connectionStringDataResponseEmployee.employee.phone == "Pass"
+      && this.connectionStringDataResponseEmployee.employee.address == "Pass" && this.connectionStringDataResponseEmployee.employee.department_id == "Pass"
+      && this.connectionStringDataResponseEmployee.employee.position_id == "Pass") {
+      empValid = true;
+    }
     //   console.log("vong for: " + i);
     //   // if pass all field stop for 
     //   if (this.connectionStringDataResponseEmployee.employee.id == "Pass" && this.connectionStringDataResponseEmployee.employee.primary_email == "Pass"
@@ -750,9 +781,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
     // };
     // //check field in each department
     // for (var i = 0; i < department.length; i++) {
-      department.id === undefined ? this.connectionStringDataResponseDepartment.department.id = "Missing Field" : this.connectionStringDataResponseDepartment.department.id = "Pass";
-      department.name === undefined ? this.connectionStringDataResponseDepartment.department.name = "Missing Field" : this.connectionStringDataResponseDepartment.department.name = "Pass";
-      department.email === undefined ? this.connectionStringDataResponseDepartment.department.email = "Missing Field" : this.connectionStringDataResponseDepartment.department.email = "Pass";
+    department.id === undefined ? this.connectionStringDataResponseDepartment.department.id = "Missing Field" : this.connectionStringDataResponseDepartment.department.id = "Pass";
+    department.name === undefined ? this.connectionStringDataResponseDepartment.department.name = "Missing Field" : this.connectionStringDataResponseDepartment.department.name = "Pass";
+    department.email === undefined ? this.connectionStringDataResponseDepartment.department.email = "Missing Field" : this.connectionStringDataResponseDepartment.department.email = "Pass";
+
+
+
+    length_dep.name !== undefined ? this.connectionStringDataResponseDepartment.department.name = "Character maximum length 200" : this.connectionStringDataResponseDepartment.department.name = "Pass";
+    length_dep.email !== undefined ? this.connectionStringDataResponseDepartment.department.email = "Character maximum length 254" : this.connectionStringDataResponseDepartment.department.email = "Pass";
+
+
+    if (this.connectionStringDataResponseDepartment.department.id == "Pass" && this.connectionStringDataResponseDepartment.department.name
+      && this.connectionStringDataResponseDepartment.department.email == "Pass") {
+      depValid = true;
+    }
     //   console.log("vong for dep: " + i);
     //   //if pass all fields >> stop for
     //   if (this.connectionStringDataResponseDepartment.department.id == "Pass"
@@ -764,12 +806,25 @@ export class CompanyConfigConnectionComponent implements OnInit {
     // //check field in each team
     // var k = 0;
     // for (k; k < team.length; k++) {
-      team.id === undefined ? this.connectionStringDataResponseTeam.team.id = "Missing Field" : this.connectionStringDataResponseTeam.team.id = "Pass";
-      team.name === undefined ? this.connectionStringDataResponseTeam.team.name = "Missing Field" : this.connectionStringDataResponseTeam.team.name = "Pass";
-      team.email === undefined ? this.connectionStringDataResponseTeam.team.email = "Missing Field" : this.connectionStringDataResponseTeam.team.email = "Pass";
+    team.id === undefined ? this.connectionStringDataResponseTeam.team.id = "Missing Field" : this.connectionStringDataResponseTeam.team.id = "Pass";
+    team.name === undefined ? this.connectionStringDataResponseTeam.team.name = "Missing Field" : this.connectionStringDataResponseTeam.team.name = "Pass";
+    team.email === undefined ? this.connectionStringDataResponseTeam.team.email = "Missing Field" : this.connectionStringDataResponseTeam.team.email = "Pass";
 
-      team_employee.employee_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Pass";
-      team_employee.team_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Pass";
+
+    length_team.name !== undefined ? this.connectionStringDataResponseTeam.team.name = "Character maximum length 200" : this.connectionStringDataResponseTeam.team.name = "Pass";
+    length_team.email !== undefined ? this.connectionStringDataResponseTeam.team.email = "Character maximum length 254" : this.connectionStringDataResponseTeam.team.email = "Pass";
+
+
+    if (this.connectionStringDataResponseTeam.team.id == "Pass" && this.connectionStringDataResponseTeam.team.name == "Pass" && this.connectionStringDataResponseTeam.team.email == "Pass") {
+      teamValid = true;
+    }
+
+    team_employee.employee_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Pass";
+    team_employee.team_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Pass";
+
+    if (this.connectionStringDataResponseTeamEmployee.team_employee.employee_id == "Pass" && this.connectionStringDataResponseTeamEmployee.team_employee.team_id == "Pass") {
+      teamEmpValid = true;
+    }
     //   console.log("vong for team: " + k);
     //   // check list members in team
     //   if (team[k].members.length > 0) {
@@ -808,8 +863,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
     // //check field in each position
     // for (var i = 0; i < position.length; i++) {
-      position.id === undefined ? this.connectionStringDataResponsePositon.position.id = "Missing Field" : this.connectionStringDataResponsePositon.position.id = "Pass";
-      position.name === undefined ? this.connectionStringDataResponsePositon.position.name = "Missing Field" : this.connectionStringDataResponsePositon.position.name = "Pass";
+    position.id === undefined ? this.connectionStringDataResponsePositon.position.id = "Missing Field" : this.connectionStringDataResponsePositon.position.id = "Pass";
+    position.name === undefined ? this.connectionStringDataResponsePositon.position.name = "Missing Field" : this.connectionStringDataResponsePositon.position.name = "Pass";
+
+
+    length_position.name !== undefined ? this.connectionStringDataResponsePositon.position.name = "Character maximum length 200" : this.connectionStringDataResponsePositon.position.name = "Pass";
+
+
+    if (this.connectionStringDataResponsePositon.position.name == "Pass" && this.connectionStringDataResponsePositon.position.id == "Pass") {
+      positionValid = true;
+    }
     //   console.log("vong for pos: " + i);
     //   //if pass all fields >> stop for
     //   if (this.connectionStringDataResponsePositon.position.id == "Pass"
@@ -824,8 +887,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
     // } else {
     //   return false;
     // }
-    console.log(this.connectionStringDataResponseTeamEmployee);
-    
+    vacation.employee_id === undefined ? this.connectionStringDataResponseVacation.vacation.employee_id = "Missing Field" : this.connectionStringDataResponseVacation.vacation.employee_id = "Pass";
+    vacation.start_date === undefined ? this.connectionStringDataResponseVacation.vacation.start_date = "Missing Field" : this.connectionStringDataResponseVacation.vacation.start_date = "Pass";
+    vacation.end_date === undefined ? this.connectionStringDataResponseVacation.vacation.end_date = "Missing Field" : this.connectionStringDataResponseVacation.vacation.end_date = "Pass";
+
+    if (this.connectionStringDataResponseVacation.vacation.employee_id == "Pass" && this.connectionStringDataResponseVacation.vacation.end_date == "Pass" && this.connectionStringDataResponseVacation.vacation.start_date == "Pass") {
+      vacationValid = true;
+    }
+
+    if (empValid == true && depValid == true && teamValid == true && teamEmpValid == true && positionValid == true && vacationValid == true) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   // test connection string
@@ -834,6 +909,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   connectionStringResultDepartment;
   connectionStringResultTeamEmployee
   connectionStringResultPosition;
+  connectionStringResultVacation;
   onTestConection(modal, value) {
     this.loadingFull = true;
     this.loadingTestConnection = true;
@@ -863,17 +939,23 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionStringResultTeam = res.teams
             this.connectionStringResultTeamEmployee = res.team_employee;
             this.connectionStringResultPosition = res.positions;
+            this.connectionStringResultVacation = res.vacation_date;
             console.log(this.connectionStringDataResponsePositon);
-            
+
             var check = this.checkingFormatDataConnectionString(
               this.connectionStringResultEmployee,
               this.connectionStringResultDepartment,
               this.connectionStringResultTeam,
               this.connectionStringResultTeamEmployee,
-              this.connectionStringResultPosition);
+              this.connectionStringResultPosition,
+              this.connectionStringResultVacation,
+              res.character_maximum_length_employee,
+              res.character_maximum_length_department,
+              res.character_maximum_length_team,
+              res.character_maximum_length_position);
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
-            this.disableSaveConnectionStringButton = true;
+            this.disableSaveConnectionStringButton = check;
             console.log(this.connectionStringDataResponseEmployee);
             this.loadingFull = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
@@ -945,16 +1027,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
       this.companyConnection.username + " " +
       this.companyConnection.password + " " +
       this.companyConnection.dialect;
-    const api_enpoint = "http://localhost:3001/api/api-endpoint?dbName="+this.companyConnection.dbName+
-    "&host="+this.companyConnection.host+"&port="+this.companyConnection.port+"&username="+this.companyConnection.username+
-    "&password="+this.companyConnection.password+"&dialect="+this.companyConnection.dialect
+    const api_enpoint = "http://localhost:3001/api/api-endpoint?dbName=" + this.companyConnection.dbName +
+      "&host=" + this.companyConnection.host + "&port=" + this.companyConnection.port + "&username=" + this.companyConnection.username +
+      "&password=" + this.companyConnection.password + "&dialect=" + this.companyConnection.dialect
     const id = localStorage.getItem('id');
     this.account = new AccountCompanyModel;
     this.account.id = id;
     this.account.connection_database = connectionString;
     this.account.api_endpoint = api_enpoint;
     console.log(this.account);
-    
+
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
         if (res.status == "success") {
