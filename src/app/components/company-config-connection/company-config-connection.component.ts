@@ -945,12 +945,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
       this.companyConnection.username + " " +
       this.companyConnection.password + " " +
       this.companyConnection.dialect;
-
+    const api_enpoint = "http://localhost:3001/api/api-endpoint?dbName="+this.companyConnection.dbName+
+    "&host="+this.companyConnection.host+"&port="+this.companyConnection.port+"&username="+this.companyConnection.username+
+    "&password="+this.companyConnection.password+"&dialect="+this.companyConnection.dialect
     const id = localStorage.getItem('id');
     this.account = new AccountCompanyModel;
     this.account.id = id;
     this.account.connection_database = connectionString;
-    console.log(this.account.connection_database);
+    this.account.api_endpoint = api_enpoint;
+    console.log(this.account);
+    
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
         if (res.status == "success") {
