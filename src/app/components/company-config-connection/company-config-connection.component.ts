@@ -1020,21 +1020,15 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnection.username = value.username;
     this.companyConnection.password = value.password;
     this.companyConnection.dialect = value.dialect;
-    const connectionString =
-      this.companyConnection.dbName + " " +
-      this.companyConnection.host + " " +
-      this.companyConnection.port + " " +
-      this.companyConnection.username + " " +
-      this.companyConnection.password + " " +
-      this.companyConnection.dialect;
-    const api_enpoint = "http://localhost:3001/api/api-endpoint?dbName=" + this.companyConnection.dbName +
-      "&host=" + this.companyConnection.host + "&port=" + this.companyConnection.port + "&username=" + this.companyConnection.username +
-      "&password=" + this.companyConnection.password + "&dialect=" + this.companyConnection.dialect
+  
+    const connectionString = "https://gmcompany-api.herokuapp.com/api/api-endpoint?dbName="+this.companyConnection.dbName+
+    "&host="+this.companyConnection.host+"&port="+this.companyConnection.port+"&username="+this.companyConnection.username+
+    "&password="+this.companyConnection.password+"&dialect="+this.companyConnection.dialect
     const id = localStorage.getItem('id');
     this.account = new AccountCompanyModel;
     this.account.id = id;
     this.account.connection_database = connectionString;
-    this.account.api_endpoint = api_enpoint;
+    // this.account.api_endpoint = api_enpoint;
     console.log(this.account);
 
     this.companyServices.updateAccountCompany(this.account).subscribe(
