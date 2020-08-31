@@ -52,7 +52,8 @@
                         </nz-input-number>
                     </nz-input-group>
                     <div style="text-align: center; margin-top: 2mm;">
-                        <img [ngStyle]="{'width':imgWidth + 'px', 'height':imgHeigh + 'px'}" [src]="imageLink" alt="" />
+                        <img [ngStyle]="{'width':imgWidth + 'px', 'height':imgHeigh + 'px'}" [src]="imageLink" alt=""
+                            onerror="this.style.display='none'" />
                     </div>
                 </nz-modal>
                 <!-- List error -->

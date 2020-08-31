@@ -99,7 +99,8 @@ export class SignatureTemplateComponent implements OnInit {
     primary_email: null,
     first_name: null,
     last_name: null,
-    phone: null
+    phone: null,
+    position_in_company: any
   };
 
   rules: Rules = {
@@ -763,10 +764,12 @@ export class SignatureTemplateComponent implements OnInit {
       let firstname = this.infoToReview.first_name;
       let lastname = this.infoToReview.last_name;
       let phone = this.infoToReview.phone;
+      let position = this.infoToReview.position_in_company.name;
       let primary_email = this.infoToReview.primary_email;
       this.htmlContentReview = this.htmlContentReview.split('{email}').join(primary_email);
       this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
       this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
+      this.htmlContentReview = this.htmlContentReview.split('{position}').join(position);
       // this.toast.success('Load review successfully!');
     } else {
       this.toast.error('You have not synchronized data!')
@@ -1082,9 +1085,11 @@ export class SignatureTemplateComponent implements OnInit {
                 let lastname = this.infoToReview.last_name;
                 let phone = this.infoToReview.phone;
                 let primary_email = this.infoToReview.primary_email;
+                let position = this.infoToReview.position_in_company.name;
                 this.htmlContentReview = this.htmlContentReview.split('{email}').join(primary_email);
                 this.htmlContentReview = this.htmlContentReview.split('{name}').join(firstname + ' ' + lastname);
                 this.htmlContentReview = this.htmlContentReview.split('{phone}').join(phone);
+                this.htmlContentReview = this.htmlContentReview.split('{position}').join(position);
               } else {
                 this.signatureID = '';
                 this.signatureName = '';
