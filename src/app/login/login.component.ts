@@ -84,7 +84,11 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/checkotp']);
                 } else {
                     localStorage.setItem('isLoggedin', 'true');
-                    this.router.navigate(['/dashboard']);
+                    if (userInfo.profile.role.id === 2) {
+                        this.router.navigate(['/dashboard']);
+                    } else if (userInfo.profile.role.id === 1) {
+                        this.router.navigate(['/company']);
+                    }
                 }
             },
             (err) => {

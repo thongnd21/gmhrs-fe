@@ -43,7 +43,11 @@ export class CheckOtpComponent implements OnInit, OnDestroy {
             this.toast.success('Validation successful!');
             localStorage.setItem('isLoggedin', 'true');
             localStorage.removeItem('two_fa_status');
-            this.router.navigate(['/dashboard']);
+            if (localStorage.getItem('roleId') === '2') {
+              this.router.navigate(['/dashboard']);
+            } else if (localStorage.getItem('roleId') === '1') {
+              this.router.navigate(['/company']);
+            }
           } else {
             this.toast.error('Invalid OTP!');
           }
