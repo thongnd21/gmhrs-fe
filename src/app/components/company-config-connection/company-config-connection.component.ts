@@ -307,7 +307,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           var username = connectionString.split("=")[4];
           var password = connectionString.split("=")[5];
           var type = connectionString.split("=")[6];
-        
+
           this.connectionString.dbName = dbName.split("&")[0];
           this.connectionString.host = host.split("&")[0];
           this.connectionString.port = port.split("&")[0];
@@ -759,12 +759,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
 
     //check length
-    length_emp.primary_email !== undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Character maximum length 254" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
-    length_emp.personal_email !== undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Character maximum length 254" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
-    length_emp.first_name !== undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Character maximum length 45" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
-    length_emp.last_name !== undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Character maximum length 45" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
-    length_emp.phone !== undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Character maximum length 15" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
-    length_emp.address !== undefined ? this.connectionStringDataResponseEmployee.employee.address = "Character maximum length 512" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
+    if (length_emp.primary_email !== undefined) {
+      this.connectionStringDataResponseEmployee.employee.primary_email = "Character maximum length 254"
+    } else if (length_emp.personal_email !== undefined) {
+      this.connectionStringDataResponseEmployee.employee.personal_email = "Character maximum length 254"
+    } else if (length_emp.first_name !== undefined) {
+      this.connectionStringDataResponseEmployee.employee.first_name = "Character maximum length 45"
+    } else if (length_emp.last_name !== undefined) {
+      this.connectionStringDataResponseEmployee.employee.last_name = "Character maximum length 45"
+    } else if (length_emp.phone !== undefined) {
+      this.connectionStringDataResponseEmployee.employee.phone = "Character maximum length 15"
+    } else if (length_emp.address !== undefined) {
+      this.connectionStringDataResponseEmployee.employee.address = "Character maximum length 512"
+    }
+
 
 
     if (this.connectionStringDataResponseEmployee.employee.id == "Pass" && this.connectionStringDataResponseEmployee.employee.primary_email == "Pass"
@@ -795,9 +803,11 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
 
 
-    length_dep.name !== undefined ? this.connectionStringDataResponseDepartment.department.name = "Character maximum length 200" : this.connectionStringDataResponseDepartment.department.name = "Pass";
-    length_dep.email !== undefined ? this.connectionStringDataResponseDepartment.department.email = "Character maximum length 254" : this.connectionStringDataResponseDepartment.department.email = "Pass";
-
+    if (length_dep.name !== undefined) {
+      this.connectionStringDataResponseDepartment.department.name = "Character maximum length 200"
+    } else if (length_dep.email !== undefined) {
+      this.connectionStringDataResponseDepartment.department.email = "Character maximum length 254"
+    }
 
     if (this.connectionStringDataResponseDepartment.department.id == "Pass" && this.connectionStringDataResponseDepartment.department.name
       && this.connectionStringDataResponseDepartment.department.email == "Pass") {
@@ -819,8 +829,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
     team.email === undefined ? this.connectionStringDataResponseTeam.team.email = "Missing Field" : this.connectionStringDataResponseTeam.team.email = "Pass";
 
 
-    length_team.name !== undefined ? this.connectionStringDataResponseTeam.team.name = "Character maximum length 200" : this.connectionStringDataResponseTeam.team.name = "Pass";
-    length_team.email !== undefined ? this.connectionStringDataResponseTeam.team.email = "Character maximum length 254" : this.connectionStringDataResponseTeam.team.email = "Pass";
+    if (length_team.name !== undefined) {
+      this.connectionStringDataResponseTeam.team.name = "Character maximum length 200"
+    } else if (length_team.email !== undefined) {
+      this.connectionStringDataResponseTeam.team.email = "Character maximum length 254"
+    }
+
 
 
     if (this.connectionStringDataResponseTeam.team.id == "Pass" && this.connectionStringDataResponseTeam.team.name == "Pass" && this.connectionStringDataResponseTeam.team.email == "Pass") {
@@ -875,8 +889,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
     position.name === undefined ? this.connectionStringDataResponsePositon.position.name = "Missing Field" : this.connectionStringDataResponsePositon.position.name = "Pass";
 
 
-    length_position.name !== undefined ? this.connectionStringDataResponsePositon.position.name = "Character maximum length 200" : this.connectionStringDataResponsePositon.position.name = "Pass";
-
+    if (length_position.name !== undefined) {
+      this.connectionStringDataResponsePositon.position.name = "Character maximum length 200"
+    }
 
     if (this.connectionStringDataResponsePositon.position.name == "Pass" && this.connectionStringDataResponsePositon.position.id == "Pass") {
       positionValid = true;
@@ -961,6 +976,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
               res.character_maximum_length_department,
               res.character_maximum_length_team,
               res.character_maximum_length_position);
+            console.log(this.connectionStringDataResponseDepartment);
+
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
             this.disableSaveConnectionStringButton = check;
@@ -1028,10 +1045,10 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnection.username = value.username;
     this.companyConnection.password = value.password;
     this.companyConnection.dialect = value.dialect;
-  
-    const connectionString = "https://gmcompany-api.herokuapp.com/api/api-endpoint?dbName="+this.companyConnection.dbName+
-    "&host="+this.companyConnection.host+"&port="+this.companyConnection.port+"&username="+this.companyConnection.username+
-    "&password="+this.companyConnection.password+"&dialect="+this.companyConnection.dialect
+
+    const connectionString = "https://gmcompany-api.herokuapp.com/api/api-endpoint?dbName=" + this.companyConnection.dbName +
+      "&host=" + this.companyConnection.host + "&port=" + this.companyConnection.port + "&username=" + this.companyConnection.username +
+      "&password=" + this.companyConnection.password + "&dialect=" + this.companyConnection.dialect
     const id = localStorage.getItem('id');
     this.account = new AccountCompanyModel;
     this.account.id = id;
