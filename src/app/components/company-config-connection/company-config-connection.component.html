@@ -1,7 +1,15 @@
 <nz-spin [nzSpinning]="loadingFull" nzTip="Loading..." [nzSize]="'large'">
     <div>
+        <button class="col" style="margin-bottom:10px; width: 100%; background-color: #492ec5; color: rgb(240, 240, 3);"
+            mat-raised-button color="primary" (click)="goToGuidePage()">
+            <i class="fa fa-fw fa-plus"></i>
+            More info about how to setup data connection and get Gsuite Credential
+        </button>
         <mat-horizontal-stepper linear #stepper>
             <!-- #docregion editable -->
+            <!-- <mat-chip style="width: 100%; background-color: #f44336;">
+                Làm màu
+            </mat-chip> -->
             <mat-step [stepControl]="accessDBForm">
                 <!-- #enddocregion editable -->
                 <mat-radio-group [(ngModel)]="connection" aria-label="Select an option">

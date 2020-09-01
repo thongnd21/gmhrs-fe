@@ -13,6 +13,7 @@ import { MatDialog, MatStepper } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountApiService } from '../../api-services/account-api.service';
 import { STRING_TYPE, ThrowStmt } from '@angular/compiler';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -258,6 +259,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     private http: HttpClient,
     public dialog: MatDialog,
     private accountServices: AccountApiService,
+    private router: Router,
   ) {
 
   }
@@ -273,7 +275,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
     console.log(this.checkSync);
   }
 
-
+  goToGuidePage(): void {
+    this.router.navigate(['/guides']);
+  }
   // form connection String
   createConnectionStringForm() {
     this.loadingFull = true;

@@ -22,6 +22,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { NgxLoadingModule } from 'ngx-loading';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
         MaterialFileInputModule,
         NgxLoadingModule,
         NzSpinModule,
+        MatChipsModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

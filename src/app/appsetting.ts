@@ -43,6 +43,6 @@ export class AppSettings {
     public static CHECKFILEGSUITEKEY = 'signature/checkFileGsuiteKey/'
     public static CONNECTION = 'connection/'
     public static UPDATESIGNATUREFORONLYWRONG = 'signature/updateSignatureTemplateForOnlyWrongEmployee/'
-
+    public static CHECKPRIMARYSETTING = 'accounts/checkPrimarySetting/'
 
 }
