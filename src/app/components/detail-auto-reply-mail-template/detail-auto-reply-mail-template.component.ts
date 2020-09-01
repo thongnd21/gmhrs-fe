@@ -116,8 +116,6 @@ export class DetailAutoReplyMailTemplateComponent implements OnInit {
           dataTemplate: JSON.stringify(jsonData),
           html: html
         };
-        console.log(emailObj);
-        this.toast.success("Get template success!");
       }
       );
     }
