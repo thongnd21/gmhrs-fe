@@ -30,6 +30,7 @@ import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { EmailEditorModule } from 'angular-email-editor';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { DashboardGuard } from './shared/guard/dashboard.guard';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -66,6 +67,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CompanyManagerGuard,
     CheckOTPGuard,
     LoginPageGuard,
+    DashboardGuard,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

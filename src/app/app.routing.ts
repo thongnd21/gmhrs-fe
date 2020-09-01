@@ -6,6 +6,7 @@ import { CompanyManagerGuard } from './shared/guard/company-manager.gruad';
 import { SystemAdminGuard } from './shared/guard/system-admin.gruad';
 import { CheckOTPGuard } from './shared/guard/checkotp.guard';
 import { LoginPageGuard } from './shared/guard/loginpage.guard';
+import { DashboardGuard } from './shared/guard/dashboard.guard';
 
 export const AppRoutes: Routes = [
   {
@@ -84,7 +85,7 @@ export const AppRoutes: Routes = [
       },
       {
         path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [DashboardGuard]
       },
       {
         path: 'guides',
