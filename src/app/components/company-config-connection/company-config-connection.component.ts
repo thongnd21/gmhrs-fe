@@ -298,21 +298,29 @@ export class CompanyConfigConnectionComponent implements OnInit {
     });
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
-        if (res.connection_database != undefined && res.connection_database.length > 1) {
+        if (res.connection_database != undefined) {
           console.log(res.connection_database);
-          this.connectionString.dbName = res.connection_database.split(" ")[0];
-          this.connectionString.host = res.connection_database.split(" ")[1];
-          this.connectionString.port = res.connection_database.split(" ")[2];
-          this.connectionString.username = res.connection_database.split(" ")[3];
-          this.connectionString.password = res.connection_database.split(" ")[4];
-          this.connectionString.type = res.connection_database.split(" ")[5];
+          var connectionString = res.connection_database.split("?")[1];
+          var dbName = connectionString.split("=")[1];
+          var host = connectionString.split("=")[2];
+          var port = connectionString.split("=")[3];
+          var username = connectionString.split("=")[4];
+          var password = connectionString.split("=")[5];
+          var type = connectionString.split("=")[6];
+        
+          this.connectionString.dbName = dbName.split("&")[0];
+          this.connectionString.host = host.split("&")[0];
+          this.connectionString.port = port.split("&")[0];
+          this.connectionString.username = username.split("&")[0];
+          this.connectionString.password = password.split("&")[0];
+          this.connectionString.type = type.split("&")[0];
           this.accessDBForm = this.fb.group({
-            dbName: new FormControl(res.connection_database.split(" ")[0], [Validators.required]),
-            host: new FormControl(res.connection_database.split(" ")[1], [Validators.required]),
-            port: new FormControl(res.connection_database.split(" ")[2], [Validators.required]),
-            username: new FormControl(res.connection_database.split(" ")[3], [Validators.required]),
-            password: new FormControl(res.connection_database.split(" ")[4], [Validators.required]),
-            dialect: new FormControl(res.connection_database.split(" ")[5]),
+            dbName: new FormControl(this.connectionString.dbName, [Validators.required]),
+            host: new FormControl(this.connectionString.host, [Validators.required]),
+            port: new FormControl(this.connectionString.port, [Validators.required]),
+            username: new FormControl(this.connectionString.username, [Validators.required]),
+            password: new FormControl(this.connectionString.password, [Validators.required]),
+            dialect: new FormControl(this.connectionString.type),
           });
           this.disableSaveConnectionStringButton = false;
           this.nextButonConditonConnectionString = true;
