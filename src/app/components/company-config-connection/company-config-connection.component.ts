@@ -1016,6 +1016,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Required";
             this.connectionStringDataResponsePositon.position.id = "Required";
             this.connectionStringDataResponsePositon.position.name = "Required";
+            this.connectionStringDataResponseVacation.vacation.end_date = "Required";
+            this.connectionStringDataResponseVacation.vacation.employee_id = "Required";
+            this.connectionStringDataResponseVacation.vacation.start_date = "Required";
             this.enableDataConnectionResult = true;
             this.connectionFail = true;
             this.loadingTestConnection = false;
