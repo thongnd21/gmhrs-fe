@@ -1106,7 +1106,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     let is_first_sync = localStorage.getItem('is_first_sync');
     console.log(account);
     console.log(is_first_sync);
-    if(is_first_sync === "false"){
+    if (is_first_sync === "false") {
       this.companyConnectionService.changeSchedule(account).subscribe(
         (res: any) => {
           this.toast.success(res.message);
@@ -1124,8 +1124,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.toast.error("Server is not available!");
         }
       )
-    }else{
-      this.toast.warning("Please complate First sync!");
+    } else {
+      this.toast.warning("Please complete First sync!");
       this.loadingConfirm = false;
       this.dialog.closeAll();
       this.getSchedule();
@@ -1217,40 +1217,40 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.toast.error("Server is not available!");
         }
       )
-    } else if(this.typeSync === 2 ){
-      if( this.weekDayChoose === null || this.weekDayChoose === undefined
-        || this.weekDayChoose.length === 0){
-          this.toast.error("Please choose day!");
+    } else if (this.typeSync === 2) {
+      if (this.weekDayChoose === null || this.weekDayChoose === undefined
+        || this.weekDayChoose.length === 0) {
+        this.toast.error("Please choose day!");
       }
-      if( this.weekTime === undefined
+      if (this.weekTime === undefined
         || this.weekTime === null
-        || this.weekTime === ''){
-          this.toast.error("Invalid time!");
+        || this.weekTime === '') {
+        this.toast.error("Invalid time!");
       }
       this.getSchedule();
       this.loadingFull = false;
-    }else if(this.typeSync === 1 ){
-      if( this.monthDayChoose === null || this.monthDayChoose === undefined
-        || this.monthDayChoose.length === 0){
-          this.toast.error("Please choose day!");
+    } else if (this.typeSync === 1) {
+      if (this.monthDayChoose === null || this.monthDayChoose === undefined
+        || this.monthDayChoose.length === 0) {
+        this.toast.error("Please choose day!");
       }
-      if( this.monthTime === undefined
+      if (this.monthTime === undefined
         || this.monthTime === null
-        || this.monthTime === ''){
-          this.toast.error("Invalid time!");
+        || this.monthTime === '') {
+        this.toast.error("Invalid time!");
       }
       this.getSchedule();
       this.loadingFull = false;
-    }else if(this.typeSync === 3 ){
-      if( this.dailyTime === undefined
+    } else if (this.typeSync === 3) {
+      if (this.dailyTime === undefined
         || this.dailyTime === null
-        || this.dailyTime === ''){
-          this.toast.error("Invalid time!");
+        || this.dailyTime === '') {
+        this.toast.error("Invalid time!");
       }
       this.getSchedule();
       this.loadingFull = false;
     }
-    
+
   }
 
   async getSchedule() {
