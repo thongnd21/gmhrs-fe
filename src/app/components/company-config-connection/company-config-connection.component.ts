@@ -420,6 +420,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
     if (company_email == "" || company_email == null || company_email == undefined) {
       this.toast.error("Please input company email");
+      this.loadingFull = false;
     } else {
       if (this.uploadedFiles != undefined) {
         for (var i = 0; i < this.uploadedFiles.length; i++) {
