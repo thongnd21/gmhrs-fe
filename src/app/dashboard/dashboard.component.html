@@ -181,6 +181,10 @@
                                             <p>{{childPanel.personal_email}}</p>
                                             <b>Last sync date:</b>
                                             <p>{{childPanel.modified_date}}</p>
+                                            <b>Position:</b>
+                                            <p>{{childPanel.position}}</p>
+                                            <b>Department:</b>
+                                            <p>{{childPanel.department}}</p>
                                         </nz-collapse-panel>
                                         <nz-collapse-panel *ngFor="let childPanel of panel.employee.updateEmployeeList"
                                             [nzHeader]="childPanel.primary_email" [nzExtra]="Update">
@@ -198,6 +202,10 @@
                                             <p>{{childPanel.personal_email}}</p>
                                             <b>Last sync date:</b>
                                             <p>{{childPanel.modified_date}}</p>
+                                            <b>Position:</b>
+                                            <p>{{childPanel.position}}</p>
+                                            <b>Department:</b>
+                                            <p>{{childPanel.department}}</p>
                                         </nz-collapse-panel>
                                         <nz-collapse-panel *ngFor="let childPanel of panel.employee.deleteEmployeeList"
                                             [nzHeader]="childPanel.primary_email" [nzExtra]="Delete">
@@ -215,6 +223,10 @@
                                             <p>{{childPanel.personal_email}}</p>
                                             <b>Last sync date:</b>
                                             <p>{{childPanel.modified_date}}</p>
+                                            <b>Position:</b>
+                                            <p>{{childPanel.position}}</p>
+                                            <b>Department:</b>
+                                            <p>{{childPanel.department}}</p>
                                         </nz-collapse-panel>
                                     </nz-collapse>
 

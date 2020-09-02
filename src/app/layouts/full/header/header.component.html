@@ -80,6 +80,8 @@
                                     <th scope="col">Primary email</th>
                                     <th scope="col">Personal email</th>
                                     <th scope="col">Created Date</th>
+                                    <th scope="col">Position</th>
+                                    <th scope="col">Department</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,7 +95,9 @@
                                     <td>{{item.address}}</td>
                                     <td>{{item.primary_email}}</td>
                                     <td>{{item.personal_email}}</td>
-                                    <td>{{item.created_date}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.position}}</td>
+                                    <td>{{item.department}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -111,6 +115,8 @@
                                     <th scope="col">Primary email</th>
                                     <th scope="col">Personal email</th>
                                     <th scope="col">Created Date</th>
+                                    <th scope="col">Position</th>
+                                    <th scope="col">Department</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -126,7 +132,9 @@
                                     <td>{{item.address}}</td>
                                     <td>{{item.primary_email}}</td>
                                     <td>{{item.personal_email}}</td>
-                                    <td>{{item.created_date}}</td>
+                                    <td>{{item.modified_date}}</td>
+                                    <td>{{item.position}}</td>
+                                    <td>{{item.department}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -176,7 +184,6 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Modified date</th>
-                                    <th scope="col">Created date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -189,7 +196,6 @@
                                     <td>{{item.email}}</td>
                                     <td>{{item.description}}</td>
                                     <td>{{item.modified_date}}</td>
-                                    <td>{{item.created_date}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -203,7 +209,6 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Modified date</th>
-                                    <th scope="col">Created date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -216,7 +221,6 @@
                                     <td>{{item.email}}</td>
                                     <td>{{item.description}}</td>
                                     <td>{{item.modified_date}}</td>
-                                    <td>{{item.created_date}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -264,7 +268,6 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -277,7 +280,6 @@
                                 <td>{{item.description}}</td>
                                 <td>{{item.email}}</td>
                                 <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -291,7 +293,6 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Modified date</th>
-                                <th scope="col">Created date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -304,7 +305,6 @@
                                 <td>{{item.description}}</td>
                                 <td>{{item.email}}</td>
                                 <td>{{item.modified_date}}</td>
-                                <td>{{item.created_date}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -532,7 +532,7 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Modified date</th>
-                                    <th scope="col">Created date</th>
+                                    <th scope="col">Members</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -550,7 +550,13 @@
                                     <td>{{item.email}}</td>
                                     <td>{{item.description}}</td>
                                     <td>{{item.modified_date}}</td>
-                                    <td>{{item.created_date}}</td>
+
+                                    <ul *ngFor="let newMember of item.newMember; let i=index">
+                                       Added:  <li style="color: green;">{{newMember.member_email}}</li>
+                                    </ul>
+                                    <ul *ngFor="let outOfHRMS of item.outOfHRMS; let i=index">
+                                       Removed:  <li style="color: red;">{{outOfHRMS.member_email}}</li>
+                                    </ul>
                                 </tr>
                             </tbody>
                         </table>
@@ -568,7 +574,6 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Modified date</th>
-                                    <th scope="col">Created date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -586,7 +591,6 @@
                                     <td>{{item.email}}</td>
                                     <td>{{item.description}}</td>
                                     <td>{{item.modified_date}}</td>
-                                    <td>{{item.created_date}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -647,7 +651,6 @@
                                     <th scope="col">Description</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Modified date</th>
-                                    <th scope="col">Created date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -665,7 +668,6 @@
                                     <td>{{item.description}}</td>
                                     <td>{{item.email}}</td>
                                     <td>{{item.modified_date}}</td>
-                                    <td>{{item.created_date}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -683,7 +685,6 @@
                                     <th scope="col">Description</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Modified date</th>
-                                    <th scope="col">Created date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -701,7 +702,6 @@
                                     <td>{{item.description}}</td>
                                     <td>{{item.email}}</td>
                                     <td>{{item.modified_date}}</td>
-                                    <td>{{item.created_date}}</td>
                                 </tr>
                             </tbody>
                         </table>

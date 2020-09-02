@@ -68,6 +68,9 @@ export class AppHeaderComponent {
       newPosition: [],
     }
   };
+  listNewMember: [];
+  listRemoveMember: [];
+
   open = (modal) =>
     this.modalService.open(modal, { windowClass: 'my-class', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
@@ -96,8 +99,8 @@ export class AppHeaderComponent {
             id: d.id,
             name: d.name,
             description: d.description,
-            modified_date: d.modified_date,
-            created_date: d.created_date,
+            modified_date: moment.utc(d.modified_date).local().format('LLLL'),
+            created_date: moment.utc(d.created_date).local().format('LLLL'),
             gsuite_id: d.gsuite_id,
             email: d.email,
             selected: true
@@ -108,8 +111,8 @@ export class AppHeaderComponent {
             id: d.id,
             name: d.name,
             description: d.description,
-            modified_date: d.modified_date,
-            created_date: d.created_date,
+            modified_date: moment.utc(d.modified_date).local().format('LLLL'),
+            created_date: moment.utc(d.created_date).local().format('LLLL'),
             email: d.email,
             selected: true
           }
@@ -119,8 +122,8 @@ export class AppHeaderComponent {
             id: d.id,
             name: d.name,
             description: d.description,
-            modified_date: d.modified_date,
-            created_date: d.created_date,
+            modified_date: moment.utc(d.modified_date).local().format('LLLL'),
+            created_date: moment.utc(d.created_date).local().format('LLLL'),
             email: d.email,
             selected: true
           }
@@ -132,10 +135,12 @@ export class AppHeaderComponent {
             name: o.name,
             email: o.email,
             description: o.description,
-            modified_date: o.modified_date,
-            created_date: o.created_date,
+            modified_date: moment.utc(o.modified_date).local().format('LLLL'),
+            created_date: moment.utc(o.created_date).local().format('LLLL'),
             gsuite_id: o.gsuite_id,
-            selected: true
+            selected: true,
+            newMember: o.memberUpdated.newMember,
+            outOfHRMS: o.memberUpdated.outOfHRMS,
           }
         });
         listSync.team.newTeam = res.teams.newTeam.map(o => {
@@ -144,8 +149,8 @@ export class AppHeaderComponent {
             name: o.name,
             email: o.email,
             description: o.description,
-            modified_date: o.modified_date,
-            created_date: o.created_date,
+            modified_date: moment.utc(o.modified_date).local().format('LLLL'),
+            created_date: moment.utc(o.created_date).local().format('LLLL'),
             gsuite_id: o.gsuite_id,
             selected: true
           }
@@ -166,13 +171,15 @@ export class AppHeaderComponent {
             first_name: o.first_name,
             id: o.id,
             last_name: o.last_name,
-            modified_date: o.modified_date,
+            modified_date: moment.utc(o.modified_date).local().format('LLLL'),
             personal_email: o.personal_email,
             phone: o.phone,
             primary_email: o.primary_email,
             position_id: o.position_id,
-            vacation_start_date: o.vacation_start_date,
-            vacation_end_date: o.vacation_end_date,
+            vacation_start_date: moment.utc(o.vacation_start_date).local().format('LLLL'),
+            vacation_end_date: moment.utc(o.vacation_end_date).local().format('LLLL'),
+            position: o.position.name,
+            department: o.department.name,
             selected: true
           }
         });
@@ -182,13 +189,15 @@ export class AppHeaderComponent {
             first_name: o.first_name,
             id: o.id,
             last_name: o.last_name,
-            modified_date: o.modified_date,
+            modified_date: moment.utc(o.modified_date).local().format('LLLL'),
             personal_email: o.personal_email,
             phone: o.phone,
             primary_email: o.primary_email,
             position_id: o.position_id,
-            vacation_start_date: o.vacation_start_date,
-            vacation_end_date: o.vacation_end_date,
+            vacation_start_date: moment.utc(o.vacation_start_date).local().format('LLLL'),
+            vacation_end_date: moment.utc(o.vacation_end_date).local().format('LLLL'),
+            position: o.position.name,
+            department: o.department.name,
             selected: true
           }
         });
@@ -783,5 +792,9 @@ export class AppHeaderComponent {
     this.listSynchonize.employees.matchedEmployee.push(this.listNewEmp[0]);
     this.listNewEmp = [];
     this.listOutEmp = [];
+  }
+
+  openDialog(item) {
+    
   }
 }

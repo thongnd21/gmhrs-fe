@@ -229,10 +229,14 @@ export class DashboardComponent implements OnInit {
 					newEmp['address'] = newEmpItem.employee.address;
 					newEmp['first_name'] = newEmpItem.employee.first_name;
 					newEmp['last_name'] = newEmpItem.employee.last_name;
+					newEmp['position'] = newEmpItem.employee.position_in_company.name;
+					newEmp['department'] = newEmpItem.employee.department.name;
 					newEmployeeList.push(newEmp);
 				});
 				element.employee.updateEmp.forEach(updateEmpItem => {
 					let updateEmp = new Object();
+					console.log(JSON.stringify(updateEmpItem) + 'llllll');
+					
 					updateEmp['type'] = updateEmpItem.type;
 					updateEmp['modified_date'] = moment.utc(updateEmpItem.modified_date).local().format('LLLL');
 					updateEmp['primary_email'] = updateEmpItem.employee.primary_email;
@@ -241,6 +245,8 @@ export class DashboardComponent implements OnInit {
 					updateEmp['address'] = updateEmpItem.employee.address;
 					updateEmp['first_name'] = updateEmpItem.employee.first_name;
 					updateEmp['last_name'] = updateEmpItem.employee.last_name;
+					updateEmp['position'] = updateEmpItem.employee.position_in_company.name;
+					updateEmp['department'] = updateEmpItem.employee.department.name;
 					updateEmployeeList.push(updateEmp);
 				});
 				element.employee.deleteEmp.forEach(deleteEmpItem => {
@@ -253,6 +259,8 @@ export class DashboardComponent implements OnInit {
 					deleteEmp['address'] = deleteEmpItem.employee.address;
 					deleteEmp['first_name'] = deleteEmpItem.employee.first_name;
 					deleteEmp['last_name'] = deleteEmpItem.employee.last_name;
+					deleteEmp['position'] = deleteEmpItem.employee.position_in_company.name;
+					deleteEmp['department'] = deleteEmpItem.employee.department.name;
 					deleteEmployeeList.push(deleteEmp);
 				});
 				//end
