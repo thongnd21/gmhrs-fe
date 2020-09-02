@@ -11,6 +11,7 @@ import { NzButtonSize } from 'ng-zorro-antd/button';
 import { SignatureService } from '../api-services/signature.services';
 import { formatDistance } from 'date-fns';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 
 export interface Chart {
 	type: ChartType;
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit {
 	list: any = new Array;
 	isNewEmp: boolean = true;
 	isLogged: boolean = false;
+	isCompletePrimarySetting = false;
 	author: string = localStorage.getItem('username');
 	panelss = [
 		{
@@ -57,7 +59,8 @@ export class DashboardComponent implements OnInit {
 		private employeeApi: AccountApiService,
 		private toast: ToastrService,
 		private modal: NzModalService,
-		private signatureService: SignatureService
+		private signatureService: SignatureService,
+		private router: Router,
 	) { }
 	// Barchart
 	barChart1: Chart = {
@@ -94,6 +97,26 @@ export class DashboardComponent implements OnInit {
 			]
 		]
 	};
+	goToSettingPage(): void {
+		this.router.navigate(['/company-config-connection']);
+	}
+	checkCompleteSetting(): void {
+		this.isSpinning = true;
+		let id = localStorage.getItem('id');
+		this.employeeApi.checkPrimarySetting(id).subscribe(
+			(res: any) => {
+				if (res.status) {
+					this.isCompletePrimarySetting = true;
+					this.getNewEmployees();
+					this.getInvalidSignature();
+					this.getActivityLog();
+				} else {
+					this.isCompletePrimarySetting = false;
+				}
+				this.isSpinning = false;
+			}
+		)
+	}
 
 	// This is for the donute chart
 	donuteChart1: Chart = {
@@ -110,9 +133,7 @@ export class DashboardComponent implements OnInit {
 	};
 
 	ngOnInit() {
-		this.getNewEmployees();
-		this.getInvalidSignature();
-		this.getActivityLog();
+		this.checkCompleteSetting();
 	}
 
 	getNewEmployees() {

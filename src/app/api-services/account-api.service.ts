@@ -9,6 +9,9 @@ export class AccountApiService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
+    checkPrimarySetting(id) {
+        return this.httpClient.get(this.URL + AppSettings.CHECKPRIMARYSETTING + id);
+    }
     getAllEmployee() {
         return this.httpClient.get(this.URL + AppSettings.EMP + 'getAll/' + localStorage.getItem("id"));
     }
