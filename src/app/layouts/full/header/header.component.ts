@@ -84,6 +84,11 @@ export class AppHeaderComponent {
     let accountId = localStorage.getItem('id');
     this.syncService.getListSynchronize(accountId).subscribe(
       (res: any) => {
+        if (!res.status) {
+          this.toast.error(res.message);
+          this.loading = false;
+          return;
+        }
         this.isFirstSync = res.is_first_sync;
         this.listItemSynch = res;
         const listSync = {
@@ -795,6 +800,6 @@ export class AppHeaderComponent {
   }
 
   openDialog(item) {
-    
+
   }
 }
