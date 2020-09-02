@@ -1103,33 +1103,28 @@ export class CompanyConfigConnectionComponent implements OnInit {
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
     account['is_schedule'] = !this.checkSync;
-    let is_first_sync = localStorage.getItem('is_first_sync');
-    console.log(account);
-    console.log(is_first_sync);
-    if (is_first_sync === "false") {
-      this.companyConnectionService.changeSchedule(account).subscribe(
-        (res: any) => {
+    this.companyConnectionService.changeSchedule(account).subscribe(
+      (res: any) => {
+
+        if (res.code == 400) {
+          this.toast.warning(res.message);
+        } else {
           this.toast.success(res.message);
-          this.loadingConfirm = false;
-          this.dialog.closeAll();
-          this.getSchedule();
-        }, (err) => {
-          this.loadingConfirm = false;
-          this.dialog.closeAll();
-          if (err.status == 0) {
-            this.toast.error("Connection timeout!");
-          } if (err.status == 400) {
-            this.toast.error("Server is not available!");
-          }
+        }
+        this.loadingConfirm = false;
+        this.dialog.closeAll();
+        this.getSchedule();
+      }, (err) => {
+        this.loadingConfirm = false;
+        this.dialog.closeAll();
+        if (err.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (err.status == 400) {
           this.toast.error("Server is not available!");
         }
-      )
-    } else {
-      this.toast.warning("Please complete First sync!");
-      this.loadingConfirm = false;
-      this.dialog.closeAll();
-      this.getSchedule();
-    }
+        this.toast.error("Server is not available!");
+      }
+    )
   }
 
   saveScheduleTime() {
