@@ -13,6 +13,7 @@ import { MatDialog, MatStepper } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountApiService } from '../../api-services/account-api.service';
 import { STRING_TYPE, ThrowStmt } from '@angular/compiler';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -265,6 +266,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     private http: HttpClient,
     public dialog: MatDialog,
     private accountServices: AccountApiService,
+    private router: Router,
   ) {
 
   }
@@ -280,7 +282,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
     console.log(this.checkSync);
   }
 
-
+  goToGuidePage(): void {
+    this.router.navigate(['/guides']);
+  }
   // form connection String
   createConnectionStringForm() {
     this.loadingFull = true;
@@ -416,6 +420,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
     if (company_email == "" || company_email == null || company_email == undefined) {
       this.toast.error("Please input company email");
+      this.loadingFull = false;
     } else {
       if (this.uploadedFiles != undefined) {
         for (var i = 0; i < this.uploadedFiles.length; i++) {
@@ -1012,6 +1017,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Required";
             this.connectionStringDataResponsePositon.position.id = "Required";
             this.connectionStringDataResponsePositon.position.name = "Required";
+            this.connectionStringDataResponseVacation.vacation.end_date = "Required";
+            this.connectionStringDataResponseVacation.vacation.employee_id = "Required";
+            this.connectionStringDataResponseVacation.vacation.start_date = "Required";
             this.enableDataConnectionResult = true;
             this.connectionFail = true;
             this.loadingTestConnection = false;
@@ -1099,10 +1107,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
     account['is_schedule'] = !this.checkSync;
-    console.log(account);
     this.companyConnectionService.changeSchedule(account).subscribe(
       (res: any) => {
-        this.toast.success(res.message);
+
+        if (res.code == 400) {
+          this.toast.warning(res.message);
+        } else {
+          this.toast.success(res.message);
+        }
         this.loadingConfirm = false;
         this.dialog.closeAll();
         this.getSchedule();
@@ -1182,7 +1194,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
       let lenght = this.dailyTime.length;
       minute = this.dailyTime.slice(n + 1, lenght);
       check = true;
-
     }
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
@@ -1205,10 +1216,40 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.toast.error("Server is not available!");
         }
       )
-    } else {
+    } else if (this.typeSync === 2) {
+      if (this.weekDayChoose === null || this.weekDayChoose === undefined
+        || this.weekDayChoose.length === 0) {
+        this.toast.error("Please choose day!");
+      }
+      if (this.weekTime === undefined
+        || this.weekTime === null
+        || this.weekTime === '') {
+        this.toast.error("Invalid time!");
+      }
       this.getSchedule();
-      this.toast.error("Invalid input!");
+      this.loadingFull = false;
+    } else if (this.typeSync === 1) {
+      if (this.monthDayChoose === null || this.monthDayChoose === undefined
+        || this.monthDayChoose.length === 0) {
+        this.toast.error("Please choose day!");
+      }
+      if (this.monthTime === undefined
+        || this.monthTime === null
+        || this.monthTime === '') {
+        this.toast.error("Invalid time!");
+      }
+      this.getSchedule();
+      this.loadingFull = false;
+    } else if (this.typeSync === 3) {
+      if (this.dailyTime === undefined
+        || this.dailyTime === null
+        || this.dailyTime === '') {
+        this.toast.error("Invalid time!");
+      }
+      this.getSchedule();
+      this.loadingFull = false;
     }
+
   }
 
   async getSchedule() {

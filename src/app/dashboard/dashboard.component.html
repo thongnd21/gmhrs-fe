@@ -1,48 +1,12 @@
-<!-- ============================================================== -->
-<!-- Simple four boxes Row -->
-<!-- ============================================================== -->
-<div fxLayout="row wrap">
-    <!-- column -->
-    <!-- column -->
-    <!-- column -->
-    <!-- <div fxFlex.gt-lg="33" fxFlex.gt-md="33"  fxFlex.gt-xs="100" fxFlex="100">
-        <mat-card>
-            <mat-card-content>
-                <mat-card-title>Total of Employee, Team, Department</mat-card-title>
-                <mat-card-subtitle></mat-card-subtitle>
-                <div class="piechart">
-                    <x-chartist class="" [data]="donuteChart1.data" [type]="donuteChart1.type" [options]="donuteChart1.options" [responsiveOptions]="donuteChart1.responsiveOptions"
-                        [events]="donuteChart1.events"> </x-chartist>
-                </div>
-            </mat-card-content>
-            <hr>
-            <mat-card-content>
-                <ul class="list-inline text-center">
-                    <li>
-                        <h6 class="text-success m-0"  style="color:#f50808">
-                            <i class="mdi mdi-checkbox-blank-circle font-10 m-r-10 "></i>Employee</h6>
-                    </li>
-                    <li>
-                        <h6 class=" text-info  m-0"  style="color:#f05b4f">
-                            <i class="mdi mdi-checkbox-blank-circle font-10 m-r-10"></i>Team</h6>
-                    </li>
-                    <li>
-                        <h6 class=" text-purple  m-0" style="color:#f4c63d">
-                            <i class="mdi mdi-checkbox-blank-circle font-10 m-r-10"></i>Department</h6>
-                    </li>
-                </ul>
-            </mat-card-content>
-        </mat-card>
-    </div> -->
-    <!-- column -->
-</div>
-
-<!-- ============================================================== -->
-<!-- Image Card row-->
-<!-- ============================================================== -->
-
 <nz-spin [nzSpinning]="isSpinning" nzTip="Loading..." [nzSize]="'large'">
-    <div fxLayout="row wrap">
+    <nz-result *ngIf="!isCompletePrimarySetting" nzStatus="info"
+        nzTitle="You must complete primary setting to use full features!">
+        <div nz-result-extra>
+            <button nz-button (click)="goToSettingPage()" nzType="primary">Go to setting</button>
+        </div>
+    </nz-result>
+
+    <div fxLayout="row wrap" *ngIf="isCompletePrimarySetting">
         <!-- Card column -->
         <div fxFlex.gt-lg="35" fxFlex.gt-md="40" fxFlex.gt-xs="100" fxFlex="100">
 
