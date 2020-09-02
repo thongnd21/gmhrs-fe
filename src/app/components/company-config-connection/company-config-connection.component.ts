@@ -1182,7 +1182,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
       let lenght = this.dailyTime.length;
       minute = this.dailyTime.slice(n + 1, lenght);
       check = true;
-
     }
     let account = {};
     account['id'] = Number.parseInt(localStorage.getItem('id'));
@@ -1205,10 +1204,40 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.toast.error("Server is not available!");
         }
       )
-    } else {
+    } else if(this.typeSync === 2 ){
+      if( this.weekDayChoose !== null && this.weekDayChoose !== undefined
+        && this.weekDayChoose.length === 0){
+          this.toast.error("Please choose day!");
+      }
+      if( this.weekTime === undefined
+        && this.weekTime === null
+        && this.weekTime === ''){
+          this.toast.error("Invalid time!");
+      }
       this.getSchedule();
-      this.toast.error("Invalid input!");
+      this.loadingFull = false;
+    }else if(this.typeSync === 1 ){
+      if( this.monthDayChoose === null && this.monthDayChoose === undefined
+        && this.monthDayChoose.length === 0){
+          this.toast.error("Please choose day!");
+      }
+      if( this.monthTime === undefined
+        && this.monthTime === null
+        && this.monthTime === ''){
+          this.toast.error("Invalid time!");
+      }
+      this.getSchedule();
+      this.loadingFull = false;
+    }else if(this.typeSync === 3 ){
+      if( this.dailyTime === undefined
+        && this.dailyTime === null
+        && this.dailyTime === ''){
+          this.toast.error("Invalid time!");
+      }
+      this.getSchedule();
+      this.loadingFull = false;
     }
+    
   }
 
   async getSchedule() {
