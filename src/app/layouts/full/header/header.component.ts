@@ -144,8 +144,8 @@ export class AppHeaderComponent {
             created_date: moment.utc(o.created_date).local().format('LLLL'),
             gsuite_id: o.gsuite_id,
             selected: true,
-            newMember: o.memberUpdated.newMember,
-            outOfHRMS: o.memberUpdated.outOfHRMS,
+            newMember: o.memberUpdated.newMember ? o.memberUpdated.newMember : [],
+            outOfHRMS: o.memberUpdated.outOfHRMS ? o.memberUpdated.outOfHRMS : [],
           }
         });
         listSync.team.newTeam = res.teams.newTeam.map(o => {
