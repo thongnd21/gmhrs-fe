@@ -1205,33 +1205,33 @@ export class CompanyConfigConnectionComponent implements OnInit {
         }
       )
     } else if(this.typeSync === 2 ){
-      if( this.weekDayChoose !== null && this.weekDayChoose !== undefined
-        && this.weekDayChoose.length === 0){
+      if( this.weekDayChoose === null || this.weekDayChoose === undefined
+        || this.weekDayChoose.length === 0){
           this.toast.error("Please choose day!");
       }
       if( this.weekTime === undefined
-        && this.weekTime === null
-        && this.weekTime === ''){
+        || this.weekTime === null
+        || this.weekTime === ''){
           this.toast.error("Invalid time!");
       }
       this.getSchedule();
       this.loadingFull = false;
     }else if(this.typeSync === 1 ){
-      if( this.monthDayChoose === null && this.monthDayChoose === undefined
-        && this.monthDayChoose.length === 0){
+      if( this.monthDayChoose === null || this.monthDayChoose === undefined
+        || this.monthDayChoose.length === 0){
           this.toast.error("Please choose day!");
       }
       if( this.monthTime === undefined
-        && this.monthTime === null
-        && this.monthTime === ''){
+        || this.monthTime === null
+        || this.monthTime === ''){
           this.toast.error("Invalid time!");
       }
       this.getSchedule();
       this.loadingFull = false;
     }else if(this.typeSync === 3 ){
       if( this.dailyTime === undefined
-        && this.dailyTime === null
-        && this.dailyTime === ''){
+        || this.dailyTime === null
+        || this.dailyTime === ''){
           this.toast.error("Invalid time!");
       }
       this.getSchedule();
