@@ -73,4 +73,8 @@ export class AccountApiService {
         return this.httpClient.get(this.URL + AppSettings.EMP + path + id);
     }
 
+    getEmployeeDetail(id) {
+        return this.httpClient.get(this.URL + AppSettings.EMP + '/' + id);
+    }
+
 }

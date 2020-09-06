@@ -67,11 +67,7 @@ export class EmployeeComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private accountServices: AccountApiService,
-    private depServices: DepartmentApiService,
-    private router: Router,
     private toast: ToastrService,
-    private teamService: TeamApiService,
-    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -79,12 +75,43 @@ export class EmployeeComponent implements OnInit {
     this.getAllAccount();
   }
   viewEmDetails(modal, id) {
-    for (let employee of this.listAccount) {
-      if (employee.id === id) {
-        this.employeeInfo = employee;
+    this.isSpinning = true;
+    this.accountServices.getEmployeeDetail(id).subscribe(
+      (res) => {
+        const element: any = res;
+        console.log(JSON.stringify(res) + "emaployee detail");
+        let item = {};
+        item['id'] = element.id;
+        item['primary_email'] = element.primary_email;
+        item['personal_email'] = element.personal_email;
+        item['phone'] = element.phone;
+        item['name'] = element.first_name + " " + element.last_name;
+        item['status'] = element.status_id;
+        item['departmentName'] = element.department.name;
+        item['address'] = element.address;
+        let team = new Array();
+        for (let teamRes of element.team_employees) {
+          team.push(teamRes.team.name);
+        }
+        item['team'] = team;
+        item['position_name'] = element.position_in_company.name;
+        item['vacation_start'] = element.vacation_start_date !== null ? moment.utc(element.vacation_start_date).local().format('DD-MM-YYYY') : "Have no vacation start date";
+        item['vacation_end'] = element.vacation_end_date !== null ? moment.utc(element.vacation_end_date).local().format('DD-MM-YYYY') : "Have no vacation end date";
+        this.isSpinning = false;  
+        this.employeeInfo = item;
         this.modalService.open(modal, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+      
+      },
+      (error) => {
+        if (error.status == 0) {
+          this.toast.error("Connection timeout!");
+        } if (error.status == 400) {
+          this.toast.error("Server is not available!");
+        }
+        this.toast.error("Server is not available!");
+        this.isSpinning = false;
       }
-    }
+    )
   }
 
   getAllAccount() {
