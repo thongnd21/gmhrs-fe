@@ -1054,7 +1054,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnection.password = value.password;
     this.companyConnection.dialect = value.dialect;
 
-    const connectionString = "https://gmcompany-api.herokuapp.com/api/api-endpoint?dbName=" + this.companyConnection.dbName +
+    const connectionString = "http://localhost:3002/api/api-endpoint?dbName=" + this.companyConnection.dbName +
       "&host=" + this.companyConnection.host + "&port=" + this.companyConnection.port + "&username=" + this.companyConnection.username +
       "&password=" + this.companyConnection.password + "&dialect=" + this.companyConnection.dialect
     const id = localStorage.getItem('id');
