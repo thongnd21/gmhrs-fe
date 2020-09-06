@@ -434,16 +434,32 @@
                                         <th>FIELD MAPPING</th>
                                     </tr>
                                 </thead>
-                                <tr>
-                                    <th>{{tableName.tableName}}</th>
+                                <tr *ngFor="let field of tableName.fields">
+                                    <th >{{tableName.tableName}}</th>
                                     <td>
-                                        <table class="a">
-                                            <tr *ngFor="let field of tableName.fields; let i =index"
-                                                style="border-bottom: 1px solid #ccc;">{{field.name}}</tr>
-                                        </table>
+                                        {{field.name}}
                                     </td>
                                     <td style="color: green;">Mapped</td>
-                                    <td></td>
+                                    <td>
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <mat-label>Choose Table Name</mat-label>
+                                            <mat-select>
+                                                <mat-option *ngFor="let tableNameMapping of tableMappingModel" [value]="tableNameMapping.name">
+                                                    {{tableNameMapping.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <mat-label>Choose Table Name</mat-label>
+                                            <mat-select>
+                                                <mat-option *ngFor="let tableNameMapping of tableMappingModel" [value]="tableNameMapping.name">
+                                                    {{tableNameMapping.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </td>
                                 </tr>
                             </table>
                         </mat-expansion-panel>
