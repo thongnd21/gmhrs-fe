@@ -962,33 +962,25 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionStatus.connection.status = "Success";
             this.connectionStatus.connection.message = "Connect successfully";
             this.loadingTestConnection = false;
-            this.connectionStringResultEmployee = res.employees;
-            this.connectionStringResultDepartment = res.departments;
-            this.connectionStringResultTeam = res.teams
-            this.connectionStringResultTeamEmployee = res.team_employee;
-            this.connectionStringResultPosition = res.positions;
-            this.connectionStringResultVacation = res.vacation_date;
-            console.log(this.connectionStringDataResponsePositon);
 
-            var check = this.checkingFormatDataConnectionString(
-              this.connectionStringResultEmployee,
-              this.connectionStringResultDepartment,
-              this.connectionStringResultTeam,
-              this.connectionStringResultTeamEmployee,
-              this.connectionStringResultPosition,
-              this.connectionStringResultVacation,
-              res.character_maximum_length_employee,
-              res.character_maximum_length_department,
-              res.character_maximum_length_team,
-              res.character_maximum_length_position);
-            console.log(this.connectionStringDataResponseDepartment);
+
+            // var check = this.checkingFormatDataConnectionString(
+            //   this.connectionStringResultEmployee,
+            //   this.connectionStringResultDepartment,
+            //   this.connectionStringResultTeam,
+            //   this.connectionStringResultTeamEmployee,
+            //   this.connectionStringResultPosition,
+            //   this.connectionStringResultVacation,
+            //   res.character_maximum_length_employee,
+            //   res.character_maximum_length_department,
+            //   res.character_maximum_length_team,
+            //   res.character_maximum_length_position);
 
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
-            this.disableSaveConnectionStringButton = check;
-            console.log(this.connectionStringDataResponseEmployee);
+            // this.disableSaveConnectionStringButton = check;
             this.loadingFull = false;
-            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+            this.modalService.open(modal, { size: '500px', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           } if (res.checkConnection.status == "fail" || res.status == 0) {
             this.connectionStatus.connection.status = "Fail";
             this.connectionStatus.connection.message = res.checkConnection.message;
@@ -1030,6 +1022,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         } else {
           this.loadingFull = false;
           this.loadingTestConnection = false;
+          this.modalService.open(modal, { size: 'xl', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           console.log(res);
         }
 
