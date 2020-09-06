@@ -15,7 +15,8 @@ import {
     MatRadioModule,
     MatSlideToggleModule,
 
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
@@ -52,6 +53,7 @@ import { MatChipsModule } from '@angular/material/chips';
         NgxLoadingModule,
         NzSpinModule,
         MatChipsModule,
+        MatExpansionModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

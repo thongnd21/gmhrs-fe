@@ -192,53 +192,51 @@ export class CompanyConfigConnectionComponent implements OnInit {
   connectionStringDataResponseEmployeeJSON;
   connectionStringDataResponseEmployee = { // json format employee to admin company checking field when input api endpoint
     employee: {
-      id: "Required",
-      primary_email: "Required",
-      personal_email: "Required",
-      first_name: "Required",
-      last_name: "Required",
-      phone: "Required",
-      address: "Required",
-      position_id: "Required",
-      department_id: "Required",
-      vacation_start_date: "Required",
-      vacation_end_date: "Requried"
+      id: "id",
+      primary_email: "primary_email",
+      personal_email: "personal_email",
+      first_name: "first_name",
+      last_name: "last_name",
+      phone: "phone",
+      address: "address",
+      position_id: "position_id",
+      department_id: "department_id"
     }
   };
   connectionStringDataResponseDepartment = {// json format department to admin company checking field when input api endpoint
     department: {
-      id: "Required",
-      name: "Required",
-      email: "Required",
-      description: "Optional"
+      id: "id",
+      name: "name",
+      email: "email",
+      description: "description"
     }
   };
   connectionStringDataResponseTeam = {// json format team to admin company checking field when input api endpoint
     team: {
-      id: "Required",
-      name: "Required",
-      email: "Required",
-      description: "Optional",
+      id: "id",
+      name: "name",
+      email: "email",
+      description: "description",
 
     }
   };
   connectionStringDataResponseTeamEmployee = {// json format team to admin company checking field when input api endpoint
     team_employee: {
-      employee_id: "Required",
-      team_id: "Required"
+      employee_id: "employee_id",
+      team_id: "team_id"
     }
   };
   connectionStringDataResponsePositon = {// json format postion to admin company checking field when input api endpoint
     position: {
-      id: "Required",
-      name: "Required"
+      id: "id",
+      name: "name"
     }
   };
   connectionStringDataResponseVacation = {// json format postion to admin company checking field when input api endpoint
     vacation: {
-      employee_id: "Required",
-      start_date: "Required",
-      end_date: "Required"
+      employee_id: "employee_id",
+      start_date: "start_date",
+      end_date: "end_date"
     }
   };
   connectionStatus = {
@@ -759,8 +757,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     employee.address === undefined ? this.connectionStringDataResponseEmployee.employee.address = "Missing Field" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
     employee.department_id === undefined ? this.connectionStringDataResponseEmployee.employee.department_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department_id = "Pass";
     employee.position_id === undefined ? this.connectionStringDataResponseEmployee.employee.position_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.position_id = "Pass";
-    employee.vacation_start_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Pass";
-    employee.vacation_end_date === undefined ? this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Missing Field" : this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Pass";
+    
 
 
     //check length
@@ -932,12 +929,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   // test connection string
-  connectionStringResultEmployee;
-  connectionStringResultTeam;
-  connectionStringResultDepartment;
-  connectionStringResultTeamEmployee
-  connectionStringResultPosition;
-  connectionStringResultVacation;
+  table : any;
   onTestConection(modal, value) {
     this.loadingFull = true;
     this.loadingTestConnection = true;
@@ -955,66 +947,25 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
       (res: any) => {
         // const result: any = res;
-        console.log(res);
         this.loadingFull = false;
         if (res.checkConnection != undefined) {
           if (res.checkConnection.status == "success") {
+            this.table = res;
+            console.log(this.table);
+            
             this.connectionStatus.connection.status = "Success";
             this.connectionStatus.connection.message = "Connect successfully";
             this.loadingTestConnection = false;
-
-
-            // var check = this.checkingFormatDataConnectionString(
-            //   this.connectionStringResultEmployee,
-            //   this.connectionStringResultDepartment,
-            //   this.connectionStringResultTeam,
-            //   this.connectionStringResultTeamEmployee,
-            //   this.connectionStringResultPosition,
-            //   this.connectionStringResultVacation,
-            //   res.character_maximum_length_employee,
-            //   res.character_maximum_length_department,
-            //   res.character_maximum_length_team,
-            //   res.character_maximum_length_position);
-
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
             // this.disableSaveConnectionStringButton = check;
             this.loadingFull = false;
-            this.modalService.open(modal, { size: '500px', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+            this.modalService.open(modal, { size: 'xl', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           } if (res.checkConnection.status == "fail" || res.status == 0) {
             this.connectionStatus.connection.status = "Fail";
             this.connectionStatus.connection.message = res.checkConnection.message;
             this.disableSaveConnectionStringButton = false;
-            this.employeeValidate = false;
-            this.teamValidate = false;
-            this.departmentValidate = false;
-            this.connectionStringDataResponseEmployee.employee.id = "Required";
-            this.connectionStringDataResponseEmployee.employee.primary_email = "Required";
-            this.connectionStringDataResponseEmployee.employee.personal_email = "Required";
-            this.connectionStringDataResponseEmployee.employee.first_name = "Required";
-            this.connectionStringDataResponseEmployee.employee.last_name = "Required";
-            this.connectionStringDataResponseEmployee.employee.phone = "Required";
-            this.connectionStringDataResponseEmployee.employee.address = "Required";
-            this.connectionStringDataResponseEmployee.employee.vacation_start_date = "Required";
-            this.connectionStringDataResponseEmployee.employee.vacation_end_date = "Required";
-            this.connectionStringDataResponseEmployee.employee.department_id = "Required";
-            this.connectionStringDataResponseEmployee.employee.position_id = "Required";
-            this.connectionStringDataResponseDepartment.department.id = "Required";
-            this.connectionStringDataResponseDepartment.department.name = "Required";
-            this.connectionStringDataResponseDepartment.department.email = "Required";
-            this.connectionStringDataResponseTeam.team.id = "Required";
-            this.connectionStringDataResponseTeam.team.name = "Required";
-            this.connectionStringDataResponseTeam.team.email = "Required";
-            this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Required";
-            this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Required";
-            this.connectionStringDataResponsePositon.position.id = "Required";
-            this.connectionStringDataResponsePositon.position.name = "Required";
-            this.connectionStringDataResponseVacation.vacation.end_date = "Required";
-            this.connectionStringDataResponseVacation.vacation.employee_id = "Required";
-            this.connectionStringDataResponseVacation.vacation.start_date = "Required";
-            this.enableDataConnectionResult = true;
             this.connectionFail = true;
-            this.loadingTestConnection = false;
             this.loadingFull = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
@@ -1317,4 +1268,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
     console.log(this.timeSchedule);
   }
+
+
 }

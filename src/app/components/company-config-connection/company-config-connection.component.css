@@ -23,3 +23,7 @@
 ::ng-deep .mat-horizontal-stepper-header{
   pointer-events: none !important;
 }
+table.a {
+  table-layout: auto;
+  width: 100%;
+}
