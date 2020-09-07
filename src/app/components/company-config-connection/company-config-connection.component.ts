@@ -933,18 +933,22 @@ export class CompanyConfigConnectionComponent implements OnInit {
   // { name: "gmhrs_vacation_date_view" },
 
   chooseTable;
-  fieldChang(event) {
+  fieldChang(event,i) {
     if (event.isUserInput) {
       console.log(event.source.value, event.source.selected);
       if (event.source.value == "gmhrs_employee_view" && event.source.selected == true) {
-        this.chooseTable = "employee";
+        this.chooseTable = "employee-"+i;
       };
       if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
-        this.chooseTable = "department";
+        this.chooseTable = "department-"+i;
       };
       if (event.source.value == "gmhrs_team_view" && event.source.selected == true) {
-        this.chooseTable = "team";
+        this.chooseTable = "team-"+i;
       };
+      console.log(
+        this.chooseTable
+      );
+      
     }
   }
 
