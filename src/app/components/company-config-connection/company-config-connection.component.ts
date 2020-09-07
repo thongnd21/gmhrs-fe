@@ -191,7 +191,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   positionValidate = false;
   connectionStringDataResponseEmployeeJSON;
   // json format employee to admin company checking field when input api endpoint
-  tableMappingModel:any[] = [
+  tableMappingModel: any[] = [
     { name: "gmhrs_employee_view" },
     { name: "gmhrs_department_view" },
     { name: "gmhrs_team_view" },
@@ -199,41 +199,41 @@ export class CompanyConfigConnectionComponent implements OnInit {
     { name: "gmhrs_position_view" },
     { name: "gmhrs_vacation_date_view" },
   ]
-  employeeMappingModel = [
-    { id: "id" },
-    { primary_email: "primary_email" },
-    { personal_email: "personal_email" },
-    { first_name: "first_name" },
-    { last_name: "last_name" },
-    { phone: "phone" },
-    { address: "address" },
-    { position_id: "position_id" },
-    { department_id: "department_id" }
+  employeeMappingModel: any[] = [
+    { field: "id" },
+    { field: "primary_email" },
+    { field: "personal_email" },
+    { field: "first_name" },
+    { field: "last_name" },
+    { field: "phone" },
+    { field: "address" },
+    { field: "position_id" },
+    { field: "department_id" }
   ]
 
   departmentMappingModel = [
-    { id: "id" },
-    { name: "name" },
-    { email: "email" }
+    { field: "id" },
+    { field: "name" },
+    { field: "email" }
   ]
 
   teamMappingModel = [
-    { id: "id" },
-    { name: "name" },
-    { email: "email" },
+    { field: "id" },
+    { field: "name" },
+    { field: "email" },
   ]
   team_employeeMappingModel = [
-    { employee_id: "employee_id" },
-    { team_id: "team_id" }
+    { field: "employee_id" },
+    { field: "team_id" }
   ]
   positionMappingModel = [
-    { id: "id" },
-    { name: "name" }
+    { field: "id" },
+    { field: "name" }
   ]
   vacation = [
-    { employee_id: "employee_id" },
-    { start_date: "start_date" },
-    { end_date: "end_date" }
+    { field: "employee_id" },
+    { field: "start_date" },
+    { field: "end_date" }
   ]
 
 
@@ -925,6 +925,29 @@ export class CompanyConfigConnectionComponent implements OnInit {
   //   }
 
   // }
+  // name: "gmhrs_employee_view" },
+  // { name: "gmhrs_department_view" },
+  // { name: "gmhrs_team_view" },
+  // { name: "gmhrs_team_employee_view" },
+  // { name: "gmhrs_position_view" },
+  // { name: "gmhrs_vacation_date_view" },
+
+  chooseTable;
+  fieldChang(event) {
+    if (event.isUserInput) {
+      console.log(event.source.value, event.source.selected);
+      if (event.source.value == "gmhrs_employee_view" && event.source.selected == true) {
+        this.chooseTable = "employee";
+      };
+      if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
+        this.chooseTable = "department";
+      };
+      if (event.source.value == "gmhrs_team_view" && event.source.selected == true) {
+        this.chooseTable = "team";
+      };
+    }
+  }
+
 
   // test connection string
   table: any;
@@ -951,7 +974,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.table = res;
             console.log(this.table);
             console.log(this.tableMappingModel);
-            
+
             this.connectionStatus.connection.status = "Success";
             this.connectionStatus.connection.message = "Connect successfully";
             this.loadingTestConnection = false;
