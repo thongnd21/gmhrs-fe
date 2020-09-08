@@ -157,7 +157,8 @@ export class AppHeaderComponent {
             modified_date: moment.utc(o.modified_date).local().format('LLLL'),
             created_date: moment.utc(o.created_date).local().format('LLLL'),
             gsuite_id: o.gsuite_id,
-            selected: true
+            selected: true,
+            newMember: o.members ? o.members : []
           }
         });
         listSync.team.outOfHRMS = res.teams.outOfHRMS.map(o => {
