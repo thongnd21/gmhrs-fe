@@ -414,7 +414,7 @@
                 </div>
 
                 <mat-accordion>
-                    <div *ngFor="let tableName of table.table">
+                    <div *ngFor="let tableName of table.table ; let i = index">
                         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title style="width: 50%; ">
@@ -434,7 +434,7 @@
                                         <th>FIELD MAPPING</th>
                                     </tr>
                                 </thead>
-                                <tr *ngFor="let field of tableName.fields; let i = index">
+                                <tr *ngFor="let field of tableName.fields; let j = index">
                                     <th>{{tableName.tableName}}</th>
                                     <td>
                                         {{field.name}}
@@ -446,21 +446,21 @@
                                             <mat-select>
                                                 <mat-option *ngFor="let tableNameMapping of tableMappingModel"
                                                     [value]="tableNameMapping.name"
-                                                    (onSelectionChange)="fieldChang($event,i)">
+                                                    (onSelectionChange)="fieldChang($event,i,j)">
                                                     {{tableNameMapping.name}}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                     </td>
                                     <td>
-                                        <mat-form-field *ngIf="chooseTable!='employee-'+i && chooseTable!='department-'+i && chooseTable!='team-'+i" style="width: 100%;"
+                                        <mat-form-field *ngIf="chooseTable[i][j]!='employee-'+i+'-'+j && chooseTable[i][j]!='department-'+i+'-'+j && chooseTable[i][j]!='team-'+i+'-'+j" style="width: 100%;"
                                             appearance="outline" >
                                             <mat-label>Choose Value</mat-label>
                                             <mat-select></mat-select>
                                         </mat-form-field>
 
                                         <mat-form-field style="width: 100%;" appearance="outline"
-                                            *ngIf="chooseTable=='employee-'+i">
+                                            *ngIf="chooseTable[i][j]=='employee-'+i+'-'+j">
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
                                                 <mat-option *ngFor="let fieldNameMapping of employeeMappingModel"
@@ -471,7 +471,7 @@
                                         </mat-form-field>
 
                                         <mat-form-field style="width: 100%;" appearance="outline" 
-                                            *ngIf="chooseTable=='department-'+i">
+                                            *ngIf="chooseTable[i][j]=='department-'+i+'-'+j">
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
                                                 <mat-option *ngFor="let fieldNameMapping of departmentMappingModel"
@@ -482,7 +482,7 @@
                                         </mat-form-field>
 
                                         <mat-form-field style="width: 100%;" appearance="outline"
-                                            *ngIf="chooseTable=='team-'+i">
+                                            *ngIf="chooseTable[i][j]=='team-'+i+'-'+j">
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
                                                 <mat-option *ngFor="let fieldNameMapping of teamMappingModel"

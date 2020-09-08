@@ -932,24 +932,22 @@ export class CompanyConfigConnectionComponent implements OnInit {
   // { name: "gmhrs_position_view" },
   // { name: "gmhrs_vacation_date_view" },
 
-  chooseTable;
-  fieldChang(event,i) {
+  chooseTable: any = [];
+  fieldChang(event, i, j) {
     if (event.isUserInput) {
       console.log(event.source.value, event.source.selected);
       if (event.source.value == "gmhrs_employee_view" && event.source.selected == true) {
-        this.chooseTable = "employee-"+i;
+        this.chooseTable[i][j] = "employee-" + i + "-" + j;
       };
       if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
-        this.chooseTable = "department-"+i;
+        this.chooseTable[i][j] = "department-" + i + "-" + j;
       };
       if (event.source.value == "gmhrs_team_view" && event.source.selected == true) {
-        this.chooseTable = "team-"+i;
+        this.chooseTable[i][j] = "team-" + i + "-" + j;
       };
-      console.log(
-        this.chooseTable
-      );
-      
     }
+    console.log(this.chooseTable );
+    
   }
 
 
@@ -972,12 +970,30 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
       (res: any) => {
         // const result: any = res;
+        this.chooseTable = [];
         this.loadingFull = false;
         if (res.checkConnection != undefined) {
           if (res.checkConnection.status == "success") {
             this.table = res;
             console.log(this.table);
             console.log(this.tableMappingModel);
+            let item = [];
+            res.table.forEach((element, i) => {
+              item =[];
+              element.fields.forEach((el, j) => {
+                item.push(j);
+              });
+              this.chooseTable[i]= item;
+            });
+            console.log(this.chooseTable);
+            // for(let i =0; i< res.table.length;i++){
+            //   for(let j = 0 ; j< res.table[i].fields.length; i++){
+            //     let item = [];
+            //     item.push(j);
+            //     listItem.push(item[j]);
+            //   }
+            // }
+
 
             this.connectionStatus.connection.status = "Success";
             this.connectionStatus.connection.message = "Connect successfully";
