@@ -251,6 +251,11 @@ export class SignatureTemplateComponent implements OnInit {
           }
         }
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -363,6 +368,11 @@ export class SignatureTemplateComponent implements OnInit {
         } else {
           this.toast.error(res.message);
         }
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -437,6 +447,12 @@ export class SignatureTemplateComponent implements OnInit {
         this.isSetPrimaryTemplateLoading = false;
         this.isSaveTemplateLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isSetPrimaryTemplateLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -477,6 +493,12 @@ export class SignatureTemplateComponent implements OnInit {
               } else {
                 this.toast.error(res.message);
               }
+            },
+            (err) => {
+              console.log(err);
+              this.isSpinning = false;
+              this.isSetPrimaryTemplateRuleLoading = false;
+              this.toast.error("Connection timeout!")
             }
           )
           // 
@@ -486,6 +508,12 @@ export class SignatureTemplateComponent implements OnInit {
         this.isSaveRulesLoading = false;
         this.isSpinning = false;
         this.isSetPrimaryTemplateRuleLoading = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isSetPrimaryTemplateRuleLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -518,6 +546,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isShowListWrongSignatureLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isShowListWrongSignatureLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -540,7 +574,14 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isShowListWrongSignatureLoading = false;
         this.isSpinning = false;
-      })
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isShowListWrongSignatureLoading = false;
+        this.toast.error("Connection timeout!")
+      }
+    )
   }
   saveSpecTemplate(): void {
     this.isSpinning = true;
@@ -558,6 +599,11 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.error(res.message);
         }
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -721,6 +767,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isSendNotifyRulesLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isSendNotifyRulesLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -828,6 +880,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isSaveRulesLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isSaveRulesLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -848,6 +906,11 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.error(res.message);
         }
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -871,6 +934,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isUpdatedTemplateLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isUpdatedTemplateLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -906,6 +975,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isSaveTemplateLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isSaveTemplateLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -937,6 +1012,11 @@ export class SignatureTemplateComponent implements OnInit {
           }
         }
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -963,6 +1043,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isGetAllSignatureLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isGetAllSignatureLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -981,6 +1067,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isDeleteTemplateLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isDeleteTemplateLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -999,6 +1091,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isGetAllSignatureLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isGetAllSignatureLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -1016,6 +1114,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isGetAllSignatureRuleLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isGetAllSignatureRuleLoading = false;
+        this.toast.error("Connection timeout!")
       }
     );
   }
@@ -1098,6 +1202,11 @@ export class SignatureTemplateComponent implements OnInit {
                 this.toast.error(res.message);
               }
               this.isSpinning = false;
+            },
+            (err) => {
+              console.log(err);
+              this.isSpinning = false
+              this.toast.error("Connection timeout!")
             }
           );
 
@@ -1106,6 +1215,11 @@ export class SignatureTemplateComponent implements OnInit {
           // this.router.navigate(['/dashboard'])
         }
         // console.log('Info to review: ' + res);
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -1155,6 +1269,11 @@ export class SignatureTemplateComponent implements OnInit {
                 } else {
                   this.toast.error(res.message)
                 }
+              },
+              (err) => {
+                console.log(err);
+                this.isSpinning = false
+                this.toast.error("Connection timeout!")
               }
             );
           }
@@ -1179,6 +1298,12 @@ export class SignatureTemplateComponent implements OnInit {
         }
         this.isDeleteTemplateRuleLoading = false;
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false;
+        this.isDeleteTemplateRuleLoading = false;
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -1245,6 +1370,11 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.error(res.message);
         }
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
 
@@ -1260,6 +1390,11 @@ export class SignatureTemplateComponent implements OnInit {
           this.toast.error(res.message);
         }
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
@@ -1288,6 +1423,11 @@ export class SignatureTemplateComponent implements OnInit {
           this.loadDynamicRule();
         }
         this.isSpinning = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isSpinning = false
+        this.toast.error("Connection timeout!")
       }
     )
   }
