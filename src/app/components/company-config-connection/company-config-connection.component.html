@@ -414,11 +414,11 @@
                 </div>
 
                 <mat-accordion>
-                    <div *ngFor="let tableName of table.table ; let i = index">
+                    <div *ngFor="let tableModel of tableMappingModel ; let i = index">
                         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title style="width: 50%; ">
-                                    Table: {{tableName.tableName}}
+                                    Table: {{tableModel.tableName}}
                                 </mat-panel-title>
                                 <mat-panel-description style="width: 50%;">
                                     Mapping Information
@@ -434,43 +434,43 @@
                                         <th>FIELD MAPPING</th>
                                     </tr>
                                 </thead>
-                                <tr *ngFor="let field of tableName.fields; let j = index">
-                                    <th>{{tableName.tableName}}</th>
+                                <tr *ngFor="let field of tableModel.fields; let j = index">
+                                    <th>{{tableModel.tableName}}</th>
                                     <td>
-                                        {{field.name}}
+                                        {{field.field}}
                                     </td>
                                     <td style="color: green;">Mapped</td>
                                     <td>
                                         <mat-form-field style="width: 100%; " appearance="outline">
                                             <mat-label>Choose Table Name</mat-label>
                                             <mat-select>
-                                                <mat-option *ngFor="let tableNameMapping of tableMappingModel"
-                                                    [value]="tableNameMapping.name"
-                                                    (onSelectionChange)="fieldChang($event,i,j)">
-                                                    {{tableNameMapping.name}}
+                                                <mat-option *ngFor="let tableName of table.table; let z = index"
+                                                    [value]="tableName.tableName"
+                                                    (onSelectionChange)="fieldChang($event, i, j, tableName.tableName)">
+                                                    {{tableName.tableName}}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                     </td>
                                     <td>
-                                        <mat-form-field *ngIf="chooseTable[i][j]!='employee-'+i+'-'+j && chooseTable[i][j]!='department-'+i+'-'+j && chooseTable[i][j]!='team-'+i+'-'+j" style="width: 100%;"
-                                            appearance="outline" >
+                                        <mat-form-field *ngIf="chooseTable[i][j]!=chooseField" style="width: 100%; "
+                                            appearance="outline">
                                             <mat-label>Choose Value</mat-label>
                                             <mat-select></mat-select>
                                         </mat-form-field>
 
                                         <mat-form-field style="width: 100%;" appearance="outline"
-                                            *ngIf="chooseTable[i][j]=='employee-'+i+'-'+j">
+                                            *ngIf="chooseTable[i][j]==chooseField">
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
-                                                <mat-option *ngFor="let fieldNameMapping of employeeMappingModel"
+                                                <mat-option *ngFor="let fieldNameMapping of fieldNameList[j]"
                                                     [value]="fieldNameMapping.field">
                                                     {{fieldNameMapping.field}}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
 
-                                        <mat-form-field style="width: 100%;" appearance="outline" 
+                                        <!-- <mat-form-field style="width: 100%;" appearance="outline" 
                                             *ngIf="chooseTable[i][j]=='department-'+i+'-'+j">
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
@@ -479,9 +479,9 @@
                                                     {{fieldNameMapping.field}}
                                                 </mat-option>
                                             </mat-select>
-                                        </mat-form-field>
+                                        </mat-form-field> -->
 
-                                        <mat-form-field style="width: 100%;" appearance="outline"
+                                        <!-- <mat-form-field style="width: 100%;" appearance="outline"
                                             *ngIf="chooseTable[i][j]=='team-'+i+'-'+j">
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
@@ -490,7 +490,7 @@
                                                     {{fieldNameMapping.field}}
                                                 </mat-option>
                                             </mat-select>
-                                        </mat-form-field>
+                                        </mat-form-field> -->
                                     </td>
                                 </tr>
                             </table>

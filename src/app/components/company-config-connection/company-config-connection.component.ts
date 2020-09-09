@@ -191,51 +191,62 @@ export class CompanyConfigConnectionComponent implements OnInit {
   positionValidate = false;
   connectionStringDataResponseEmployeeJSON;
   // json format employee to admin company checking field when input api endpoint
-  tableMappingModel: any[] = [
-    { name: "gmhrs_employee_view" },
-    { name: "gmhrs_department_view" },
-    { name: "gmhrs_team_view" },
-    { name: "gmhrs_team_employee_view" },
-    { name: "gmhrs_position_view" },
-    { name: "gmhrs_vacation_date_view" },
-  ]
-  employeeMappingModel: any[] = [
-    { field: "id" },
-    { field: "primary_email" },
-    { field: "personal_email" },
-    { field: "first_name" },
-    { field: "last_name" },
-    { field: "phone" },
-    { field: "address" },
-    { field: "position_id" },
-    { field: "department_id" }
-  ]
+  tableMappingModel = [
+    {
+      tableName: "gmhrs_employee_view",
+      fields: [
+        { field: "id" },
+        { field: "primary_email" },
+        { field: "personal_email" },
+        { field: "first_name" },
+        { field: "last_name" },
+        { field: "phone" },
+        { field: "address" },
+        { field: "position_id" },
+        { field: "department_id" }
+      ]
 
-  departmentMappingModel = [
-    { field: "id" },
-    { field: "name" },
-    { field: "email" }
-  ]
+    },
+    {
+      tableName: "gmhrs_department_view",
+      fields: [
+        { field: "id" },
+        { field: "name" },
+        { field: "email" }
+      ]
+    },
+    {
+      tableName: "gmhrs_team_view",
+      fields: [
+        { field: "id" },
+        { field: "name" },
+        { field: "email" },
+      ]
+    },
+    {
+      tableName: "gmhrs_team_employee_view",
+      fields: [
+        { field: "employee_id" },
+        { field: "team_id" }
+      ]
+    },
+    {
+      tableName: "gmhrs_position_view",
+      fields: [
+        { field: "id" },
+        { field: "name" }
+      ]
+    },
+    {
+      tableName: "gmhrs_vacation_date_view",
+      fields: [
+        { field: "employee_id" },
+        { field: "start_date" },
+        { field: "end_date" }
+      ]
+    },
 
-  teamMappingModel = [
-    { field: "id" },
-    { field: "name" },
-    { field: "email" },
   ]
-  team_employeeMappingModel = [
-    { field: "employee_id" },
-    { field: "team_id" }
-  ]
-  positionMappingModel = [
-    { field: "id" },
-    { field: "name" }
-  ]
-  vacation = [
-    { field: "employee_id" },
-    { field: "start_date" },
-    { field: "end_date" }
-  ]
-
 
   connectionStatus = {
     connection: {
@@ -734,220 +745,44 @@ export class CompanyConfigConnectionComponent implements OnInit {
     }
   }
 
-  // checkingFormatDataConnectionString(employee, department, team, team_employee, position, vacation, length_emp, length_dep, length_team, length_position) {
 
-  //   console.log(vacation);
-
-  //   var empValid = false;
-  //   var depValid = false;
-  //   var teamValid = false;
-  //   var positionValid = false;
-  //   var teamEmpValid = false;
-  //   var vacationValid = false;
-  //   //check fields in each employee
-  //   // for (var i = 0; i < employee.length; i++) {
-  //   employee.id === undefined ? this.connectionStringDataResponseEmployee.employee.id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.id = "Pass";
-  //   employee.primary_email === undefined ? this.connectionStringDataResponseEmployee.employee.primary_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.primary_email = "Pass";
-  //   employee.personal_email === undefined ? this.connectionStringDataResponseEmployee.employee.personal_email = "Missing Field" : this.connectionStringDataResponseEmployee.employee.personal_email = "Pass";
-  //   employee.first_name === undefined ? this.connectionStringDataResponseEmployee.employee.first_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.first_name = "Pass";
-  //   employee.last_name === undefined ? this.connectionStringDataResponseEmployee.employee.last_name = "Missing Field" : this.connectionStringDataResponseEmployee.employee.last_name = "Pass";
-  //   employee.phone === undefined ? this.connectionStringDataResponseEmployee.employee.phone = "Missing Field" : this.connectionStringDataResponseEmployee.employee.phone = "Pass";
-  //   employee.address === undefined ? this.connectionStringDataResponseEmployee.employee.address = "Missing Field" : this.connectionStringDataResponseEmployee.employee.address = "Pass";
-  //   employee.department_id === undefined ? this.connectionStringDataResponseEmployee.employee.department_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.department_id = "Pass";
-  //   employee.position_id === undefined ? this.connectionStringDataResponseEmployee.employee.position_id = "Missing Field" : this.connectionStringDataResponseEmployee.employee.position_id = "Pass";
-
-
-
-  //   //check length
-  //   if (length_emp.primary_email !== undefined) {
-  //     this.connectionStringDataResponseEmployee.employee.primary_email = "Character maximum length 254"
-  //   } else if (length_emp.personal_email !== undefined) {
-  //     this.connectionStringDataResponseEmployee.employee.personal_email = "Character maximum length 254"
-  //   } else if (length_emp.first_name !== undefined) {
-  //     this.connectionStringDataResponseEmployee.employee.first_name = "Character maximum length 45"
-  //   } else if (length_emp.last_name !== undefined) {
-  //     this.connectionStringDataResponseEmployee.employee.last_name = "Character maximum length 45"
-  //   } else if (length_emp.phone !== undefined) {
-  //     this.connectionStringDataResponseEmployee.employee.phone = "Character maximum length 15"
-  //   } else if (length_emp.address !== undefined) {
-  //     this.connectionStringDataResponseEmployee.employee.address = "Character maximum length 512"
-  //   }
-
-
-
-  //   if (this.connectionStringDataResponseEmployee.employee.id == "Pass" && this.connectionStringDataResponseEmployee.employee.primary_email == "Pass"
-  //     && this.connectionStringDataResponseEmployee.employee.personal_email == "Pass" && this.connectionStringDataResponseEmployee.employee.first_name == "Pass"
-  //     && this.connectionStringDataResponseEmployee.employee.last_name == "Pass" && this.connectionStringDataResponseEmployee.employee.phone == "Pass"
-  //     && this.connectionStringDataResponseEmployee.employee.address == "Pass" && this.connectionStringDataResponseEmployee.employee.department_id == "Pass"
-  //     && this.connectionStringDataResponseEmployee.employee.position_id == "Pass") {
-  //     empValid = true;
-  //   }
-  //   //   console.log("vong for: " + i);
-  //   //   // if pass all field stop for 
-  //   //   if (this.connectionStringDataResponseEmployee.employee.id == "Pass" && this.connectionStringDataResponseEmployee.employee.primary_email == "Pass"
-  //   //     && this.connectionStringDataResponseEmployee.employee.first_name == "Pass" && this.connectionStringDataResponseEmployee.employee.last_name == "Pass"
-  //   //     && this.connectionStringDataResponseEmployee.employee.phone == "Pass" && this.connectionStringDataResponseEmployee.employee.address == "Pass"
-  //   //     && this.connectionStringDataResponseEmployee.employee.position_id == "Pass"
-  //   //     && this.connectionStringDataResponseEmployee.employee.department.id == "Pass"
-  //   //     && this.connectionStringDataResponseEmployee.employee.department.name == "Pass"
-  //   //     && this.connectionStringDataResponseEmployee.employee.vacation_start_date == "Pass" && this.connectionStringDataResponseEmployee.employee.vacation_end_date == "Pass") {
-  //   //     this.employeeValidate = true;
-  //   //     i = employee.length - 1;
-  //   //   }
-  //   // };
-  //   // //check field in each department
-  //   // for (var i = 0; i < department.length; i++) {
-  //   department.id === undefined ? this.connectionStringDataResponseDepartment.department.id = "Missing Field" : this.connectionStringDataResponseDepartment.department.id = "Pass";
-  //   department.name === undefined ? this.connectionStringDataResponseDepartment.department.name = "Missing Field" : this.connectionStringDataResponseDepartment.department.name = "Pass";
-  //   department.email === undefined ? this.connectionStringDataResponseDepartment.department.email = "Missing Field" : this.connectionStringDataResponseDepartment.department.email = "Pass";
-
-
-
-  //   if (length_dep.name !== undefined) {
-  //     this.connectionStringDataResponseDepartment.department.name = "Character maximum length 200"
-  //   } else if (length_dep.email !== undefined) {
-  //     this.connectionStringDataResponseDepartment.department.email = "Character maximum length 254"
-  //   }
-
-  //   if (this.connectionStringDataResponseDepartment.department.id == "Pass" && this.connectionStringDataResponseDepartment.department.name
-  //     && this.connectionStringDataResponseDepartment.department.email == "Pass") {
-  //     depValid = true;
-  //   }
-  //   //   console.log("vong for dep: " + i);
-  //   //   //if pass all fields >> stop for
-  //   //   if (this.connectionStringDataResponseDepartment.department.id == "Pass"
-  //   //     && this.connectionStringDataResponseDepartment.department.name == "Pass" && this.connectionStringDataResponseDepartment.department.email == "Pass") {
-  //   //     this.departmentValidate = true;
-  //   //     i = department.length - 1;;
-  //   //   }
-  //   // };
-  //   // //check field in each team
-  //   // var k = 0;
-  //   // for (k; k < team.length; k++) {
-  //   team.id === undefined ? this.connectionStringDataResponseTeam.team.id = "Missing Field" : this.connectionStringDataResponseTeam.team.id = "Pass";
-  //   team.name === undefined ? this.connectionStringDataResponseTeam.team.name = "Missing Field" : this.connectionStringDataResponseTeam.team.name = "Pass";
-  //   team.email === undefined ? this.connectionStringDataResponseTeam.team.email = "Missing Field" : this.connectionStringDataResponseTeam.team.email = "Pass";
-
-
-  //   if (length_team.name !== undefined) {
-  //     this.connectionStringDataResponseTeam.team.name = "Character maximum length 200"
-  //   } else if (length_team.email !== undefined) {
-  //     this.connectionStringDataResponseTeam.team.email = "Character maximum length 254"
-  //   }
-
-
-
-  //   if (this.connectionStringDataResponseTeam.team.id == "Pass" && this.connectionStringDataResponseTeam.team.name == "Pass" && this.connectionStringDataResponseTeam.team.email == "Pass") {
-  //     teamValid = true;
-  //   }
-
-  //   team_employee.employee_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.employee_id = "Pass";
-  //   team_employee.team_id === undefined ? this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Missing Field" : this.connectionStringDataResponseTeamEmployee.team_employee.team_id = "Pass";
-
-  //   if (this.connectionStringDataResponseTeamEmployee.team_employee.employee_id == "Pass" && this.connectionStringDataResponseTeamEmployee.team_employee.team_id == "Pass") {
-  //     teamEmpValid = true;
-  //   }
-  //   //   console.log("vong for team: " + k);
-  //   //   // check list members in team
-  //   //   if (team[k].members.length > 0) {
-  //   //     for (var i = 0; i < team[k].members.length; i++) {
-  //   //       console.log("team: " + k + "member: " + i)
-  //   //       if (team[k].members[i].employee_id === undefined) {
-  //   //         this.connectionStringDataResponseTeam.team.member[0].id = "Missing Field";
-  //   //       } else {
-  //   //         this.connectionStringDataResponseTeam.team.member[0].id = "Pass";
-  //   //       }
-  //   //       if (team[k].members[i].employee.primary_email === undefined) {
-  //   //         this.connectionStringDataResponseTeam.team.member[0].primary_email = "Missing Field";
-  //   //       } else {
-  //   //         this.connectionStringDataResponseTeam.team.member[0].primary_email = "Pass";
-  //   //       }
-  //   //       //if pass all stop members for
-  //   //       if (this.connectionStringDataResponseTeam.team.member[0].id == "Pass"
-  //   //         && this.connectionStringDataResponseTeam.team.member[0].primary_email == "Pass") {
-  //   //         i = team[k].members.length - 1;
-  //   //       }
-  //   //     }
-  //   //   } else {
-  //   //     this.connectionStringDataResponseTeam.team.member[0].id = "Missing Field";
-  //   //     this.connectionStringDataResponseTeam.team.member[0].primary_email = "Missing Field";
-  //   //   }
-  //   //   // if pass all stop team for
-  //   //   if (this.connectionStringDataResponseTeam.team.id == "Pass" && this.connectionStringDataResponseTeam.team.name == "Pass"
-  //   //     && this.connectionStringDataResponseTeam.team.email == "Pass"
-  //   //     && this.connectionStringDataResponseTeam.team.member[0].id == "Pass"
-  //   //     && this.connectionStringDataResponseTeam.team.member[0].primary_email == "Pass") {
-  //   //     this.teamValidate = true;
-  //   //     k = team.length - 1;
-  //   //   }
-
-  //   // }
-
-  //   // //check field in each position
-  //   // for (var i = 0; i < position.length; i++) {
-  //   position.id === undefined ? this.connectionStringDataResponsePositon.position.id = "Missing Field" : this.connectionStringDataResponsePositon.position.id = "Pass";
-  //   position.name === undefined ? this.connectionStringDataResponsePositon.position.name = "Missing Field" : this.connectionStringDataResponsePositon.position.name = "Pass";
-
-
-  //   if (length_position.name !== undefined) {
-  //     this.connectionStringDataResponsePositon.position.name = "Character maximum length 200"
-  //   }
-
-  //   if (this.connectionStringDataResponsePositon.position.name == "Pass" && this.connectionStringDataResponsePositon.position.id == "Pass") {
-  //     positionValid = true;
-  //   }
-  //   //   console.log("vong for pos: " + i);
-  //   //   //if pass all fields >> stop for
-  //   //   if (this.connectionStringDataResponsePositon.position.id == "Pass"
-  //   //     && this.connectionStringDataResponsePositon.position.name == "Pass") {
-  //   //     this.positionValidate = true;
-  //   //     i = position.length - 1;;
-  //   //   }
-  //   // };
-
-  //   // if (this.employeeValidate == true && this.departmentValidate == true && this.teamValidate == true && this.positionValidate == true) {
-  //   //   return true;
-  //   // } else {
-  //   //   return false;
-  //   // }
-  //   vacation.employee_id === undefined ? this.connectionStringDataResponseVacation.vacation.employee_id = "Missing Field" : this.connectionStringDataResponseVacation.vacation.employee_id = "Pass";
-  //   vacation.start_date === undefined ? this.connectionStringDataResponseVacation.vacation.start_date = "Missing Field" : this.connectionStringDataResponseVacation.vacation.start_date = "Pass";
-  //   vacation.end_date === undefined ? this.connectionStringDataResponseVacation.vacation.end_date = "Missing Field" : this.connectionStringDataResponseVacation.vacation.end_date = "Pass";
-
-  //   if (this.connectionStringDataResponseVacation.vacation.employee_id == "Pass" && this.connectionStringDataResponseVacation.vacation.end_date == "Pass" && this.connectionStringDataResponseVacation.vacation.start_date == "Pass") {
-  //     vacationValid = true;
-  //   }
-
-  //   if (empValid == true && depValid == true && teamValid == true && teamEmpValid == true && positionValid == true && vacationValid == true) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-
-  // }
-  // name: "gmhrs_employee_view" },
-  // { name: "gmhrs_department_view" },
-  // { name: "gmhrs_team_view" },
-  // { name: "gmhrs_team_employee_view" },
-  // { name: "gmhrs_position_view" },
-  // { name: "gmhrs_vacation_date_view" },
 
   chooseTable: any = [];
-  fieldChang(event, i, j) {
+  chooseField = "null";
+  fieldNameList = [];
+  fieldChang(event, z, j, name) {
     if (event.isUserInput) {
-      console.log(event.source.value, event.source.selected);
-      if (event.source.value == "gmhrs_employee_view" && event.source.selected == true) {
-        this.chooseTable[i][j] = "employee-" + i + "-" + j;
-      };
-      if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
-        this.chooseTable[i][j] = "department-" + i + "-" + j;
-      };
-      if (event.source.value == "gmhrs_team_view" && event.source.selected == true) {
-        this.chooseTable[i][j] = "team-" + i + "-" + j;
-      };
+
+      this.chooseField = "null";
+      for (let i = 0; i < this.table.table.length; i++) {
+        if (event.source.value == this.table.table[i].tableName && event.source.selected == true) {
+          this.chooseTable[z][j] = this.table.table[i].tableName + "-" + z + "-" + j;
+          this.chooseField = this.table.table[i].tableName + "-" + z + "-" + j;
+
+        };
+        // if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
+        //   this.chooseTable[i][j] = "department-" + i + "-" + j;
+        // };
+        // if (event.source.value == "gmhrs_team_view" && event.source.selected == true) {
+        //   this.chooseTable[i][j] = "team-" + i + "-" + j;
+        // };
+      }
+      // if (this.chooseField != "null") {
+      //   for (let i = 0; i < this.table.table.length; i++) {
+      //     if (this.chooseField.split("-")[0] == this.table.table[i].tableName) {
+      //       this.fieldNameList = this.table.table[i].fields
+      //     }
+      //   }
+      // }
+
     }
-    console.log(this.chooseTable );
-    
+    console.log(this.chooseField);
+    console.log(this.fieldNameList);
+    console.log("Z: " + z);
+    console.log("J: " + j);
+
+
+
   }
 
 
@@ -978,23 +813,19 @@ export class CompanyConfigConnectionComponent implements OnInit {
             console.log(this.table);
             console.log(this.tableMappingModel);
             let item = [];
-            res.table.forEach((element, i) => {
-              item =[];
+            let item1 = []
+            this.tableMappingModel.forEach((element, i) => {
+              item = [];
+              item1 = []
               element.fields.forEach((el, j) => {
                 item.push(j);
+                item1.push(el)
               });
-              this.chooseTable[i]= item;
+              this.chooseTable[i] = item;
+              this.fieldNameList[i]= item1
             });
             console.log(this.chooseTable);
-            // for(let i =0; i< res.table.length;i++){
-            //   for(let j = 0 ; j< res.table[i].fields.length; i++){
-            //     let item = [];
-            //     item.push(j);
-            //     listItem.push(item[j]);
-            //   }
-            // }
-
-
+            console.log(this.fieldNameList);
             this.connectionStatus.connection.status = "Success";
             this.connectionStatus.connection.message = "Connect successfully";
             this.loadingTestConnection = false;
