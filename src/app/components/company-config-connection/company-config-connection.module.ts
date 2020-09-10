@@ -17,7 +17,8 @@ import {
 
     MatProgressSpinnerModule,
     MatExpansionModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatTableModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
@@ -56,6 +57,7 @@ import { MatChipsModule } from '@angular/material/chips';
         MatChipsModule,
         MatExpansionModule,
         MatFormFieldModule,
+        MatTableModule,
         RouterModule.forChild(CompanyConfigConnectionRoutes)
     ],
     declarations: [CompanyConfigConnectionComponent]

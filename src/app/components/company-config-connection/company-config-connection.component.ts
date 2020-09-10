@@ -9,7 +9,7 @@ import { FileUpload } from '../../api-services/file-upload-api.service';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { data } from 'jquery';
-import { MatDialog, MatStepper } from '@angular/material';
+import { MatDialog, MatStepper, MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountApiService } from '../../api-services/account-api.service';
 import { STRING_TYPE, ThrowStmt } from '@angular/compiler';
@@ -191,62 +191,59 @@ export class CompanyConfigConnectionComponent implements OnInit {
   positionValidate = false;
   connectionStringDataResponseEmployeeJSON;
   // json format employee to admin company checking field when input api endpoint
-  tableMappingModel = [
-    {
-      tableName: "gmhrs_employee_view",
-      fields: [
-        { field: "id" },
-        { field: "primary_email" },
-        { field: "personal_email" },
-        { field: "first_name" },
-        { field: "last_name" },
-        { field: "phone" },
-        { field: "address" },
-        { field: "position_id" },
-        { field: "department_id" }
-      ]
+  tableEmployeeMappingModel =
+    [
+      { tableName: "gmhrs_employee_view", fieldName: "id", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "primary_email", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "personal_email", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "first_name", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "last_name", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "phone", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "address", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "position_id", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
+      { tableName: "gmhrs_employee_view", fieldName: "department_id", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" }
+    ]
 
-    },
-    {
-      tableName: "gmhrs_department_view",
-      fields: [
-        { field: "id" },
-        { field: "name" },
-        { field: "email" }
-      ]
-    },
-    {
-      tableName: "gmhrs_team_view",
-      fields: [
-        { field: "id" },
-        { field: "name" },
-        { field: "email" },
-      ]
-    },
-    {
-      tableName: "gmhrs_team_employee_view",
-      fields: [
-        { field: "employee_id" },
-        { field: "team_id" }
-      ]
-    },
-    {
-      tableName: "gmhrs_position_view",
-      fields: [
-        { field: "id" },
-        { field: "name" }
-      ]
-    },
-    {
-      tableName: "gmhrs_vacation_date_view",
-      fields: [
-        { field: "employee_id" },
-        { field: "start_date" },
-        { field: "end_date" }
-      ]
-    },
+  //   {
+  //     tableName: "gmhrs_department_view",
+  //     fields: [
+  //       { field: "id" },
+  //       { field: "name" },
+  //       { field: "email" }
+  //     ]
+  //   },
+  //   {
+  //     tableName: "gmhrs_team_view",
+  //     fields: [
+  //       { field: "id" },
+  //       { field: "name" },
+  //       { field: "email" },
+  //     ]
+  //   },
+  //   {
+  //     tableName: "gmhrs_team_employee_view",
+  //     fields: [
+  //       { field: "employee_id" },
+  //       { field: "team_id" }
+  //     ]
+  //   },
+  //   {
+  //     tableName: "gmhrs_position_view",
+  //     fields: [
+  //       { field: "id" },
+  //       { field: "name" }
+  //     ]
+  //   },
+  //   {
+  //     tableName: "gmhrs_vacation_date_view",
+  //     fields: [
+  //       { field: "employee_id" },
+  //       { field: "start_date" },
+  //       { field: "end_date" }
+  //     ]
+  //   },
 
-  ]
+  // ]
 
   connectionStatus = {
     connection: {
@@ -261,6 +258,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
   nextButonConditonGSuiteCredential = false;
   file_name_auth_gsuite_company;
   loadingFull = false;
+  dataSourceEmployee: MatTableDataSource<any>;
+  dataSourceDepartment: MatTableDataSource<any>;
+  dataSourceTeam: MatTableDataSource<any>;
+  dataSourceTeamEmployee: MatTableDataSource<any>;
+  dataSourcePosition: MatTableDataSource<any>;
+  dataSourceVacation: MatTableDataSource<any>;
+  displayedColumnsEmployee = ['tableName', 'fieldName', 'mapping', 'tableNameMapping', 'fieldNameMapping'];
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(
@@ -750,15 +754,17 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseTable: any = [];
   chooseField = "null";
   fieldNameList = [];
-  fieldChang(event, z, j, name) {
+  tableMappingSelect = null;
+  fieldChang(event, name) {
+    this.tableMappingSelect = null;
     if (event.isUserInput) {
 
       this.chooseField = "null";
       for (let i = 0; i < this.table.table.length; i++) {
         if (event.source.value == this.table.table[i].tableName && event.source.selected == true) {
-          this.chooseTable[z][j] = this.table.table[i].tableName + "-" + z + "-" + j;
-          this.chooseField = this.table.table[i].tableName + "-" + z + "-" + j;
-
+          // this.chooseTable[z][j] = this.table.table[i].tableName + "-" + z + "-" + j;
+          // this.chooseField = this.table.table[i].tableName + "-" + z + "-" + j;
+          this.tableMappingSelect = name;
         };
         // if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
         //   this.chooseTable[i][j] = "department-" + i + "-" + j;
@@ -776,10 +782,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
       // }
 
     }
-    console.log(this.chooseField);
-    console.log(this.fieldNameList);
-    console.log("Z: " + z);
-    console.log("J: " + j);
 
 
 
@@ -811,21 +813,19 @@ export class CompanyConfigConnectionComponent implements OnInit {
           if (res.checkConnection.status == "success") {
             this.table = res;
             console.log(this.table);
-            console.log(this.tableMappingModel);
-            let item = [];
-            let item1 = []
-            this.tableMappingModel.forEach((element, i) => {
-              item = [];
-              item1 = []
-              element.fields.forEach((el, j) => {
-                item.push(j);
-                item1.push(el)
-              });
-              this.chooseTable[i] = item;
-              this.fieldNameList[i]= item1
-            });
-            console.log(this.chooseTable);
-            console.log(this.fieldNameList);
+            // let item = [];
+            // let item1 = []
+            // this.tableMappingModel.forEach((element, i) => {
+            //   item = [];
+            //   item1 = []
+            //   element.fields.forEach((el, j) => {
+            //     item.push(j);
+            //     item1.push(el)
+            //   });
+            //   this.chooseTable[i] = item;
+            //   this.fieldNameList[i] = item1
+            // });
+            this.dataSourceEmployee = new MatTableDataSource(this.tableEmployeeMappingModel);
             this.connectionStatus.connection.status = "Success";
             this.connectionStatus.connection.message = "Connect successfully";
             this.loadingTestConnection = false;
