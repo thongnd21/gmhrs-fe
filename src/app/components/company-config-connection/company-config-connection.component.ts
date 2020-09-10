@@ -261,6 +261,86 @@ export class CompanyConfigConnectionComponent implements OnInit {
   nextButonConditonGSuiteCredential = false;
   file_name_auth_gsuite_company;
   loadingFull = false;
+  mappingTableResult = [
+    {
+      tableGM: "gmhrs_employee_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { primary_email: "" },
+          { personal_email: "" },
+          { first_name: "" },
+          { last_name: "" },
+          { phone: "" },
+          { address: "" },
+          { position_id: "" },
+          { department_id: "" }
+        ]
+
+      }
+    },
+    {
+      tableGM: "gmhrs_department_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { name: "" },
+          { email: "" }
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_team_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { name: "" },
+          { email: "" }
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_team_employee_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { employee_id: "" },
+          { team_id: "" },
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_position_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { name: "" }
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_vacation_date_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { employee_id: "" },
+          { start_date: "" },
+          { end_date: "" }
+        ]
+
+      }
+    }
+  ]
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(
@@ -759,31 +839,18 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.chooseField[z][j] = this.table.table[i].tableName + "-" + z + "-" + j;
           this.fieldNameList[z][j] = this.table.table[i].fields;
           console.log(this.fieldNameList);
+          this.mappingTableResult[z].tableHR.nametableHR = name;
 
         };
-        // if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
-        //   this.chooseTable[i][j] = "department-" + i + "-" + j;
-        // };
-        // if (event.source.value == "gmhrs_team_view" && event.source.selected == true) {
-        //   this.chooseTable[i][j] = "team-" + i + "-" + j;
-        // };
       }
-      // if (this.chooseField != "null") {
-      //   for (let i = 0; i < this.table.table.length; i++) {
-      //     if (this.chooseField.split("-")[0] == this.table.table[i].tableName) {
-      //       this.fieldNameList = this.table.table[i].fields
-      //     }
-      //   }
-      // }
-
     }
-    console.log(this.chooseField);
-    console.log(this.fieldNameList);
-    console.log("Z: " + z);
-    console.log("J: " + j);
+  }
 
-
-
+  selectFiledChange(event, z, j, name, fieldModel) {
+    if (event.isUserInput) {
+      this.mappingTableResult[z].tableHR.fields[j][fieldModel] = name;
+      console.log(this.mappingTableResult);
+    }
   }
 
 

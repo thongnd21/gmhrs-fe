@@ -453,8 +453,8 @@
                                         </mat-form-field>
                                     </td>
                                     <td>
-                                        <mat-form-field *ngIf="chooseTable[i][j]!=chooseField[i][j]" style="width: 100%; "
-                                            appearance="outline">
+                                        <mat-form-field *ngIf="chooseTable[i][j]!=chooseField[i][j]"
+                                            style="width: 100%; " appearance="outline">
                                             <mat-label>Choose Value</mat-label>
                                             <mat-select></mat-select>
                                         </mat-form-field>
@@ -464,7 +464,7 @@
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
                                                 <mat-option *ngFor="let fieldNameMapping of fieldNameList[i][j]"
-                                                    [value]="fieldNameMapping.name">
+                                                    [value]="fieldNameMapping.name" (onSelectionChange)="selectFiledChange($event, i, j, fieldNameMapping.name, field.field)">
                                                     {{fieldNameMapping.name}}
                                                 </mat-option>
                                             </mat-select>
