@@ -193,15 +193,15 @@ export class CompanyConfigConnectionComponent implements OnInit {
   // json format employee to admin company checking field when input api endpoint
   tableEmployeeMappingModel =
     [
-      { tableName: "gmhrs_employee_view", fieldName: "id", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "primary_email", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "personal_email", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "first_name", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "last_name", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "phone", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "address", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "position_id", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" },
-      { tableName: "gmhrs_employee_view", fieldName: "department_id", mapping: "Mapped", tableNameMapping: "", fieldNameMapping: "" }
+      { tableName: "gmhrs_employee_view", fieldName: "id", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "primary_email", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "personal_email", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "first_name", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "last_name", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "phone", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "address", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "position_id", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' },
+      { tableName: "gmhrs_employee_view", fieldName: "department_id", mapping: 'Mapped', tableNameMapping: '', fieldNameMapping: '' }
     ]
 
   //   {
@@ -755,16 +755,21 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseField = "null";
   fieldNameList = [];
   tableMappingSelect = null;
-  fieldChang(event, name) {
+  fieldChang(event, name, row, index) {
     this.tableMappingSelect = null;
     if (event.isUserInput) {
-
+      console.log(index);
       this.chooseField = "null";
       for (let i = 0; i < this.table.table.length; i++) {
         if (event.source.value == this.table.table[i].tableName && event.source.selected == true) {
           // this.chooseTable[z][j] = this.table.table[i].tableName + "-" + z + "-" + j;
           // this.chooseField = this.table.table[i].tableName + "-" + z + "-" + j;
           this.tableMappingSelect = name;
+          const dataEmp = this.dataSourceEmployee.data;
+          dataEmp[index].tableNameMapping = name;
+          this.dataSourceEmployee.data = dataEmp;
+          console.log(this.dataSourceEmployee.data);
+          console.log(this.tableMappingSelect);
         };
         // if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
         //   this.chooseTable[i][j] = "department-" + i + "-" + j;

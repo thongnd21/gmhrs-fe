@@ -456,13 +456,13 @@
                                 <mat-header-cell *matHeaderCellDef>
                                     Table Mapping
                                 </mat-header-cell>
-                                <mat-cell *matCellDef="let row" style="margin-top: 10px;">
+                                <mat-cell *matCellDef="let row; let i = index" style="margin-top: 10px;">
                                     <mat-form-field style="width: 100%; " appearance="outline">
                                         <mat-label>Choose Table Name</mat-label>
                                         <mat-select>
                                             <mat-option *ngFor="let tableName of table.table; let z = index"
                                                 [value]="tableName.tableName"
-                                                (onSelectionChange)="fieldChang($event, row.tableNameMapping)">
+                                                (onSelectionChange)="fieldChang($event, tableName.tableName, row, i)">
                                                 {{tableName.tableName}}
                                             </mat-option>
                                         </mat-select>
