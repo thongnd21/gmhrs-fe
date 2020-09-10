@@ -954,13 +954,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
     // this.account.api_endpoint = api_enpoint;
     console.log(this.account);
 
-    this.companyServices.updateAccountCompany(this.account).subscribe(
+    this.companyConnectionService.saveDBCompanyConnection(this.mappingTableResult).subscribe(
       (res: any) => {
         if (res.status == "success") {
           this.loadingFull = false;
           this.toast.success("Save connection successfully!");
           this.nextButonConditonConnectionString = true;
-          this.closeModal();
+          // this.closeModal();
         };
         if (res.status == "fail") {
           this.loadingFull = false;

@@ -14,6 +14,10 @@ export class CompanyConnectionService {
     return this.httpClient.post('http://localhost:3002/api/connection', DBInfor);
   }
 
+  saveDBCompanyConnection(result){
+    // return this.httpClient.post('https://gmcompany-api.herokuapp.com/api/connection', result);
+    return this.httpClient.put('http://localhost:3002/api/connection', result);
+  }
 
   changeSchedule(account) {
     const path = 'changeScheStatus/';
