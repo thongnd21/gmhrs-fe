@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ɵɵtextInterpolateV } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray, FormControlName } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyServices } from '../../api-services/company.services';
@@ -748,16 +748,17 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
 
   chooseTable: any = [];
-  chooseField = "null";
+  chooseField = [];
   fieldNameList = [];
   fieldChang(event, z, j, name) {
     if (event.isUserInput) {
 
-      this.chooseField = "null";
       for (let i = 0; i < this.table.table.length; i++) {
         if (event.source.value == this.table.table[i].tableName && event.source.selected == true) {
           this.chooseTable[z][j] = this.table.table[i].tableName + "-" + z + "-" + j;
-          this.chooseField = this.table.table[i].tableName + "-" + z + "-" + j;
+          this.chooseField[z][j] = this.table.table[i].tableName + "-" + z + "-" + j;
+          this.fieldNameList[z][j] = this.table.table[i].fields;
+          console.log(this.fieldNameList);
 
         };
         // if (event.source.value == "gmhrs_department_view" && event.source.selected == true) {
@@ -806,6 +807,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       (res: any) => {
         // const result: any = res;
         this.chooseTable = [];
+        this.chooseField = []
         this.loadingFull = false;
         if (res.checkConnection != undefined) {
           if (res.checkConnection.status == "success") {
@@ -813,16 +815,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
             console.log(this.table);
             console.log(this.tableMappingModel);
             let item = [];
-            let item1 = []
+            let item1 = [];
+            let item2 = []
             this.tableMappingModel.forEach((element, i) => {
               item = [];
               item1 = []
+              item2 = []
               element.fields.forEach((el, j) => {
                 item.push(j);
-                item1.push(el)
+                item1.push(j)
+                item2.push("null")
               });
               this.chooseTable[i] = item;
-              this.fieldNameList[i]= item1
+              this.chooseField[i] = item2;
+              this.fieldNameList[i] = item1
             });
             console.log(this.chooseTable);
             console.log(this.fieldNameList);
