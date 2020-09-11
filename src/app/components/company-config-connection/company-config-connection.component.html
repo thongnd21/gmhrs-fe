@@ -428,18 +428,14 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>TABLE NAME</th>
-                                        <th>FIELD NAME</th>
-                                        <th>STATUS</th>
                                         <th>TABLE MAPPING</th>
+                                        <th>FIELD NAME</th>
                                         <th>FIELD MAPPING</th>
+                                        <th>STATUS</th>
                                     </tr>
                                 </thead>
                                 <tr *ngFor="let field of tableModel.fields; let j = index">
                                     <th>{{tableModel.tableName}}</th>
-                                    <td>
-                                        {{field.field}}
-                                    </td>
-                                    <td style="color: green;">Mapped</td>
                                     <td>
                                         <mat-form-field style="width: 100%; " appearance="outline">
                                             <mat-label>Choose Table Name</mat-label>
@@ -451,6 +447,10 @@
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
+                                    </td>
+
+                                    <td>
+                                        {{field.field}}
                                     </td>
                                     <td>
                                         <mat-form-field *ngIf="chooseTable[i][j]!=chooseField[i][j]"
@@ -464,12 +464,15 @@
                                             <mat-label>Choose Field Name</mat-label>
                                             <mat-select>
                                                 <mat-option *ngFor="let fieldNameMapping of fieldNameList[i][j]"
-                                                    [value]="fieldNameMapping.name" (onSelectionChange)="selectFiledChange($event, i, j, fieldNameMapping.name, field.field)">
+                                                    [value]="fieldNameMapping.name"
+                                                    (onSelectionChange)="selectFiledChange($event, i, j, fieldNameMapping.name, field.field)">
                                                     {{fieldNameMapping.name}}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                     </td>
+                                    <td style="color: green;">Mapped</td>
+
                                 </tr>
                             </table>
                         </mat-expansion-panel>
@@ -480,7 +483,7 @@
                     Close
                 </button>
                 <button style="margin-right: 40px;" mat-raised-button (click)="onSubmitConection(accessDBForm.value)"
-                    color="primary" >
+                    color="primary">
                     <!-- [disabled]="!disableSaveConnectionStringButton" -->
                     Save
                 </button>
