@@ -364,10 +364,10 @@ export class SignatureTemplateComponent implements OnInit {
             }
             this.showSpecificModel = true;
           }
-          this.isSpinning = false;
         } else {
           this.toast.error(res.message);
         }
+        this.isSpinning = false;
       },
       (err) => {
         console.log(err);
