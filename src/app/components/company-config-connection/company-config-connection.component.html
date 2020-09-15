@@ -412,350 +412,454 @@
                         </tr>
                     </table>
                 </div>
+                <mat-tab-group>
+                    <mat-tab label="Validate Database connection">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>TABLE NAME</th>
+                                        <th>FIELD NAME</th>
+                                        <th>STATUS</th>
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.id!='Pass'}">
+                                    <td>gmhrs_employee_view</td>
+                                    <td>id</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.id}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.primary_email=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.primary_email!='Pass'}">
+                                    <td></td>
+                                    <td>primary_email</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.primary_email}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.primary_email=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.primary_email!='Pass'"
+                                            style="color: red;">close</mat-icon>
 
-                <div class="card-body">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>TABLE NAME</th>
-                                <th>FIELD NAME</th>
-                                <th>STATUS</th>
-                                <th>#</th>
-                            </tr>
-                        </thead>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.id!='Pass'}">
-                            <td>gmhrs_employee_view</td>
-                            <td>id</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.primary_email=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.primary_email!='Pass'}">
-                            <td></td>
-                            <td>primary_email</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.primary_email}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.primary_email=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.primary_email!='Pass'"
-                                    style="color: red;">close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.personal_email=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.personal_email!='Pass'}">
+                                    <td></td>
+                                    <td>personal_email</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.personal_email}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.personal_email=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.personal_email!='Pass'"
+                                            style="color: red;">close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.first_name=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.first_name!='Pass'}">
+                                    <td></td>
+                                    <td>first_name</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.first_name}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.first_name=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.first_name!='Pass'"
+                                            style="color: red;">close</mat-icon>
 
-                            </td>
-                        </tr>
-                        <tr
-                            [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.personal_email=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.personal_email!='Pass'}">
-                            <td></td>
-                            <td>personal_email</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.personal_email}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.personal_email=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.personal_email!='Pass'"
-                                    style="color: red;">close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.first_name=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.first_name!='Pass'}">
-                            <td></td>
-                            <td>first_name</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.first_name}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.first_name=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.first_name!='Pass'"
-                                    style="color: red;">close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.last_name=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.last_name!='Pass'}">
+                                    <td></td>
+                                    <td>last_name</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.last_name}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.last_name=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.last_name!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.phone=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.phone!='Pass'}">
+                                    <td></td>
+                                    <td>phone</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.phone}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.phone=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.phone!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.address=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.address!='Pass'}">
+                                    <td></td>
+                                    <td>address</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.address}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.address=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.address!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.department_id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.department_id!='Pass'}">
+                                    <td></td>
+                                    <td>department_id</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.department_id}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.department_id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.department_id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.position_id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.position_id!='Pass'}">
+                                    <td></td>
+                                    <td>position_id</td>
+                                    <td>{{connectionStringDataResponseEmployee.employee.position_id}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.position_id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseEmployee.employee.position_id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <!-- <tr
+                                        [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.department.name=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseEmployee.employee.department.name!='Pass'}">
+                                        <td></td>
+                                        <td>department_id</td>
+                                        <td>{{connectionStringDataResponseEmployee.employee.department.name}}</td>
+                                        <td>
+                                            <mat-icon
+                                                *ngIf="connectionStringDataResponseEmployee.employee.department.name=='Pass'"
+                                                style="color: green;">done
+                                            </mat-icon>
+                                            <mat-icon
+                                                *ngIf="connectionStringDataResponseEmployee.employee.department.name!='Pass'"
+                                                style="color: red;">
+                                                close</mat-icon>
+                                        </td>
+                                    </tr> -->
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseDepartment.department.id!='Pass'}">
+                                    <td>gmhrs_department_view</td>
+                                    <td>id</td>
+                                    <td>{{connectionStringDataResponseDepartment.department.id}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseDepartment.department.id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseDepartment.department.id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.name=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseDepartment.department.name!='Pass'}">
+                                    <td></td>
+                                    <td>name</td>
+                                    <td>{{connectionStringDataResponseDepartment.department.name}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseDepartment.department.name=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseDepartment.department.name!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.email=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseDepartment.department.email!='Pass'}">
+                                    <td></td>
+                                    <td>email</td>
+                                    <td>{{connectionStringDataResponseDepartment.department.email}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseDepartment.department.email=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseDepartment.department.email !='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseTeam.team.id!='Pass'}">
+                                    <td>gmhrs_team_view</td>
+                                    <td>id</td>
+                                    <td>{{connectionStringDataResponseTeam.team.id}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseTeam.team.id=='Pass'"
+                                            style="color: green;">
+                                            done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseTeam.team.id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.name=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseTeam.team.name!='Pass'}">
+                                    <td></td>
+                                    <td>name</td>
+                                    <td>{{connectionStringDataResponseTeam.team.name}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseTeam.team.name=='Pass'"
+                                            style="color: green;">
+                                            done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseTeam.team.name!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.email=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseTeam.team.email!='Pass'}">
+                                    <td></td>
+                                    <td>email</td>
+                                    <td>{{connectionStringDataResponseTeam.team.email}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseTeam.team.email=='Pass'"
+                                            style="color: green;">
+                                            done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseTeam.team.email!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseTeamEmployee.team_employee.employee_id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseTeamEmployee.team_employee.employee_id!='Pass'}">
+                                    <td>gmhrs_team_employee_view</td>
+                                    <td>employee_id</td>
+                                    <td>{{connectionStringDataResponseTeamEmployee.team_employee.employee_id}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseTeamEmployee.team_employee.employee_id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseTeamEmployee.team_employee.employee_id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseTeamEmployee.team_employee.team_id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseTeamEmployee.team_employee.team_id!='Pass'}">
+                                    <td></td>
+                                    <td>team_id</td>
+                                    <td>{{connectionStringDataResponseTeamEmployee.team_employee.team_id}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseTeamEmployee.team_employee.team_id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseTeamEmployee.team_employee.team_id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponsePositon.position.id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponsePositon.position.id!='Pass'}">
+                                    <td>gmhrs_positon_view</td>
+                                    <td>id</td>
+                                    <td>{{connectionStringDataResponsePositon.position.id}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponsePositon.position.id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponsePositon.position.id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr [ngClass]="{'response-status-success' : connectionStringDataResponsePositon.position.name=='Pass' ,
+                            'response-status-fail' : connectionStringDataResponsePositon.position.name!='Pass'}">
+                                    <td></td>
+                                    <td>name</td>
+                                    <td>{{connectionStringDataResponsePositon.position.name}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponsePositon.position.name=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponsePositon.position.name!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseVacation.vacation.employee_id=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseVacation.vacation.employee_id!='Pass'}">
+                                    <td>gmhrs_vacation_date_view</td>
+                                    <td>employee_id</td>
+                                    <td>{{connectionStringDataResponseVacation.vacation.employee_id}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseVacation.vacation.employee_id=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseVacation.vacation.employee_id!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseVacation.vacation.start_date=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseVacation.vacation.start_date!='Pass'}">
+                                    <td></td>
+                                    <td>start_date</td>
+                                    <td>{{connectionStringDataResponseVacation.vacation.start_date}}</td>
+                                    <td>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseVacation.vacation.start_date=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon
+                                            *ngIf="connectionStringDataResponseVacation.vacation.start_date!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'response-status-success' : connectionStringDataResponseVacation.vacation.end_date=='Pass' ,
+                                'response-status-fail' : connectionStringDataResponseVacation.vacation.end_date!='Pass'}">
+                                    <td></td>
+                                    <td>end_date</td>
+                                    <td>{{connectionStringDataResponseVacation.vacation.end_date}}</td>
+                                    <td>
+                                        <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.end_date=='Pass'"
+                                            style="color: green;">done
+                                        </mat-icon>
+                                        <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.end_date!='Pass'"
+                                            style="color: red;">
+                                            close</mat-icon>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Mapping Database">
+                        <mat-accordion>
+                            <div *ngFor="let tableModel of tableMappingModel ; let i = index">
+                                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title style="width: 50%; ">
+                                            Table: {{tableModel.tableName}}
+                                        </mat-panel-title>
+                                        <mat-panel-description style="width: 50%;">
+                                            Mapping Information
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <table class="table table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>TABLE NAME</th>
+                                                <th>TABLE MAPPING</th>
+                                                <th>FIELD NAME</th>
+                                                <th>FIELD MAPPING</th>
+                                                <th>STATUS</th>
+                                            </tr>
+                                        </thead>
+                                        <tr *ngFor="let field of tableModel.fields; let j = index">
+                                            <th>{{tableModel.tableName}}</th>
+                                            <td>
+                                                <mat-form-field style="width: 100%; " appearance="outline">
+                                                    <mat-label>Choose Table Name</mat-label>
+                                                    <mat-select>
+                                                        <mat-option *ngFor="let tableName of table; let z = index"
+                                                            [value]="tableName.tableName"
+                                                            (onSelectionChange)="fieldChang($event, i, j, tableName.tableName)">
+                                                            {{tableName.tableName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </td>
 
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.last_name=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.last_name!='Pass'}">
-                            <td></td>
-                            <td>last_name</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.last_name}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.last_name=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.last_name!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.phone=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.phone!='Pass'}">
-                            <td></td>
-                            <td>phone</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.phone}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.phone=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.phone!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.address=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.address!='Pass'}">
-                            <td></td>
-                            <td>address</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.address}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.address=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.address!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.department_id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.department_id!='Pass'}">
-                            <td></td>
-                            <td>department_id</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.department_id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.department_id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.department_id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.position_id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.position_id!='Pass'}">
-                            <td></td>
-                            <td>position_id</td>
-                            <td>{{connectionStringDataResponseEmployee.employee.position_id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.position_id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseEmployee.employee.position_id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <!-- <tr
-                                [ngClass]="{'response-status-success' : connectionStringDataResponseEmployee.employee.department.name=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseEmployee.employee.department.name!='Pass'}">
-                                <td></td>
-                                <td>department_id</td>
-                                <td>{{connectionStringDataResponseEmployee.employee.department.name}}</td>
-                                <td>
-                                    <mat-icon
-                                        *ngIf="connectionStringDataResponseEmployee.employee.department.name=='Pass'"
-                                        style="color: green;">done
-                                    </mat-icon>
-                                    <mat-icon
-                                        *ngIf="connectionStringDataResponseEmployee.employee.department.name!='Pass'"
-                                        style="color: red;">
-                                        close</mat-icon>
-                                </td>
-                            </tr> -->
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseDepartment.department.id!='Pass'}">
-                            <td>gmhrs_department_view</td>
-                            <td>id</td>
-                            <td>{{connectionStringDataResponseDepartment.department.id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseDepartment.department.id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseDepartment.department.id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.name=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseDepartment.department.name!='Pass'}">
-                            <td></td>
-                            <td>name</td>
-                            <td>{{connectionStringDataResponseDepartment.department.name}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseDepartment.department.name=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseDepartment.department.name!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseDepartment.department.email=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseDepartment.department.email!='Pass'}">
-                            <td></td>
-                            <td>email</td>
-                            <td>{{connectionStringDataResponseDepartment.department.email}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseDepartment.department.email=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseDepartment.department.email !='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseTeam.team.id!='Pass'}">
-                            <td>gmhrs_team_view</td>
-                            <td>id</td>
-                            <td>{{connectionStringDataResponseTeam.team.id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseTeam.team.id=='Pass'"
-                                    style="color: green;">
-                                    done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseTeam.team.id!='Pass'" style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.name=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseTeam.team.name!='Pass'}">
-                            <td></td>
-                            <td>name</td>
-                            <td>{{connectionStringDataResponseTeam.team.name}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseTeam.team.name=='Pass'"
-                                    style="color: green;">
-                                    done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseTeam.team.name!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseTeam.team.email=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseTeam.team.email!='Pass'}">
-                            <td></td>
-                            <td>email</td>
-                            <td>{{connectionStringDataResponseTeam.team.email}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseTeam.team.email=='Pass'"
-                                    style="color: green;">
-                                    done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseTeam.team.email!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr
-                            [ngClass]="{'response-status-success' : connectionStringDataResponseTeamEmployee.team_employee.employee_id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseTeamEmployee.team_employee.employee_id!='Pass'}">
-                            <td>gmhrs_team_employee_view</td>
-                            <td>employee_id</td>
-                            <td>{{connectionStringDataResponseTeamEmployee.team_employee.employee_id}}</td>
-                            <td>
-                                <mat-icon
-                                    *ngIf="connectionStringDataResponseTeamEmployee.team_employee.employee_id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon
-                                    *ngIf="connectionStringDataResponseTeamEmployee.team_employee.employee_id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr
-                            [ngClass]="{'response-status-success' : connectionStringDataResponseTeamEmployee.team_employee.team_id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseTeamEmployee.team_employee.team_id!='Pass'}">
-                            <td></td>
-                            <td>team_id</td>
-                            <td>{{connectionStringDataResponseTeamEmployee.team_employee.team_id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseTeamEmployee.team_employee.team_id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseTeamEmployee.team_employee.team_id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponsePositon.position.id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponsePositon.position.id!='Pass'}">
-                            <td>gmhrs_positon_view</td>
-                            <td>id</td>
-                            <td>{{connectionStringDataResponsePositon.position.id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponsePositon.position.id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponsePositon.position.id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponsePositon.position.name=='Pass' ,
-                    'response-status-fail' : connectionStringDataResponsePositon.position.name!='Pass'}">
-                            <td></td>
-                            <td>name</td>
-                            <td>{{connectionStringDataResponsePositon.position.name}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponsePositon.position.name=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponsePositon.position.name!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseVacation.vacation.employee_id=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseVacation.vacation.employee_id!='Pass'}">
-                            <td>gmhrs_vacation_date_view</td>
-                            <td>employee_id</td>
-                            <td>{{connectionStringDataResponseVacation.vacation.employee_id}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.employee_id=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.employee_id!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseVacation.vacation.start_date=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseVacation.vacation.start_date!='Pass'}">
-                            <td></td>
-                            <td>start_date</td>
-                            <td>{{connectionStringDataResponseVacation.vacation.start_date}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.start_date=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.start_date!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                        <tr [ngClass]="{'response-status-success' : connectionStringDataResponseVacation.vacation.end_date=='Pass' ,
-                        'response-status-fail' : connectionStringDataResponseVacation.vacation.end_date!='Pass'}">
-                            <td></td>
-                            <td>end_date</td>
-                            <td>{{connectionStringDataResponseVacation.vacation.end_date}}</td>
-                            <td>
-                                <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.end_date=='Pass'"
-                                    style="color: green;">done
-                                </mat-icon>
-                                <mat-icon *ngIf="connectionStringDataResponseVacation.vacation.end_date!='Pass'"
-                                    style="color: red;">
-                                    close</mat-icon>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                                            <td>
+                                                {{field.field}}
+                                            </td>
+                                            <td>
+                                                <mat-form-field *ngIf="chooseTable[i][j]!=chooseField[i][j]"
+                                                    style="width: 100%; " appearance="outline">
+                                                    <mat-label>Choose Value</mat-label>
+                                                    <mat-select></mat-select>
+                                                </mat-form-field>
+
+                                                <mat-form-field style="width: 100%;" appearance="outline"
+                                                    *ngIf="chooseTable[i][j]==chooseField[i][j]">
+                                                    <mat-label>Choose Field Name</mat-label>
+                                                    <mat-select>
+                                                        <mat-option *ngFor="let fieldNameMapping of fieldNameList[i][j]"
+                                                            [value]="fieldNameMapping.name"
+                                                            (onSelectionChange)="selectFiledChange($event, i, j, fieldNameMapping.name, field.field)">
+                                                            {{fieldNameMapping.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </td>
+                                            <td style="color: green;">Mapped</td>
+
+                                        </tr>
+                                    </table>
+                                </mat-expansion-panel>
+                            </div>
+                        </mat-accordion>
+                    </mat-tab>
+                </mat-tab-group>
+
                 <button mat-flat-button style="margin-right: 40px;" col-md-2 ml-2 color="primary"
                     (click)="closeModal()">
                     Close

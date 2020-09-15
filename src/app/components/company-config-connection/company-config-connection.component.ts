@@ -254,6 +254,141 @@ export class CompanyConfigConnectionComponent implements OnInit {
   nextButonConditonGSuiteCredential = false;
   file_name_auth_gsuite_company;
   loadingFull = false;
+  tableMappingModel = [
+    {
+      tableName: "gmhrs_employee_view",
+      fields: [
+        { field: "id" },
+        { field: "primary_email" },
+        { field: "personal_email" },
+        { field: "first_name" },
+        { field: "last_name" },
+        { field: "phone" },
+        { field: "address" },
+        { field: "position_id" },
+        { field: "department_id" }
+      ]
+
+    },
+    {
+      tableName: "gmhrs_department_view",
+      fields: [
+        { field: "id" },
+        { field: "name" },
+        { field: "email" }
+      ]
+    },
+    {
+      tableName: "gmhrs_team_view",
+      fields: [
+        { field: "id" },
+        { field: "name" },
+        { field: "email" },
+      ]
+    },
+    {
+      tableName: "gmhrs_team_employee_view",
+      fields: [
+        { field: "employee_id" },
+        { field: "team_id" }
+      ]
+    },
+    {
+      tableName: "gmhrs_position_view",
+      fields: [
+        { field: "id" },
+        { field: "name" }
+      ]
+    },
+    {
+      tableName: "gmhrs_vacation_date_view",
+      fields: [
+        { field: "employee_id" },
+        { field: "start_date" },
+        { field: "end_date" }
+      ]
+    },
+  ]
+  mappingTableResult = [
+    {
+      tableGM: "gmhrs_employee_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { primary_email: "" },
+          { personal_email: "" },
+          { first_name: "" },
+          { last_name: "" },
+          { phone: "" },
+          { address: "" },
+          { position_id: "" },
+          { department_id: "" }
+        ]
+
+      }
+    },
+    {
+      tableGM: "gmhrs_department_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { name: "" },
+          { email: "" }
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_team_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { name: "" },
+          { email: "" }
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_team_employee_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { employee_id: "" },
+          { team_id: "" },
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_position_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { id: "" },
+          { name: "" }
+        ]
+      }
+    },
+    {
+      tableGM: "gmhrs_vacation_date_view",
+      tableHR:
+      {
+        nametableHR: "",
+        fields: [
+          { employee_id: "" },
+          { start_date: "" },
+          { end_date: "" }
+        ]
+
+      }
+    }
+  ]
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(
@@ -931,6 +1066,32 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   }
 
+
+  chooseTable: any = [];
+  chooseField = [];
+  fieldNameList = [];
+  fieldChang(event, z, j, name) {
+    if (event.isUserInput) {
+
+      for (let i = 0; i < this.table.length; i++) {
+        if (event.source.value == this.table[i].tableName && event.source.selected == true) {
+          this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+          this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+          this.fieldNameList[z][j] = this.table[i].fields;
+          console.log(this.fieldNameList);
+          this.mappingTableResult[z].tableHR.nametableHR = name;
+
+        };
+      }
+    }
+  }
+
+  selectFiledChange(event, z, j, name, fieldModel) {
+    if (event.isUserInput) {
+      this.mappingTableResult[z].tableHR.fields[j][fieldModel] = name;
+      console.log(this.mappingTableResult);
+    }
+  }
   // test connection string
   connectionStringResultEmployee;
   connectionStringResultTeam;
@@ -938,6 +1099,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   connectionStringResultTeamEmployee
   connectionStringResultPosition;
   connectionStringResultVacation;
+  table: any;
   onTestConection(modal, value) {
     this.loadingFull = true;
     this.loadingTestConnection = true;
@@ -968,6 +1130,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionStringResultTeamEmployee = res.team_employee;
             this.connectionStringResultPosition = res.positions;
             this.connectionStringResultVacation = res.vacation_date;
+            this.table = res.table;
+
             console.log(this.connectionStringDataResponsePositon);
 
             var check = this.checkingFormatDataConnectionString(
@@ -982,13 +1146,30 @@ export class CompanyConfigConnectionComponent implements OnInit {
               res.character_maximum_length_team,
               res.character_maximum_length_position);
             console.log(this.connectionStringDataResponseDepartment);
-
+            console.log(this.table);
+            console.log(this.tableMappingModel);
+            let item = [];
+            let item1 = [];
+            let item2 = []
+            this.tableMappingModel.forEach((element, i) => {
+              item = [];
+              item1 = []
+              item2 = []
+              element.fields.forEach((el, j) => {
+                item.push(j);
+                item1.push(j)
+                item2.push("null")
+              });
+              this.chooseTable[i] = item;
+              this.chooseField[i] = item2;
+              this.fieldNameList[i] = item1
+            });
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
             this.disableSaveConnectionStringButton = check;
             console.log(this.connectionStringDataResponseEmployee);
             this.loadingFull = false;
-            this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+            this.modalService.open(modal, { size: 'xl', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           } if (res.checkConnection.status == "fail" || res.status == 0) {
             this.connectionStatus.connection.status = "Fail";
             this.connectionStatus.connection.message = res.checkConnection.message;
