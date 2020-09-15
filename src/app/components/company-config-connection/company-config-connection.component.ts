@@ -438,21 +438,22 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
         if (res.connection_database != undefined) {
+          this.loadingFull = false;
           console.log(res.connection_database);
-          var connectionString = res.connection_database.split("?")[1];
-          var dbName = connectionString.split("=")[1];
-          var host = connectionString.split("=")[2];
-          var port = connectionString.split("=")[3];
-          var username = connectionString.split("=")[4];
-          var password = connectionString.split("=")[5];
-          var type = connectionString.split("=")[6];
+          var connectionString = res.connection_database
+          var dbName = connectionString.split(" ")[0];
+          var host = connectionString.split(" ")[1];
+          var port = connectionString.split(" ")[2];
+          var username = connectionString.split(" ")[3];
+          var password = connectionString.split(" ")[4];
+          var type = connectionString.split(" ")[5];
 
-          this.connectionString.dbName = dbName.split("&")[0];
-          this.connectionString.host = host.split("&")[0];
-          this.connectionString.port = port.split("&")[0];
-          this.connectionString.username = username.split("&")[0];
-          this.connectionString.password = password.split("&")[0];
-          this.connectionString.type = type.split("&")[0];
+          this.connectionString.dbName = dbName;
+          this.connectionString.host = host;
+          this.connectionString.port = port;
+          this.connectionString.username = username;
+          this.connectionString.password = password;
+          this.connectionString.type = type;
           this.accessDBForm = this.fb.group({
             dbName: new FormControl(this.connectionString.dbName, [Validators.required]),
             host: new FormControl(this.connectionString.host, [Validators.required]),
@@ -463,7 +464,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
           });
           this.disableSaveConnectionStringButton = false;
           this.nextButonConditonConnectionString = true;
-          this.loadingFull = false;
           // this.disableTestConnectionStringButton = false;
         }
         else {
@@ -1234,13 +1234,15 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnection.username = value.username;
     this.companyConnection.password = value.password;
     this.companyConnection.dialect = value.dialect;
-
-    const connectionString = "http://localhost:3002/api/api-endpoint?dbName=" + this.companyConnection.dbName +
+    const connectionString = this.companyConnection.dbName + " " + this.companyConnection.host + " " + this.companyConnection.port + " " + this.companyConnection.username + " " +
+      this.companyConnection.password + " " + this.companyConnection.dialect;
+    const connectionString_valid = "http://localhost:3002/api/api-endpoint?dbName=" + this.companyConnection.dbName +
       "&host=" + this.companyConnection.host + "&port=" + this.companyConnection.port + "&username=" + this.companyConnection.username +
       "&password=" + this.companyConnection.password + "&dialect=" + this.companyConnection.dialect
     const id = localStorage.getItem('id');
     this.account = new AccountCompanyModel;
     this.account.id = id;
+    this.account.connection_valid = connectionString_valid;
     this.account.connection_database = connectionString;
     // this.account.api_endpoint = api_enpoint;
     console.log(this.account);
@@ -1249,13 +1251,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
       (res: any) => {
         if (res.status == "success") {
           this.loadingFull = false;
-          this.toast.success("Save connection successfully!");
+          this.toast.success("Save connection database successfully!");
           this.nextButonConditonConnectionString = true;
           this.closeModal();
         };
-        if (res.status == "fail") {
+        if (res.code == "fail") {
           this.loadingFull = false;
-          this.toast.error("Save connection fail!");
+          this.toast.error("Save connection database fail!");
           this.nextButonConditonConnectionString = false;
         }
       },
@@ -1267,6 +1269,49 @@ export class CompanyConfigConnectionComponent implements OnInit {
     )
   }
 
+  onSubmitConectionMapping(value) {
+    this.loadingFull = true;
+    this.companyConnection = new CompanyConnection();
+    this.companyConnection.dbName = value.dbName;
+    this.companyConnection.host = value.host;
+    this.companyConnection.port = value.port;
+    this.companyConnection.username = value.username;
+    this.companyConnection.password = value.password;
+    this.companyConnection.dialect = value.dialect;
+
+
+
+
+    const id = localStorage.getItem('id');
+    this.account = new AccountCompanyModel;
+    this.account.id = id;
+    var req = {
+      accountId: this.account.id,
+      mapping: this.mappingTableResult,
+      dbInfor: this.companyConnection
+    }
+
+    this.companyConnectionService.saveDBMappingConnection(req).subscribe(
+      (res: any) => {
+        if (res.code == 200) {
+          this.loadingFull = false;
+          this.toast.success(res.status);
+          this.nextButonConditonConnectionString = true;
+          this.closeModal();
+        };
+        if (res.code == 500) {
+          this.loadingFull = false;
+          this.toast.error(res.status);
+          this.nextButonConditonConnectionString = false;
+        }
+      },
+      (error) => {
+        this.loadingFull = false;
+        this.toast.error("Server is not available!");
+        this.nextButonConditonConnectionString = false;
+      }
+    )
+  }
 
   //onchange file
   public onChange(fileList: FileList): void {

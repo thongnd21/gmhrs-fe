@@ -790,84 +790,97 @@
                                 </tr>
                             </table>
                         </div>
+                        <button mat-flat-button style="margin-right: 40px;" col-md-2 ml-2 color="primary"
+                            (click)="closeModal()">
+                            Close
+                        </button>
+                        <button style="margin-right: 40px;" mat-raised-button
+                            (click)="onSubmitConection(accessDBForm.value)" color="primary"
+                            [disabled]="!disableSaveConnectionStringButton">
+                            Save
+                        </button>
                     </mat-tab>
                     <mat-tab label="Mapping Database">
-                        <mat-accordion>
-                            <div *ngFor="let tableModel of tableMappingModel ; let i = index">
-                                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title style="width: 50%; ">
-                                            Table: {{tableModel.tableName}}
-                                        </mat-panel-title>
-                                        <mat-panel-description style="width: 50%;">
-                                            Mapping Information
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <table class="table table-bordered">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th>TABLE NAME</th>
-                                                <th>TABLE MAPPING</th>
-                                                <th>FIELD NAME</th>
-                                                <th>FIELD MAPPING</th>
-                                                <th>STATUS</th>
+                        <div class="card-body">
+                            <mat-accordion>
+                                <div *ngFor="let tableModel of tableMappingModel ; let i = index">
+                                    <mat-expansion-panel (opened)="panelOpenState = true"
+                                        (closed)="panelOpenState = false">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title style="width: 50%; ">
+                                                Table: {{tableModel.tableName}}
+                                            </mat-panel-title>
+                                            <mat-panel-description style="width: 50%;">
+                                                Mapping Information
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                        <table class="table table-bordered">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>TABLE NAME</th>
+                                                    <th>TABLE MAPPING</th>
+                                                    <th>FIELD NAME</th>
+                                                    <th>FIELD MAPPING</th>
+                                                    <th>STATUS</th>
+                                                </tr>
+                                            </thead>
+                                            <tr *ngFor="let field of tableModel.fields; let j = index">
+                                                <th>{{tableModel.tableName}}</th>
+                                                <td>
+                                                    <mat-form-field style="width: 100%; " appearance="outline">
+                                                        <mat-label>Choose Table Name</mat-label>
+                                                        <mat-select>
+                                                            <mat-option *ngFor="let tableName of table; let z = index"
+                                                                [value]="tableName.tableName"
+                                                                (onSelectionChange)="fieldChang($event, i, j, tableName.tableName)">
+                                                                {{tableName.tableName}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </td>
+
+                                                <td>
+                                                    {{field.field}}
+                                                </td>
+                                                <td>
+                                                    <mat-form-field *ngIf="chooseTable[i][j]!=chooseField[i][j]"
+                                                        style="width: 100%; " appearance="outline">
+                                                        <mat-label>Choose Value</mat-label>
+                                                        <mat-select></mat-select>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field style="width: 100%;" appearance="outline"
+                                                        *ngIf="chooseTable[i][j]==chooseField[i][j]">
+                                                        <mat-label>Choose Field Name</mat-label>
+                                                        <mat-select>
+                                                            <mat-option
+                                                                *ngFor="let fieldNameMapping of fieldNameList[i][j]"
+                                                                [value]="fieldNameMapping.name"
+                                                                (onSelectionChange)="selectFiledChange($event, i, j, fieldNameMapping.name, field.field)">
+                                                                {{fieldNameMapping.name}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </td>
+                                                <td style="color: green;">Mapped</td>
+
                                             </tr>
-                                        </thead>
-                                        <tr *ngFor="let field of tableModel.fields; let j = index">
-                                            <th>{{tableModel.tableName}}</th>
-                                            <td>
-                                                <mat-form-field style="width: 100%; " appearance="outline">
-                                                    <mat-label>Choose Table Name</mat-label>
-                                                    <mat-select>
-                                                        <mat-option *ngFor="let tableName of table; let z = index"
-                                                            [value]="tableName.tableName"
-                                                            (onSelectionChange)="fieldChang($event, i, j, tableName.tableName)">
-                                                            {{tableName.tableName}}
-                                                        </mat-option>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </td>
-
-                                            <td>
-                                                {{field.field}}
-                                            </td>
-                                            <td>
-                                                <mat-form-field *ngIf="chooseTable[i][j]!=chooseField[i][j]"
-                                                    style="width: 100%; " appearance="outline">
-                                                    <mat-label>Choose Value</mat-label>
-                                                    <mat-select></mat-select>
-                                                </mat-form-field>
-
-                                                <mat-form-field style="width: 100%;" appearance="outline"
-                                                    *ngIf="chooseTable[i][j]==chooseField[i][j]">
-                                                    <mat-label>Choose Field Name</mat-label>
-                                                    <mat-select>
-                                                        <mat-option *ngFor="let fieldNameMapping of fieldNameList[i][j]"
-                                                            [value]="fieldNameMapping.name"
-                                                            (onSelectionChange)="selectFiledChange($event, i, j, fieldNameMapping.name, field.field)">
-                                                            {{fieldNameMapping.name}}
-                                                        </mat-option>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </td>
-                                            <td style="color: green;">Mapped</td>
-
-                                        </tr>
-                                    </table>
-                                </mat-expansion-panel>
-                            </div>
-                        </mat-accordion>
+                                        </table>
+                                    </mat-expansion-panel>
+                                </div>
+                            </mat-accordion>
+                        </div>
+                        <button mat-flat-button style="margin-right: 40px;" col-md-2 ml-2 color="primary"
+                            (click)="closeModal()">
+                            Close
+                        </button>
+                        <button style="margin-right: 40px;" mat-raised-button
+                            (click)="onSubmitConectionMapping(accessDBForm.value)" color="primary"
+                            [disabled]="!disableSaveConnectionStringButton">
+                            Save
+                        </button>
                     </mat-tab>
                 </mat-tab-group>
-
-                <button mat-flat-button style="margin-right: 40px;" col-md-2 ml-2 color="primary"
-                    (click)="closeModal()">
-                    Close
-                </button>
-                <button style="margin-right: 40px;" mat-raised-button (click)="onSubmitConection(accessDBForm.value)"
-                    color="primary" [disabled]="!disableSaveConnectionStringButton">
-                    Save
-                </button>
             </div>
         </ng-template>
 
