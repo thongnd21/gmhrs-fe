@@ -1084,6 +1084,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         };
       }
     }
+    this.checkingMapping(this.mappingTableResult);
   }
 
   selectFiledChange(event, z, j, name, fieldModel) {
@@ -1091,6 +1092,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       this.mappingTableResult[z].tableHR.fields[j][fieldModel] = name;
       console.log(this.mappingTableResult);
     }
+    this.checkingMapping(this.mappingTableResult);
   }
   // test connection string
   connectionStringResultEmployee;
@@ -1269,6 +1271,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     )
   }
 
+  enableButtonSaveMapping = true;
   onSubmitConectionMapping(value) {
     this.loadingFull = true;
     this.companyConnection = new CompanyConnection();
@@ -1311,6 +1314,75 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.nextButonConditonConnectionString = false;
       }
     )
+  }
+
+  checkingMapping(mappingResult) {
+    for (let i = 0; i < mappingResult.length; i++) {
+      if (mappingResult[i].tableHR.nametableHR == "") {
+        this.enableButtonSaveMapping = true;
+      } else {
+        for (let j = 0; j < mappingResult[i].tableHR.fields.length; j++) {
+          if (i == 0) {
+            if (mappingResult[i].tableHR.fields[j].id !== "" &&
+              mappingResult[i].tableHR.fields[j].primary_email !== "" && mappingResult[i].tableHR.fields[j].personal_email !== ""
+              && mappingResult[i].tableHR.fields[j].first_name !== "" && mappingResult[i].tableHR.fields[j].last_name !== ""
+              && mappingResult[i].tableHR.fields[j].phone !== "" && mappingResult[i].tableHR.fields[j].address !== ""
+              && mappingResult[i].tableHR.fields[j].position_id !== "" && mappingResult[i].tableHR.fields[j].department_id !== "") {
+              this.enableButtonSaveMapping = false;
+            }
+            else {
+              this.enableButtonSaveMapping = true;
+            }
+          }
+          if (i == 1) {
+            if (mappingResult[i].tableHR.fields[j].id !== "" &&
+              mappingResult[i].tableHR.fields[j].name !== "" && mappingResult[i].tableHR.fields[j].email !== ""
+            ) {
+              this.enableButtonSaveMapping = false;
+            }
+            else {
+              this.enableButtonSaveMapping = true;
+            }
+          }
+          if (i == 2) {
+            if (mappingResult[i].tableHR.fields[j].id !== "" &&
+              mappingResult[i].tableHR.fields[j].name !== "" && mappingResult[i].tableHR.fields[j].email !== ""
+            ) {
+              this.enableButtonSaveMapping = false;
+            }
+            else {
+              this.enableButtonSaveMapping = true;
+            }
+          }
+          if (i == 3) {
+            if (mappingResult[i].tableHR.fields[j].employee_id !== "" && mappingResult[i].tableHR.fields[j].team_id !== "") {
+              this.enableButtonSaveMapping = false;
+            }
+            else {
+              this.enableButtonSaveMapping = true;
+            }
+          }
+          if (i == 4) {
+            if (mappingResult[i].tableHR.fields[j].id !== "" && mappingResult[i].tableHR.fields[j].name !== "") {
+              this.enableButtonSaveMapping = false;
+            }
+            else {
+              this.enableButtonSaveMapping = true;
+            }
+          }
+          if (i == 5) {
+            if (mappingResult[i].tableHR.fields[j].employee_id !== "" &&
+              mappingResult[i].tableHR.fields[j].start_date !== "" && mappingResult[i].tableHR.fields[j].end_date !== ""
+            ) {
+              this.enableButtonSaveMapping = false;
+            }
+            else {
+              this.enableButtonSaveMapping = true;
+            }
+          }
+        }
+      }
+    }
   }
 
   //onchange file
