@@ -964,17 +964,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnection.password = value.password;
     this.companyConnection.dialect = value.dialect;
 
-    const connectionString = "https://gmcompany-api.herokuapp.com/api/api-endpoint?dbName=" + this.companyConnection.dbName +
-      "&host=" + this.companyConnection.host + "&port=" + this.companyConnection.port + "&username=" + this.companyConnection.username +
-      "&password=" + this.companyConnection.password + "&dialect=" + this.companyConnection.dialect
+    // const connectionString = "https://gmcompany-api.herokuapp.com/api/api-endpoint?dbName=" + this.companyConnection.dbName +
+    //   "&host=" + this.companyConnection.host + "&port=" + this.companyConnection.port + "&username=" + this.companyConnection.username +
+    //   "&password=" + this.companyConnection.password + "&dialect=" + this.companyConnection.dialect
     const id = localStorage.getItem('id');
     this.account = new AccountCompanyModel;
     this.account.id = id;
-    this.account.connection_database = connectionString;
+    // this.account.connection_database = connectionString;
     // this.account.api_endpoint = api_enpoint;
-    console.log(this.account);
-
-    this.companyConnectionService.saveDBCompanyConnection(this.mappingTableResult).subscribe(
+    var req = {
+      accountId : this.account.id,
+      mapping: this.mappingTableResult,
+      dbInfor: this.companyConnection
+    }
+    this.companyConnectionService.saveDBCompanyConnection(req).subscribe(
       (res: any) => {
         if (res.status == "success") {
           this.loadingFull = false;
