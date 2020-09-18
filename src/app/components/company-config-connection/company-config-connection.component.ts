@@ -257,8 +257,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
   tableMappingModel = [
     {
       tableName: "gmhrs_employee_view",
+      tableHR: "",
       fields: [
-        { field: "id" },
+        { field: "id",  },
         { field: "primary_email" },
         { field: "personal_email" },
         { field: "first_name" },
@@ -272,6 +273,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     },
     {
       tableName: "gmhrs_department_view",
+      tableHR: "",
       fields: [
         { field: "id" },
         { field: "name" },
@@ -280,6 +282,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     },
     {
       tableName: "gmhrs_team_view",
+      tableHR: "",
       fields: [
         { field: "id" },
         { field: "name" },
@@ -288,6 +291,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     },
     {
       tableName: "gmhrs_team_employee_view",
+      tableHR: "",
       fields: [
         { field: "employee_id" },
         { field: "team_id" }
@@ -295,6 +299,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     },
     {
       tableName: "gmhrs_position_view",
+      tableHR: "",
       fields: [
         { field: "id" },
         { field: "name" }
@@ -302,6 +307,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     },
     {
       tableName: "gmhrs_vacation_date_view",
+      tableHR: "",
       fields: [
         { field: "employee_id" },
         { field: "start_date" },
@@ -1070,20 +1076,19 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseTable: any = [];
   chooseField = [];
   fieldNameList = [];
-  fieldChang(event, z, j, name) {
+  fieldChang(event, z,j,  name) {
     if (event.isUserInput) {
 
       for (let i = 0; i < this.table.length; i++) {
         if (event.source.value == this.table[i].tableName && event.source.selected == true) {
-          this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-          this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-          this.fieldNameList[z][j] = this.table[i].fields;
-          console.log(this.fieldNameList);
-          this.mappingTableResult[z].tableHR.nametableHR = name;
-
+            this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+            this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+            this.fieldNameList[z][j] = this.table[i].fields;
+            this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
     }
+    console.log(this.mappingTableResult);
     this.checkingMapping(this.mappingTableResult);
   }
 
