@@ -1,3 +1,4 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
 .spinner-container {
     position: absolute;
     top: 0;
@@ -26,4 +27,7 @@
 table.a {
   table-layout: auto;
   width: 100%;
+}
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+  z-index: 99999 !important;
 }

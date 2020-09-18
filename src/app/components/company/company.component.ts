@@ -102,6 +102,11 @@ export class CompanyComponent implements OnInit {
     this.account = new AccountCompanyModel;
     this.companyServices.getAccountCompanyById(id).subscribe(
       (data: any) => {
+        let basicAuth = atob(data.basic_auth_endpoint);
+        console.log(basicAuth + "aaaaaaaaa");
+        
+        // let username = basicAuth.split(":")[0];
+        // let password = basicAuth.split(":")[1];
         this.account.id = data.id;
         this.account.email = data.email;
         this.account.username = data.username;
@@ -111,6 +116,10 @@ export class CompanyComponent implements OnInit {
         this.account.address = data.address;
         this.account.phone = data.phone;
         this.account.status_id = data.status_id;
+        this.account.token_api_endpoint = data.token_api_endpoint;
+        this.account.basic_auth_endpoint = basicAuth;
+
+        console.log(this.account + "aaaaaaaaa");
       },
       (error)=>{
         this.loadingFull = false;

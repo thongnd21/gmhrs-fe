@@ -193,7 +193,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   // json format employee to admin company checking field when input api endpoint
   tableMappingModel = [
     {
-      tableName: "gmhrs_employee_view",
+      tableName: "employee",
       fields: [
         { field: "id" },
         { field: "primary_email" },
@@ -208,7 +208,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
     },
     {
-      tableName: "gmhrs_department_view",
+      tableName: "department",
       fields: [
         { field: "id" },
         { field: "name" },
@@ -216,7 +216,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       ]
     },
     {
-      tableName: "gmhrs_team_view",
+      tableName: "team",
       fields: [
         { field: "id" },
         { field: "name" },
@@ -224,21 +224,21 @@ export class CompanyConfigConnectionComponent implements OnInit {
       ]
     },
     {
-      tableName: "gmhrs_team_employee_view",
+      tableName: "team_employee",
       fields: [
         { field: "employee_id" },
         { field: "team_id" }
       ]
     },
     {
-      tableName: "gmhrs_position_view",
+      tableName: "position",
       fields: [
         { field: "id" },
         { field: "name" }
       ]
     },
     {
-      tableName: "gmhrs_vacation_date_view",
+      tableName: "vacation_date",
       fields: [
         { field: "employee_id" },
         { field: "start_date" },
@@ -263,7 +263,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   loadingFull = false;
   mappingTableResult = [
     {
-      tableGM: "gmhrs_employee_view",
+      tableGM: "employee",
       tableHR:
       {
         nametableHR: "",
@@ -282,7 +282,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       }
     },
     {
-      tableGM: "gmhrs_department_view",
+      tableGM: "department",
       tableHR:
       {
         nametableHR: "",
@@ -294,7 +294,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       }
     },
     {
-      tableGM: "gmhrs_team_view",
+      tableGM: "team",
       tableHR:
       {
         nametableHR: "",
@@ -306,7 +306,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       }
     },
     {
-      tableGM: "gmhrs_team_employee_view",
+      tableGM: "team_employee",
       tableHR:
       {
         nametableHR: "",
@@ -317,7 +317,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       }
     },
     {
-      tableGM: "gmhrs_position_view",
+      tableGM: "position",
       tableHR:
       {
         nametableHR: "",
@@ -328,7 +328,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       }
     },
     {
-      tableGM: "gmhrs_vacation_date_view",
+      tableGM: "vacation_date",
       tableHR:
       {
         nametableHR: "",
@@ -600,15 +600,22 @@ export class CompanyConfigConnectionComponent implements OnInit {
     const accountId = localStorage.getItem('id');
     this.APIEndpointForm = this.fb.group({
       url: new FormControl('', [Validators.required]),
+      tokenAuth: new FormControl(''),
+      usernameAuth: new FormControl(''),
+      passwordAuth: new FormControl('')
     });
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
-        console.log(res);
-
         if (res.api_endpoint != undefined && res.api_endpoint.length > 1) {
-          console.log(res.connection_database);
+          var basicAuth = atob(res.basic_auth_endpoint);
+          var username = basicAuth.split(":")[0];
+          var password = basicAuth.split(":")[1];
+          
           this.APIEndpointForm = this.fb.group({
             url: new FormControl(res.api_endpoint, [Validators.required]),
+            tokenAuth: new FormControl(res.token_api_endpoint),
+            usernameAuth: new FormControl(username),
+            passwordAuth: new FormControl(password)
           });
 
           this.disableSaveConnectionStringButton = false;
@@ -633,6 +640,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.account = new AccountCompanyModel();
     this.account.id = localStorage.getItem('id');
     this.account.api_endpoint = value.url;
+    this.account.usernameAuth = value.usernameAuth
+    this.account.passwordAuth = value.passwordAuth
+    this.account.tokenAuth = value.tokenAuth
     console.log(this.account);
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
@@ -660,11 +670,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.loadingFull = true;
     console.log(value);
     const endpoint = value.url
+    const username = value.usernameAuth
+    const password = value.passwordAuth
+    const token = value.tokenAuth
     this.loadingTestAPI = true;
     this.enableDataAPIResult = false;
     this.apiEndpointFail = false;
     this.anableButtonSaveAPIEndpoint = false;
-    this.accountServices.testAPIEndpoint(endpoint).subscribe(
+    this.accountServices.testAPIEndpoint(endpoint, username, password, token).subscribe(
       (res: any) => {
         console.log(res);
 
@@ -687,8 +700,15 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
       },
       (error) => {
-        this.connectionStatus.connection.status = "Fail";
-        this.employeeValidate = false;
+        console.log(error);
+        
+        // if(error.isAuthenticated!==undefined)
+        if(error.status==401){
+          this.connectionStatus.connection.status = error.statusText;
+        } else {
+          this.connectionStatus.connection.status = "Fail";
+        }
+        this.employeeValidate = false
         this.teamValidate = false;
         this.departmentValidate = false;
         this.dataAPIEndpoindEmployee.employee.id = "Required";

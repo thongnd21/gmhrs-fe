@@ -91,6 +91,31 @@
                                             </mat-form-field>
                                         </div>
                                     </div>
+                                    <h3>Authentication</h3>
+                                    <mat-tab-group>
+                                        <mat-tab label="Bearer Token">
+                                            <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+                                                <div class="pb-1">
+                                                    <mat-form-field class="full-width">
+                                                        <input matInput name="tokenAuth" formControlName="tokenAuth" placeholder="token" />
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </mat-tab>
+                                        <mat-tab label="Basic Auth">
+                                            <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+                                                <div class="pb-1">
+                                                    <mat-form-field class="full-width">
+                                                        <input matInput name="usernameAuth" formControlName="usernameAuth" placeholder="username" />
+                                                    </mat-form-field>
+                                                    <mat-form-field class="full-width">
+                                                        <input matInput name="passwordAuth" formControlName="passwordAuth" type="password" placeholder="password" />
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </mat-tab>
+                                    </mat-tab-group>
+
                                 </div>
                                 <button mat-raised-button style="margin-right: 40px;" color="primary"
                                     (click)="nextClicked(1)">Next</button>

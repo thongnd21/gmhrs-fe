@@ -12,4 +12,7 @@ export class AccountCompanyModel {
     is_schedule : boolean
     schedule_time: string
     primary_email: string
+    token_api_endpoint: string
+    basic_auth_endpoint: string
+    
 }

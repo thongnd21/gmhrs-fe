@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppSettings } from '../appsetting';
 @Injectable({
     providedIn: 'root'
@@ -43,8 +43,19 @@ export class AccountApiService {
         return this.httpClient.put(this.URL + AppSettings.ACCOUNT + path, account);
     };
 
-    testAPIEndpoint(url) {
-        return this.httpClient.get(url);
+    testAPIEndpoint(url, username, password, token) {
+        console.log(username + " " + password + " " + token);
+        
+        var header = null;
+        if (username !== "" && password !== "") {
+
+        var buff = btoa(username+":"+password);
+            header = new HttpHeaders({ Authorization: "Basic " + buff});
+
+        } else if (token !== "") {
+            header = new HttpHeaders({ Authorization: "Bearer " + token});
+        }
+        return this.httpClient.get(url, { headers: header});
     };
 
     getInvalidSignature() {
