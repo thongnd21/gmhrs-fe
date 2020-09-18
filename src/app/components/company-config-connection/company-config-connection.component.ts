@@ -257,61 +257,57 @@ export class CompanyConfigConnectionComponent implements OnInit {
   tableMappingModel = [
     {
       tableName: "gmhrs_employee_view",
-      tableHR: "",
+
       fields: [
-        { field: "id",  },
-        { field: "primary_email" },
-        { field: "personal_email" },
-        { field: "first_name" },
-        { field: "last_name" },
-        { field: "phone" },
-        { field: "address" },
-        { field: "position_id" },
-        { field: "department_id" }
+        { field: "id", status: "Not mapping yet" },
+        { field: "primary_email", status: "Not mapping yet" },
+        { field: "personal_email", status: "Not mapping yet" },
+        { field: "first_name", status: "Not mapping yet" },
+        { field: "last_name", status: "Not mapping yet" },
+        { field: "phone", status: "Not mapping yet" },
+        { field: "address", status: "Not mapping yet" },
+        { field: "position_id", status: "Not mapping yet" },
+        { field: "department_id", status: "Not mapping yet" }
       ]
 
     },
     {
       tableName: "gmhrs_department_view",
-      tableHR: "",
       fields: [
-        { field: "id" },
-        { field: "name" },
-        { field: "email" }
+        { field: "id", status: "" },
+        { field: "name", status: "" },
+        { field: "email", status: "" }
       ]
     },
     {
       tableName: "gmhrs_team_view",
-      tableHR: "",
       fields: [
-        { field: "id" },
-        { field: "name" },
-        { field: "email" },
+        { field: "id", status: "" },
+        { field: "name", status: "" },
+        { field: "email", status: "" },
       ]
     },
     {
       tableName: "gmhrs_team_employee_view",
-      tableHR: "",
       fields: [
-        { field: "employee_id" },
-        { field: "team_id" }
+        { field: "employee_id", status: "" },
+        { field: "team_id", status: "" }
       ]
     },
     {
       tableName: "gmhrs_position_view",
-      tableHR: "",
       fields: [
-        { field: "id" },
-        { field: "name" }
+        { field: "id", status: "" },
+        { field: "name", status: "" }
       ]
     },
     {
       tableName: "gmhrs_vacation_date_view",
-      tableHR: "",
+      status: "",
       fields: [
-        { field: "employee_id" },
-        { field: "start_date" },
-        { field: "end_date" }
+        { field: "employee_id", status: "" },
+        { field: "start_date", status: "" },
+        { field: "end_date", status: "" }
       ]
     },
   ]
@@ -1076,28 +1072,28 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseTable: any = [];
   chooseField = [];
   fieldNameList = [];
-  fieldChang(event, z,j,  name) {
+  fieldChang(event, z, j, name) {
     if (event.isUserInput) {
 
       for (let i = 0; i < this.table.length; i++) {
         if (event.source.value == this.table[i].tableName && event.source.selected == true) {
-            this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-            this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-            this.fieldNameList[z][j] = this.table[i].fields;
-            this.mappingTableResult[z].tableHR.nametableHR = name;
+          this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+          this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+          this.fieldNameList[z][j] = this.table[i].fields;
+          this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
     }
-    console.log(this.mappingTableResult);
     this.checkingMapping(this.mappingTableResult);
+    this.checkingLength(this.mappingTableResult)
   }
 
   selectFiledChange(event, z, j, name, fieldModel) {
     if (event.isUserInput) {
       this.mappingTableResult[z].tableHR.fields[j][fieldModel] = name;
-      console.log(this.mappingTableResult);
     }
     this.checkingMapping(this.mappingTableResult);
+    this.checkingLength(this.mappingTableResult);
   }
   // test connection string
   connectionStringResultEmployee;
@@ -1390,6 +1386,35 @@ export class CompanyConfigConnectionComponent implements OnInit {
     }
   }
 
+  checkingLength(mappingResult) {
+    console.log(this.tableMappingModel);
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[1].primary_email != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[1].primary_email == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 254) {
+                  this.tableMappingModel[0].fields[1].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else {
+                  this.tableMappingModel[0].fields[1].status = "Max character length must to < 254";
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[1].status = "Not mapping yet";
+          }
+        }
+      }
+    } else {
+      this.tableMappingModel[0].fields[1].status = "Not mapping yet";
+    }
+  }
   //onchange file
   public onChange(fileList: FileList): void {
     let file = fileList[0];

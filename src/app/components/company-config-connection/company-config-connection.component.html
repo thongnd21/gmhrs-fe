@@ -863,7 +863,10 @@
                                                         </mat-select>
                                                     </mat-form-field>
                                                 </td>
-                                                <td style="color: green;">Mapped</td>
+                                                <td
+                                                    [ngClass]="{'response-status-success' : tableMappingModel[i].fields[j].status == 'Mapped' ,
+                                                'response-status-fail' : tableMappingModel[i].fields[j].status != 'Mapped'}">
+                                                    {{field.status}}</td>
 
                                             </tr>
                                         </table>
