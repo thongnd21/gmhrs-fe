@@ -829,7 +829,8 @@
                                                 <td>
                                                     <mat-form-field style="width: 100%; " appearance="outline">
                                                         <mat-label>Choose Table Name</mat-label>
-                                                        <mat-select>
+                                                        <mat-select
+                                                            [(ngModel)]="mappingTableResult[i].tableHR.nametableHR">
                                                             <mat-option *ngFor="let tableName of table; let z = index"
                                                                 [value]="tableName.tableName"
                                                                 (onSelectionChange)="fieldChang($event, i, j, tableName.tableName)">
@@ -876,7 +877,7 @@
                         </button>
                         <button style="margin-right: 40px;" mat-raised-button
                             (click)="onSubmitConectionMapping(accessDBForm.value)" color="primary"
-                            [disabled]="!disableSaveConnectionStringButton">
+                            [disabled]="enableButtonSaveMapping">
                             Save
                         </button>
                     </mat-tab>
