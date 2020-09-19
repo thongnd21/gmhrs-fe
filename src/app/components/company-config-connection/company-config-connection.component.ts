@@ -256,62 +256,58 @@ export class CompanyConfigConnectionComponent implements OnInit {
   loadingFull = false;
   tableMappingModel = [
     {
-      tableName: "gmhrs_employee_view",
-      tableHR: "",
+      tableName: "employee",
+
       fields: [
-        { field: "id",  },
-        { field: "primary_email" },
-        { field: "personal_email" },
-        { field: "first_name" },
-        { field: "last_name" },
-        { field: "phone" },
-        { field: "address" },
-        { field: "position_id" },
-        { field: "department_id" }
+        { field: "id", status: "Not mapping yet" },
+        { field: "primary_email", status: "Not mapping yet" },
+        { field: "personal_email", status: "Not mapping yet" },
+        { field: "first_name", status: "Not mapping yet" },
+        { field: "last_name", status: "Not mapping yet" },
+        { field: "phone", status: "Not mapping yet" },
+        { field: "address", status: "Not mapping yet" },
+        { field: "position_id", status: "Not mapping yet" },
+        { field: "department_id", status: "Not mapping yet" }
       ]
 
     },
     {
-      tableName: "gmhrs_department_view",
-      tableHR: "",
+      tableName: "department",
       fields: [
-        { field: "id" },
-        { field: "name" },
-        { field: "email" }
+        { field: "id", status: "" },
+        { field: "name", status: "" },
+        { field: "email", status: "" }
       ]
     },
     {
-      tableName: "gmhrs_team_view",
-      tableHR: "",
+      tableName: "team",
       fields: [
-        { field: "id" },
-        { field: "name" },
-        { field: "email" },
+        { field: "id", status: "" },
+        { field: "name", status: "" },
+        { field: "email", status: "" },
       ]
     },
     {
-      tableName: "gmhrs_team_employee_view",
-      tableHR: "",
+      tableName: "team_employee",
       fields: [
-        { field: "employee_id" },
-        { field: "team_id" }
+        { field: "employee_id", status: "" },
+        { field: "team_id", status: "" }
       ]
     },
     {
-      tableName: "gmhrs_position_view",
-      tableHR: "",
+      tableName: "position",
       fields: [
-        { field: "id" },
-        { field: "name" }
+        { field: "id", status: "" },
+        { field: "name", status: "" }
       ]
     },
     {
-      tableName: "gmhrs_vacation_date_view",
-      tableHR: "",
+      tableName: "vacation_date",
+      status: "",
       fields: [
-        { field: "employee_id" },
-        { field: "start_date" },
-        { field: "end_date" }
+        { field: "employee_id", status: "" },
+        { field: "start_date", status: "" },
+        { field: "end_date", status: "" }
       ]
     },
   ]
@@ -1076,28 +1072,28 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseTable: any = [];
   chooseField = [];
   fieldNameList = [];
-  fieldChang(event, z,j,  name) {
+  fieldChang(event, z, j, name) {
     if (event.isUserInput) {
 
       for (let i = 0; i < this.table.length; i++) {
         if (event.source.value == this.table[i].tableName && event.source.selected == true) {
-            this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-            this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-            this.fieldNameList[z][j] = this.table[i].fields;
-            this.mappingTableResult[z].tableHR.nametableHR = name;
+          this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+          this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
+          this.fieldNameList[z][j] = this.table[i].fields;
+          this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
     }
-    console.log(this.mappingTableResult);
     this.checkingMapping(this.mappingTableResult);
+    this.checkingLength(this.mappingTableResult)
   }
 
   selectFiledChange(event, z, j, name, fieldModel) {
     if (event.isUserInput) {
       this.mappingTableResult[z].tableHR.fields[j][fieldModel] = name;
-      console.log(this.mappingTableResult);
     }
     this.checkingMapping(this.mappingTableResult);
+    this.checkingLength(this.mappingTableResult);
   }
   // test connection string
   connectionStringResultEmployee;
@@ -1326,13 +1322,12 @@ export class CompanyConfigConnectionComponent implements OnInit {
       if (mappingResult[i].tableHR.nametableHR == "") {
         this.enableButtonSaveMapping = true;
       } else {
-        for (let j = 0; j < mappingResult[i].tableHR.fields.length; j++) {
           if (i == 0) {
-            if (mappingResult[i].tableHR.fields[j].id !== "" &&
-              mappingResult[i].tableHR.fields[j].primary_email !== "" && mappingResult[i].tableHR.fields[j].personal_email !== ""
-              && mappingResult[i].tableHR.fields[j].first_name !== "" && mappingResult[i].tableHR.fields[j].last_name !== ""
-              && mappingResult[i].tableHR.fields[j].phone !== "" && mappingResult[i].tableHR.fields[j].address !== ""
-              && mappingResult[i].tableHR.fields[j].position_id !== "" && mappingResult[i].tableHR.fields[j].department_id !== "") {
+            if (mappingResult[i].tableHR.fields[0].id !== "" &&
+              mappingResult[i].tableHR.fields[1].primary_email !== "" && mappingResult[i].tableHR.fields[2].personal_email !== ""
+              && mappingResult[i].tableHR.fields[3].first_name !== "" && mappingResult[i].tableHR.fields[4].last_name !== ""
+              && mappingResult[i].tableHR.fields[5].phone !== "" && mappingResult[i].tableHR.fields[6].address !== ""
+              && mappingResult[i].tableHR.fields[7].position_id !== "" && mappingResult[i].tableHR.fields[8].department_id !== "") {
               this.enableButtonSaveMapping = false;
             }
             else {
@@ -1340,8 +1335,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
             }
           }
           if (i == 1) {
-            if (mappingResult[i].tableHR.fields[j].id !== "" &&
-              mappingResult[i].tableHR.fields[j].name !== "" && mappingResult[i].tableHR.fields[j].email !== ""
+            if (mappingResult[i].tableHR.fields[0].id !== "" &&
+              mappingResult[i].tableHR.fields[1].name !== "" && mappingResult[i].tableHR.fields[2].email !== ""
             ) {
               this.enableButtonSaveMapping = false;
             }
@@ -1350,8 +1345,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
             }
           }
           if (i == 2) {
-            if (mappingResult[i].tableHR.fields[j].id !== "" &&
-              mappingResult[i].tableHR.fields[j].name !== "" && mappingResult[i].tableHR.fields[j].email !== ""
+            if (mappingResult[i].tableHR.fields[0].id !== "" &&
+              mappingResult[i].tableHR.fields[1].name !== "" && mappingResult[i].tableHR.fields[2].email !== ""
             ) {
               this.enableButtonSaveMapping = false;
             }
@@ -1360,7 +1355,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
             }
           }
           if (i == 3) {
-            if (mappingResult[i].tableHR.fields[j].employee_id !== "" && mappingResult[i].tableHR.fields[j].team_id !== "") {
+            if (mappingResult[i].tableHR.fields[0].employee_id !== "" && mappingResult[i].tableHR.fields[1].team_id !== "") {
               this.enableButtonSaveMapping = false;
             }
             else {
@@ -1368,7 +1363,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
             }
           }
           if (i == 4) {
-            if (mappingResult[i].tableHR.fields[j].id !== "" && mappingResult[i].tableHR.fields[j].name !== "") {
+            if (mappingResult[i].tableHR.fields[0].id !== "" && mappingResult[i].tableHR.fields[1].name !== "") {
               this.enableButtonSaveMapping = false;
             }
             else {
@@ -1376,8 +1371,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
             }
           }
           if (i == 5) {
-            if (mappingResult[i].tableHR.fields[j].employee_id !== "" &&
-              mappingResult[i].tableHR.fields[j].start_date !== "" && mappingResult[i].tableHR.fields[j].end_date !== ""
+            if (mappingResult[i].tableHR.fields[0].employee_id !== "" &&
+              mappingResult[i].tableHR.fields[1].start_date !== "" && mappingResult[i].tableHR.fields[2].end_date !== ""
             ) {
               this.enableButtonSaveMapping = false;
             }
@@ -1385,11 +1380,170 @@ export class CompanyConfigConnectionComponent implements OnInit {
               this.enableButtonSaveMapping = true;
             }
           }
-        }
       }
     }
   }
 
+  checkingLength(mappingResult) {
+    // if (mappingResult[0].tableHR.nametableHR != "") {
+    //   for (let i = 0; i < this.table.length; i++) {
+    //     if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+    //       if (mappingResult[0].tableHR.fields[1].primary_email != "") {
+
+    //         for (let j = 0; j < this.table[i].fields.length; j++) {
+    //           if (mappingResult[0].tableHR.fields[1].primary_email == this.table[i].fields[j].name) {
+    //             console.log(this.table[i].fields[j].length);
+
+    //             if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 254) {
+    //               this.tableMappingModel[0].fields[1].status = "Mapped";
+    //               console.log(this.tableMappingModel);
+
+    //             } else {
+    //               this.tableMappingModel[0].fields[1].status = "Max character length must to < 254";
+    //             }
+    //           }
+    //         }
+    //       } else {
+    //         this.tableMappingModel[0].fields[1].status = "Not mapping yet";
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   this.tableMappingModel[0].fields[1].status = "Not mapping yet";
+    // }
+    if (mappingResult[0].tableHR.fields[0].id != "") {
+      this.tableMappingModel[0].fields[0].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[0].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[1].primary_email != "") {
+      this.tableMappingModel[0].fields[1].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[1].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[2].personal_email != "") {
+      this.tableMappingModel[0].fields[2].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[2].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[3].first_name != "") {
+      this.tableMappingModel[0].fields[3].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[3].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[4].last_name != "") {
+      this.tableMappingModel[0].fields[4].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[4].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[5].phone != "") {
+      this.tableMappingModel[0].fields[5].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[5].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[6].address != "") {
+      this.tableMappingModel[0].fields[6].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[6].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[7].position_id != "") {
+      this.tableMappingModel[0].fields[7].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[7].status = "Not mapping yet";
+    }
+
+    if (mappingResult[0].tableHR.fields[8].department_id != "") {
+      this.tableMappingModel[0].fields[8].status = "Mapped";
+    } else {
+      this.tableMappingModel[0].fields[8].status = "Not mapping yet";
+    }
+
+    if (mappingResult[1].tableHR.fields[0].id != "") {
+      this.tableMappingModel[1].fields[0].status = "Mapped";
+    } else {
+      this.tableMappingModel[1].fields[0].status = "Not mapping yet";
+    }
+
+    if (mappingResult[1].tableHR.fields[1].name != "") {
+      this.tableMappingModel[1].fields[1].status = "Mapped";
+    } else {
+      this.tableMappingModel[1].fields[1].status = "Not mapping yet";
+    }
+
+    if (mappingResult[1].tableHR.fields[2].email != "") {
+      this.tableMappingModel[1].fields[2].status = "Mapped";
+    } else {
+      this.tableMappingModel[1].fields[2].status = "Not mapping yet";
+    }
+
+    if (mappingResult[2].tableHR.fields[0].id != "") {
+      this.tableMappingModel[2].fields[0].status = "Mapped";
+    } else {
+      this.tableMappingModel[2].fields[0].status = "Not mapping yet";
+    }
+
+    if (mappingResult[2].tableHR.fields[1].name != "") {
+      this.tableMappingModel[2].fields[1].status = "Mapped";
+    } else {
+      this.tableMappingModel[2].fields[1].status = "Not mapping yet";
+    }
+
+    if (mappingResult[2].tableHR.fields[2].email != "") {
+      this.tableMappingModel[2].fields[2].status = "Mapped";
+    } else {
+      this.tableMappingModel[2].fields[2].status = "Not mapping yet";
+    }
+
+    if (mappingResult[3].tableHR.fields[0].employee_id != "") {
+      this.tableMappingModel[3].fields[0].status = "Mapped";
+    } else {
+      this.tableMappingModel[3].fields[0].status = "Not mapping yet";
+    }
+
+    if (mappingResult[3].tableHR.fields[1].team_id != "") {
+      this.tableMappingModel[3].fields[1].status = "Mapped";
+    } else {
+      this.tableMappingModel[3].fields[1].status = "Not mapping yet";
+    }
+
+    if (mappingResult[4].tableHR.fields[0].id != "") {
+      this.tableMappingModel[4].fields[0].status = "Mapped";
+    } else {
+      this.tableMappingModel[4].fields[0].status = "Not mapping yet";
+    }
+
+    if (mappingResult[4].tableHR.fields[1].name != "") {
+      this.tableMappingModel[4].fields[1].status = "Mapped";
+    } else {
+      this.tableMappingModel[4].fields[1].status = "Not mapping yet";
+    }
+
+    if (mappingResult[5].tableHR.fields[0].employee_id != "") {
+      this.tableMappingModel[5].fields[0].status = "Mapped";
+    } else {
+      this.tableMappingModel[5].fields[0].status = "Not mapping yet";
+    }
+
+    if (mappingResult[5].tableHR.fields[1].start_date != "") {
+      this.tableMappingModel[5].fields[1].status = "Mapped";
+    } else {
+      this.tableMappingModel[5].fields[1].status = "Not mapping yet";
+    }
+
+    if (mappingResult[5].tableHR.fields[2].end_date != "") {
+      this.tableMappingModel[5].fields[2].status = "Mapped";
+    } else {
+      this.tableMappingModel[5].fields[2].status = "Not mapping yet";
+    }
+    
+  }
   //onchange file
   public onChange(fileList: FileList): void {
     let file = fileList[0];
