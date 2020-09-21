@@ -1072,14 +1072,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseTable: any = [];
   chooseField = [];
   fieldNameList = [];
-  fieldChang(event, z, j, name) {
+  fieldChang(event, z, name) {
     if (event.isUserInput) {
 
       for (let i = 0; i < this.table.length; i++) {
         if (event.source.value == this.table[i].tableName && event.source.selected == true) {
-          this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-          this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-          this.fieldNameList[z][j] = this.table[i].fields;
+          this.chooseTable[z] = this.table[i].tableName + "-" + z;
+          this.chooseField[z] = this.table[i].tableName + "-" + z;
+          this.fieldNameList[z] = this.table[i].fields;
           this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
@@ -1294,7 +1294,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       mapping: this.mappingTableResult,
       dbInfor: this.companyConnection
     }
-
+    console.log(req);
     this.companyConnectionService.saveDBMappingConnection(req).subscribe(
       (res: any) => {
         if (res.code == 200) {
