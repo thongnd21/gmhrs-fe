@@ -850,7 +850,7 @@
                                                     <mat-form-field style="width: 100%;" appearance="outline"
                                                         *ngIf="mappingTableResult[i].tableHR.nametableHR != ''">
                                                         <mat-label>Choose Field Name</mat-label>
-                                                        <mat-select [(ngModel)]="mappingTableResult[i].tableHR.fields[j][field.field]" >
+                                                        <mat-select [(ngModel)]="mappingTableResult[i].tableHR.fields[j]" >
                                                             <mat-option
                                                                 *ngFor="let fieldNameMapping of fieldNameList[i]"
                                                                 [value]="fieldNameMapping.name"
