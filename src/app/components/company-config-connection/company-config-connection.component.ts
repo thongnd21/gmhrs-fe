@@ -1073,9 +1073,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseField = [];
   fieldNameList = [];
   checkChangeSelectTable = [];
-  fieldChang(event, z, name) {
-    if (event.isUserInput) {
-      if (event.source.value != this.checkChangeSelectTable[z]) {
+  fieldChang(event, z) {
+      if (this.mappingTableResult[z].tableHR.nametableHR != this.checkChangeSelectTable[z]) {
         console.log(this.mappingTableResult);
 
         if (z == 0) {
@@ -1120,21 +1119,21 @@ export class CompanyConfigConnectionComponent implements OnInit {
         }
       }
       for (let i = 0; i < this.table.length; i++) {
-        if (event.source.value == this.table[i].tableName && event.source.selected == true) {
+        if (this.mappingTableResult[z].tableHR.nametableHR == this.table[i].tableName) {
           this.chooseTable[z] = this.table[i].tableName + "-" + z;
           this.chooseField[z] = this.table[i].tableName + "-" + z;
           this.fieldNameList[z] = this.table[i].fields;
           // this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
+      console.log(this.fieldNameList[z]);
+      
       this.checkingMapping();
-    }
 
   }
 
-  selectFiledChange(event, z, j, name, fieldModel) {
-    if (event.isUserInput) {
-      this.mappingTableResult[z].tableHR.fields[j] = name;
+  selectFiledChange(event, z, j) {
+      this.mappingTableResult[z].tableHR.fields[j] = this.mappingTableResult[z].tableHR.fields[j];
       if (z == 0) {
         this.checkingLengthEmployee(this.mappingTableResult);
       } else if (z == 1) {
@@ -1150,8 +1149,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.checkingLengthVacation(this.mappingTableResult);
       }
       this.checkingMapping();
-
-    }
 
   }
   // test connection string

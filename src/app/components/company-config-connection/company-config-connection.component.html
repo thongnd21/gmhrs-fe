@@ -814,17 +814,17 @@
                                                 Mapping Information
                                             </mat-panel-description>
                                         </mat-expansion-panel-header>
-                                        <mat-form-field style="width: 100%; " appearance="outline">
+                                        <div style="width: 100%; " appearance="outline">
                                             <mat-label>Choose Table Name</mat-label>
-                                            <mat-select
+                                            <select class="form-control form-control-lg"
+                                                (change)="fieldChang($event, i)"
                                                 [(ngModel)]="mappingTableResult[i].tableHR.nametableHR">
-                                                <mat-option *ngFor="let tableName of table; let z = index"
-                                                (onSelectionChange)="fieldChang($event, i, tableName.tableName)"
+                                                <option *ngFor="let tableName of table; let z = index"
                                                     [value]="tableName.tableName">
                                                     {{tableName.tableName}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
+                                                </option>
+                                            </select>
+                                        </div>
                                         <table class="table table-bordered">
                                             <thead class="thead-dark">
                                                 <tr>
@@ -841,24 +841,25 @@
                                                     {{field.field}}
                                                 </td>
                                                 <td>
-                                                    <mat-form-field *ngIf="mappingTableResult[i].tableHR.nametableHR == ''"
+                                                    <div *ngIf="mappingTableResult[i].tableHR.nametableHR == ''"
                                                         style="width: 100%; " appearance="outline">
                                                         <mat-label>Choose Value</mat-label>
-                                                        <mat-select></mat-select>
-                                                    </mat-form-field>
+                                                        <mat-select class="form-control form-control-lg"></mat-select>
+                                                    </div>
 
-                                                    <mat-form-field style="width: 100%;" appearance="outline"
+                                                    <div style="width: 100%;" appearance="outline"
                                                         *ngIf="mappingTableResult[i].tableHR.nametableHR != ''">
                                                         <mat-label>Choose Field Name</mat-label>
-                                                        <mat-select [(ngModel)]="mappingTableResult[i].tableHR.fields[j]" >
-                                                            <mat-option
+                                                        <select class="form-control form-control-lg" 
+                                                        (change)="selectFiledChange($event, i,j)"
+                                                        [(ngModel)]="mappingTableResult[i].tableHR.fields[j]" >
+                                                            <option
                                                                 *ngFor="let fieldNameMapping of fieldNameList[i]"
-                                                                [value]="fieldNameMapping.name"
-                                                                (onSelectionChange)="selectFiledChange($event, i,j, fieldNameMapping.name, field.field)">
+                                                                [value]="fieldNameMapping.name">
                                                                 {{fieldNameMapping.name}}
-                                                            </mat-option>
-                                                        </mat-select>
-                                                    </mat-form-field>
+                                                            </option>
+                                                        </select>
+                                                    </div>
                                                 </td>
                                                 <td
                                                     [ngClass]="{'response-status-success' : tableMappingModel[i].fields[j].status == 'Mapped' ,
