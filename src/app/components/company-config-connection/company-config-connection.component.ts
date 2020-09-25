@@ -24,12 +24,16 @@ import { Router } from '@angular/router';
 export class CompanyConfigConnectionComponent implements OnInit {
   accessDBForm: FormGroup;
   connection = true;
+  authconnection = true;
   timeMonthDate = true;
   isOptional = false;
   gsuiteCredentialForm: FormGroup;
   APIEndpointForm: FormGroup;
+  tokenForm: FormGroup;
+  basicForm: FormGroup;
   account;
   fileContent;
+  selected = 'Basic Auth';
   accessGsuiteAuthen = {//response test authen gsuite (primary_email + file json)
     employee: {
       status: String,
@@ -412,6 +416,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.getSchedule();
     this.createConnectionStringForm();
     this.createFormApiEndpoint();
+    // this.createFormTokenAuth();
+    // this.createFormBasicAuth();
     for (let i = 1; i < 32; i++) {
       this.dayInMonth.push(i);
     }
@@ -650,15 +656,57 @@ export class CompanyConfigConnectionComponent implements OnInit {
     const accountId = localStorage.getItem('id');
     this.APIEndpointForm = this.fb.group({
       url: new FormControl('', [Validators.required]),
+      tokenAuth: new FormControl(''),
+      usernameAuth: new FormControl(''),
+      passwordAuth: new FormControl('')
     });
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
         console.log(res);
+        var basicAuth = atob(res.basic_auth_endpoint);
+        var username = basicAuth.split(":")[0];
+        var password = basicAuth.split(":")[1];
 
         if (res.api_endpoint != undefined && res.api_endpoint.length > 1) {
           console.log(res.connection_database);
           this.APIEndpointForm = this.fb.group({
             url: new FormControl(res.api_endpoint, [Validators.required]),
+            tokenAuth: new FormControl(res.token_api_endpoint),
+            usernameAuth: new FormControl(username),
+            passwordAuth: new FormControl(password)
+          });
+          this.selected = res.method_auth_api_endpoint
+
+          this.disableSaveConnectionStringButton = false;
+          this.nextButonConditonApiEnpoint = true;
+          // this.disableTestConnectionStringButton = false;
+        }
+        else {
+          this.nextButonConditonApiEnpoint = false;
+          // this.disableTestConnectionStringButton = true;
+        }
+      },
+      (error) => {
+        this.loadingFull = false;
+      }
+    )
+  }
+
+  createFormTokenAuth() {
+    const accountId = localStorage.getItem('id');
+    this.tokenForm = this.fb.group({
+      tokenAuth: new FormControl('')
+    });
+    this.companyServices.getAccountCompanyById(accountId).subscribe(
+      (res: any) => {
+        console.log(res);
+        // var basicAuth = atob(res.basic_auth_endpoint);
+
+        if (res.api_endpoint != undefined && res.api_endpoint.length > 1) {
+          console.log(res.connection_database);
+          this.tokenForm = this.fb.group({
+            // url: new FormControl(res.api_endpoint, [Validators.required]),
+            tokenAuth: new FormControl(res.token_api_endpoint)
           });
 
           this.disableSaveConnectionStringButton = false;
@@ -677,12 +725,52 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
 
+  createFormBasicAuth() {
+    const accountId = localStorage.getItem('id');
+    this.basicForm = this.fb.group({
+      usernameAuth: new FormControl(),
+      passwordAuth: new FormControl()
+    });
+    this.companyServices.getAccountCompanyById(accountId).subscribe(
+      (res: any) => {
+        console.log(res);
+        var basicAuth = atob(res.basic_auth_endpoint);
+        var username = basicAuth.split(":")[0];
+        var password = basicAuth.split(":")[1];
+
+        if (res.api_endpoint != undefined && res.api_endpoint.length > 1) {
+          console.log(res.connection_database);
+          this.basicForm = this.fb.group({
+            // url: new FormControl(res.api_endpoint, [Validators.required]),
+            usernameAuth: new FormControl(username),
+            passwordAuth: new FormControl(password)
+          });
+
+          this.disableSaveConnectionStringButton = false;
+          this.nextButonConditonApiEnpoint = true;
+          // this.disableTestConnectionStringButton = false;
+        }
+        else {
+          this.nextButonConditonApiEnpoint = false;
+          // this.disableTestConnectionStringButton = true;
+        }
+      },
+      (error) => {
+        this.loadingFull = false;
+      }
+    )
+  }
+
   // api endpoint
   onSubmitURLConection(value) {
     this.loadingFull = true;
     this.account = new AccountCompanyModel();
     this.account.id = localStorage.getItem('id');
     this.account.api_endpoint = value.url;
+    this.account.usernameAuth = value.usernameAuth
+    this.account.passwordAuth = value.passwordAuth
+    this.account.tokenAuth = value.tokenAuth
+    this.account.selected = this.selected
     console.log(this.account);
     this.companyServices.updateAccountCompany(this.account).subscribe(
       (res: any) => {
@@ -710,11 +798,15 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.loadingFull = true;
     console.log(value);
     const endpoint = value.url
+    const username = value.usernameAuth
+    const password = value.passwordAuth
+    const token = value.tokenAuth
+    const selected = this.selected
     this.loadingTestAPI = true;
     this.enableDataAPIResult = false;
     this.apiEndpointFail = false;
     this.anableButtonSaveAPIEndpoint = false;
-    this.accountServices.testAPIEndpoint(endpoint).subscribe(
+    this.accountServices.testAPIEndpoint(endpoint, username, password, token, selected).subscribe(
       (res: any) => {
         console.log(res);
 
@@ -736,8 +828,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.loadingFull = false;
         this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
       },
-      (error) => {
-        this.connectionStatus.connection.status = "Fail";
+      (error) => { 
+        // if(error.isAuthenticated!==undefined)
+        if(error.status==401){
+          this.connectionStatus.connection.status = error.statusText;
+        } else {
+          this.connectionStatus.connection.status = "Fail";
+        }
+        // this.connectionStatus.connection.status = "Fail";
         this.employeeValidate = false;
         this.teamValidate = false;
         this.departmentValidate = false;
