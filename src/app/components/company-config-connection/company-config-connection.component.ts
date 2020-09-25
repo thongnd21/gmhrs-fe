@@ -322,15 +322,15 @@ export class CompanyConfigConnectionComponent implements OnInit {
       {
         nametableHR: "",
         fields: [
-          { id: "" },
-          { primary_email: "" },
-          { personal_email: "" },
-          { first_name: "" },
-          { last_name: "" },
-          { phone: "" },
-          { address: "" },
-          { position_id: "" },
-          { department_id: "" }
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
         ]
 
       }
@@ -341,9 +341,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
       {
         nametableHR: "",
         fields: [
-          { id: "" },
-          { name: "" },
-          { email: "" }
+          "",
+          "",
+          ""
         ]
       }
     },
@@ -353,9 +353,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
       {
         nametableHR: "",
         fields: [
-          { id: "" },
-          { name: "" },
-          { email: "" }
+          "",
+          "",
+          ""
         ]
       }
     },
@@ -365,8 +365,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
       {
         nametableHR: "",
         fields: [
-          { employee_id: "" },
-          { team_id: "" },
+          "",
+          "",
         ]
       }
     },
@@ -376,8 +376,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
       {
         nametableHR: "",
         fields: [
-          { id: "" },
-          { name: "" }
+          "",
+          ""
         ]
       }
     },
@@ -387,9 +387,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
       {
         nametableHR: "",
         fields: [
-          { employee_id: "" },
-          { start_date: "" },
-          { end_date: "" }
+          "",
+          "",
+          ""
         ]
 
       }
@@ -1170,28 +1170,87 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseTable: any = [];
   chooseField = [];
   fieldNameList = [];
-  fieldChang(event, z, j, name) {
+  checkChangeSelectTable = [];
+  fieldChang(event, z, name) {
     if (event.isUserInput) {
+      if (event.source.value != this.checkChangeSelectTable[z]) {
+        console.log(this.mappingTableResult);
 
+        if (z == 0) {
+          console.log("0");
+          for (let k = 0; k < this.tableMappingModel[0].fields.length; k++) {
+            this.tableMappingModel[0].fields[k].status = "Not mapping yet"
+            console.log(this.tableMappingModel[0].fields[k].status);
+            this.mappingTableResult[0].tableHR.fields[k] = "";
+
+          }
+        }
+        if (z == 1) {
+          console.log("1");
+          for (let k = 0; k < this.tableMappingModel[1].fields.length; k++) {
+            this.tableMappingModel[1].fields[k].status = "Not mapping yet"
+          }
+
+        }
+        if (z == 2) {
+          console.log("2");
+          for (let k = 0; k < this.tableMappingModel[2].fields.length; k++) {
+            this.tableMappingModel[2].fields[k].status = "Not mapping yet"
+          }
+        }
+        if (z == 3) {
+          console.log("3");
+          for (let k = 0; k < this.tableMappingModel[3].fields.length; k++) {
+            this.tableMappingModel[3].fields[k].status = "Not mapping yet"
+          }
+        }
+        if (z == 4) {
+          console.log("4");
+          for (let k = 0; k < this.tableMappingModel[4].fields.length; k++) {
+            this.tableMappingModel[4].fields[k].status = "Not mapping yet"
+          }
+        }
+        if (z == 5) {
+          console.log("5");
+          for (let k = 0; k < this.tableMappingModel[5].fields.length; k++) {
+            this.tableMappingModel[5].fields[k].status = "Not mapping yet"
+          }
+        }
+      }
       for (let i = 0; i < this.table.length; i++) {
         if (event.source.value == this.table[i].tableName && event.source.selected == true) {
-          this.chooseTable[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-          this.chooseField[z][j] = this.table[i].tableName + "-" + z + "-" + j;
-          this.fieldNameList[z][j] = this.table[i].fields;
-          this.mappingTableResult[z].tableHR.nametableHR = name;
+          this.chooseTable[z] = this.table[i].tableName + "-" + z;
+          this.chooseField[z] = this.table[i].tableName + "-" + z;
+          this.fieldNameList[z] = this.table[i].fields;
+          // this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
+      this.checkingMapping();
     }
-    this.checkingMapping(this.mappingTableResult);
-    this.checkingLength(this.mappingTableResult)
+
   }
 
   selectFiledChange(event, z, j, name, fieldModel) {
     if (event.isUserInput) {
-      this.mappingTableResult[z].tableHR.fields[j][fieldModel] = name;
+      this.mappingTableResult[z].tableHR.fields[j] = name;
+      if (z == 0) {
+        this.checkingLengthEmployee(this.mappingTableResult);
+      } else if (z == 1) {
+        this.checkingLengthDepartment(this.mappingTableResult);
+
+      } else if (z == 2) {
+        this.checkingLengthTeam(this.mappingTableResult);
+      } else if (z == 3) {
+        this.checkingLengthTeamEmployee(this.mappingTableResult);
+      } else if (z == 4) {
+        this.checkingLengthposition(this.mappingTableResult);
+      } else if (z == 5) {
+        this.checkingLengthVacation(this.mappingTableResult);
+      }
+      this.checkingMapping();
+
     }
-    this.checkingMapping(this.mappingTableResult);
-    this.checkingLength(this.mappingTableResult);
+
   }
   // test connection string
   connectionStringResultEmployee;
@@ -1392,7 +1451,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       mapping: this.mappingTableResult,
       dbInfor: this.companyConnection
     }
-
+    console.log(req);
     this.companyConnectionService.saveDBMappingConnection(req).subscribe(
       (res: any) => {
         if (res.code == 200) {
@@ -1415,233 +1474,747 @@ export class CompanyConfigConnectionComponent implements OnInit {
     )
   }
 
-  checkingMapping(mappingResult) {
-    for (let i = 0; i < mappingResult.length; i++) {
-      if (mappingResult[i].tableHR.nametableHR == "") {
-        this.enableButtonSaveMapping = true;
-      } else {
-          if (i == 0) {
-            if (mappingResult[i].tableHR.fields[0].id !== "" &&
-              mappingResult[i].tableHR.fields[1].primary_email !== "" && mappingResult[i].tableHR.fields[2].personal_email !== ""
-              && mappingResult[i].tableHR.fields[3].first_name !== "" && mappingResult[i].tableHR.fields[4].last_name !== ""
-              && mappingResult[i].tableHR.fields[5].phone !== "" && mappingResult[i].tableHR.fields[6].address !== ""
-              && mappingResult[i].tableHR.fields[7].position_id !== "" && mappingResult[i].tableHR.fields[8].department_id !== "") {
-              this.enableButtonSaveMapping = false;
-            }
-            else {
-              this.enableButtonSaveMapping = true;
-            }
-          }
-          if (i == 1) {
-            if (mappingResult[i].tableHR.fields[0].id !== "" &&
-              mappingResult[i].tableHR.fields[1].name !== "" && mappingResult[i].tableHR.fields[2].email !== ""
-            ) {
-              this.enableButtonSaveMapping = false;
-            }
-            else {
-              this.enableButtonSaveMapping = true;
-            }
-          }
-          if (i == 2) {
-            if (mappingResult[i].tableHR.fields[0].id !== "" &&
-              mappingResult[i].tableHR.fields[1].name !== "" && mappingResult[i].tableHR.fields[2].email !== ""
-            ) {
-              this.enableButtonSaveMapping = false;
-            }
-            else {
-              this.enableButtonSaveMapping = true;
-            }
-          }
-          if (i == 3) {
-            if (mappingResult[i].tableHR.fields[0].employee_id !== "" && mappingResult[i].tableHR.fields[1].team_id !== "") {
-              this.enableButtonSaveMapping = false;
-            }
-            else {
-              this.enableButtonSaveMapping = true;
-            }
-          }
-          if (i == 4) {
-            if (mappingResult[i].tableHR.fields[0].id !== "" && mappingResult[i].tableHR.fields[1].name !== "") {
-              this.enableButtonSaveMapping = false;
-            }
-            else {
-              this.enableButtonSaveMapping = true;
-            }
-          }
-          if (i == 5) {
-            if (mappingResult[i].tableHR.fields[0].employee_id !== "" &&
-              mappingResult[i].tableHR.fields[1].start_date !== "" && mappingResult[i].tableHR.fields[2].end_date !== ""
-            ) {
-              this.enableButtonSaveMapping = false;
-            }
-            else {
-              this.enableButtonSaveMapping = true;
-            }
-          }
-      }
-    }
-  }
-
-  checkingLength(mappingResult) {
-    // if (mappingResult[0].tableHR.nametableHR != "") {
-    //   for (let i = 0; i < this.table.length; i++) {
-    //     if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
-    //       if (mappingResult[0].tableHR.fields[1].primary_email != "") {
-
-    //         for (let j = 0; j < this.table[i].fields.length; j++) {
-    //           if (mappingResult[0].tableHR.fields[1].primary_email == this.table[i].fields[j].name) {
-    //             console.log(this.table[i].fields[j].length);
-
-    //             if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 254) {
-    //               this.tableMappingModel[0].fields[1].status = "Mapped";
-    //               console.log(this.tableMappingModel);
-
-    //             } else {
-    //               this.tableMappingModel[0].fields[1].status = "Max character length must to < 254";
-    //             }
-    //           }
-    //         }
-    //       } else {
-    //         this.tableMappingModel[0].fields[1].status = "Not mapping yet";
+  checkingMapping() {
+    // for (let i = 0; i < mappingResult.length; i++) {
+    //   if (mappingResult[i].tableHR.nametableHR == "") {
+    //     this.enableButtonSaveMapping = true;
+    //   } else {
+    //     if (i == 0) {
+    //       if (mappingResult[i].tableHR.fields[0] !== "" &&
+    //         mappingResult[i].tableHR.fields[1] !== "" && mappingResult[i].tableHR.fields[2] !== ""
+    //         && mappingResult[i].tableHR.fields[3] !== "" && mappingResult[i].tableHR.fields[4] !== ""
+    //         && mappingResult[i].tableHR.fields[5] !== "" && mappingResult[i].tableHR.fields[6] !== ""
+    //         && mappingResult[i].tableHR.fields[7] !== "" && mappingResult[i].tableHR.fields[8] !== "") {
+    //         this.enableButtonSaveMapping = false;
+    //       }
+    //       else {
+    //         this.enableButtonSaveMapping = true;
+    //       }
+    //     }
+    //     if (i == 1) {
+    //       if (mappingResult[i].tableHR.fields[0].id !== "" &&
+    //         mappingResult[i].tableHR.fields[1].name !== "" && mappingResult[i].tableHR.fields[2].email !== ""
+    //       ) {
+    //         this.enableButtonSaveMapping = false;
+    //       }
+    //       else {
+    //         this.enableButtonSaveMapping = true;
+    //       }
+    //     }
+    //     if (i == 2) {
+    //       if (mappingResult[i].tableHR.fields[0].id !== "" &&
+    //         mappingResult[i].tableHR.fields[1].name !== "" && mappingResult[i].tableHR.fields[2].email !== ""
+    //       ) {
+    //         this.enableButtonSaveMapping = false;
+    //       }
+    //       else {
+    //         this.enableButtonSaveMapping = true;
+    //       }
+    //     }
+    //     if (i == 3) {
+    //       if (mappingResult[i].tableHR.fields[0].employee_id !== "" && mappingResult[i].tableHR.fields[1].team_id !== "") {
+    //         this.enableButtonSaveMapping = false;
+    //       }
+    //       else {
+    //         this.enableButtonSaveMapping = true;
+    //       }
+    //     }
+    //     if (i == 4) {
+    //       if (mappingResult[i].tableHR.fields[0].id !== "" && mappingResult[i].tableHR.fields[1].name !== "") {
+    //         this.enableButtonSaveMapping = false;
+    //       }
+    //       else {
+    //         this.enableButtonSaveMapping = true;
+    //       }
+    //     }
+    //     if (i == 5) {
+    //       if (mappingResult[i].tableHR.fields[0].employee_id !== "" &&
+    //         mappingResult[i].tableHR.fields[1].start_date !== "" && mappingResult[i].tableHR.fields[2].end_date !== ""
+    //       ) {
+    //         this.enableButtonSaveMapping = false;
+    //       }
+    //       else {
+    //         this.enableButtonSaveMapping = true;
     //       }
     //     }
     //   }
-    // } else {
-    //   this.tableMappingModel[0].fields[1].status = "Not mapping yet";
     // }
-    if (mappingResult[0].tableHR.fields[0].id != "") {
-      this.tableMappingModel[0].fields[0].status = "Mapped";
+    var check = []
+    for (let i = 0; i < this.tableMappingModel.length; i++) {
+      for (let j = 0; j < this.tableMappingModel[i].fields.length; j++) {
+        if (this.tableMappingModel[i].fields[j].status != "Mapped") {
+          check.push(this.tableMappingModel[i].fields[j].status);
+        }
+      }
+    }
+    if (check.length > 0) {
+      this.enableButtonSaveMapping = true
+    } else {
+      this.enableButtonSaveMapping = false
+    }
+  }
+  // check length emp mapping database
+  checkingLengthEmployee(mappingResult) {
+    // id emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[0] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[0] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[0].fields[0].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[0].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[0].status = "Not mapping yet";
     }
+    //check primary emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[1] != "") {
 
-    if (mappingResult[0].tableHR.fields[1].primary_email != "") {
-      this.tableMappingModel[0].fields[1].status = "Mapped";
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[1] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 254) {
+                  this.tableMappingModel[0].fields[1].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[0].fields[1].status = "Mapped";
+                } else {
+                  this.tableMappingModel[0].fields[1].status = "Max character length must to < 254"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[1].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[1].status = "Not mapping yet";
     }
+    //check personal emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[2] != "") {
 
-    if (mappingResult[0].tableHR.fields[2].personal_email != "") {
-      this.tableMappingModel[0].fields[2].status = "Mapped";
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[2] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 254) {
+                  this.tableMappingModel[0].fields[2].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[0].fields[2].status = "Mapped";
+                } else {
+                  this.tableMappingModel[0].fields[2].status = "Max character length must to < 254"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[2].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[2].status = "Not mapping yet";
     }
 
-    if (mappingResult[0].tableHR.fields[3].first_name != "") {
-      this.tableMappingModel[0].fields[3].status = "Mapped";
+    //check first name emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[3] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[3] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 45) {
+                  this.tableMappingModel[0].fields[3].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[0].fields[3].status = "Mapped";
+                } else {
+                  this.tableMappingModel[0].fields[3].status = "Max character length must to < 45"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[3].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[3].status = "Not mapping yet";
     }
 
-    if (mappingResult[0].tableHR.fields[4].last_name != "") {
-      this.tableMappingModel[0].fields[4].status = "Mapped";
+    //check last name emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[4] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[4] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 45) {
+                  this.tableMappingModel[0].fields[4].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[0].fields[4].status = "Mapped";
+                } else {
+                  this.tableMappingModel[0].fields[4].status = "Max character length must to < 45"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[4].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[4].status = "Not mapping yet";
     }
 
-    if (mappingResult[0].tableHR.fields[5].phone != "") {
-      this.tableMappingModel[0].fields[5].status = "Mapped";
+    //check phone  emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[5] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[5] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 45) {
+                  this.tableMappingModel[0].fields[5].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[0].fields[5].status = "Mapped";
+                } else {
+                  this.tableMappingModel[0].fields[5].status = "Max character length must to < 15"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[5].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[5].status = "Not mapping yet";
     }
 
-    if (mappingResult[0].tableHR.fields[6].address != "") {
-      this.tableMappingModel[0].fields[6].status = "Mapped";
+    //check address  emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[6] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[6] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 512) {
+                  this.tableMappingModel[0].fields[6].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[0].fields[6].status = "Mapped";
+                } else {
+                  this.tableMappingModel[0].fields[6].status = "Max character length must to < 512"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[6].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[6].status = "Not mapping yet";
     }
 
-    if (mappingResult[0].tableHR.fields[7].position_id != "") {
-      this.tableMappingModel[0].fields[7].status = "Mapped";
+    // department id emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[7] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[7] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[0].fields[7].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[7].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[7].status = "Not mapping yet";
     }
 
-    if (mappingResult[0].tableHR.fields[8].department_id != "") {
-      this.tableMappingModel[0].fields[8].status = "Mapped";
+    // position id emp
+    if (mappingResult[0].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[0].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[0].tableHR.fields[8] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[0].tableHR.fields[8] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[0].fields[8].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[0].fields[8].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[0].fields[8].status = "Not mapping yet";
     }
+    // for (let i = 0; i < this.mappingTableResult.length; i++) {
+    //   for (let j = 0; j < this.mappingTableResult[i].tableHR.fields.length; j++) {
+    //     if (this.mappingTableResult[i].tableHR.fields[j] === "") {
+    //       this.tableMappingModel[i].fields[j].status = "Not mapping yet"
+    //     } else {
+    //       this.tableMappingModel[i].fields[j].status = "Mapped";
+    //     }
+    //   }
+    // }
 
-    if (mappingResult[1].tableHR.fields[0].id != "") {
-      this.tableMappingModel[1].fields[0].status = "Mapped";
+  }
+
+  //check length department mapping database
+  checkingLengthDepartment(mappingResult) {
+
+    // id department
+    if (mappingResult[1].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[1].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[1].tableHR.fields[0] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[1].tableHR.fields[0] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[1].fields[0].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[1].fields[0].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[1].fields[0].status = "Not mapping yet";
     }
 
-    if (mappingResult[1].tableHR.fields[1].name != "") {
-      this.tableMappingModel[1].fields[1].status = "Mapped";
+    // name department
+    if (mappingResult[1].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[1].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[1].tableHR.fields[1] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[1].tableHR.fields[1] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 200) {
+                  this.tableMappingModel[1].fields[1].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[1].fields[1].status = "Mapped";
+                } else {
+                  this.tableMappingModel[1].fields[1].status = "Max character length must to < 200"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[1].fields[1].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[1].fields[1].status = "Not mapping yet";
     }
 
-    if (mappingResult[1].tableHR.fields[2].email != "") {
-      this.tableMappingModel[1].fields[2].status = "Mapped";
+    // email department
+    if (mappingResult[1].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[1].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[1].tableHR.fields[2] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[1].tableHR.fields[2] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 254) {
+                  this.tableMappingModel[1].fields[2].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[1].fields[2].status = "Mapped";
+                } else {
+                  this.tableMappingModel[1].fields[2].status = "Max character length must to < 254"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[1].fields[2].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[1].fields[2].status = "Not mapping yet";
     }
+  }
 
-    if (mappingResult[2].tableHR.fields[0].id != "") {
-      this.tableMappingModel[2].fields[0].status = "Mapped";
+  // check length team mapping database
+  checkingLengthTeam(mappingResult) {
+
+    // id team
+    if (mappingResult[2].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[2].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[2].tableHR.fields[0] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[2].tableHR.fields[0] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[2].fields[0].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[2].fields[0].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[2].fields[0].status = "Not mapping yet";
     }
 
-    if (mappingResult[2].tableHR.fields[1].name != "") {
-      this.tableMappingModel[2].fields[1].status = "Mapped";
+    // name team
+    if (mappingResult[1].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[2].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[2].tableHR.fields[1] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[2].tableHR.fields[1] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 200) {
+                  this.tableMappingModel[2].fields[1].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[2].fields[1].status = "Mapped";
+                } else {
+                  this.tableMappingModel[2].fields[1].status = "Max character length must to < 200"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[2].fields[1].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[2].fields[1].status = "Not mapping yet";
     }
 
-    if (mappingResult[2].tableHR.fields[2].email != "") {
-      this.tableMappingModel[2].fields[2].status = "Mapped";
+    // email team
+    if (mappingResult[1].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[2].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[2].tableHR.fields[2] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[2].tableHR.fields[2] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 254) {
+                  this.tableMappingModel[2].fields[2].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[2].fields[2].status = "Mapped";
+                } else {
+                  this.tableMappingModel[2].fields[2].status = "Max character length must to < 254"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[2].fields[2].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[2].fields[2].status = "Not mapping yet";
     }
+  }
 
-    if (mappingResult[3].tableHR.fields[0].employee_id != "") {
-      this.tableMappingModel[3].fields[0].status = "Mapped";
+  //check length team_employee mapping database
+  checkingLengthTeamEmployee(mappingResult) {
+    // employee_id team
+    if (mappingResult[3].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[3].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[3].tableHR.fields[0] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[3].tableHR.fields[0] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[3].fields[0].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[3].fields[0].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[3].fields[0].status = "Not mapping yet";
     }
 
-    if (mappingResult[3].tableHR.fields[1].team_id != "") {
-      this.tableMappingModel[3].fields[1].status = "Mapped";
+    // team_id team
+    if (mappingResult[3].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[3].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[3].tableHR.fields[1] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[3].tableHR.fields[1] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[3].fields[1].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[3].fields[1].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[3].fields[1].status = "Not mapping yet";
     }
+  }
 
-    if (mappingResult[4].tableHR.fields[0].id != "") {
-      this.tableMappingModel[4].fields[0].status = "Mapped";
+  //check length position mapping database
+  checkingLengthposition(mappingResult) {
+    // employee_id team
+    if (mappingResult[4].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[4].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[4].tableHR.fields[0] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[4].tableHR.fields[0] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[4].fields[0].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[4].fields[0].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[4].fields[0].status = "Not mapping yet";
     }
 
-    if (mappingResult[4].tableHR.fields[1].name != "") {
-      this.tableMappingModel[4].fields[1].status = "Mapped";
+    // name team
+    if (mappingResult[4].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[4].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[4].tableHR.fields[1] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[4].tableHR.fields[1] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length <= 45) {
+                  this.tableMappingModel[4].fields[1].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else if (this.table[i].fields[j].length === null) {
+                  this.tableMappingModel[4].fields[1].status = "Mapped";
+                } else {
+                  this.tableMappingModel[4].fields[1].status = "Max character length must to < 45"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[4].fields[1].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[4].fields[1].status = "Not mapping yet";
     }
+  }
 
-    if (mappingResult[5].tableHR.fields[0].employee_id != "") {
-      this.tableMappingModel[5].fields[0].status = "Mapped";
+  checkingLengthVacation(mappingResult) {
+    if (mappingResult[4].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[5].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[5].tableHR.fields[0] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[5].tableHR.fields[0] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                // if (this.table[i].fields[j].length !== null && this.table[i].fields[j].length > 15) {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 15";
+                // }
+                // else if (this.table[i].fields[j].length === null) {
+                this.tableMappingModel[5].fields[0].status = "Mapped";
+                // } else {
+                //   this.tableMappingModel[0].fields[0].status = "Max character length must to < 254"
+                // }
+              }
+            }
+          } else {
+            this.tableMappingModel[5].fields[0].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[5].fields[0].status = "Not mapping yet";
     }
+    // employee_id team
+    if (mappingResult[5].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[5].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[5].tableHR.fields[1] != "") {
 
-    if (mappingResult[5].tableHR.fields[1].start_date != "") {
-      this.tableMappingModel[5].fields[1].status = "Mapped";
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[5].tableHR.fields[1] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+                if (this.table[i].fields[j].type === "datetime") {
+                  this.tableMappingModel[5].fields[1].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else {
+                  this.tableMappingModel[5].fields[1].status = "Type must be datetime"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[5].fields[1].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[5].fields[1].status = "Not mapping yet";
     }
 
-    if (mappingResult[5].tableHR.fields[2].end_date != "") {
-      this.tableMappingModel[5].fields[2].status = "Mapped";
+    // name team
+    if (mappingResult[5].tableHR.nametableHR != "") {
+      for (let i = 0; i < this.table.length; i++) {
+        if (mappingResult[5].tableHR.nametableHR == this.table[i].tableName) {
+          if (mappingResult[5].tableHR.fields[2] != "") {
+
+            for (let j = 0; j < this.table[i].fields.length; j++) {
+              if (mappingResult[5].tableHR.fields[2] == this.table[i].fields[j].name) {
+                console.log(this.table[i].fields[j].length);
+
+                if (this.table[i].fields[j].type === "datetime") {
+                  this.tableMappingModel[5].fields[2].status = "Mapped";
+                  console.log(this.tableMappingModel);
+
+                } else {
+                  this.tableMappingModel[5].fields[2].status = "Type must be datetime"
+                }
+              }
+            }
+          } else {
+            this.tableMappingModel[5].fields[2].status = "Not mapping yet";
+          }
+        }
+      }
     } else {
       this.tableMappingModel[5].fields[2].status = "Not mapping yet";
     }
-    
   }
+
   //onchange file
   public onChange(fileList: FileList): void {
     let file = fileList[0];
