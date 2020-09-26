@@ -1081,7 +1081,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         if (z == 0) {
           console.log("0");
           for (let k = 0; k < this.tableMappingModel[0].fields.length; k++) {
-            this.tableMappingModel[0].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[0].fields[k].status = "Not mapping yet";
             console.log(this.tableMappingModel[0].fields[k].status);
             this.mappingTableResult[0].tableHR.fields[k] = "";
 
@@ -1090,32 +1090,37 @@ export class CompanyConfigConnectionComponent implements OnInit {
         if (z == 1) {
           console.log("1");
           for (let k = 0; k < this.tableMappingModel[1].fields.length; k++) {
-            this.tableMappingModel[1].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[1].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[1].tableHR.fields[k] = "";
           }
 
         }
         if (z == 2) {
           console.log("2");
           for (let k = 0; k < this.tableMappingModel[2].fields.length; k++) {
-            this.tableMappingModel[2].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[2].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[2].tableHR.fields[k] = "";
           }
         }
         if (z == 3) {
           console.log("3");
           for (let k = 0; k < this.tableMappingModel[3].fields.length; k++) {
-            this.tableMappingModel[3].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[3].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[3].tableHR.fields[k] = "";
           }
         }
         if (z == 4) {
           console.log("4");
           for (let k = 0; k < this.tableMappingModel[4].fields.length; k++) {
-            this.tableMappingModel[4].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[4].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[4].tableHR.fields[k] = "";
           }
         }
         if (z == 5) {
           console.log("5");
           for (let k = 0; k < this.tableMappingModel[5].fields.length; k++) {
-            this.tableMappingModel[5].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[5].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[5].tableHR.fields[k] = "";
           }
         }
       }
@@ -1127,6 +1132,9 @@ export class CompanyConfigConnectionComponent implements OnInit {
           // this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
+      console.log(this.fieldNameList);
+      
+      this.checkChangeSelectTable[z] = event.source.value;
       this.checkingMapping();
     }
 
@@ -1219,13 +1227,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
               item2 = []
               element.fields.forEach((el, j) => {
                 item.push(j);
-                item1.push(j)
+                item1.push(el.field)
                 item2.push("null")
               });
               this.chooseTable[i] = item;
               this.chooseField[i] = item2;
               this.fieldNameList[i] = item1
+
             });
+            console.log(this.fieldNameList);
+
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
             this.disableSaveConnectionStringButton = check;
