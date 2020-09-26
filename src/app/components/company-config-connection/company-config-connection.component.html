@@ -816,9 +816,10 @@
                                         </mat-expansion-panel-header>
                                         <div style="width: 100%; " appearance="outline">
                                             <mat-label>Choose Table Name</mat-label>
-                                            <select class="form-control form-control-lg"
+                                            <select class="custom-select mb-2 col-md-12"
                                                 (change)="fieldChang($event, i)"
                                                 [(ngModel)]="mappingTableResult[i].tableHR.nametableHR">
+                                                <option  [disabled]="true" [value]="''">---- Choose table </option>
                                                 <option *ngFor="let tableName of table; let z = index"
                                                     [value]="tableName.tableName">
                                                     {{tableName.tableName}}
@@ -840,23 +841,24 @@
                                                 <td>
                                                     {{field.field}}
                                                 </td>
-                                                <td>
+                                                <td> 
                                                     <div *ngIf="mappingTableResult[i].tableHR.nametableHR == ''"
                                                         style="width: 100%; " appearance="outline">
                                                         <mat-label>Choose Value</mat-label>
-                                                        <mat-select class="form-control form-control-lg"></mat-select>
+                                                        <mat-select class="custom-select col-md-12"></mat-select>
                                                     </div>
 
                                                     <div style="width: 100%;" appearance="outline"
                                                         *ngIf="mappingTableResult[i].tableHR.nametableHR != ''">
                                                         <mat-label>Choose Field Name</mat-label>
-                                                        <select class="form-control form-control-lg" 
+                                                        <select class="custom-select col-md-12" 
                                                         (change)="selectFiledChange($event, i,j)"
                                                         [(ngModel)]="mappingTableResult[i].tableHR.fields[j]" >
+                                                        <option [value]="''" [disabled]="true">---- Choose field </option>
                                                             <option
-                                                                *ngFor="let fieldNameMapping of fieldNameList[i]"
-                                                                [value]="fieldNameMapping.name">
-                                                                {{fieldNameMapping.name}}
+                                                                *ngFor="let fieldNameMapping of fieldNameList[i]; let j = index"
+                                                                [value]="fieldNameMapping">
+                                                                {{fieldNameMapping}}
                                                             </option>
                                                         </select>
                                                     </div>
