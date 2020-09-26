@@ -1173,31 +1173,32 @@ export class CompanyConfigConnectionComponent implements OnInit {
   chooseField = [];
   fieldNameList = [];
   checkChangeSelectTable = [];
-  fieldChang(event, z, name) {
-    if (event.isUserInput) {
-      if (event.source.value != this.checkChangeSelectTable[z]) {
+  fieldChang(event, z) {
+      if (this.mappingTableResult[z].tableHR.nametableHR != this.checkChangeSelectTable[z]) {
         console.log(this.mappingTableResult);
 
         if (z == 0) {
           console.log("0");
           for (let k = 0; k < this.tableMappingModel[0].fields.length; k++) {
-            this.tableMappingModel[0].fields[k].status = "Not mapping yet"
-            console.log(this.tableMappingModel[0].fields[k].status);
+            this.tableMappingModel[0].fields[k].status = "Not mapping yet";
             this.mappingTableResult[0].tableHR.fields[k] = "";
-
+            
           }
+          console.log(this.mappingTableResult);
         }
         if (z == 1) {
           console.log("1");
           for (let k = 0; k < this.tableMappingModel[1].fields.length; k++) {
-            this.tableMappingModel[1].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[1].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[1].tableHR.fields[k] = "";
           }
 
         }
         if (z == 2) {
           console.log("2");
           for (let k = 0; k < this.tableMappingModel[2].fields.length; k++) {
-            this.tableMappingModel[2].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[2].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[2].tableHR.fields[k] = "";
           }
         }
         if (z == 3) {
@@ -1209,32 +1210,39 @@ export class CompanyConfigConnectionComponent implements OnInit {
         if (z == 4) {
           console.log("4");
           for (let k = 0; k < this.tableMappingModel[4].fields.length; k++) {
-            this.tableMappingModel[4].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[4].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[4].tableHR.fields[k] = "";
           }
         }
         if (z == 5) {
           console.log("5");
           for (let k = 0; k < this.tableMappingModel[5].fields.length; k++) {
-            this.tableMappingModel[5].fields[k].status = "Not mapping yet"
+            this.tableMappingModel[5].fields[k].status = "Not mapping yet";
+            this.mappingTableResult[5].tableHR.fields[k] = "";
           }
         }
       }
+      console.log(this.table);
       for (let i = 0; i < this.table.length; i++) {
-        if (event.source.value == this.table[i].tableName && event.source.selected == true) {
+        if (this.mappingTableResult[z].tableHR.nametableHR == this.table[i].tableName) {
           this.chooseTable[z] = this.table[i].tableName + "-" + z;
           this.chooseField[z] = this.table[i].tableName + "-" + z;
-          this.fieldNameList[z] = this.table[i].fields;
+          this.fieldNameList[z] = [];
+          this.table[i].fields.forEach(element => {
+            this.fieldNameList[z].push(element.name);
+          });
           // this.mappingTableResult[z].tableHR.nametableHR = name;
         };
       }
+      this.checkChangeSelectTable[z] = this.mappingTableResult[z].tableHR.nametableHR;
+      console.log(this.fieldNameList[z]);
+      
       this.checkingMapping();
-    }
 
   }
 
-  selectFiledChange(event, z, j, name, fieldModel) {
-    if (event.isUserInput) {
-      this.mappingTableResult[z].tableHR.fields[j] = name;
+  selectFiledChange(event, z, j) {
+      this.mappingTableResult[z].tableHR.fields[j] = this.mappingTableResult[z].tableHR.fields[j];
       if (z == 0) {
         this.checkingLengthEmployee(this.mappingTableResult);
       } else if (z == 1) {
@@ -1250,8 +1258,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.checkingLengthVacation(this.mappingTableResult);
       }
       this.checkingMapping();
-
-    }
 
   }
   // test connection string
@@ -1279,7 +1285,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyConnectionService.testDBCompanyConnection(this.companyConnection).subscribe(
       (res: any) => {
         // const result: any = res;
-        console.log(res);
+        console.log(this.mappingTableResult);
         this.loadingFull = false;
         if (res.checkConnection != undefined) {
           if (res.checkConnection.status == "success") {
@@ -1294,8 +1300,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.connectionStringResultVacation = res.vacation_date;
             this.table = res.table;
 
-            console.log(this.connectionStringDataResponsePositon);
-
             var check = this.checkingFormatDataConnectionString(
               this.connectionStringResultEmployee,
               this.connectionStringResultDepartment,
@@ -1307,9 +1311,6 @@ export class CompanyConfigConnectionComponent implements OnInit {
               res.character_maximum_length_department,
               res.character_maximum_length_team,
               res.character_maximum_length_position);
-            console.log(this.connectionStringDataResponseDepartment);
-            console.log(this.table);
-            console.log(this.tableMappingModel);
             let item = [];
             let item1 = [];
             let item2 = []
@@ -1319,18 +1320,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
               item2 = []
               element.fields.forEach((el, j) => {
                 item.push(j);
-                item1.push(j)
-                item2.push("null")
+                item2.push("null");
               });
               this.chooseTable[i] = item;
               this.chooseField[i] = item2;
-              this.fieldNameList[i] = item1
             });
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
             this.disableSaveConnectionStringButton = check;
-            console.log(this.connectionStringDataResponseEmployee);
             this.loadingFull = false;
+            console.log(this.fieldNameList);
             this.modalService.open(modal, { size: 'xl', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
           } if (res.checkConnection.status == "fail" || res.status == 0) {
             this.connectionStatus.connection.status = "Fail";
@@ -1368,7 +1367,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.loadingTestConnection = false;
             this.loadingFull = false;
             this.modalService.open(modal, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
-
+            console.log(this.fieldNameList);
           }
         } else {
           this.loadingFull = false;
