@@ -663,15 +663,17 @@ export class CompanyConfigConnectionComponent implements OnInit {
     this.companyServices.getAccountCompanyById(accountId).subscribe(
       (res: any) => {
         console.log(res);
-        var basicAuth = atob(res.basic_auth_endpoint);
-        var username = basicAuth.split(":")[0];
-        var password = basicAuth.split(":")[1];
+        var basicAuth = res.api_encrypt;
+        var api_endpoint = basicAuth.split(" ")[0];
+        var username = basicAuth.split(" ")[1];
+        var password = basicAuth.split(" ")[2];
+        var token = basicAuth.split(" ")[3];
 
-        if (res.api_endpoint != undefined && res.api_endpoint.length > 1) {
+        if (api_endpoint != undefined && api_endpoint.length > 1) {
           console.log(res.connection_database);
           this.APIEndpointForm = this.fb.group({
-            url: new FormControl(res.api_endpoint, [Validators.required]),
-            tokenAuth: new FormControl(res.token_api_endpoint),
+            url: new FormControl(api_endpoint, [Validators.required]),
+            tokenAuth: new FormControl(token),
             usernameAuth: new FormControl(username),
             passwordAuth: new FormControl(password)
           });
