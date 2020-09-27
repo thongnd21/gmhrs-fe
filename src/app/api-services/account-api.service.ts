@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AppSettings } from '../appsetting';
 @Injectable({
     providedIn: 'root'
@@ -45,16 +45,16 @@ export class AccountApiService {
 
     testAPIEndpoint(url, username, password, token, selected) {
         console.log(username + " " + password + " " + token);
-        
+
         var header = null;
         if (selected == "Basic Auth") {
-        var buff = btoa(username+":"+password);
-            header = new HttpHeaders({ Authorization: "Basic " + buff});
+            var buff = btoa(username + ":" + password);
+            header = new HttpHeaders({ Authorization: "Basic " + buff });
 
         } else if (selected == "Token Bearer") {
-            header = new HttpHeaders({ Authorization: "Bearer " + token});
+            header = new HttpHeaders({ Authorization: "Bearer " + token });
         }
-        return this.httpClient.get(url+"?selected="+selected, { headers: header});
+        return this.httpClient.get(url + "?selected=" + selected, { headers: header });
     };
 
     getInvalidSignature() {
@@ -85,6 +85,13 @@ export class AccountApiService {
 
     getEmployeeDetail(id) {
         return this.httpClient.get(this.URL + AppSettings.EMP + '/' + id);
+    }
+
+    getMappingConfig(accountId) {
+        let path = "getMappingConfig/get"
+        let param = new HttpParams().set('id', accountId);
+        // return this.httpClient.get('http://localhost:3000/api/email/syncReplyMail',{params: param});
+        return this.httpClient.get(this.URL + AppSettings.ACCOUNT + path, { params: param });
     }
 
 }
