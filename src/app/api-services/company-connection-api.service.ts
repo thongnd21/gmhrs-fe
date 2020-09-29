@@ -10,13 +10,13 @@ export class CompanyConnectionService {
   constructor(private httpClient: HttpClient) { }
 
   testDBCompanyConnection(DBInfor) {
-    return this.httpClient.post('https://gmcompany-api.herokuapp.com/api/connection', DBInfor);
-    // return this.httpClient.post('http://localhost:3002/api/connection', DBInfor);
+    // return this.httpClient.post('https://gmcompany-api.herokuapp.com/api/connection', DBInfor);
+    return this.httpClient.post('http://localhost:3002/api/connection', DBInfor);
   }
 
   saveDBMappingConnection(mappingConfig) {
-    return this.httpClient.put('https://gmcompany-api.herokuapp.com/api/connection', mappingConfig);
-    // return this.httpClient.put('http://localhost:3002/api/connection', mappingConfig);
+    // return this.httpClient.put('https://gmcompany-api.herokuapp.com/api/connection', mappingConfig);
+    return this.httpClient.put('http://localhost:3002/api/connection', mappingConfig);
   }
 
   changeSchedule(account) {
