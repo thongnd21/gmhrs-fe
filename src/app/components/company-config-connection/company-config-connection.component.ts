@@ -462,7 +462,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.connectionString.username = username;
           this.connectionString.password = password;
           this.connectionString.type = type;
-          this.connection = res.method_auth_connection == "DB" ? true : false;
+          this.connection = res.method_auth_connection != "API" ? true : false;
           this.accessDBForm = this.fb.group({
             dbName: new FormControl(this.connectionString.dbName, [Validators.required]),
             host: new FormControl(this.connectionString.host, [Validators.required]),
