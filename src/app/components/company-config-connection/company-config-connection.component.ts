@@ -831,6 +831,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
         console.log(res);
 
         // if(res.employees.length>0 && res.departments.length>0 &&)
+        console.log(res);
+
         this.connectionStatus.connection.status = "Success";
         this.apiEndpointResultEmployeeList = res.employees.length > 0 ? res.employees : null;
         this.apiEndpointResultDepartmentList = res.departments.length > 0 ? res.departments : null;
@@ -859,6 +861,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.employeeValidate = false;
         this.teamValidate = false;
         this.departmentValidate = false;
+        this.positionValidate = false;
         this.dataAPIEndpoindEmployee.employee.id = "Required";
         this.dataAPIEndpoindEmployee.employee.primary_email = "Required";
         this.dataAPIEndpoindEmployee.employee.personal_email = "Required";
@@ -875,6 +878,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
         this.dataAPIEndpoindTeam.team.email = "Required";
         this.dataAPIEndpoindTeam.team.member[0].id = "Required";
         this.dataAPIEndpoindTeam.team.member[0].primary_email = "Required";
+        this.dataAPIEndpoindPosition.position.id = "Required";
+        this.dataAPIEndpoindPosition.position.name = "Required";
         this.apiEndpointFail = true;
         this.loadingTestAPI = false;
         this.enableDataAPIResult = true;
@@ -1069,7 +1074,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       this.connectionStringDataResponseDepartment.department.email = "Character maximum length 254"
     }
 
-    if (this.connectionStringDataResponseDepartment.department.id == "Pass" && this.connectionStringDataResponseDepartment.department.name
+    if (this.connectionStringDataResponseDepartment.department.id == "Pass" && this.connectionStringDataResponseDepartment.department.name == "Pass"
       && this.connectionStringDataResponseDepartment.department.email == "Pass") {
       depValid = true;
     }
@@ -1177,6 +1182,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
     if (this.connectionStringDataResponseVacation.vacation.employee_id == "Pass" && this.connectionStringDataResponseVacation.vacation.end_date == "Pass" && this.connectionStringDataResponseVacation.vacation.start_date == "Pass") {
       vacationValid = true;
     }
+    console.log(empValid, depValid, teamValid, teamEmpValid, positionValid, vacationValid);
+
 
     if (empValid == true && depValid == true && teamValid == true && teamEmpValid == true && positionValid == true && vacationValid == true) {
       return true;
@@ -1348,6 +1355,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
             this.getMappingConfig();
             this.enableDataConnectionResult = true;
             this.connectionFail = false;
+            console.log(check);
+
             this.disableSaveConnectionStringButton = check;
             this.loadingFull = false;
             console.log(this.fieldNameList);
@@ -1440,12 +1449,14 @@ export class CompanyConfigConnectionComponent implements OnInit {
               this.tableMappingModel[i].fields[j].status = "Mapped";
             }
           }
+          this.enableButtonSaveMapping = false;
         } else {
           for (let i = 0; i < this.tableMappingModel.length; i++) {
             for (let j = 0; j < this.tableMappingModel[i].fields.length; j++) {
               this.tableMappingModel[i].fields[j].status = "Not mapping yet";
             }
           }
+          this.enableButtonSaveMapping = true;
         }
 
 
@@ -1551,13 +1562,16 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.closeModal();
         };
         if (res.code == 500) {
-          this.loadingFull = false;
+          this.enableButtonSaveMapping = false;
+          this.loadingSaveMapping = false;
           this.toast.error(res.status);
           this.nextButonConditonConnectionString = false;
         }
       },
       (error) => {
         this.loadingFull = false;
+        this.enableButtonSaveMapping = false;
+        this.loadingSaveMapping = false;
         this.toast.error("Server is not available!");
         this.nextButonConditonConnectionString = false;
       }
