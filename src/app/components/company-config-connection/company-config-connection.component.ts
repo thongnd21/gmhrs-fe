@@ -31,6 +31,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   APIEndpointForm: FormGroup;
   tokenForm: FormGroup;
   basicForm: FormGroup;
+  connection_method = "";
   account;
   fileContent;
   selected = 'Basic Auth';
@@ -429,13 +430,20 @@ export class CompanyConfigConnectionComponent implements OnInit {
   goToGuidePage(): void {
     this.router.navigate(['/guides']);
   }
+
+  changeMethod(method): void {
+    if (method === "API") {
+      this.connection_method = "API endpoint";
+    } else if (method === "DB") {
+      this.connection_method = "Database mapping";
+    }
+  }
   // form connection String
   createConnectionStringForm() {
     this.loadingFull = true;
     const accountId = localStorage.getItem('id');
     // this.account = new AccountCompanyModel;
     this.nextButonConditonConnectionString = false;
-
     this.accessDBForm = this.fb.group({
       dbName: new FormControl('', [Validators.required]),
       host: new FormControl('', [Validators.required]),
@@ -464,6 +472,13 @@ export class CompanyConfigConnectionComponent implements OnInit {
           this.connectionString.password = password;
           this.connectionString.type = type;
           this.connection = res.method_auth_connection != "API" ? true : false;
+          if (res.method_auth_connection == "API") {
+            this.connection_method = 'API endpoint'
+          } else if (res.method_auth_connection == "DBM") {
+            this.connection_method = 'Database mapping manually'
+          } else if (res.method_auth_connection == "DB") {
+            this.connection_method = 'Database mapping automatically'
+          }
           this.accessDBForm = this.fb.group({
             dbName: new FormControl(this.connectionString.dbName, [Validators.required]),
             host: new FormControl(this.connectionString.host, [Validators.required]),
@@ -474,6 +489,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
           });
           this.disableSaveConnectionStringButton = false;
           this.nextButonConditonConnectionString = true;
+
           // this.disableTestConnectionStringButton = false;
         }
         else {
@@ -1460,6 +1476,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   // save connection string
   onSubmitConection(value) {
+    this.connection_method = 'Database mapping automatically'
     this.loadingFull = true;
     this.companyConnection = new CompanyConnection();
     this.companyConnection.dbName = value.dbName;
@@ -1505,6 +1522,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
 
   enableButtonSaveMapping = true;
   onSubmitConectionMapping(value) {
+    this.connection_method = 'Database mapping manually'
+    this.loadingFull = true;
     this.enableButtonSaveMapping = true;
     this.loadingSaveMapping = true;
     this.companyConnection = new CompanyConnection();
