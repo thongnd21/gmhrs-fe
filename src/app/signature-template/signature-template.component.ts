@@ -712,7 +712,7 @@ export class SignatureTemplateComponent implements OnInit {
       }
     }
     this.modal.confirm({
-      nzTitle: '<i>Do you Want to create a new signature rule?</i>',
+      nzTitle: '<i>Do you Want to update this signature rule?</i>',
       nzContent: '<b>It will update this signature rule!</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.updateSignatureRules()
@@ -904,6 +904,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.signatureService.updateSignatureTemplateRules(signature).subscribe(
       (res: any) => {
         if (res.status) {
+          this.signatureRuleID = res.id;
           this.toast.success(res.message);
         } else {
           this.toast.error(res.message);
