@@ -84,8 +84,8 @@ export class AppHeaderComponent {
     let accountId = localStorage.getItem('id');
     this.syncService.getListSynchronize(accountId).subscribe(
       (res: any) => {
-        if (!res.status) {
-          this.toast.error(res.message);
+        if(res.status == "fail"){
+          this.toast.error("Connection method having problem. Can not request your system!");
           this.loading = false;
           return;
         }
