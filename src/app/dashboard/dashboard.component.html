@@ -216,17 +216,21 @@
                                             <p> {{childPanel.email}}</p>
                                             <b> Team description:</b>
                                             <p> {{childPanel.description}}</p>
+                                            <div *ngIf="childPanel.log_content != null"> 
                                                 <ul
                                                     *ngFor="let newMember of childPanel.log_content.newMember; let i=index">
                                                     Added: <li style="color: green;">
                                                         {{newMember.employee.primary_email}}
                                                     </li>
-                                                </ul>
+                                                </ul></div>
+
+                                            <div *ngIf="childPanel.log_content != null"> 
                                                 <ul *ngFor="let outOf of childPanel.log_content.outOfHRMS; let i=index">
                                                     Removed: <li style="color: red;">
                                                         {{outOf.member_email}}
                                                     </li>
                                                 </ul>
+                                                </div>
                                         </nz-collapse-panel>
                                         <nz-collapse-panel *ngFor="let childPanel of panel.team.deleteTeamList"
                                             [nzHeader]="childPanel.email" [nzExtra]="Delete">
