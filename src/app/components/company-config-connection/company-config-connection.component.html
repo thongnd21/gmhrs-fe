@@ -13,9 +13,11 @@
             <mat-step [stepControl]="accessDBForm">
                 <!-- #enddocregion editable -->
                 <mat-radio-group [(ngModel)]="connection" aria-label="Select an option">
-                    <mat-radio-button [value]="true">Database Connection</mat-radio-button>
-                    <mat-radio-button [value]="false">API Endpoint</mat-radio-button>
+                    <mat-radio-button (click)="changeMethod('DB')" [value]="true">Database Connection</mat-radio-button>
+                    <mat-radio-button (click)="changeMethod('API')" [value]="false">API Endpoint</mat-radio-button>
                 </mat-radio-group>
+                <mat-card> Current method: {{connection_method}} <b><i>(*Note: If you want to change method connection. Let's to save the method after test method conection is processed)</i></b></mat-card>
+                
                 <div class="card-body" *ngIf="connection == true">
                     <mat-card class="p-0">
                         <mat-card-content>
@@ -897,7 +899,7 @@
                                             <select class="custom-select mb-2 col-md-12"
                                                 (change)="fieldChang($event, i)"
                                                 [(ngModel)]="mappingTableResult[i].tableHR.nametableHR">
-                                                <option  [disabled]="true" [value]="''">---- Choose table </option>
+                                                <option [disabled]="true" [value]="''">---- Choose table </option>
                                                 <option *ngFor="let tableName of table; let z = index"
                                                     [value]="tableName.tableName">
                                                     {{tableName.tableName}}
@@ -919,7 +921,7 @@
                                                 <td>
                                                     {{field.field}}
                                                 </td>
-                                                <td> 
+                                                <td>
                                                     <div *ngIf="mappingTableResult[i].tableHR.nametableHR == ''"
                                                         style="width: 100%; " appearance="outline">
                                                         <mat-label>Choose Value</mat-label>
@@ -929,10 +931,11 @@
                                                     <div style="width: 100%;" appearance="outline"
                                                         *ngIf="mappingTableResult[i].tableHR.nametableHR != ''">
                                                         <mat-label>Choose Field Name</mat-label>
-                                                        <select class="custom-select col-md-12" 
-                                                        (change)="selectFiledChange($event, i,j)"
-                                                        [(ngModel)]="mappingTableResult[i].tableHR.fields[j]" >
-                                                        <option [value]="''" [disabled]="true">---- Choose field </option>
+                                                        <select class="custom-select col-md-12"
+                                                            (change)="selectFiledChange($event, i,j)"
+                                                            [(ngModel)]="mappingTableResult[i].tableHR.fields[j]">
+                                                            <option [value]="''" [disabled]="true">---- Choose field
+                                                            </option>
                                                             <option
                                                                 *ngFor="let fieldNameMapping of fieldNameList[i]; let j = index"
                                                                 [value]="fieldNameMapping">
