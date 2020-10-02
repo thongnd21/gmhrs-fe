@@ -304,7 +304,12 @@ export class DashboardComponent implements OnInit {
 					updateTeam['email'] = updateTeamItem.team.email;
 					updateTeam['description'] = updateTeamItem.team.description;
 					updateTeam['name'] = updateTeamItem.team.name;
+					updateTeam['log_content'] = JSON.parse(updateTeamItem.log_content);
 					updateTeamList.push(updateTeam);
+					console.log(updateTeamList);
+					console.log("============");
+					
+					
 				});
 				element.team.deleteTeam.forEach(deleteTeamItem => {
 					let deleteTeam = new Object();
