@@ -59,6 +59,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   };
   file;
   companyConnection;
+  loadingSaveMapping = false;
   controls;
   typeSync;
   dayInMonth: Array<Number> = [];
@@ -1517,6 +1518,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
   onSubmitConectionMapping(value) {
     this.connection_method = 'Database mapping manually'
     this.loadingFull = true;
+    this.enableButtonSaveMapping = true;
+    this.loadingSaveMapping = true;
     this.companyConnection = new CompanyConnection();
     this.companyConnection.dbName = value.dbName;
     this.companyConnection.host = value.host;
@@ -1539,6 +1542,8 @@ export class CompanyConfigConnectionComponent implements OnInit {
     console.log(req);
     this.companyConnectionService.saveDBMappingConnection(req).subscribe(
       (res: any) => {
+        this.enableButtonSaveMapping = false;
+        this.loadingSaveMapping = false;
         if (res.code == 200) {
           this.loadingFull = false;
           this.toast.success(res.status);

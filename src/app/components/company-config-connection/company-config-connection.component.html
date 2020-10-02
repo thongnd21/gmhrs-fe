@@ -959,11 +959,16 @@
                             (click)="closeModal()">
                             Close
                         </button>
-                        <button style="margin-right: 40px;" mat-raised-button
-                            (click)="onSubmitConectionMapping(accessDBForm.value)" color="primary"
-                            [disabled]="enableButtonSaveMapping">
-                            Save
-                        </button>
+                        <div class="button-container  mr-2">
+                            <div class="spinner-container" *ngIf="loadingSaveMapping">
+                                <mat-spinner diameter="24"></mat-spinner>
+                            </div>
+                            <button style="margin-right: 40px;" mat-raised-button
+                                (click)="onSubmitConectionMapping(accessDBForm.value)" color="primary"
+                                [disabled]="enableButtonSaveMapping">
+                                Save
+                            </button>
+                        </div>
                     </mat-tab>
                 </mat-tab-group>
             </div>
