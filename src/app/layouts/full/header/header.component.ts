@@ -285,6 +285,7 @@ export class AppHeaderComponent {
         }
       },
       (err) => {
+        this.loading = false;
         if (err.status == 0) {
           this.toast.error('Connection time out');
         } else
@@ -320,6 +321,7 @@ export class AppHeaderComponent {
           this.closeModal();
         },
         (err) => {
+          this.loading = false;
           if (err.status == 0) {
             this.toast.error('Connection time out');
           } else

@@ -2384,7 +2384,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       && this.monthTime !== ''
     ) {
 
-      this.monthTime = moment(this.monthTime, 'HH:mm').utc().format('HH:mm');
+      this.monthTime = moment(this.monthTime, 'HH:mm').format('HH:mm');
       dayInMonth = '';
       for (let i = 0; i < this.monthDayChoose.length; i++) {
         dayInMonth += this.monthDayChoose[i];
@@ -2403,7 +2403,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       && this.weekTime !== undefined
       && this.weekTime !== null
       && this.weekTime !== '') {
-      this.weekTime = moment(this.weekTime, 'HH:mm').utc().format('HH:mm');
+      this.weekTime = moment(this.weekTime, 'HH:mm').format('HH:mm');
       dayInWeek = '';
       for (let i = 0; i < this.weekDayChoose.length; i++) {
         dayInWeek += this.weekDayChoose[i];
@@ -2420,7 +2420,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
       && this.dailyTime !== null
       && this.dailyTime !== ''
     ) {
-      this.dailyTime = moment(this.dailyTime, 'HH:mm').utc().format('HH:mm');
+      this.dailyTime = moment(this.dailyTime, 'HH:mm').format('HH:mm');
       hours = this.dailyTime.split(':', 1);
       let n = this.dailyTime.indexOf(":");
       let lenght = this.dailyTime.length;
@@ -2516,7 +2516,7 @@ export class CompanyConfigConnectionComponent implements OnInit {
   }
 
   parseTimeCron(arrTime) {
-    let time = moment.utc(arrTime[1] + ":" + arrTime[0], 'HH:mm').local().format('HH:mm');
+    let time = moment(arrTime[1] + ":" + arrTime[0], 'HH:mm').format('HH:mm');
     if (arrTime[2] === "*" && arrTime[4] === "*") {
       this.typeSync = 3;
       this.dailyTime = time;
