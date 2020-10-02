@@ -472,6 +472,7 @@ export class SignatureTemplateComponent implements OnInit {
     let id = localStorage.getItem('id');
     let signature = new Signature();
     signature.is_primary = this.is_primary_rule;
+    signature.id = this.signatureRuleID;
     signature.account_id = id;
     signature.content = JSON.stringify(this.rules);
     signature.name = this.signatureRuleName;
@@ -896,6 +897,7 @@ export class SignatureTemplateComponent implements OnInit {
     let id = localStorage.getItem('id');
     let signature = new Signature();
     signature.is_primary = this.is_primary_rule;
+    signature.id = this.signatureRuleID;
     signature.account_id = id;
     signature.content = JSON.stringify(this.rules);
     signature.name = this.signatureRuleName;
