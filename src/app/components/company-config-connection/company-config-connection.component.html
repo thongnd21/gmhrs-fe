@@ -16,8 +16,9 @@
                     <mat-radio-button (click)="changeMethod('DB')" [value]="true">Database Connection</mat-radio-button>
                     <mat-radio-button (click)="changeMethod('API')" [value]="false">API Endpoint</mat-radio-button>
                 </mat-radio-group>
-                <mat-card> Current method: {{connection_method}} <b><i>(*Note: If you want to change method connection. Let's to save the method after test method conection is processed)</i></b></mat-card>
-                
+                <mat-card> Current method: {{connection_method}} <b><i>(*Note: If you want to change method connection.
+                            Let's to save the method after test method conection is processed)</i></b></mat-card>
+
                 <div class="card-body" *ngIf="connection == true">
                     <mat-card class="p-0">
                         <mat-card-content>
@@ -149,7 +150,7 @@
                                             <div class="pb-1">
                                                 <mat-form-field class="full-width">
                                                     <input matInput name="tokenAuth" formControlName="tokenAuth"
-                                                        placeholder="token" />
+                                                        type="password" placeholder="token" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -895,7 +896,7 @@
                                             </mat-panel-description>
                                         </mat-expansion-panel-header>
                                         <div style="width: 100%; " appearance="outline">
-                                            <mat-label>Choose Table Name</mat-label>
+                                            <mat-label>Choose Table Mapping</mat-label>
                                             <select class="custom-select mb-2 col-md-12"
                                                 (change)="fieldChang($event, i)"
                                                 [(ngModel)]="mappingTableResult[i].tableHR.nametableHR">
