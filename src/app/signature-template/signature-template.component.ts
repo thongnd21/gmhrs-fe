@@ -404,6 +404,7 @@ export class SignatureTemplateComponent implements OnInit {
     this.isSpinning = true;
     let signature = new Signature;
     let id = localStorage.getItem('id');
+    signature.id = this.signatureID;
     signature.name = this.signatureName;
     signature.content = this.htmlContent;
     signature.account_id = id;
@@ -749,7 +750,7 @@ export class SignatureTemplateComponent implements OnInit {
     }
     this.modal.confirm({
       nzTitle: '<i>Do you want to new signature?</i>',
-      nzContent: '<b>It will create a new signature template!</b>',
+      nzContent: '<b>It will update this signature template!</b>',
       nzOkText: "OK, do it!",
       nzOnOk: () => this.updateSignature()
     });
@@ -989,6 +990,7 @@ export class SignatureTemplateComponent implements OnInit {
     let signature = new Signature;
     let id = localStorage.getItem('id');
     signature.name = this.signatureName;
+    signature.id = this.signatureID;
     signature.content = this.htmlContent;
     signature.account_id = id;
     this.signatureService.updateSignatureTemplate(id, signature).subscribe(
